@@ -1,6 +1,7 @@
 import {
   Box,
   Container,
+  Link,
   Tab,
   TabList,
   TabPanel,
@@ -13,7 +14,6 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Login from "../Authentication/Login";
 import Signup from "../Authentication/Signup";
-import { SocialIcon } from "react-social-icons";
 
 function Homepage() {
   const navigate = useNavigate();
@@ -38,15 +38,12 @@ function Homepage() {
       >
         <Text
           display={"flex"}
-          justifyContent={"space-between"}
+          justifyContent={"center"}
+          alignItems={"center"}
           fontSize="4xl"
           fontFamily="Work sans"
         >
           RocketChat
-          <Text color={"blue.200"} paddingLeft={3}>
-            Follow Me
-            <SocialIcon url="https://www.instagram.com/jdtheefirst/" />
-          </Text>
         </Text>
       </Box>
       <Box bg="white" w="100%" p={4} borderRadius="lg" borderWidth="1px">
@@ -64,6 +61,26 @@ function Homepage() {
             </TabPanel>
           </TabPanels>
         </Tabs>
+      </Box>{" "}
+      <Box
+        display={"flex"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        width={"42%"}
+        mt={5}
+      >
+        <Link
+          display={"flex"}
+          justifyContent={"center"}
+          href="https://jdportfolio-2ba993e38582.herokuapp.com/"
+        >
+          @jdtheefirst
+        </Link>
+        {"   "}
+        <Text variant="body2" color="white" align="center">
+          {"Copyright © "} {new Date().getFullYear()}
+          {"."}
+        </Text>
       </Box>
     </Container>
   );
