@@ -1,0 +1,42 @@
+{
+  "name": "mern-app",
+  "version": "1.0.0",
+  "description": "chat-app",
+  "main": "./backend/index.js",
+  "scripts": {
+    "frontend": "cd frontend && npm start",
+    "backend": "cd backend && node index.js",
+    "heroku-postbuild": "cd frontend && npm install && npm run build"
+  },
+  "heroku-run-build-script": true,
+  "author": "jdtheefirst",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.1.1",
+    "react-social-icons": "^5.15.0",
+    "socket.io": "^4.6.1"
+  },
+  "engines": {
+    "node": "18.5.0",
+    "npm": "8.19.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^5.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jdtheefirst/mern-rocketchat.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/jdtheefirst/mern-rocketchat/issues"
+  },
+  "homepage": "https://github.com/jdtheefirst/mern-rocketchat#readme"
+}
