@@ -30,6 +30,7 @@ import ProfileModal from "../miscellanious/ProfileModal";
 import { getSenderName } from "../config/ChatLogics";
 import UserListItem from "../userAvatar/UserListItem";
 import { ChatState } from "../Context/ChatProvider";
+import MatchModal from "./Match";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -139,9 +140,9 @@ function SideDrawer() {
             </Text>
           </Button>
         </Tooltip>
-        <Text fontSize="2xl" fontFamily="Work sans" justifyContent={"center"}>
-          RocketChat
-        </Text>
+
+        <MatchModal />
+
         <div>
           <Menu>
             <MenuButton p={1}>
