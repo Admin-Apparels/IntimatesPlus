@@ -61,7 +61,7 @@ const allUsers = asyncHandler(async (req, res) => {
   const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
   res.send(users);
 });
-const getUserById = async (req, res) => {
+const getUserById = asyncHandler(async (req, res) => {
   try {
     const userId = req.params.userId;
     const user = await User.findById(userId);
@@ -69,6 +69,20 @@ const getUserById = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve user" });
   }
-};
+});
 
-module.exports = { registerUsers, authUser, allUsers, getUserById };
+const getUsers = asyncHandler(async (req, res) => {
+  try {
+    const { limit } = req.query;
+
+    const users = await User.aggregate([
+      { $sample: { size: parseInt(limit, 10) } },
+    ]);
+
+    res.json({ users });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+module.exports = { registerUsers, authUser, allUsers, getUserById, getUsers };
