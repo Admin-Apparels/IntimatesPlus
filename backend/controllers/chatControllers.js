@@ -1,19 +1,27 @@
 const asyncHandler = require("express-async-handler");
 const Chat = require("../models/chatModel");
-const User = require("../models/userModel");
+const { FemaleUser, MaleUser } = require("../models/userModel");
 
 //@description     Create or fetch One to One Chat
 //@route           POST /api/chat/
 //@access          Protected
 const accessChat = asyncHandler(async (req, res) => {
-  const { userId } = req.body;
+  const { userId, user } = req.body;
   if (!userId) {
     return res.sendStatus(400);
   }
 
+  // Determine the type of user based on the gender field
+  let User;
+  if (user.gender === "female") {
+    User = FemaleUser;
+  } else {
+    User = MaleUser;
+  }
+
   var isChat = await Chat.find({
     $and: [
-      { users: { $elemMatch: { $eq: req.user._id } } },
+      { users: { $elemMatch: { $eq: user._id } } },
       { users: { $elemMatch: { $eq: userId } } },
     ],
   })
@@ -30,7 +38,7 @@ const accessChat = asyncHandler(async (req, res) => {
   } else {
     var chatData = {
       chatName: "sender",
-      users: [req.user._id, userId],
+      users: [user._id, userId],
     };
 
     try {
@@ -52,20 +60,35 @@ const accessChat = asyncHandler(async (req, res) => {
 //@access          Protected
 const fetchChats = asyncHandler(async (req, res) => {
   try {
-    await Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+    const userId = req.user._id;
+    const gender = req.user.gender;
+    console.log(userId, gender);
+
+    let UserModel;
+    if (gender === "female") {
+      UserModel = FemaleUser;
+    } else if (gender === "male") {
+      UserModel = MaleUser;
+    } else {
+      res.status(400);
+      throw new Error("Invalid gender");
+    }
+
+    const results = await Chat.find({ users: { $elemMatch: { $eq: userId } } })
       .populate("users", "-password")
+      .populate("groupAdmin", "-password")
       .populate("latestMessage")
-      .sort({ updatedAt: -1 })
-      .then(async (results) => {
-        results = await User.populate(results, {
-          path: "latestMessage.sender",
-          select: "name pic email",
-        });
-        res.status(200).send(results);
-      });
+      .sort({ updatedAt: -1 });
+
+    const populatedResults = await UserModel.populate(results, {
+      path: "latestMessage.sender",
+      select: "name pic email",
+    });
+    res.status(200).json(populatedResults);
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
   }
 });
+
 module.exports = { accessChat, fetchChats };

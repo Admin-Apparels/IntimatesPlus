@@ -46,6 +46,8 @@ const MyChat = ({ fetchAgain }) => {
       });
     }
   }, [toast, user.token, loggedUser, setChats]);
+  console.log(loggedUser);
+  console.log(user);
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -56,6 +58,7 @@ const MyChat = ({ fetchAgain }) => {
       fetchChats();
     }
   }, [fetchChats, loggedUser]);
+  console.log(user);
 
   const renderChatItems = () => {
     return chats.map((chat) => (

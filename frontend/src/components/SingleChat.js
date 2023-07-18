@@ -14,7 +14,7 @@ import io from "socket.io-client";
 import { ChatState } from "./Context/ChatProvider";
 import animation from "../animations/typing.json";
 
-const ENDPOINT = "https://mernchatjd-f76c53987d01.herokuapp.com";
+const ENDPOINT = "http://localhost:8080";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {

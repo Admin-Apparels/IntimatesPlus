@@ -20,24 +20,62 @@ import { useState } from "react";
 import axios from "axios";
 
 const MatchModal = () => {
+  const [loadingChat, setLoadingChat] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [users, setUsers] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
-  const { user } = ChatState();
+  const { setSelectedChat, user, chats, setChats } = ChatState();
   const toast = useToast();
+  console.log(chats);
 
-  const fetchUsers = async () => {
+  const accessChat = async (userId) => {
+    try {
+      setLoadingChat(true);
+
+      // Check if there is an existing chat with the logged-in user
+      const existingChat = chats.find(
+        (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
+      );
+
+      if (existingChat) {
+        setSelectedChat(existingChat);
+      } else {
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+
+        const { data } = await axios.post(`/api/chat`, { userId }, config);
+
+        setChats([data, ...chats]);
+        setSelectedChat(data);
+      }
+
+      setLoadingChat(false);
+      onClose();
+    } catch (error) {
+      setLoadingChat(false);
+      toast({
+        title: "Error fetching the chat",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
+  const fetchFemaleUsers = async () => {
     setLoading(true);
     try {
       const config = {
         headers: {
           Authorization: `Bearer ${user.token}`,
-        },
-        params: {
-          limit: 10,
         },
       };
 
@@ -45,6 +83,7 @@ const MatchModal = () => {
 
       setUsers(data);
       setLoading(false);
+      console.log(data);
     } catch (error) {
       toast({
         title: "Error fetching next Matches",
@@ -64,30 +103,33 @@ const MatchModal = () => {
     if (currentIndex < users.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
-      fetchUsers();
+      fetchFemaleUsers();
       setCurrentIndex(0);
     }
   };
-
   const currentUser = users[currentIndex];
 
   return (
     <>
-      <IconButton
-        display={{ base: "flex" }}
-        icon={<FaHeart color="red" />}
-        onClick={() => {
-          onOpen(); // Call the first function
-          fetchUsers(); // Call the second function
-        }}
-      />
+      {loading ? (
+        <Spinner xs="auto" display="flex" />
+      ) : (
+        <IconButton
+          display={{ base: "flex" }}
+          icon={<FaHeart color="red.500" />}
+          onClick={() => {
+            setLoading(true);
+            onOpen();
+            fetchFemaleUsers();
+          }}
+        />
+      )}
 
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
-        {loading && <Spinner ml="auto" display="flex" />}
         {currentUser ? (
           <>
             <ModalOverlay />
-            <ModalContent height="450px" width={"auto"}>
+            <ModalContent height="450px">
               <ModalHeader
                 fontSize="40px"
                 fontFamily="Work sans"
@@ -104,7 +146,7 @@ const MatchModal = () => {
                 justifyContent="space-between"
               >
                 <Image
-                  borderRadius="10%"
+                  borderRadius="5%"
                   boxSize={isFocused ? "300px" : "150px"}
                   src={currentUser.pic}
                   alt={currentUser.name}
@@ -120,8 +162,18 @@ const MatchModal = () => {
                   Email: {currentUser.email}
                 </Text>
               </ModalBody>
-              <ModalFooter display={isFocused ? "none" : "flex"}>
-                <Button onClick={nextPage}>Next</Button>
+              <ModalFooter
+                display={isFocused ? "none" : "flex"}
+                justifyContent={"space-between"}
+              >
+                <Button onClick={() => accessChat(currentUser._id)}>
+                  Start Chat
+                </Button>
+                {loadingChat ? (
+                  <Spinner ml="auto" display="flex" />
+                ) : (
+                  <Button onClick={nextPage}>Next</Button>
+                )}
               </ModalFooter>
             </ModalContent>
           </>

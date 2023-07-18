@@ -93,7 +93,7 @@ function SideDrawer() {
     }
   };
 
-  const accessChat = async (userId) => {
+  const accessChat = async (userId, user) => {
     try {
       setLoadingChat(true);
       const config = {
@@ -102,7 +102,7 @@ function SideDrawer() {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.post(`/api/chat`, { userId }, config);
+      const { data } = await axios.post(`/api/chat`, { userId, user }, config);
 
       if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
 
@@ -140,8 +140,7 @@ function SideDrawer() {
             </Text>
           </Button>
         </Tooltip>
-
-        <MatchModal />
+        {user.gender === "male" && <MatchModal />}
 
         <div>
           <Menu>
@@ -205,11 +204,11 @@ function SideDrawer() {
             {loading ? (
               <ChatLoading />
             ) : (
-              results.map((user) => (
+              results.map((userData) => (
                 <UserListItem
-                  key={user._id}
-                  user={user}
-                  handleFunction={() => accessChat(user._id)}
+                  key={userData._id}
+                  user={userData}
+                  handleFunction={() => accessChat(userData._id, user)}
                 />
               ))
             )}
