@@ -106,7 +106,13 @@ const MyChat = ({ fetchAgain }) => {
         justifyContent="space-between"
         alignItems="center"
       >
-        My Chats
+        My Chats:{" "}
+        {Array.isArray(chats) &&
+          chats.length === 0 &&
+          user.gender === "female" && <>Wait from Admin</>}
+        {Array.isArray(chats) &&
+          chats.length === 0 &&
+          user.gender === "male" && <>Create Chats Above</>}
       </Box>
       <Box
         display="flex"
@@ -118,6 +124,7 @@ const MyChat = ({ fetchAgain }) => {
         borderRadius="lg"
         overflowY="hidden"
       >
+        {" "}
         {chats && Array.isArray(chats) ? (
           <Stack overflowY="scroll">{renderChatItems()}</Stack>
         ) : (

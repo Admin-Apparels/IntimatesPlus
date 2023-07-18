@@ -114,8 +114,7 @@ const getUserById = asyncHandler(async (req, res) => {
 
 const getUsers = asyncHandler(async (req, res) => {
   try {
-    const allUsers = await FemaleUser.find().lean().exec();
-    console.log(allUsers);
+    const allUsers = await FemaleUser.find().lean();
 
     res.json({ allUsers });
   } catch (error) {

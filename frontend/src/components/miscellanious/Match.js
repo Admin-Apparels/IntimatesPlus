@@ -34,8 +34,6 @@ const MatchModal = () => {
   const accessChat = async (userId) => {
     try {
       setLoadingChat(true);
-
-      // Check if there is an existing chat with the logged-in user
       const existingChat = chats.find(
         (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
       );
@@ -81,9 +79,8 @@ const MatchModal = () => {
 
       const { data } = await axios.get("/api/user", config);
 
-      setUsers(data);
+      setUsers(data.allUsers);
       setLoading(false);
-      console.log(data);
     } catch (error) {
       toast({
         title: "Error fetching next Matches",
@@ -95,7 +92,7 @@ const MatchModal = () => {
       });
     }
   };
-  console.log(users);
+
   const toggleFocus = () => {
     setIsFocused((prevState) => !prevState);
   };
