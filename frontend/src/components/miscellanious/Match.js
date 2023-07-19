@@ -13,6 +13,7 @@ import {
   Image,
   useToast,
   Spinner,
+  
 } from "@chakra-ui/react";
 import { FaHeart } from "react-icons/fa";
 import { ChatState } from "../Context/ChatProvider";
@@ -30,8 +31,10 @@ const MatchModal = () => {
   const { setSelectedChat, user, chats, setChats } = ChatState();
   const toast = useToast();
   console.log(chats);
+  console.log(user);
 
   const accessChat = async (userId) => {
+    console.log(userId);
     try {
       setLoadingChat(true);
       const existingChat = chats.find(
@@ -48,7 +51,7 @@ const MatchModal = () => {
           },
         };
 
-        const { data } = await axios.post(`/api/chat`, { userId }, config);
+        const { data } = await axios.post('/api/chat', { userId, user }, config);
 
         setChats([data, ...chats]);
         setSelectedChat(data);
@@ -57,7 +60,7 @@ const MatchModal = () => {
       setLoadingChat(false);
       onClose();
     } catch (error) {
-      setLoadingChat(false);
+      
       toast({
         title: "Error fetching the chat",
         description: error.message,
@@ -122,11 +125,11 @@ const MatchModal = () => {
         />
       )}
 
-      <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
+      <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered >
         {currentUser ? (
           <>
             <ModalOverlay />
-            <ModalContent height="450px">
+            <ModalContent height="80vh" width={'calc(100% - 20px)'}>
               <ModalHeader
                 fontSize="40px"
                 fontFamily="Work sans"
@@ -144,7 +147,7 @@ const MatchModal = () => {
               >
                 <Image
                   borderRadius="5%"
-                  boxSize={isFocused ? "300px" : "150px"}
+                  boxSize={isFocused ? "20rem" : "10rem"}
                   src={currentUser.pic}
                   alt={currentUser.name}
                   cursor="pointer"
@@ -152,11 +155,14 @@ const MatchModal = () => {
                   transition="box-size 0.3s ease-in-out"
                 />
                 <Text
-                  fontSize={{ base: "28px", md: "30px" }}
+                  fontSize={{ base: "15px", md: "15px" }}
                   fontFamily="Work sans"
                   display={isFocused ? "none" : "flex"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  textAlign={"center"}
                 >
-                  Email: {currentUser.email}
+                  : {currentUser.value}
                 </Text>
               </ModalBody>
               <ModalFooter
