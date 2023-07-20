@@ -72,9 +72,9 @@ const fetchChats = async (req, res) => {
     console.log(user._id, user.gender);
 
     let UserModel;
-    if (gender === "female") {
+    if (user.gender === "female") {
       UserModel = FemaleUser;
-    } else if (gender === "male") {
+    } else if (user.gender === "male") {
       UserModel = MaleUser;
     } else {
       res.status(400);
