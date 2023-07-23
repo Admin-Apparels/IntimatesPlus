@@ -13,14 +13,13 @@ const accessChat = async (req, res) => {
     return res.sendStatus(400);
   }
 
- 
-  let User;
+  let UserModel;
   if (user.gender === "female") {
-    User = FemaleUser;
+    UserModel = FemaleUser;
     console.log(" User is female");
   } else {
-    User = MaleUser;
-    console.log("User is male")
+    UserModel = MaleUser;
+    console.log("User is male");
   }
 
   var isChat = await Chat.find({
@@ -33,7 +32,7 @@ const accessChat = async (req, res) => {
     .populate("users", "-password")
     .populate("latestMessage");
 
-  isChat = await User.populate(isChat, {
+  isChat = await UserModel.populate(isChat, {
     path: "latestMessage.sender",
     select: "name pic email",
   });
@@ -58,7 +57,7 @@ const accessChat = async (req, res) => {
     } catch (error) {
       res.status(400);
       res.status(400).json({ message: error.message });
-      console.log("catch block run")
+      console.log("catch block run");
     }
   }
 };
@@ -68,8 +67,8 @@ const accessChat = async (req, res) => {
 //@access          Protected
 const fetchChats = async (req, res) => {
   try {
-    const {user} = req.body;
-    console.log(user._id, user.gender);
+    const { user } = req.body;
+    console.log(user._id, user.gender, user.token);
 
     let UserModel;
     if (user.gender === "female") {
@@ -82,17 +81,17 @@ const fetchChats = async (req, res) => {
     }
 
     Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
-    .populate("users", "-password")
-    .populate("groupAdmin", "-password")
-    .populate("latestMessage")
-    .sort({ updatedAt: -1 })
-    .then(async (results) => {
-      results = await UserModel.populate(results, {
-        path: "latestMessage.sender",
-        select: "name pic email",
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password")
+      .populate("latestMessage")
+      .sort({ updatedAt: -1 })
+      .then(async (results) => {
+        results = await UserModel.populate(results, {
+          path: "latestMessage.sender",
+          select: "name pic email",
+        });
+        res.status(200).send(results);
       });
-      res.status(200).send(results);
-    });
   } catch (error) {
     res.status(400);
     throw new Error(error.message);

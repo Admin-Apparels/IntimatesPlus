@@ -21,7 +21,7 @@ const MyChat = ({ fetchAgain }) => {
         },
       };
 
-      const { data } = await axios.get("/api/chat", config);
+      const { data } = await axios.get("/api/chat", { user }, config);
 
       const chatsWithSenderNames = await Promise.all(
         data.map(async (chat) => {
@@ -46,7 +46,6 @@ const MyChat = ({ fetchAgain }) => {
       });
     }
   }, [toast, user.token, loggedUser, setChats]);
- 
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -57,7 +56,6 @@ const MyChat = ({ fetchAgain }) => {
       fetchChats();
     }
   }, [fetchChats, loggedUser]);
-
 
   const renderChatItems = () => {
     return chats.map((chat) => (
@@ -105,14 +103,15 @@ const MyChat = ({ fetchAgain }) => {
         justifyContent="space-between"
         alignItems="center"
       >
-        My Chats:{" "}
-        <br/>
+        My Chats: <br />
         {Array.isArray(chats) &&
           chats.length === 0 &&
-          user.gender === "female" && "Wait from Admin"}
+          user.gender === "female" &&
+          "Wait from Admin"}
         {Array.isArray(chats) &&
           chats.length === 0 &&
-          user.gender === "male" && "Create Chats Above"}
+          user.gender === "male" &&
+          "Create Chats Above"}
       </Box>
       <Box
         display="flex"

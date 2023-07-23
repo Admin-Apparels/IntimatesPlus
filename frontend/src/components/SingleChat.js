@@ -108,6 +108,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             {
               content: newMessage,
               chatId: selectedChat,
+              user,
             },
             config
           );
