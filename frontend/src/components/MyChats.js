@@ -10,6 +10,7 @@ const MyChat = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
 
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
+  console.log(user);
 
   const toast = useToast();
 
@@ -21,7 +22,7 @@ const MyChat = ({ fetchAgain }) => {
         },
       };
 
-      const { data } = await axios.get("/api/chat", { user }, config);
+      const { data } = await axios.get("/api/chat", { params: user }, config);
 
       const chatsWithSenderNames = await Promise.all(
         data.map(async (chat) => {
@@ -45,7 +46,7 @@ const MyChat = ({ fetchAgain }) => {
         position: "bottom-left",
       });
     }
-  }, [toast, user.token, loggedUser, setChats]);
+  }, [toast, user, loggedUser, setChats]);
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -53,6 +54,7 @@ const MyChat = ({ fetchAgain }) => {
   }, []);
   useEffect(() => {
     if (loggedUser) {
+      console.log(loggedUser);
       fetchChats();
     }
   }, [fetchChats, loggedUser]);

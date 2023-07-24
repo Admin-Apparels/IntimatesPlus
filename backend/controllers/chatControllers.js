@@ -5,7 +5,7 @@ const { FemaleUser, MaleUser } = require("../models/userModel");
 //@description     Create or fetch One to One Chat
 //@route           POST /api/chat/
 //@access          Protected
-const accessChat = async (req, res) => {
+const accessChat = asyncHandler(async (req, res) => {
   const { userId, user } = req.body;
   console.log(userId);
   console.log(user);
@@ -23,7 +23,6 @@ const accessChat = async (req, res) => {
   }
 
   var isChat = await Chat.find({
-    isGroupChat: false,
     $and: [
       { users: { $elemMatch: { $eq: req.user._id } } },
       { users: { $elemMatch: { $eq: userId } } },
@@ -39,12 +38,14 @@ const accessChat = async (req, res) => {
 
   if (isChat.length > 0) {
     res.send(isChat[0]);
+    console.log("chat found!!!");
+    console.log(isChat[0]);
   } else {
     var chatData = {
       chatName: "sender",
-      isGroupChat: false,
       users: [req.user._id, userId],
     };
+    console.log("Creating chat in progress!!!");
 
     try {
       const createdChat = await Chat.create(chatData);
@@ -60,16 +61,15 @@ const accessChat = async (req, res) => {
       console.log("catch block run");
     }
   }
-};
+});
 
 //@description     Fetch all chats for a user
 //@route           GET /api/chat/
 //@access          Protected
-const fetchChats = async (req, res) => {
+const fetchChats = asyncHandler(async (req, res) => {
+  const { user } = req.query;
   try {
-    const { user } = req.body;
-    console.log(user._id, user.gender, user.token);
-
+    console.log(user);
     let UserModel;
     if (user.gender === "female") {
       UserModel = FemaleUser;
@@ -96,6 +96,6 @@ const fetchChats = async (req, res) => {
     res.status(400);
     throw new Error(error.message);
   }
-};
+});
 
 module.exports = { accessChat, fetchChats };

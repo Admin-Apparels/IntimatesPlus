@@ -11,18 +11,18 @@ const registerUsers = asyncHandler(async (req, res) => {
     throw new Error("Please enter all fields");
   }
 
-  let User;
+  let UserModel;
   if (gender === "female") {
-    User = FemaleUser;
+    UserModel = FemaleUser;
   } else if (gender === "male") {
-    User = MaleUser;
+    UserModel = MaleUser;
   } else {
     res.status(400);
     throw new Error("Invalid gender");
   }
 
   // Check if user already exists in the corresponding collection
-  const userExists = await User.findOne({ email });
+  const userExists = await UserModel.findOne({ email });
   if (userExists) {
     res.status(400);
     throw new Error("User already exists, login");
@@ -35,7 +35,7 @@ const registerUsers = asyncHandler(async (req, res) => {
   }
 
   // Create a new user based on gender
-  const user = await User.create(userData);
+  const user = await UserModel.create(userData);
 
   if (user) {
     const responseData = {

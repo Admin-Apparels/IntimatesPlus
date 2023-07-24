@@ -13,7 +13,6 @@ import {
   Image,
   useToast,
   Spinner,
-  
 } from "@chakra-ui/react";
 import { FaHeart } from "react-icons/fa";
 import { ChatState } from "../Context/ChatProvider";
@@ -28,7 +27,7 @@ const MatchModal = () => {
   const [loading, setLoading] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
-  const { setSelectedChat, user, chats, setChats } = ChatState();
+  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
   const toast = useToast();
   console.log(chats);
   console.log(user);
@@ -51,16 +50,20 @@ const MatchModal = () => {
           },
         };
 
-        const { data } = await axios.post('/api/chat', { userId, user }, config);
+        const { data } = await axios.post(
+          "/api/chat",
+          { userId, user },
+          config
+        );
 
         setChats([data, ...chats]);
+        console.log(data);
         setSelectedChat(data);
       }
 
       setLoadingChat(false);
       onClose();
     } catch (error) {
-      
       toast({
         title: "Error fetching the chat",
         description: error.message,
@@ -71,6 +74,8 @@ const MatchModal = () => {
       });
     }
   };
+  console.log(selectedChat);
+  console.log(chats);
   const fetchFemaleUsers = async () => {
     setLoading(true);
     try {
@@ -125,11 +130,11 @@ const MatchModal = () => {
         />
       )}
 
-      <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered >
+      <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
         {currentUser ? (
           <>
             <ModalOverlay />
-            <ModalContent height="80vh" width={'calc(100% - 20px)'}>
+            <ModalContent height="80vh" width={"calc(100% - 20px)"}>
               <ModalHeader
                 fontSize="40px"
                 fontFamily="Work sans"
