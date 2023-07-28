@@ -58,6 +58,7 @@ const MyChat = ({ fetchAgain }) => {
       fetchChats();
     }
   }, [fetchChats, loggedUser]);
+  console.log(selectedChat);
 
   const renderChatItems = () => {
     return chats.map((chat) => (

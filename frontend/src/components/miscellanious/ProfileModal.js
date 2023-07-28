@@ -13,15 +13,33 @@ import {
   Text,
   Image,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { ChatState } from "../Context/ChatProvider";
 import { useState } from "react";
 
 const ProfileModal = ({ user, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isFocused, setIsFocused] = useState(false);
+  const { selectedChat } = ChatState();
 
   const toggleFocus = () => {
     setIsFocused((prevState) => !prevState);
   };
+  const handleBlockUser = async (userId, authToken) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      };
+
+      const response = await axios.put(`/api/user/block/${userId}`, {}, config);
+      return response.data;
+    } catch (error) {
+      throw error.response.data.message || "Error blocking user";
+    }
+  };
+  const handleUnblock = () => {};
 
   return (
     <>
@@ -70,7 +88,20 @@ const ProfileModal = ({ user, children }) => {
             </Text>
           </ModalBody>
           <ModalFooter display={isFocused ? "none" : "flex"}>
-            <Button onClick={onClose}>Close</Button>
+            {selectedChat.isBlocked === true ? (
+              <Button color={"green.400"} onClick={handleUnblock}>
+                Blocked
+              </Button>
+            ) : (
+              <Button
+                color={"red.400"}
+                onClick={() =>
+                  handleBlockUser(selectedChat.users[1]._id, user.token)
+                }
+              >
+                Block
+              </Button>
+            )}
           </ModalFooter>
         </ModalContent>
       </Modal>

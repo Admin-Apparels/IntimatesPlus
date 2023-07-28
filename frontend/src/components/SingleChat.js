@@ -39,6 +39,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   const { selectedChat, setSelectedChat, user, notification, setNotification } =
     ChatState();
+  console.log(selectedChat);
 
   const fetchMessages = useCallback(async () => {
     if (!selectedChat) return;
