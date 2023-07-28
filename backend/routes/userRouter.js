@@ -1,7 +1,6 @@
 const {
   registerUsers,
   authUser,
-  allUsers,
   getUserById,
   getUsers,
 } = require("../controllers/userControllers");

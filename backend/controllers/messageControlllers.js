@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Message = require("../models/messageModel");
-const { FemaleUser, MaleUser } = require("../models/userModel");
+const User = require("../models/userModel");
 const Chat = require("../models/chatModel");
 
 //@description     Get all Messages
@@ -22,20 +22,11 @@ const allMessages = asyncHandler(async (req, res) => {
 //@route           POST /api/Message/
 //@access          Protected
 const sendMessage = asyncHandler(async (req, res) => {
-  const { content, chatId, user } = req.body;
+  const { content, chatId } = req.body;
 
   if (!content || !chatId) {
     console.log("Invalid data passed into request");
     return res.sendStatus(400);
-  }
-  let UserModel;
-  if (user.gender === "female") {
-    UserModel = FemaleUser;
-  } else if (gender === "male") {
-    UserModel = MaleUser;
-  } else {
-    res.status(400);
-    throw new Error("Invalid gender");
   }
 
   var newMessage = {
@@ -48,7 +39,7 @@ const sendMessage = asyncHandler(async (req, res) => {
     var message = await Message.create(newMessage);
     message = await message.populate("sender", "name pic");
     message = await message.populate("chat");
-    message = await UserModel.populate(message, {
+    message = await User.populate(message, {
       path: "chat.users",
       select: "name pic email",
     });

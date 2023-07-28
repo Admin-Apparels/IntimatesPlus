@@ -158,16 +158,14 @@ const MatchModal = () => {
                   cursor="pointer"
                   onClick={toggleFocus}
                   transition="box-size 0.3s ease-in-out"
-                />
+                />{" "}
                 <Text
                   fontSize={{ base: "15px", md: "15px" }}
                   fontFamily="Work sans"
                   display={isFocused ? "none" : "flex"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
                   textAlign={"center"}
                 >
-                  : {currentUser.value}
+                  {currentUser.value}
                 </Text>
               </ModalBody>
               <ModalFooter

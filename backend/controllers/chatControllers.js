@@ -1,25 +1,16 @@
 const asyncHandler = require("express-async-handler");
 const Chat = require("../models/chatModel");
-const { FemaleUser, MaleUser } = require("../models/userModel");
+const User = require("../models/userModel");
 
 //@description     Create or fetch One to One Chat
 //@route           POST /api/chat/
 //@access          Protected
 const accessChat = asyncHandler(async (req, res) => {
-  const { userId, user } = req.body;
-  console.log(userId);
-  console.log(user);
-  if (!userId) {
-    return res.sendStatus(400);
-  }
+  const { userId } = req.body;
 
-  let UserModel;
-  if (user.gender === "female") {
-    UserModel = FemaleUser;
-    console.log(" User is female");
-  } else {
-    UserModel = MaleUser;
-    console.log("User is male");
+  if (!userId) {
+    console.log("UserId param not sent with request");
+    return res.sendStatus(400);
   }
 
   var isChat = await Chat.find({
@@ -31,25 +22,22 @@ const accessChat = asyncHandler(async (req, res) => {
     .populate("users", "-password")
     .populate("latestMessage");
 
-  isChat = await UserModel.populate(isChat, {
+  isChat = await User.populate(isChat, {
     path: "latestMessage.sender",
     select: "name pic email",
   });
 
   if (isChat.length > 0) {
     res.send(isChat[0]);
-    console.log("chat found!!!");
-    console.log(isChat[0]);
   } else {
     var chatData = {
       chatName: "sender",
+
       users: [req.user._id, userId],
     };
-    console.log("Creating chat in progress!!!");
 
     try {
       const createdChat = await Chat.create(chatData);
-      console.log(createdChat);
       const FullChat = await Chat.findOne({ _id: createdChat._id }).populate(
         "users",
         "-password"
@@ -57,36 +45,18 @@ const accessChat = asyncHandler(async (req, res) => {
       res.status(200).json(FullChat);
     } catch (error) {
       res.status(400);
-      res.status(400).json({ message: error.message });
-      console.log("catch block run");
+      throw new Error(error.message);
     }
   }
 });
-
-//@description     Fetch all chats for a user
-//@route           GET /api/chat/
-//@access          Protected
 const fetchChats = asyncHandler(async (req, res) => {
-  const { user } = req.query;
   try {
-    console.log(user);
-    let UserModel;
-    if (user.gender === "female") {
-      UserModel = FemaleUser;
-    } else if (user.gender === "male") {
-      UserModel = MaleUser;
-    } else {
-      res.status(400);
-      throw new Error("Invalid gender");
-    }
-
     Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
       .populate("users", "-password")
-      .populate("groupAdmin", "-password")
       .populate("latestMessage")
       .sort({ updatedAt: -1 })
       .then(async (results) => {
-        results = await UserModel.populate(results, {
+        results = await User.populate(results, {
           path: "latestMessage.sender",
           select: "name pic email",
         });
@@ -98,4 +68,7 @@ const fetchChats = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { accessChat, fetchChats };
+module.exports = {
+  accessChat,
+  fetchChats,
+};

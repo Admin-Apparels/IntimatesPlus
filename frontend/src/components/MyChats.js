@@ -22,7 +22,7 @@ const MyChat = ({ fetchAgain }) => {
         },
       };
 
-      const { data } = await axios.get("/api/chat", { params: user }, config);
+      const { data } = await axios.get("/api/chat", config);
 
       const chatsWithSenderNames = await Promise.all(
         data.map(async (chat) => {

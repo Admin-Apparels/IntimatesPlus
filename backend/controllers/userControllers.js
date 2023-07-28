@@ -1,41 +1,24 @@
 const asyncHandler = require("express-async-handler");
-const { FemaleUser, MaleUser } = require("../models/userModel");
+const User = require("../models/userModel");
 
 const generateToken = require("../config/generateToken");
 const registerUsers = asyncHandler(async (req, res) => {
   const { name, email, password, gender, pic, value } = req.body;
-  console.log(gender);
 
   if (!email || !name || !password) {
     res.status(400);
     throw new Error("Please enter all fields");
   }
 
-  let UserModel;
-  if (gender === "female") {
-    UserModel = FemaleUser;
-  } else if (gender === "male") {
-    UserModel = MaleUser;
-  } else {
-    res.status(400);
-    throw new Error("Invalid gender");
-  }
-
-  // Check if user already exists in the corresponding collection
-  const userExists = await UserModel.findOne({ email });
+  const userExists = await User.findOne({ email });
   if (userExists) {
     res.status(400);
     throw new Error("User already exists, login");
   }
 
-  const userData = { name, email, password, gender, pic };
+  const userData = { name, email, password, gender, pic, value };
 
-  if (gender === "female") {
-    userData.value = value; // Add value field only for female users
-  }
-
-  // Create a new user based on gender
-  const user = await UserModel.create(userData);
+  const user = await User.create(userData);
 
   if (user) {
     const responseData = {
@@ -43,8 +26,9 @@ const registerUsers = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       gender: user.gender,
+      value: user.value,
       pic: user.pic,
-      token: generateToken(user._id, user.gender),
+      token: generateToken(user._id),
     };
 
     res.status(201).json(responseData);
@@ -57,69 +41,47 @@ const registerUsers = asyncHandler(async (req, res) => {
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  const femaleUser = await FemaleUser.findOne({ email });
+  const user = await User.findOne({ email });
 
-  const maleUser = !femaleUser ? await MaleUser.findOne({ email }) : null;
-
-  if (femaleUser && (await femaleUser.comparePassword(password))) {
-    res.status(201).json({
-      _id: femaleUser._id,
-      name: femaleUser.name,
-      email: femaleUser.email,
-      gender: femaleUser.gender,
-      pic: femaleUser.pic,
-      token: generateToken(femaleUser._id, femaleUser.gender),
-    });
-  } else if (maleUser && (await maleUser.comparePassword(password))) {
-    res.status(201).json({
-      _id: maleUser._id,
-      name: maleUser.name,
-      email: maleUser.email,
-      gender: maleUser.gender,
-      pic: maleUser.pic,
-      token: generateToken(maleUser._id, maleUser.gender),
+  if (user && (await user.comparePassword(password))) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      gender: user.gender,
+      value: user.value,
+      pic: user.pic,
+      token: generateToken(user._id),
     });
   } else {
-    res.status(400);
-    throw new Error("User Not Found, Sign Up");
+    res.status(401);
+    throw new Error("Invalid Email or Password");
   }
 });
 
-const allUsers = asyncHandler(async (req, res) => {
-  // const keyword = req.query.search
-  //   ? {
-  //       $or: [
-  //         { name: { $regex: req.query.search, $options: "i" } },
-  //         { email: { $regex: req.query.search, $options: "i" } },
-  //       ],
-  //     }
-  //   : {};
-  // const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
-  // res.send(users);
-});
 const getUserById = asyncHandler(async (req, res) => {
   try {
     const userId = req.params.userId;
-    const femaleUser = await FemaleUser.findById(userId);
-    const maleUser = !femaleUser ? await MaleUser.findById(userId) : null;
-    if (femaleUser) {
-      res.json({ femaleUser });
-    } else {
-      res.json({ maleUser });
-    }
+    const user = await User.findById(userId);
+
+    res.json({ user });
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve user" });
   }
 });
+// const randomFemaleUsers = await User.aggregate([
+//   { $match: { gender: "female" } },
+//   { $sample: { size: 10 } },
+// ]);
 
 const getUsers = asyncHandler(async (req, res) => {
   try {
-    const allUsers = await FemaleUser.find().lean();
+    const allUsers = await User.find({ gender: "female" }).lean();
 
     res.json({ allUsers });
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error404" });
   }
 });
 
-module.exports = { registerUsers, authUser, allUsers, getUserById, getUsers };
+module.exports = { registerUsers, authUser, getUserById, getUsers };

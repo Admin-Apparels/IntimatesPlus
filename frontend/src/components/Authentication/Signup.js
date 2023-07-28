@@ -54,52 +54,29 @@ const Signup = () => {
           "Content-type": "application/json",
         },
       };
-      if (gender === "female") {
-        const { data } = await axios.post(
-          "/api/user",
-          {
-            name,
-            email,
-            password,
-            gender,
-            value,
-            pic,
-          },
-          config
-        );
-        toast({
-          title: "Registration Successful",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom",
-        });
-        localStorage.setItem("userInfo", JSON.stringify(data));
-        setPicLoading(false);
-        navigate("/chats");
-      } else {
-        const { data } = await axios.post(
-          "/api/user",
-          {
-            name,
-            email,
-            password,
-            gender,
-            pic,
-          },
-          config
-        );
-        toast({
-          title: "Registration Successful",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom",
-        });
-        localStorage.setItem("userInfo", JSON.stringify(data));
-        setPicLoading(false);
-        navigate("/chats");
-      }
+
+      const { data } = await axios.post(
+        "/api/user",
+        {
+          name,
+          email,
+          password,
+          gender,
+          value,
+          pic,
+        },
+        config
+      );
+      toast({
+        title: "Registration Successful",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      setPicLoading(false);
+      navigate("/chats");
     } catch (error) {
       toast({
         title: "Error Occurred!",
@@ -157,7 +134,7 @@ const Signup = () => {
   };
 
   const MIN_CHARACTERS = 100;
-  const MAX_CHARACTERS = 120;
+  const MAX_CHARACTERS = 150;
   const isFormValid = () => {
     if (gender === "female") {
       return value.length >= MIN_CHARACTERS;
@@ -235,9 +212,9 @@ const Signup = () => {
           />
           <Text
             fontSize="sm"
-            color={value.length >= MAX_CHARACTERS ? "green.500" : "red.500"}
+            color={value.length >= MIN_CHARACTERS ? "green.500" : "red.500"}
           >
-            {`${value.length}/${MAX_CHARACTERS}`}
+            {`${value.length}/${MIN_CHARACTERS}`}
           </Text>
         </FormControl>
       )}

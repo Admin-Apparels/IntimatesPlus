@@ -5,7 +5,7 @@ chatModel = mongoose.Schema(
     users: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: ["FemaleUser", "MaleUser"],
+        ref: "User",
       },
     ],
     latestMessage: {
