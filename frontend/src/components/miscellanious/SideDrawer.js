@@ -25,7 +25,7 @@ import axios from "axios";
 import { useToast } from "@chakra-ui/toast";
 import ChatLoading from "../ChatLoading";
 import { Spinner } from "@chakra-ui/spinner";
-import ProfileModal from "../miscellanious/ProfileModal";
+import ClientModal from "../miscellanious/Client";
 
 import { getSenderName } from "../config/ChatLogics";
 import UserListItem from "../userAvatar/UserListItem";
@@ -177,9 +177,9 @@ function SideDrawer() {
               />
             </MenuButton>
             <MenuList>
-              <ProfileModal user={user}>
+              <ClientModal user={user}>
                 <MenuItem>My Profile</MenuItem>{" "}
-              </ProfileModal>
+              </ClientModal>
               <MenuDivider />
               <MenuItem onClick={logoutHandler}>Logout</MenuItem>
             </MenuList>

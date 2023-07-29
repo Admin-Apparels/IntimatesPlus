@@ -211,7 +211,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             />
 
             {getSenderName(user, selectedChat.users)}
-            <ProfileModal user={getSenderFull(user, selectedChat.users)} />
+            <ProfileModal userInfo={getSenderFull(user, selectedChat.users)} />
           </Text>
           <Box
             display="flex"

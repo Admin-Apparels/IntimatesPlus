@@ -83,5 +83,29 @@ const getUsers = asyncHandler(async (req, res) => {
     res.status(500).json({ error: "Internal Server Error404" });
   }
 });
+const blockUnblock = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
 
-module.exports = { registerUsers, authUser, getUserById, getUsers };
+  const userToBlock = await User.findById(userId);
+
+  if (!userToBlock) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  try {
+    userToBlock.isBlocked = !userToBlock.isBlocked;
+    await userToBlock.save();
+    console.log(userToBlock);
+    res.json(userToBlock);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error: 404" });
+  }
+});
+
+module.exports = {
+  registerUsers,
+  authUser,
+  getUserById,
+  getUsers,
+  blockUnblock,
+};

@@ -12,46 +12,55 @@ import {
   IconButton,
   Text,
   Image,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { ChatState } from "../Context/ChatProvider";
 import { useState } from "react";
 
-const ProfileModal = ({ user, children }) => {
+const ProfileModal = ({ userInfo }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isFocused, setIsFocused] = useState(false);
-  const { selectedChat } = ChatState();
+  const { user, setUser, selectedChat } = ChatState();
+  console.log(user);
+  const toast = useToast();
 
   const toggleFocus = () => {
     setIsFocused((prevState) => !prevState);
   };
-  const handleBlockUser = async (userId, authToken) => {
+  const handleBlockUnBlock = async (userId, user) => {
+    console.log(user.token);
+    console.log(userId);
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${authToken}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
 
-      const response = await axios.put(`/api/user/block/${userId}`, {}, config);
-      return response.data;
+      const { data } = await axios.put(`/api/user/block/${userId}`, {}, config);
+      setUser(data);
+      console.log(data);
     } catch (error) {
-      throw error.response.data.message || "Error blocking user";
+      toast({
+        title: "Error Occured!",
+        description: "Failed to Process Request.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
     }
   };
-  const handleUnblock = () => {};
 
   return (
     <>
-      {children ? (
-        <span onClick={onOpen}>{children}</span>
-      ) : (
-        <IconButton
-          display={{ base: "flex" }}
-          icon={<ViewIcon />}
-          onClick={onOpen}
-        />
-      )}
+      <IconButton
+        display={{ base: "flex" }}
+        icon={<ViewIcon />}
+        onClick={onOpen}
+      />
+
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
         <ModalContent height="410px">
@@ -61,7 +70,7 @@ const ProfileModal = ({ user, children }) => {
             display="flex"
             justifyContent="center"
           >
-            {user.name}
+            {userInfo.name}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
@@ -73,8 +82,8 @@ const ProfileModal = ({ user, children }) => {
             <Image
               borderRadius="full"
               boxSize={isFocused ? "300px" : "150px"}
-              src={user.pic}
-              alt={user.name}
+              src={userInfo.pic}
+              alt={userInfo.name}
               cursor="pointer"
               onClick={toggleFocus}
               transition="box-size 0.3s ease-in-out"
@@ -84,19 +93,24 @@ const ProfileModal = ({ user, children }) => {
               fontFamily="Work sans"
               display={isFocused ? "none" : "flex"}
             >
-              Email: {user.email}
+              Email: {userInfo.email}
             </Text>
           </ModalBody>
           <ModalFooter display={isFocused ? "none" : "flex"}>
-            {selectedChat.isBlocked === true ? (
-              <Button color={"green.400"} onClick={handleUnblock}>
-                Blocked
+            {selectedChat.users[1].isBlocked === true ? (
+              <Button
+                color={"green.400"}
+                onClick={() =>
+                  handleBlockUnBlock(selectedChat.users[1]._id, user)
+                }
+              >
+                Unblock
               </Button>
             ) : (
               <Button
                 color={"red.400"}
                 onClick={() =>
-                  handleBlockUser(selectedChat.users[1]._id, user.token)
+                  handleBlockUnBlock(selectedChat.users[1]._id, user)
                 }
               >
                 Block
