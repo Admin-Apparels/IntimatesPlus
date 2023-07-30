@@ -22,15 +22,15 @@ const ProfileModal = ({ userInfo }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isFocused, setIsFocused] = useState(false);
   const { user, setUser, selectedChat } = ChatState();
-  console.log(user);
+
   const toast = useToast();
 
   const toggleFocus = () => {
     setIsFocused((prevState) => !prevState);
   };
-  const handleBlockUnBlock = async (userId, user) => {
-    console.log(user.token);
+  const handleBlock = async (userId, user) => {
     console.log(userId);
+    console.log(user);
     try {
       const config = {
         headers: {
@@ -52,6 +52,33 @@ const ProfileModal = ({ userInfo }) => {
       });
     }
   };
+  const handleUnBlock = async (userId, user) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/user/unblock/${userId}`,
+        {},
+        config
+      );
+      setUser(data);
+      console.log(data);
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: "Failed to Process Request.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+  };
+  const blocked = user.isBlocked.includes(selectedChat.users[1]._id);
 
   return (
     <>
@@ -97,21 +124,17 @@ const ProfileModal = ({ userInfo }) => {
             </Text>
           </ModalBody>
           <ModalFooter display={isFocused ? "none" : "flex"}>
-            {selectedChat.users[1].isBlocked === true ? (
+            {blocked ? (
               <Button
                 color={"green.400"}
-                onClick={() =>
-                  handleBlockUnBlock(selectedChat.users[1]._id, user)
-                }
+                onClick={() => handleUnBlock(selectedChat.users[1]._id, user)}
               >
                 Unblock
               </Button>
             ) : (
               <Button
                 color={"red.400"}
-                onClick={() =>
-                  handleBlockUnBlock(selectedChat.users[1]._id, user)
-                }
+                onClick={() => handleBlock(selectedChat.users[1]._id, user)}
               >
                 Block
               </Button>

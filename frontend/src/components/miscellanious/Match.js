@@ -131,7 +131,7 @@ const MatchModal = () => {
       )}
 
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
-        {currentUser ? (
+        {currentUser && (
           <>
             <ModalOverlay />
             <ModalContent height="80vh" width={"calc(100% - 20px)"}>
@@ -183,14 +183,6 @@ const MatchModal = () => {
               </ModalFooter>
             </ModalContent>
           </>
-        ) : (
-          <Text
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
-            No more Matches
-          </Text>
         )}
       </Modal>
     </>

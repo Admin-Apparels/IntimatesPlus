@@ -28,6 +28,7 @@ const registerUsers = asyncHandler(async (req, res) => {
       gender: user.gender,
       value: user.value,
       pic: user.pic,
+      isBlocked: [],
       token: generateToken(user._id),
     };
 
@@ -51,6 +52,7 @@ const authUser = asyncHandler(async (req, res) => {
       gender: user.gender,
       value: user.value,
       pic: user.pic,
+      isBlocked: user.isBlocked,
       token: generateToken(user._id),
     });
   } else {
@@ -83,8 +85,9 @@ const getUsers = asyncHandler(async (req, res) => {
     res.status(500).json({ error: "Internal Server Error404" });
   }
 });
-const blockUnblock = asyncHandler(async (req, res) => {
+const block = asyncHandler(async (req, res) => {
   const { userId } = req.params;
+  const { user } = req.user;
 
   const userToBlock = await User.findById(userId);
 
@@ -93,12 +96,30 @@ const blockUnblock = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
   try {
-    userToBlock.isBlocked = !userToBlock.isBlocked;
-    await userToBlock.save();
-    console.log(userToBlock);
-    res.json(userToBlock);
+    await User.updateOne(
+      { _id: user._id },
+      { $addToSet: { isBlocked: userId } }
+    );
+    const updatedUser = await User.findById(user._id);
+    console.log(updatedUser);
+    res.json(updatedUser);
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error: 404" });
+    res.status(500).json({ error: "Failed to Block!" });
+  }
+});
+const Unblock = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const { user } = req.user;
+
+  try {
+    await User.updateOne({ _id: user._id }, { $pull: { isBlocked: userId } });
+
+    const updatedUser = await User.findById(user._id);
+
+    console.log(updatedUser);
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: "Unable to Unblock" });
   }
 });
 
@@ -107,5 +128,6 @@ module.exports = {
   authUser,
   getUserById,
   getUsers,
-  blockUnblock,
+  block,
+  Unblock,
 };
