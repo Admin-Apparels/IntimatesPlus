@@ -39,7 +39,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   const { selectedChat, setSelectedChat, user, notification, setNotification } =
     ChatState();
-  console.log(user);
 
   const fetchMessages = useCallback(async () => {
     if (!selectedChat) return;
@@ -94,9 +93,25 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     if ((event && event.key === "Enter") || !event) {
       if (newMessage && selectedChat) {
         socket.emit("stop typing", selectedChat._id);
-        if (selectedChat.users[1].isBlocked) {
+        const unBlock1 = user.isBlocked.includes(selectedChat.users[1]._id); //you blocked this user in 1 index;
+        const unblock2 = user.isBlocked.includes(selectedChat.users[0]._id); // you blocked this user in 0 index;
+        const blocked1 = selectedChat.users[0].isBlocked.includes(user._id); //can be in both users due to populate
+        const blocked2 = selectedChat.users[1].isBlocked.includes(user._id);
+        if (blocked1 || blocked2) {
           toast({
             title: "Blocked!",
+            description: "Can't send Message",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom",
+          });
+
+          return;
+        }
+        if (unBlock1 || unblock2) {
+          toast({
+            title: "Unblock user to send Message",
             description: "Failed to send the Message",
             status: "error",
             duration: 5000,
@@ -106,18 +121,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
           return;
         }
-        // if (selectedChat.users[1].isBlocked) {
-        //   toast({
-        //     title: "Blocked!",
-        //     description: "Failed to send the Message",
-        //     status: "error",
-        //     duration: 5000,
-        //     isClosable: true,
-        //     position: "bottom",
-        //   });
-
-        //   return;
-        // }
 
         try {
           const config = {

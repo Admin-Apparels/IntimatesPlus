@@ -39,7 +39,7 @@ const ProfileModal = ({ userInfo }) => {
       };
 
       const { data } = await axios.put(`/api/user/block/${userId}`, {}, config);
-      setUser(data);
+      setUser((prev) => ({ ...prev, isBlocked: data.isBlocked }));
       console.log(data);
     } catch (error) {
       toast({
@@ -53,6 +53,7 @@ const ProfileModal = ({ userInfo }) => {
     }
   };
   const handleUnBlock = async (userId, user) => {
+    console.log("UNBLOCKING...");
     try {
       const config = {
         headers: {
@@ -65,7 +66,7 @@ const ProfileModal = ({ userInfo }) => {
         {},
         config
       );
-      setUser(data);
+      setUser((prev) => ({ ...prev, isBlocked: data.isBlocked }));
       console.log(data);
     } catch (error) {
       toast({
@@ -78,8 +79,13 @@ const ProfileModal = ({ userInfo }) => {
       });
     }
   };
-  const blocked = user.isBlocked.includes(selectedChat.users[1]._id);
-
+  const blocked =
+    user.isBlocked.includes(selectedChat.users[0]._id) ||
+    user.isBlocked.includes(selectedChat.users[1]._id);
+  const userId =
+    selectedChat.users[1]._id === user._id
+      ? selectedChat.users[0]._id
+      : selectedChat.users[1]._id;
   return (
     <>
       <IconButton
@@ -90,7 +96,7 @@ const ProfileModal = ({ userInfo }) => {
 
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
-        <ModalContent height="410px">
+        <ModalContent height="410px" width={"calc(100% - 20px)"}>
           <ModalHeader
             fontSize="40px"
             fontFamily="Work sans"
@@ -127,14 +133,14 @@ const ProfileModal = ({ userInfo }) => {
             {blocked ? (
               <Button
                 color={"green.400"}
-                onClick={() => handleUnBlock(selectedChat.users[1]._id, user)}
+                onClick={() => handleUnBlock(userId, user)}
               >
                 Unblock
               </Button>
             ) : (
               <Button
                 color={"red.400"}
-                onClick={() => handleBlock(selectedChat.users[1]._id, user)}
+                onClick={() => handleBlock(userId, user)}
               >
                 Block
               </Button>

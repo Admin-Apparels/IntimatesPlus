@@ -87,21 +87,14 @@ const getUsers = asyncHandler(async (req, res) => {
 });
 const block = asyncHandler(async (req, res) => {
   const { userId } = req.params;
-  const { user } = req.user;
-
-  const userToBlock = await User.findById(userId);
-
-  if (!userToBlock) {
-    res.status(404);
-    throw new Error("User not found");
-  }
+  const user = req.user;
   try {
     await User.updateOne(
       { _id: user._id },
       { $addToSet: { isBlocked: userId } }
     );
-    const updatedUser = await User.findById(user._id);
-    console.log(updatedUser);
+    const updatedUser = await User.findById(user._id).select("isBlocked");
+
     res.json(updatedUser);
   } catch (error) {
     res.status(500).json({ error: "Failed to Block!" });
@@ -109,19 +102,48 @@ const block = asyncHandler(async (req, res) => {
 });
 const Unblock = asyncHandler(async (req, res) => {
   const { userId } = req.params;
-  const { user } = req.user;
+  const user = req.user;
 
   try {
     await User.updateOne({ _id: user._id }, { $pull: { isBlocked: userId } });
 
-    const updatedUser = await User.findById(user._id);
+    const updatedUser = await User.findById(user._id).select("isBlocked");
 
-    console.log(updatedUser);
     res.json(updatedUser);
   } catch (error) {
     res.status(500).json({ error: "Unable to Unblock" });
   }
 });
+const updateUser = async (req, res) => {
+  const { pic } = req.body;
+  const { userId } = req.params;
+
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: userId },
+      { pic: pic },
+      { new: true }
+    ).select("pic");
+
+    res.json(updatedUser);
+  } catch (error) {
+    throw new Error("Failed to update user pic");
+  }
+};
+const deleteUser = async (req, res) => {
+  const { userId } = req.params;
+  console.log(userId);
+  try {
+    const deletedUser = await User.findOneAndDelete({ _id: userId });
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 module.exports = {
   registerUsers,
@@ -130,4 +152,6 @@ module.exports = {
   getUsers,
   block,
   Unblock,
+  updateUser,
+  deleteUser,
 };
