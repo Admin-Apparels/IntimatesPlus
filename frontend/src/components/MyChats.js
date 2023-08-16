@@ -9,7 +9,15 @@ import { ChatState } from "./Context/ChatProvider";
 const MyChat = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
 
-  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
+  const {
+    selectedChat,
+    setSelectedChat,
+    user,
+    chats,
+    setChats,
+    notification,
+    setNotification,
+  } = ChatState();
   console.log(user);
 
   const toast = useToast();
@@ -75,7 +83,13 @@ const MyChat = ({ fetchAgain }) => {
   const renderChatItems = () => {
     return chats.map((chat) => (
       <Box
-        onClick={() => setSelectedChat(chat)}
+        onClick={() => {
+          setSelectedChat(chat);
+          const otherNotifications = notification.filter(
+            (n) => n.chat._id !== chat._id
+          );
+          setNotification(otherNotifications);
+        }}
         cursor="pointer"
         bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
         color={selectedChat === chat ? "white" : "black"}

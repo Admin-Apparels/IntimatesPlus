@@ -2,6 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
+import { Badge } from "@chakra-ui/react";
 import {
   Menu,
   MenuButton,
@@ -43,7 +44,7 @@ function SideDrawer() {
     chats,
     setChats,
   } = ChatState();
-
+  console.log(notification);
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const history = useNavigate();
@@ -104,8 +105,22 @@ function SideDrawer() {
 
         <div>
           <Menu>
-            <MenuButton p={1}>
-              <BellIcon fontSize="2xl" m={1} />
+            <MenuButton p={1} position="relative">
+              <BellIcon fontSize="2xl" p={0} m={0} />
+              {notification.length > 0 && (
+                <Badge
+                  color="red.400"
+                  variant="subtle"
+                  position="absolute"
+                  top="-3px"
+                  right="-3px"
+                  backgroundColor={"transparent"}
+                  zIndex={1}
+                >
+                  {"+"}
+                  {notification.length}
+                </Badge>
+              )}
             </MenuButton>
             <MenuList pl={2}>
               {!notification.length && "No New Messages"}
@@ -115,14 +130,13 @@ function SideDrawer() {
                   onClick={() => {
                     setSelectedChat(notif.chat);
                     setNotification(notification.filter((n) => n !== notif));
+                    const otherNotifications = notification.filter(
+                      (n) => n.chat._id !== notif.chat._id
+                    );
+                    setNotification(otherNotifications);
                   }}
                 >
-                  {notif.chat.isGroupChat
-                    ? `New Message in ${notif.chat.chatName}`
-                    : `New Message from ${getSenderName(
-                        user,
-                        notif.chat.users
-                      )}`}
+                  {`New Message from ${getSenderName(user, notif.chat.users)}`}
                 </MenuItem>
               ))}
             </MenuList>
