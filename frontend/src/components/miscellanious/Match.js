@@ -14,7 +14,7 @@ import {
   useToast,
   Spinner,
 } from "@chakra-ui/react";
-import { FaHeart } from "react-icons/fa";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { ChatState } from "../Context/ChatProvider";
 import { useState } from "react";
 import axios from "axios";
@@ -121,7 +121,17 @@ const MatchModal = () => {
       ) : (
         <IconButton
           display={{ base: "flex" }}
-          icon={<FaHeart color="red.500" />}
+          justifyContent={"center"}
+          alignItems={"center"}
+          color={"red.400"}
+          icon={
+            <>
+              <FavoriteIcon fontSize="medium" />
+              <Text p={0} m={0} mt={3} fontStyle={"italic"}>
+                Find Women:{")"}
+              </Text>
+            </>
+          }
           onClick={() => {
             setLoading(true);
             onOpen();

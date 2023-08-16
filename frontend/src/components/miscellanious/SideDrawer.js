@@ -23,7 +23,6 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/toast";
-import ChatLoading from "../ChatLoading";
 import { Spinner } from "@chakra-ui/spinner";
 import ClientModal from "../miscellanious/Client";
 
@@ -34,8 +33,6 @@ import MatchModal from "./Match";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
 
   const {
@@ -54,43 +51,6 @@ function SideDrawer() {
   const logoutHandler = () => {
     localStorage.removeItem("userInfo");
     history("/");
-  };
-
-  const handleSearch = async () => {
-    if (!search) {
-      toast({
-        title: "Please Enter something in search",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "top-left",
-      });
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-
-      const { data } = await axios.get(`/api/user?search=${search}`, config);
-
-      setLoading(false);
-      setResults(data);
-    } catch (error) {
-      toast({
-        title: "Error Occured!",
-        description: "Failed to Load the Search Results",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom-left",
-      });
-    }
   };
 
   const accessChat = async (userId, user) => {
@@ -136,7 +96,7 @@ function SideDrawer() {
           <Button variant="ghost" onClick={onOpen}>
             <i className="fas fa-search"></i>
             <Text display={{ base: "none", md: "flex" }} px={4}>
-              Search User
+              Search Chat
             </Text>
           </Button>
         </Tooltip>
@@ -190,7 +150,7 @@ function SideDrawer() {
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader borderBottomWidth="1px">Search Users</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">Search Chat</DrawerHeader>
           <DrawerBody>
             <Box display="flex" pb={2}>
               <Input
@@ -199,18 +159,42 @@ function SideDrawer() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <Button onClick={handleSearch}>Go</Button>
             </Box>
-            {loading ? (
-              <ChatLoading />
+            {search !== "" ? (
+              chats.length > 0 ? (
+                chats
+                  .filter((chat) =>
+                    chat.users.some(
+                      (participant) =>
+                        participant._id !== user._id &&
+                        (participant.name
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                          participant.email
+                            .toLowerCase()
+                            .includes(search.toLowerCase()))
+                    )
+                  )
+                  .map((chat) => {
+                    const otherParticipant = chat.users.find(
+                      (participant) => participant._id !== user._id
+                    );
+
+                    return (
+                      <UserListItem
+                        key={otherParticipant._id}
+                        user={otherParticipant}
+                        handleFunction={() =>
+                          accessChat(otherParticipant._id, user)
+                        }
+                      />
+                    );
+                  })
+              ) : (
+                <Text>No chats were found.</Text>
+              )
             ) : (
-              results.map((userData) => (
-                <UserListItem
-                  key={userData._id}
-                  user={userData}
-                  handleFunction={() => accessChat(userData._id, user)}
-                />
-              ))
+              <Text>Start typing to search for chats...</Text>
             )}
             {loadingChat && <Spinner ml="auto" display="flex" />}
           </DrawerBody>

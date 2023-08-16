@@ -23,23 +23,35 @@ const MyChat = ({ fetchAgain }) => {
       };
 
       const { data } = await axios.get("/api/chat", config);
+      console.log(data);
+      if (data.message) {
+        if (user.gender === "male") {
+          toast({
+            title: "Chat with One Girl that You Like!",
+            description: "Lucky Hour!",
+            status: "success",
+            duration: 10000,
+            isClosable: true,
+            position: "top-left",
+          });
+        }
+      } else {
+        const chatsWithSenderNames = await Promise.all(
+          data.map(async (chat) => {
+            const resolvedUsers = await Promise.all(chat.users);
+            const senderName =
+              resolvedUsers[0]._id === loggedUser._id
+                ? resolvedUsers[1].name
+                : resolvedUsers[0].name;
+            return { ...chat, senderName };
+          })
+        );
 
-      const chatsWithSenderNames = await Promise.all(
-        data.map(async (chat) => {
-          const resolvedUsers = await Promise.all(chat.users);
-          const senderName =
-            resolvedUsers[0]._id === loggedUser._id
-              ? resolvedUsers[1].name
-              : resolvedUsers[0].name;
-          return { ...chat, senderName };
-        })
-      );
-
-      setChats(chatsWithSenderNames);
+        setChats(chatsWithSenderNames);
+      }
     } catch (error) {
       toast({
-        title: "Error Occured!",
-        description: "Failed to Load the chats",
+        title: "Error Occured Retrieving Chats!",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -90,31 +102,34 @@ const MyChat = ({ fetchAgain }) => {
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
       flexDir="column"
       alignItems="center"
-      p={3}
+      p={2}
       bg="white"
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
     >
       <Box
-        pb={3}
-        px={3}
-        fontSize={{ base: "28px", md: "30px" }}
-        fontFamily="Work sans"
         display="flex"
+        p={2}
         w="100%"
         justifyContent="space-between"
         alignItems="center"
       >
-        My Chats: <br />
-        {Array.isArray(chats) &&
-          chats.length === 0 &&
-          user.gender === "female" &&
-          "Wait from Admin"}
-        {Array.isArray(chats) &&
-          chats.length === 0 &&
-          user.gender === "male" &&
-          "Create Chats Above"}
+        <Text fontFamily={"fantasy"} fontWeight={"medium"}>
+          My Chats:{" "}
+        </Text>
+        <Text fontWeight={"bold"}>
+          {Array.isArray(chats) &&
+            chats.length === 0 &&
+            user.gender === "female" &&
+            "Wait from Admin"}
+        </Text>
+        <Text fontWeight={"bold"}>
+          {Array.isArray(chats) &&
+            chats.length === 0 &&
+            user.gender === "male" &&
+            "Create Chats Above"}
+        </Text>
       </Box>
       <Box
         display="flex"

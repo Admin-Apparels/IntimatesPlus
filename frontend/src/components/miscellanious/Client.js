@@ -28,6 +28,7 @@ const ClientModal = ({ children }) => {
   const [isFocused, setIsFocused] = useState(false);
   const { user, setUser } = ChatState();
   const [picLoading, setPicLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [pic, setPic] = useState(undefined);
   const toast = useToast();
   const navigate = useNavigate();
@@ -86,7 +87,7 @@ const ClientModal = ({ children }) => {
       return;
     }
     const defaultImageUrl =
-      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+      "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1691604043/tafdbj59ooryy49zkttk.png";
     if (
       encodeURIComponent(user.pic) === encodeURIComponent(defaultImageUrl) &&
       (pics.type === "image/jpeg" || pics.type === "image/png")
@@ -131,6 +132,9 @@ const ClientModal = ({ children }) => {
   };
 
   const deleteAccount = async () => {
+    setDeleteLoading(true);
+    const defaultImageUrl =
+      "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1691604043/tafdbj59ooryy49zkttk.png";
     const userId = user._id;
     try {
       const config = {
@@ -138,9 +142,31 @@ const ClientModal = ({ children }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
+      if (
+        encodeURIComponent(user.pic) !== encodeURIComponent(defaultImageUrl)
+      ) {
+        const publicId = user.pic.split("/").pop().split(".")[0];
+        try {
+          const { data } = await axios.delete(
+            `/api/user/delete-image/${publicId}`,
+            config
+          );
+          console.log(data);
+        } catch (error) {
+          toast({
+            title: "Error",
+            description: "Image Not Deleted.",
+            status: "error",
+            duration: 5000,
+            position: "bottom",
+            isClosable: true,
+          });
+        }
+      }
       await axios.delete(`api/user/deleteuser/${userId}`, config);
       localStorage.removeItem("userInfo");
       navigate("/");
+      setDeleteLoading(false);
       toast({
         title: "Account Deleted",
         description: "Your account has been successfully deleted.",
@@ -150,6 +176,7 @@ const ClientModal = ({ children }) => {
         isClosable: true,
       });
     } catch (error) {
+      setDeleteLoading(false);
       toast({
         title: "Error Occurred",
         description: error.message || "Failed to delete account.",
@@ -239,6 +266,15 @@ const ClientModal = ({ children }) => {
 
               <Button
                 backgroundColor={"red.400"}
+                onMouseEnter={() => {
+                  toast({
+                    title: "You are about to delete your Account",
+                    status: "warning",
+                    duration: 5000,
+                    position: "bottom",
+                    isClosable: true,
+                  });
+                }}
                 onClick={() => {
                   if (
                     window.confirm(
@@ -248,6 +284,7 @@ const ClientModal = ({ children }) => {
                     deleteAccount();
                   }
                 }}
+                isLoading={deleteLoading}
               >
                 Delete Account
               </Button>

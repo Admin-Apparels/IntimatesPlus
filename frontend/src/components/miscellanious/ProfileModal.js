@@ -29,8 +29,6 @@ const ProfileModal = ({ userInfo }) => {
     setIsFocused((prevState) => !prevState);
   };
   const handleBlock = async (userId, user) => {
-    console.log(userId);
-    console.log(user);
     try {
       const config = {
         headers: {
@@ -40,7 +38,6 @@ const ProfileModal = ({ userInfo }) => {
 
       const { data } = await axios.put(`/api/user/block/${userId}`, {}, config);
       setUser((prev) => ({ ...prev, isBlocked: data.isBlocked }));
-      console.log(data);
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -53,7 +50,6 @@ const ProfileModal = ({ userInfo }) => {
     }
   };
   const handleUnBlock = async (userId, user) => {
-    console.log("UNBLOCKING...");
     try {
       const config = {
         headers: {
@@ -67,7 +63,6 @@ const ProfileModal = ({ userInfo }) => {
         config
       );
       setUser((prev) => ({ ...prev, isBlocked: data.isBlocked }));
-      console.log(data);
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -86,6 +81,8 @@ const ProfileModal = ({ userInfo }) => {
     selectedChat.users[1]._id === user._id
       ? selectedChat.users[0]._id
       : selectedChat.users[1]._id;
+  const deleted =
+    selectedChat.users[0].deleted || selectedChat.users[1].deleted;
   return (
     <>
       <IconButton
@@ -121,30 +118,33 @@ const ProfileModal = ({ userInfo }) => {
               onClick={toggleFocus}
               transition="box-size 0.3s ease-in-out"
             />
+
             <Text
-              fontSize={{ base: "28px", md: "30px" }}
+              fontSize={{ base: "18px", md: "20px" }}
               fontFamily="Work sans"
+              textAlign={"center"}
               display={isFocused ? "none" : "flex"}
             >
-              Email: {userInfo.email}
+              {userInfo.value}
             </Text>
           </ModalBody>
           <ModalFooter display={isFocused ? "none" : "flex"}>
-            {blocked ? (
-              <Button
-                color={"green.400"}
-                onClick={() => handleUnBlock(userId, user)}
-              >
-                Unblock
-              </Button>
-            ) : (
-              <Button
-                color={"red.400"}
-                onClick={() => handleBlock(userId, user)}
-              >
-                Block
-              </Button>
-            )}
+            {!deleted &&
+              (blocked ? (
+                <Button
+                  color={"green.400"}
+                  onClick={() => handleUnBlock(userId, user)}
+                >
+                  Unblock
+                </Button>
+              ) : (
+                <Button
+                  color={"red.400"}
+                  onClick={() => handleBlock(userId, user)}
+                >
+                  Block
+                </Button>
+              ))}
           </ModalFooter>
         </ModalContent>
       </Modal>

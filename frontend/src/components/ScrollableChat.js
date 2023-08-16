@@ -7,11 +7,13 @@ import {
   isSameSenderMargin,
   isSameUser,
 } from "./config/ChatLogics";
+import { Text } from "@chakra-ui/react";
 import { ChatState } from "./Context/ChatProvider";
 
 const ScrollableChat = ({ messages }) => {
-  const { user } = ChatState();
-
+  const { user, selectedChat } = ChatState();
+  const deleted =
+    selectedChat.users[0].deleted || selectedChat.users[1].deleted;
   return (
     <ScrollableFeed>
       {messages &&
@@ -56,6 +58,7 @@ const ScrollableChat = ({ messages }) => {
             </div>
           );
         })}
+      {deleted && <Text color={"red"}>User Account deleted</Text>}
     </ScrollableFeed>
   );
 };

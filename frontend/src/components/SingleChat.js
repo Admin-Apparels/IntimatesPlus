@@ -97,6 +97,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         const unblock2 = user.isBlocked.includes(selectedChat.users[0]._id); // you blocked this user in 0 index;
         const blocked1 = selectedChat.users[0].isBlocked.includes(user._id); //can be in both users due to populate
         const blocked2 = selectedChat.users[1].isBlocked.includes(user._id);
+        const deleted =
+          selectedChat.users[0].deleted || selectedChat.users[1].deleted;
         if (blocked1 || blocked2) {
           toast({
             title: "Blocked!",
@@ -114,6 +116,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             title: "Unblock user to send Message",
             description: "Failed to send the Message",
             status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom",
+          });
+
+          return;
+        }
+        if (deleted) {
+          toast({
+            title: "User Account Deleted.",
+            description: "User deleted their Account",
+            status: "info",
             duration: 5000,
             isClosable: true,
             position: "bottom",

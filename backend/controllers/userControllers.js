@@ -2,6 +2,13 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 
 const generateToken = require("../config/generateToken");
+const dotenv = require("dotenv");
+
+const crypto = require("crypto");
+const axios = require("axios");
+
+dotenv.config({ path: "./secrets.env" });
+
 const registerUsers = asyncHandler(async (req, res) => {
   const { name, email, password, gender, pic, value } = req.body;
 
@@ -43,6 +50,10 @@ const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
+  if (user.deleted) {
+    res.status(400);
+    throw new Error("Sign Up please...");
+  }
 
   if (user && (await user.comparePassword(password))) {
     res.json({
@@ -78,7 +89,10 @@ const getUserById = asyncHandler(async (req, res) => {
 
 const getUsers = asyncHandler(async (req, res) => {
   try {
-    const allUsers = await User.find({ gender: "female" }).lean();
+    const allUsers = await User.find({
+      gender: "female",
+      $and: [{ deleted: { $ne: true } }],
+    }).lean();
 
     res.json({ allUsers });
   } catch (error) {
@@ -134,7 +148,20 @@ const deleteUser = async (req, res) => {
   const { userId } = req.params;
   console.log(userId);
   try {
-    const deletedUser = await User.findOneAndDelete({ _id: userId });
+    const deletedUser = await User.findOneAndUpdate(
+      { _id: userId },
+      {
+        $set: {
+          name: "Deleted Account",
+          value: "",
+          deleted: true,
+          password: "",
+          pic: "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1691604043/tafdbj59ooryy49zkttk.png",
+          isBlocked: [],
+        },
+      },
+      { new: true }
+    );
     if (!deletedUser) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -142,6 +169,34 @@ const deleteUser = async (req, res) => {
   } catch (error) {
     console.error("Error deleting user:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+const deleteImage = async (req, res) => {
+  const public_id = req.params.publicId;
+  const timestamp = new Date().getTime();
+  const stringToSign = `public_id=${public_id}&timestamp=${timestamp}${process.env.CLOUDINARY_API_SECRET}`;
+  const signature = crypto
+    .createHash("sha1")
+    .update(stringToSign)
+    .digest("hex");
+
+  try {
+    const formData = new FormData();
+    formData.append("public_id", public_id);
+    formData.append("signature", signature);
+    formData.append("api_key", process.env.CLOUDINARY_API_KEY);
+    formData.append("timestamp", timestamp);
+
+    await axios.delete(
+      `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/destroy`,
+      { data: formData }
+    );
+
+    res.status(200).json({ message: "Image deleted successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the image" });
   }
 };
 
@@ -154,4 +209,5 @@ module.exports = {
   Unblock,
   updateUser,
   deleteUser,
+  deleteImage,
 };

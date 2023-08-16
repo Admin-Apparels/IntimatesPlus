@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const userSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true, sparse: true },
     password: { type: String, required: true },
     gender: { type: String, required: true },
     value: { type: String },
@@ -12,9 +12,10 @@ const userSchema = mongoose.Schema(
       type: String,
 
       default:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1691604043/tafdbj59ooryy49zkttk.png",
     },
     isBlocked: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    deleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,
