@@ -49,17 +49,19 @@ const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
     origin: "http://localhost:3000",
-    // credentials: true,
   },
 });
-
+const onlineUsers = new Set();
 io.on("connection", (socket) => {
   console.log("Connected to socket.io");
   socket.on("setup", (userData) => {
-    socket.join(userData._id);
+    const userId = userData._id;
+    socket.join(userId);
     socket.emit("connected");
+    socket.userData = userData;
+    onlineUsers.add(userId);
+    io.emit("onlineUsers", onlineUsers.size);
   });
-
   socket.on("join chat", (room) => {
     socket.join(room);
     console.log("User Joined Room: " + room);
@@ -79,6 +81,13 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("disconnect", () => {
+    if (socket.userData && socket.userData._id) {
+      const userId = socket.userData._id;
+      onlineUsers.delete(userId);
+      io.emit("onlineUsers", onlineUsers.size);
+    }
+  });
   socket.off("setup", () => {
     console.log("USER DISCONNECTED");
     socket.leave(userData._id);

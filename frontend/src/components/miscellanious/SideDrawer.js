@@ -43,6 +43,7 @@ function SideDrawer() {
     setNotification,
     chats,
     setChats,
+    onlineUsersCount,
   } = ChatState();
   console.log(chats);
   const toast = useToast();
@@ -91,7 +92,6 @@ function SideDrawer() {
         bg="white"
         w="100%"
         p="5px 10px 5px 10px"
-        borderWidth="5px"
       >
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
           <Button variant="ghost" onClick={onOpen}>
@@ -102,6 +102,11 @@ function SideDrawer() {
           </Button>
         </Tooltip>
         {user.gender === "male" && <MatchModal />}
+        <Text
+          p={0}
+          m={0}
+          color={"green.400"}
+        >{`${onlineUsersCount} Online`}</Text>
 
         <div>
           <Menu>

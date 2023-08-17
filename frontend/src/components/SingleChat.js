@@ -21,7 +21,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
-  const [socketConnected, setSocketConnected] = useState(false);
 
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
@@ -37,8 +36,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     },
   };
 
-  const { selectedChat, setSelectedChat, user, notification, setNotification } =
-    ChatState();
+  const {
+    selectedChat,
+    setSelectedChat,
+    user,
+    notification,
+    setNotification,
+    setOnlineUsersCount,
+  } = ChatState();
 
   const fetchMessages = useCallback(async () => {
     if (!selectedChat) return;
@@ -174,14 +179,26 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   useEffect(() => {
     socket = io(ENDPOINT);
     socket.emit("setup", user);
-    socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
+    socket.on("newUserRegistered", () => {
+      toast({
+        title: "New User Registered",
+        description: `${user.name} joined`,
+        status: "info",
+        duration: 5000,
+        isClosable: true,
+        position: "top-left",
+      });
+    });
+    socket.on("onlineUsers", (count) => {
+      setOnlineUsersCount(count);
+    });
 
     return () => {
       socket.disconnect();
     };
-  }, [user]);
+  }, [user, toast, setOnlineUsersCount]);
 
   useEffect(() => {
     fetchMessages();
@@ -275,6 +292,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             />
 
             {getSenderName(user, selectedChat.users)}
+
             <ProfileModal userInfo={getSenderFull(user, selectedChat.users)} />
           </Text>
           <Box
@@ -307,7 +325,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <div>
                   <Lottie
                     options={defaultOptions}
-                    // height={50}
                     width={70}
                     style={{ marginBottom: 15, marginLeft: 0 }}
                   />
