@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema(
       type: String,
 
       default:
-        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1691604043/tafdbj59ooryy49zkttk.png",
+        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1692259839/xqm81bw94x7h6velrwha.png",
     },
     isBlocked: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     deleted: { type: Boolean, default: false },

@@ -29,11 +29,8 @@ const MatchModal = () => {
 
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
   const toast = useToast();
-  console.log(chats);
-  console.log(user);
 
   const accessChat = async (userId) => {
-    console.log(userId);
     try {
       setLoadingChat(true);
       const existingChat = chats.find(
@@ -57,7 +54,7 @@ const MatchModal = () => {
         );
 
         setChats([data, ...chats]);
-        console.log(data);
+
         setSelectedChat(data);
       }
 
@@ -74,8 +71,7 @@ const MatchModal = () => {
       });
     }
   };
-  console.log(selectedChat);
-  console.log(chats);
+
   const fetchFemaleUsers = async () => {
     setLoading(true);
     try {
@@ -121,14 +117,14 @@ const MatchModal = () => {
       ) : (
         <IconButton
           display={{ base: "flex" }}
+          flexDirection={"column"}
           justifyContent={"center"}
           alignItems={"center"}
           color={"red.400"}
           icon={
             <>
-              <FavoriteIcon fontSize="medium" />
-              <Text p={0} m={0} mt={3} fontStyle={"italic"}>
-                Find Women:{")"}
+              <Text p={1} fontStyle={"italic"}>
+                <FavoriteIcon fontSize="medium" p={0} m={0} /> Match
               </Text>
             </>
           }

@@ -18,7 +18,6 @@ const MyChat = ({ fetchAgain }) => {
     notification,
     setNotification,
   } = ChatState();
-  console.log(user);
 
   const toast = useToast();
 
@@ -31,7 +30,7 @@ const MyChat = ({ fetchAgain }) => {
       };
 
       const { data } = await axios.get("/api/chat", config);
-      console.log(data);
+
       if (data.message) {
         if (user.gender === "male") {
           toast({
@@ -78,7 +77,6 @@ const MyChat = ({ fetchAgain }) => {
       fetchChats();
     }
   }, [fetchChats, loggedUser]);
-  console.log(selectedChat);
 
   const renderChatItems = () => {
     return chats.map((chat) => (
@@ -98,10 +96,15 @@ const MyChat = ({ fetchAgain }) => {
         borderRadius="lg"
         key={chat._id}
       >
-        <Text>{!chat.isGroupChat ? chat.senderName : chat.chatName}</Text>
+        <Text>{chat.senderName}</Text>
         {chat.latestMessage && (
           <Text fontSize="xs">
-            <b>{chat.latestMessage.sender.name} : </b>
+            <b>
+              {chat.latestMessage.sender.name === user.name
+                ? "You"
+                : chat.latestMessage.sender.name}
+              {":"}{" "}
+            </b>
             {chat.latestMessage.content.length > 50
               ? chat.latestMessage.content.substring(0, 51) + "..."
               : chat.latestMessage.content}

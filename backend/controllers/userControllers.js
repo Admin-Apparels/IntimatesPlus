@@ -156,7 +156,7 @@ const deleteUser = async (req, res) => {
           value: "",
           deleted: true,
           password: "",
-          pic: "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1691604043/tafdbj59ooryy49zkttk.png",
+          pic: "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1692259839/xqm81bw94x7h6velrwha.png",
           isBlocked: [],
         },
       },

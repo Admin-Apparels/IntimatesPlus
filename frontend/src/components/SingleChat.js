@@ -190,6 +190,25 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   }, [selectedChat, fetchMessages, toast, user.token]);
 
   useEffect(() => {
+    const showNotification = (title, options) => {
+      if (Notification.permission === "granted") {
+        new Notification(title, options);
+        const audio = new Audio(
+          "https://s3.amazonaws.com/freecodecamp/drums/Give_us_a_light.mp3"
+        );
+        audio.play();
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then((permission) => {
+          if (permission === "granted") {
+            new Notification(title, options);
+            const audio = new Audio(
+              "https://s3.amazonaws.com/freecodecamp/drums/Give_us_a_light.mp3"
+            );
+            audio.play();
+          }
+        });
+      }
+    };
     socket.on("message received", (newMessageReceived) => {
       if (
         !selectedChatCompare ||
@@ -198,6 +217,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         if (!notification.includes(newMessageReceived)) {
           setNotification([newMessageReceived, ...notification]);
           setFetchAgain((prevValue) => !prevValue);
+          showNotification("New Message", {
+            body: `New message from ${newMessageReceived.sender.name}`,
+            icon: `${newMessageReceived.sender.pic}`,
+          });
         }
       } else {
         setMessages((prevMessages) => [...prevMessages, newMessageReceived]);

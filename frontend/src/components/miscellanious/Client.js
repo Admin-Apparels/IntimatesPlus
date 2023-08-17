@@ -87,7 +87,7 @@ const ClientModal = ({ children }) => {
       return;
     }
     const defaultImageUrl =
-      "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1691604043/tafdbj59ooryy49zkttk.png";
+      "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1692259839/xqm81bw94x7h6velrwha.png";
     if (
       encodeURIComponent(user.pic) === encodeURIComponent(defaultImageUrl) &&
       (pics.type === "image/jpeg" || pics.type === "image/png")
@@ -134,7 +134,7 @@ const ClientModal = ({ children }) => {
   const deleteAccount = async () => {
     setDeleteLoading(true);
     const defaultImageUrl =
-      "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1691604043/tafdbj59ooryy49zkttk.png";
+      "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1692259839/xqm81bw94x7h6velrwha.png";
     const userId = user._id;
     try {
       const config = {
