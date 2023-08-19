@@ -17,6 +17,7 @@ import {
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { ChatState } from "../Context/ChatProvider";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const MatchModal = () => {
@@ -26,11 +27,14 @@ const MatchModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const navigate = useNavigate();
 
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
   const toast = useToast();
 
   const accessChat = async (userId) => {
+    if (chats.length === 5) navigate("/paycheck");
+
     try {
       setLoadingChat(true);
       const existingChat = chats.find(
