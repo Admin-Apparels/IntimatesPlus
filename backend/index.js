@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const userRoutes = require("./routes/userRouter");
 const chatRoutes = require("./routes/chatRouter");
 const messageRoutes = require("./routes/messageRouter");
+const payRoutes = require("./routes/payRouter");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const path = require("path");
 const bodyParser = require("body-parser");
@@ -18,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
-
+app.use("/api/paycheck", payRoutes);
 const __dirname1 = path.resolve();
 
 if (process.env.NODE_ENV === "production") {

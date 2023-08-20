@@ -33,7 +33,7 @@ const MatchModal = () => {
   const toast = useToast();
 
   const accessChat = async (userId) => {
-    if (chats.length === 5) navigate("/paycheck");
+    if (chats.length === 7) navigate("/paycheck");
 
     try {
       setLoadingChat(true);
