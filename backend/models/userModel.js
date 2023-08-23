@@ -16,6 +16,8 @@ const userSchema = mongoose.Schema(
     },
     isBlocked: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     deleted: { type: Boolean, default: false },
+    accountType: { type: String, dafault: "new" },
+    subscription: { type: String },
   },
   {
     timestamps: true,

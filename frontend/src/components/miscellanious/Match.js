@@ -29,50 +29,61 @@ const MatchModal = () => {
   const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate();
 
-  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
+  const { selectedChat, setSelectedChat, user, chats, setChats, setMatchId } =
+    ChatState();
   const toast = useToast();
 
   const accessChat = async (userId) => {
-    if (chats.length === 7) navigate("/paycheck");
+    const existingChat = chats.find(
+      (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
+    );
 
-    try {
-      setLoadingChat(true);
-      const existingChat = chats.find(
-        (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
-      );
-
-      if (existingChat) {
-        setSelectedChat(existingChat);
-      } else {
-        const config = {
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-
-        const { data } = await axios.post(
-          "/api/chat",
-          { userId, user },
-          config
-        );
-
-        setChats([data, ...chats]);
-
-        setSelectedChat(data);
-      }
-
-      setLoadingChat(false);
+    if (existingChat) {
+      setSelectedChat(existingChat);
       onClose();
-    } catch (error) {
-      toast({
-        title: "Error fetching the chat",
-        description: error.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom-left",
-      });
+      return;
+    }
+    if (user.accountType === "new " || user.accountType === "Bronze") {
+      navigate("/paycheck");
+      onClose();
+    } else {
+      const currentDate = new Date();
+      const subscriptionExpiry = new Date(user.subscription);
+
+      if (currentDate < subscriptionExpiry) {
+        try {
+          setLoadingChat(true);
+          const config = {
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+          };
+
+          const { data } = await axios.post(
+            "/api/chat",
+            { userId, user },
+            config
+          );
+
+          setChats([data, ...chats]);
+
+          setSelectedChat(data);
+          setLoadingChat(false);
+          onClose();
+        } catch (error) {
+          toast({
+            title: "Error fetching the chat",
+            description: error.message,
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom-left",
+          });
+        }
+      } else {
+        navigate("/paycheck");
+      }
     }
   };
 
@@ -182,7 +193,12 @@ const MatchModal = () => {
                 display={isFocused ? "none" : "flex"}
                 justifyContent={"space-between"}
               >
-                <Button onClick={() => accessChat(currentUser._id)}>
+                <Button
+                  onClick={() => {
+                    setMatchId(currentUser._id);
+                    accessChat(currentUser._id);
+                  }}
+                >
                   Start Chat
                 </Button>
                 {loadingChat ? (
