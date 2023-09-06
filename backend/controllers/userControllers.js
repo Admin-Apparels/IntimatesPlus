@@ -37,6 +37,8 @@ const registerUsers = asyncHandler(async (req, res) => {
       pic: user.pic,
       isBlocked: [],
       token: generateToken(user._id),
+      accountType: user.accountType,
+      subscription: user.subscription,
     };
 
     res.status(201).json(responseData);
@@ -65,6 +67,8 @@ const authUser = asyncHandler(async (req, res) => {
       pic: user.pic,
       isBlocked: user.isBlocked,
       token: generateToken(user._id),
+      accountType: user.accountType,
+      subscription: user.subscription,
     });
   } else {
     res.status(401);

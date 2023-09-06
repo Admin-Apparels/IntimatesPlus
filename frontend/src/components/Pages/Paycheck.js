@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Text,
@@ -6,47 +6,53 @@ import {
   List,
   ListItem,
   ListIcon,
-  Button,
   useColorModeValue,
   VStack,
   useToast,
-  Spinner,
+  Button,
+  Image,
+  Input,
+  ModalContent,
+  ModalOverlay,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Modal,
+  useDisclosure,
+  Divider,
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { ChatState } from "../Context/ChatProvider";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function Paycheck() {
   const toast = useToast();
-  const {
-    selectedChat,
-    setSelectedChat,
-    user,
-    setUser,
-    chats,
-    setChats,
-    matchId,
-  } = ChatState();
+  const { setSelectedChat, user, setUser, chats, setChats, userId } =
+    ChatState();
   const navigate = useNavigate();
-  const [loadingChat, setLoadingChat] = useState(false);
-  console.log(selectedChat);
-  console.log(matchId);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [subscription, setSubscription] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const handleApprove = async (accountType) => {
     console.log(accountType);
 
     try {
       const config = {
         headers: {
-          Authentication: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const { data } = await axios.put(
-        `/api/paycheck/${user.id}?account=n${accountType}`,
+        `/api/paycheck/${user._id}?account=${accountType}`,
+        {},
         config
       );
       setUser(data);
+
       console.log(user);
     } catch (error) {
       console.log(error);
@@ -54,34 +60,20 @@ export default function Paycheck() {
     }
   };
   const handleCreateChat = async () => {
-    setLoadingChat(true);
     try {
-      const existingChat = chats.find(
-        (chat) => chat.users[0]._id === matchId || chat.users[1]._id === matchId
-      );
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
 
-      if (existingChat) {
-        setSelectedChat(existingChat);
-      } else {
-        const config = {
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
+      const { data } = await axios.post("/api/chat", { userId, user }, config);
 
-        const { data } = await axios.post(
-          "/api/chat",
-          { matchId, user },
-          config
-        );
+      setChats([data, ...chats]);
 
-        setChats([data, ...chats]);
-
-        setSelectedChat(data);
-      }
-
-      setLoadingChat(false);
+      setSelectedChat(data);
+      // navigate("/chats");
     } catch (error) {
       toast({
         title: "Error fetching the chat",
@@ -93,6 +85,26 @@ export default function Paycheck() {
       });
     }
   };
+  const makePaymentMpesa = async () => {
+    if (!phoneNumber) return;
+    console.log(phoneNumber, subscription, user._id);
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.post(
+        `/api/paycheck/makepaymentmpesa/${user._id}`,
+        { subscription, phoneNumber },
+        config
+      );
+      console.log(data);
+    } catch (error) {}
+  };
+  console.log(phoneNumber);
+
   return (
     <VStack
       backgroundColor={"grey"}
@@ -178,16 +190,14 @@ export default function Paycheck() {
                   ],
                 });
               }}
-              onApprove={(data, actions) => {
-                console.log(data);
+              onApprove={async (data, actions) => {
                 const amount = "Bronze";
-                handleCreateChat();
-                handleApprove(amount);
+                await handleApprove(amount);
+                await handleCreateChat();
                 return actions.order.capture().then(function (details) {
-                  navigate("/chats");
                   toast({
                     title: "Success",
-                    description: data.subscriptionID,
+                    description: "Subcription Successfull",
                     status: "info",
                     duration: 3000,
                     isClosable: true,
@@ -196,10 +206,87 @@ export default function Paycheck() {
                 });
               }}
               onCancel={() => {
-                navigate("/chats");
+                toast({
+                  title: "Cancelled",
+                  description: "Subscription Unsuccessfull",
+                  status: "info",
+                  isClosable: true,
+                  position: "bottom",
+                });
               }}
             />
           </PayPalScriptProvider>
+          <Button
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            width={"100%"}
+            backgroundColor={"green.400"}
+            color={"white"}
+            onClick={() => {
+              setSubscription("Gold");
+              onOpen();
+            }}
+          >
+            <Image
+              height={5}
+              width={"auto"}
+              src={
+                "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1694007922/mpesa_ppfs6p.png"
+              }
+              alt={""}
+            />{" "}
+            Pay with Mpesa
+          </Button>
+          <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
+            <ModalOverlay />
+            <ModalContent padding={5}>
+              <ModalHeader
+                fontSize="40px"
+                fontFamily="Work sans"
+                display="flex"
+                justifyContent="center"
+              >
+                <Text textAlign={"center"} justifyContent={"center"}>
+                  Enter Your Mpesa Phone Number
+                </Text>
+              </ModalHeader>
+              <ModalCloseButton />
+              <ModalBody
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Input
+                  fontSize={"2xl"}
+                  placeholder="Example 0710334455"
+                  type="text"
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  value={phoneNumber}
+                  minLength={10}
+                  maxLength={10}
+                />
+                <Divider p={2} />
+                <Button
+                  width={"100%"}
+                  onClick={() => {
+                    makePaymentMpesa();
+                    onClose();
+                  }}
+                  isDisabled={phoneNumber.length !== parseInt(10)}
+                  colorScheme="green"
+                >
+                  Subscribe
+                </Button>
+              </ModalBody>
+              <ModalFooter display="flex">
+                <Text textAlign={"center"} justifyContent={"center"}>
+                  You'll be sent a Message
+                </Text>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </Box>
       </Box>
 
@@ -279,14 +366,15 @@ export default function Paycheck() {
                   ],
                 });
               }}
-              onApprove={(data, actions) => {
+              onApprove={async (data, actions) => {
                 console.log(data);
                 const amount = "Platnum";
-                handleApprove(amount);
+                await handleApprove(amount);
+                await handleCreateChat();
                 return actions.order.capture().then(function (details) {
                   toast({
                     title: "Success",
-                    description: data.subscriptionID,
+                    description: "Subcription Successfull",
                     status: "info",
                     duration: 3000,
                     isClosable: true,
@@ -295,10 +383,38 @@ export default function Paycheck() {
                 });
               }}
               onCancel={() => {
-                navigate("/chats");
+                toast({
+                  title: "Cancelled",
+                  description: "Subscription Unsuccessfull",
+                  status: "info",
+                  isClosable: true,
+                  position: "bottom",
+                });
               }}
             />
           </PayPalScriptProvider>
+          <Button
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            width={"100%"}
+            backgroundColor={"green.400"}
+            color={"white"}
+            onClick={() => {
+              setSubscription("Platnum");
+              onOpen();
+            }}
+          >
+            <Image
+              height={5}
+              width={"auto"}
+              src={
+                "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1694007922/mpesa_ppfs6p.png"
+              }
+              alt={""}
+            />{" "}
+            Pay with Mpesa
+          </Button>
         </Box>
       </Box>
 
@@ -378,10 +494,11 @@ export default function Paycheck() {
                   ],
                 });
               }}
-              onApprove={(data, actions) => {
+              onApprove={async (data, actions) => {
                 console.log(data);
                 const amount = "Gold";
-                handleApprove(amount);
+                await handleCreateChat();
+                await handleApprove(amount);
                 return actions.order.capture().then(function (details) {
                   toast({
                     title: "Success",
@@ -394,10 +511,38 @@ export default function Paycheck() {
                 });
               }}
               onCancel={() => {
-                navigate("/chats");
+                toast({
+                  title: "Cancelled",
+                  description: "Subscription Unsuccessfull",
+                  status: "info",
+                  isClosable: true,
+                  position: "bottom",
+                });
               }}
             />
           </PayPalScriptProvider>
+          <Button
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            width={"100%"}
+            backgroundColor={"green.400"}
+            color={"white"}
+            onClick={() => {
+              setSubscription("Gold");
+              onOpen();
+            }}
+          >
+            <Image
+              height={5}
+              width={"auto"}
+              src={
+                "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1694007922/mpesa_ppfs6p.png"
+              }
+              alt={""}
+            />{" "}
+            Pay with Mpesa
+          </Button>
         </Box>
       </Box>
     </VStack>

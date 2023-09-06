@@ -9,7 +9,7 @@ const ChatProvider = ({ children }) => {
   const [notification, setNotification] = useState([]);
   const [chats, setChats] = useState([]);
   const [onlineUsersCount, setOnlineUsersCount] = useState(0);
-  const [matchId, setMatchId] = useState(undefined);
+  const [userId, setUserId] = useState(undefined);
 
   const navigate = useNavigate();
 
@@ -34,8 +34,8 @@ const ChatProvider = ({ children }) => {
         setNotification,
         onlineUsersCount,
         setOnlineUsersCount,
-        matchId,
-        setMatchId,
+        userId,
+        setUserId,
       }}
     >
       {children}

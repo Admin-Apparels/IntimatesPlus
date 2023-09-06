@@ -106,7 +106,8 @@ function SideDrawer() {
           p={0}
           m={0}
           color={"green.400"}
-        >{`${onlineUsersCount} Online`}</Text>
+          fontSize={"2xs"}
+        >{`${onlineUsersCount}Online`}</Text>
 
         <div>
           <Menu>

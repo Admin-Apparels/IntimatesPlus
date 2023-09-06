@@ -29,8 +29,7 @@ const MatchModal = () => {
   const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate();
 
-  const { selectedChat, setSelectedChat, user, chats, setChats, setMatchId } =
-    ChatState();
+  const { setSelectedChat, user, chats, setChats, setUserId } = ChatState();
   const toast = useToast();
 
   const accessChat = async (userId) => {
@@ -195,7 +194,7 @@ const MatchModal = () => {
               >
                 <Button
                   onClick={() => {
-                    setMatchId(currentUser._id);
+                    setUserId(currentUser._id);
                     accessChat(currentUser._id);
                   }}
                 >
