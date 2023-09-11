@@ -181,15 +181,17 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket.emit("setup", user);
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
-    socket.on("newUserRegistered", () => {
-      toast({
-        title: "New User Registered",
-        description: `${user.name} joined`,
-        status: "info",
-        duration: 5000,
-        isClosable: true,
-        position: "top-left",
-      });
+    socket.on("newUserRegistered", (userName) => {
+      if (userName !== user.name) {
+        toast({
+          title: "New User Registered",
+          description: `${userName} joined`,
+          status: "info",
+          duration: 5000,
+          isClosable: true,
+          position: "top-left",
+        });
+      }
     });
     socket.on("onlineUsers", (count) => {
       setOnlineUsersCount(count);

@@ -62,6 +62,10 @@ io.on("connection", (socket) => {
     socket.userData = userData;
     onlineUsers.add(userId);
     io.emit("onlineUsers", onlineUsers.size);
+
+    if (userData.isNewUser) {
+      io.emit("newUserRegistered", userData.name);
+    }
   });
   socket.on("join chat", (room) => {
     socket.join(room);

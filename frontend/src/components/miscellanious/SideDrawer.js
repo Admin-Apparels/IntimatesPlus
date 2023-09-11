@@ -93,7 +93,13 @@ function SideDrawer() {
         w="100%"
         p="5px 10px 5px 10px"
       >
-        <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
+        <Tooltip
+          label="Search Users to chat"
+          hasArrow
+          placement="bottom-end"
+          color={"green"}
+          backgroundColor={"transparent"}
+        >
           <Button variant="ghost" onClick={onOpen}>
             <i className="fas fa-search"></i>
             <Text display={{ base: "none", md: "flex" }} px={4}>
@@ -102,12 +108,15 @@ function SideDrawer() {
           </Button>
         </Tooltip>
         {user.gender === "male" && <MatchModal />}
-        <Text
-          p={0}
-          m={0}
-          color={"green.400"}
-          fontSize={"2xs"}
-        >{`${onlineUsersCount}Online`}</Text>
+        <Tooltip
+          label="Users Online"
+          placement="top"
+          hasArrow
+          color={"green"}
+          backgroundColor={"transparent"}
+        >
+          {`${onlineUsersCount}`}
+        </Tooltip>
 
         <div>
           <Menu>

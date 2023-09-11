@@ -32,16 +32,6 @@ const MyChat = ({ fetchAgain }) => {
       const { data } = await axios.get("/api/chat", config);
 
       if (data.message) {
-        if (user.gender === "male") {
-          toast({
-            title: "Chat with One Girl that You Like!",
-            description: "Lucky Hour!",
-            status: "success",
-            duration: 10000,
-            isClosable: true,
-            position: "top-left",
-          });
-        }
       } else {
         const chatsWithSenderNames = await Promise.all(
           data.map(async (chat) => {

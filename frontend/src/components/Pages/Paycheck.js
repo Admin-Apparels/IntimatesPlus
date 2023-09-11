@@ -73,7 +73,6 @@ export default function Paycheck() {
       setChats([data, ...chats]);
 
       setSelectedChat(data);
-      // navigate("/chats");
     } catch (error) {
       toast({
         title: "Error fetching the chat",
@@ -195,6 +194,7 @@ export default function Paycheck() {
                 await handleApprove(amount);
                 await handleCreateChat();
                 return actions.order.capture().then(function (details) {
+                  navigate("/chats");
                   toast({
                     title: "Success",
                     description: "Subcription Successfull",
@@ -273,6 +273,13 @@ export default function Paycheck() {
                   onClick={() => {
                     makePaymentMpesa();
                     onClose();
+                    toast({
+                      title: "wait as message is sent",
+                      status: "loading",
+                      isClosable: true,
+                      position: "bottom",
+                      duration: 5000,
+                    });
                   }}
                   isDisabled={phoneNumber.length !== parseInt(10)}
                   colorScheme="green"
@@ -372,6 +379,7 @@ export default function Paycheck() {
                 await handleApprove(amount);
                 await handleCreateChat();
                 return actions.order.capture().then(function (details) {
+                  navigate("/chats");
                   toast({
                     title: "Success",
                     description: "Subcription Successfull",
@@ -500,6 +508,7 @@ export default function Paycheck() {
                 await handleCreateChat();
                 await handleApprove(amount);
                 return actions.order.capture().then(function (details) {
+                  navigate("/chats");
                   toast({
                     title: "Success",
                     description: data.subscriptionID,

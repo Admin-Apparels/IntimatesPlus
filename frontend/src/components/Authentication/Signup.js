@@ -67,14 +67,13 @@ const Signup = () => {
         },
         config
       );
-      toast({
-        title: "Registration Successful",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      localStorage.setItem("userInfo", JSON.stringify(data));
+      const userData = await { ...data, isNewUser: true };
+      localStorage.setItem("userInfo", JSON.stringify(userData));
+
+      setTimeout(() => {
+        userData.isNewUser = false;
+        localStorage.setItem("userInfo", JSON.stringify(userData));
+      }, 2500);
       setPicLoading(false);
       navigate("/chats");
     } catch (error) {

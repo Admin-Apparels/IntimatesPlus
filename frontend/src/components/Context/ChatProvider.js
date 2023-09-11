@@ -18,8 +18,19 @@ const ChatProvider = ({ children }) => {
     setUser(userInfo);
 
     if (!userInfo) navigate("/");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const handleStorageChange = (e) => {
+      if (e.key === "userInfo") {
+        const updatedUserInfo = JSON.parse(e.newValue);
+        setUser(updatedUserInfo);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, [navigate]);
+  console.log(user);
 
   return (
     <ChatContext.Provider
