@@ -14,7 +14,6 @@ import {
   useToast,
   Spinner,
 } from "@chakra-ui/react";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import { ChatState } from "../Context/ChatProvider";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -95,7 +94,7 @@ const MatchModal = () => {
         },
       };
 
-      const { data } = await axios.get(`/api/user`, config);
+      const { data } = await axios.get(`/api/user/getusers`, config);
 
       setUsers(data.allUsers);
       setLoading(false);
@@ -130,15 +129,17 @@ const MatchModal = () => {
         <Spinner xs="auto" display="flex" />
       ) : (
         <IconButton
-          display={{ base: "flex" }}
-          flexDirection={"column"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          color={"red.400"}
           icon={
             <>
-              <Text p={1} fontStyle={"italic"}>
-                <FavoriteIcon fontSize="medium" p={0} m={0} /> Match
+              <Text p={1} fontStyle={"italic"} display={"flex"}>
+                <Image
+                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1694448680/pngwing.com_jzzs7q.png"
+                  fontSize="medium"
+                  p={0}
+                  m={0}
+                  h={5}
+                />{" "}
+                Match
               </Text>
             </>
           }

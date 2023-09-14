@@ -1,4 +1,4 @@
-import { Link } from "@chakra-ui/react";
+import { Box, Link } from "@chakra-ui/react";
 import React from "react";
 
 class ErrorBoundary extends React.Component {
@@ -18,12 +18,20 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div>
-          <p>An error occurred. Please </p>
-          <Link color="teal.500" href="/chats">
-            Go Back...
-          </Link>
-        </div>
+        <Box
+          display={"flex"}
+          alignItems="center"
+          backgroundColor={"white"}
+          justifyContent="center"
+          width={"100%"}
+        >
+          <p>
+            An error occurred. Please{" "}
+            <Link color="teal.500" href="/chats">
+              Go Back...
+            </Link>
+          </p>
+        </Box>
       );
     }
 

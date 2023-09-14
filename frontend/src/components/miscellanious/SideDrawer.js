@@ -82,6 +82,15 @@ function SideDrawer() {
       });
     }
   };
+  function formatOnlineUsersCount(onlineUsersCount) {
+    if (onlineUsersCount < 1000) {
+      return onlineUsersCount.toString();
+    } else if (onlineUsersCount < 10000) {
+      return `${(onlineUsersCount / 1000).toFixed(1)}k`;
+    } else {
+      return `${(onlineUsersCount / 1000).toFixed(1)}k`;
+    }
+  }
 
   return (
     <>
@@ -95,7 +104,6 @@ function SideDrawer() {
       >
         <Tooltip
           label="Search Users to chat"
-          hasArrow
           placement="bottom-end"
           color={"green"}
           backgroundColor={"transparent"}
@@ -111,11 +119,10 @@ function SideDrawer() {
         <Tooltip
           label="Users Online"
           placement="top"
-          hasArrow
           color={"green"}
           backgroundColor={"transparent"}
         >
-          {`${onlineUsersCount}`}
+          {formatOnlineUsersCount(onlineUsersCount)}
         </Tooltip>
 
         <div>

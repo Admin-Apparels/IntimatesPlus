@@ -10,6 +10,9 @@ const ChatProvider = ({ children }) => {
   const [chats, setChats] = useState([]);
   const [onlineUsersCount, setOnlineUsersCount] = useState(0);
   const [userId, setUserId] = useState(undefined);
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [pic, setPic] = useState("");
 
   const navigate = useNavigate();
 
@@ -35,6 +38,12 @@ const ChatProvider = ({ children }) => {
   return (
     <ChatContext.Provider
       value={{
+        pic,
+        setPic,
+        email,
+        setEmail,
+        name,
+        setName,
         chats,
         setChats,
         selectedChat,

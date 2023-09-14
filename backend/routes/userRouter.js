@@ -1,5 +1,6 @@
 const {
   registerUsers,
+  searchUser,
   authUser,
   getUserById,
   getUsers,
@@ -14,9 +15,10 @@ const express = require("express");
 const router = express.Router();
 
 router.post("/", registerUsers);
+router.get("/:email/:name", searchUser);
 router.route("/login").post(authUser);
 
-router.route("/").get(protect, getUsers);
+router.route("/getusers").get(protect, getUsers);
 router.put("/block/:userId", protect, block);
 router.put("/unblock/:userId", protect, Unblock);
 router.get("/:userId", protect, getUserById);

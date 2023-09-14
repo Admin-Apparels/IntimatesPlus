@@ -47,6 +47,27 @@ const registerUsers = asyncHandler(async (req, res) => {
     throw new Error("Failed to create the account, try again after some time.");
   }
 });
+const searchUser = async (req, res) => {
+  const { email, name } = req.params;
+  const userExists = await User.findOne({ email, name });
+  if (!userExists) {
+    res.status(201).json("Unfound");
+  } else {
+    const responseData = {
+      _id: userExists._id,
+      name: userExists.name,
+      email: userExists.email,
+      gender: userExists.gender,
+      value: userExists.value,
+      pic: userExists.pic,
+      isBlocked: userExists.isBlocked,
+      token: generateToken(userExists._id),
+      accountType: userExists.accountType,
+      subscription: userExists.subscription,
+    };
+    res.status(201).json(responseData);
+  }
+};
 
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -206,6 +227,7 @@ const deleteImage = async (req, res) => {
 
 module.exports = {
   registerUsers,
+  searchUser,
   authUser,
   getUserById,
   getUsers,

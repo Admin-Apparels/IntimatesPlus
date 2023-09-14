@@ -7,6 +7,9 @@ import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import GoogleLoginButton from "./Google";
+
 const Login = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
@@ -95,17 +98,9 @@ const Login = () => {
       >
         Login
       </Button>
-      <Button
-        variant="solid"
-        colorScheme="red"
-        width="100%"
-        onClick={() => {
-          setEmail("guest@example.com");
-          setPassword("123456");
-        }}
-      >
-        Get Guest User Credentials
-      </Button>
+      <GoogleOAuthProvider clientId="836402802539-eqr9obfujd1q8heagf9luptlmcid62ss.apps.googleusercontent.com">
+        <GoogleLoginButton />
+      </GoogleOAuthProvider>
     </VStack>
   );
 };
