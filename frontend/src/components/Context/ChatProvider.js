@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { createContext, useContext, useState } from "react";
 
 const ChatContext = createContext();
 
@@ -13,27 +12,6 @@ const ChatProvider = ({ children }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [pic, setPic] = useState("");
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    setUser(userInfo);
-
-    if (!userInfo) navigate("/");
-    const handleStorageChange = (e) => {
-      if (e.key === "userInfo") {
-        const updatedUserInfo = JSON.parse(e.newValue);
-        setUser(updatedUserInfo);
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, [navigate]);
-  console.log(user);
 
   return (
     <ChatContext.Provider

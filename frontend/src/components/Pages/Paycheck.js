@@ -27,7 +27,7 @@ import axios from "axios";
 import { ChatState } from "../Context/ChatProvider";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Paycheck() {
   const toast = useToast();
@@ -37,9 +37,14 @@ export default function Paycheck() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [subscription, setSubscription] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const handleApprove = async (accountType) => {
-    console.log(accountType);
 
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+    if (!userInfo) navigate("/");
+  }, [navigate]);
+
+  const handleApprove = async (accountType) => {
     try {
       const config = {
         headers: {

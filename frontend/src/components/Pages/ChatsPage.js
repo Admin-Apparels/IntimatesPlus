@@ -1,14 +1,34 @@
 import { Box } from "@chakra-ui/layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Chatbox from "../Chatbox";
 import MyChats from "../MyChats";
 import SideDrawer from "../miscellanious/SideDrawer";
 import ErrorBoundary from "./ErrorBoundary";
 import { ChatState } from "../Context/ChatProvider";
+import { useNavigate } from "react-router-dom";
 
 const Chatpage = () => {
+  const navigate = useNavigate();
   const [fetchAgain, setFetchAgain] = useState(false);
-  const { user } = ChatState();
+  const { user, setUser } = ChatState();
+
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    setUser(userInfo);
+
+    if (!userInfo) navigate("/");
+    const handleStorageChange = (e) => {
+      if (e.key === "userInfo") {
+        const updatedUserInfo = JSON.parse(e.newValue);
+        setUser(updatedUserInfo);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [navigate, setUser]);
 
   return (
     <div style={{ width: "100%" }}>

@@ -21,6 +21,7 @@ const GoogleLoginButton = () => {
         } else {
           console.log("Data found. Storing in localStorage.");
           localStorage.setItem("userInfo", JSON.stringify(data));
+          navigate("/chats");
         }
       } catch (error) {
         console.log(error);

@@ -12,7 +12,7 @@ dotenv.config({ path: "./secrets.env" });
 const registerUsers = asyncHandler(async (req, res) => {
   const { name, email, password, gender, pic, value } = req.body;
 
-  if (!email || !name || !password) {
+  if (!email || !name) {
     res.status(400);
     throw new Error("Please enter all fields");
   }
