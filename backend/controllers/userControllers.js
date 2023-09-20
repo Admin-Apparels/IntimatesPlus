@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
+const nodemailer = require("nodemailer");
 
 const generateToken = require("../config/generateToken");
 const dotenv = require("dotenv");
@@ -12,7 +13,7 @@ dotenv.config({ path: "./secrets.env" });
 const registerUsers = asyncHandler(async (req, res) => {
   const { name, email, password, gender, pic, value } = req.body;
 
-  if (!email || !name) {
+  if (!email || !name || !password || !gender) {
     res.status(400);
     throw new Error("Please enter all fields");
   }
@@ -224,8 +225,38 @@ const deleteImage = async (req, res) => {
       .json({ error: "An error occurred while deleting the image" });
   }
 };
+const authorizeUser = async (req, res) => {
+  const { userEmail } = req.params;
+  const verificationCode = Math.floor(
+    100000 + Math.random() * 900000
+  ).toString();
+
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "jngatia045@gmail.com",
+      pass: "onnkvpekzzbxdrpl",
+    },
+  });
+  const mailOptions = {
+    from: "jngatia045@gmail.com",
+    to: userEmail,
+    subject: "Verify Your Email",
+    text: `Your verification code is: ${verificationCode}`,
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error(error);
+      res.status(400).json({ message: "Email Sending Failed" });
+    } else {
+      console.log("Email sent: " + info.response);
+      res.status(200).json(verificationCode);
+    }
+  });
+};
 
 module.exports = {
+  authorizeUser,
   registerUsers,
   searchUser,
   authUser,

@@ -13,6 +13,7 @@ import {
   Image,
   useToast,
   Spinner,
+  Box,
 } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 import { useState } from "react";
@@ -130,18 +131,26 @@ const MatchModal = () => {
       ) : (
         <IconButton
           icon={
-            <>
-              <Text p={1} fontStyle={"italic"} display={"flex"}>
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+            >
+              <Text
+                p={1}
+                fontStyle={"italic"}
+                display={"flex"}
+                color={"red.700"}
+              >
+                Match
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1694448680/pngwing.com_jzzs7q.png"
-                  fontSize="medium"
                   p={0}
                   m={0}
-                  h={5}
+                  h={3}
                 />{" "}
-                Match
               </Text>
-            </>
+            </Box>
           }
           onClick={() => {
             setLoading(true);

@@ -2,10 +2,26 @@ import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
-import { Radio, RadioGroup, Textarea, Stack, Text } from "@chakra-ui/react";
+import {
+  Radio,
+  RadioGroup,
+  Textarea,
+  Stack,
+  Text,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Divider,
+} from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -13,6 +29,7 @@ const Signup = () => {
   const handleClick = () => setShow(!show);
   const toast = useToast();
   const navigate = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,8 +39,11 @@ const Signup = () => {
   const [picLoading, setPicLoading] = useState(false);
   const [value, setValue] = useState("");
   const [gender, setGender] = useState("");
+  const [code, setCode] = useState("");
+  const [inputCode, setInputCode] = useState("");
+  const [disabled, setDisabled] = useState(false);
 
-  const submitHandler = async () => {
+  const generateAndVerify = async () => {
     setPicLoading(true);
     if (!name || !email || !password || !confirmpassword || !isFormValid()) {
       toast({
@@ -47,7 +67,31 @@ const Signup = () => {
       setPicLoading(false);
       return;
     }
-
+    try {
+      const { data } = await axios.get(`/api/user/${email}`);
+      console.log(data);
+      setCode(data);
+      onOpen();
+      setPicLoading(false);
+    } catch (error) {
+      toast({
+        title: "Check Your Email!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setDisabled(true);
+      setTimeout(() => {
+        setDisabled(false);
+      }, 30000);
+      onClose();
+      setPicLoading(false);
+    }
+  };
+  const submitHandler = async () => {
+    setPicLoading(true);
     try {
       const config = {
         headers: {
@@ -143,7 +187,65 @@ const Signup = () => {
   };
 
   return (
-    <VStack spacing="5px">
+    <VStack spacing="3px">
+      <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
+        <ModalOverlay />
+        <ModalContent padding={5}>
+          <ModalHeader
+            fontSize="40px"
+            fontFamily="Work sans"
+            display="flex"
+            justifyContent="center"
+          >
+            <Text
+              textAlign={"center"}
+              justifyContent={"center"}
+              fontSize={"2xl"}
+            >
+              Enter Code sent to: ~{email}~
+            </Text>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Input
+              fontSize={"2xl"}
+              placeholder={`i.e 126413`}
+              type="text"
+              textAlign="center"
+              onChange={(e) => setInputCode(e.target.value)}
+              value={inputCode}
+              minLength={6}
+              maxLength={6}
+            />
+            <Divider p={2} />
+            <Button
+              width={"100%"}
+              onClick={() => {
+                submitHandler();
+                onClose();
+              }}
+              isDisabled={code !== inputCode}
+              colorScheme="green"
+            >
+              Done
+            </Button>
+          </ModalBody>
+          <ModalFooter display="flex">
+            <Text
+              textAlign={"center"}
+              justifyContent={"center"}
+              color={code !== inputCode ? "red" : "green"}
+            >
+              Please Enter the Exact Code Recieved
+            </Text>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       <FormControl id="first-name" isRequired>
         <FormLabel>Name</FormLabel>
         <Input
@@ -226,13 +328,24 @@ const Signup = () => {
           onChange={(e) => postDetails(e.target.files[0])}
         />
       </FormControl>
+      {disabled && (
+        <Text
+          display="flex"
+          padding={0}
+          margin={0}
+          fontSize={"2xs"}
+          textAlign={"right"}
+        >
+          Try Again after 30sec
+        </Text>
+      )}
       <Button
         colorScheme="blue"
         width="100%"
         style={{ marginTop: 15 }}
-        onClick={() => submitHandler()}
+        onClick={() => generateAndVerify()}
         isLoading={picLoading}
-        isDisabled={!isFormValid()}
+        isDisabled={!isFormValid() || disabled}
       >
         {gender === "female" && !isFormValid() ? (
           <Text>Not Enough characters</Text>

@@ -90,6 +90,7 @@ export default function Paycheck() {
     }
   };
   const makePaymentMpesa = async () => {
+    //COMING SOON
     if (!phoneNumber) return;
     console.log(phoneNumber, subscription, user._id);
     try {
@@ -286,10 +287,11 @@ export default function Paycheck() {
                       duration: 5000,
                     });
                   }}
-                  isDisabled={phoneNumber.length !== parseInt(10)}
+                  // phoneNumber.length !== parseInt(10)
+                  isDisabled={true}
                   colorScheme="green"
                 >
-                  Subscribe
+                  Comming soon
                 </Button>
               </ModalBody>
               <ModalFooter display="flex">

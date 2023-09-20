@@ -48,7 +48,6 @@ const GoogleLoginButton = () => {
         setName(parts[0]);
         setEmail(data.email);
         setPic(data.picture);
-        console.log(name, email);
         await submitHandler();
       } catch (error) {
         console.log(error);
