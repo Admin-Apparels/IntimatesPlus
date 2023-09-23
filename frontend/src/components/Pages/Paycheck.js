@@ -73,7 +73,11 @@ export default function Paycheck() {
         },
       };
 
-      const { data } = await axios.post("/api/chat", { userId, user }, config);
+      const { data } = await axios.post(
+        `/api/chat/${user.accountType}`,
+        { userId, user },
+        config
+      );
 
       setChats([data, ...chats]);
 

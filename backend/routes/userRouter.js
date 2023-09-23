@@ -17,11 +17,11 @@ const express = require("express");
 const router = express.Router();
 
 router.post("/", limiter, registerUsers);
-router.get("/:email/:name", limiter, searchUser);
+router.get("searchuser/:email", limiter, searchUser);
 router.route("/login").post(limiter, authUser);
 router.get("/:userEmail", limiter, authorizeUser);
 
-router.route("/getusers").get(protect, limiter, getUsers);
+router.get("/female/users", protect, limiter, getUsers);
 router.put("/block/:userId", protect, limiter, block);
 router.put("/unblock/:userId", protect, limiter, Unblock);
 router.get("/:userId", protect, limiter, getUserById);

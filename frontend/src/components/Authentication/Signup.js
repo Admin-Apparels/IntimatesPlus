@@ -73,6 +73,10 @@ const Signup = () => {
       setCode(data);
       onOpen();
       setPicLoading(false);
+      setDisabled(true);
+      setTimeout(() => {
+        setDisabled(false);
+      }, 30000);
     } catch (error) {
       toast({
         title: "Check Your Email!",
@@ -306,7 +310,7 @@ const Signup = () => {
           <Textarea
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="Here is a sample placeholder"
+            placeholder="Hi Admin, I am Nina from Nairobi looking for a..."
             size="sm"
             minLength={MIN_CHARACTERS}
             maxLength={MAX_CHARACTERS}
@@ -328,17 +332,7 @@ const Signup = () => {
           onChange={(e) => postDetails(e.target.files[0])}
         />
       </FormControl>
-      {disabled && (
-        <Text
-          display="flex"
-          padding={0}
-          margin={0}
-          fontSize={"2xs"}
-          textAlign={"right"}
-        >
-          Try Again after 30sec
-        </Text>
-      )}
+
       <Button
         colorScheme="blue"
         width="100%"
@@ -350,7 +344,7 @@ const Signup = () => {
         {gender === "female" && !isFormValid() ? (
           <Text>Not Enough characters</Text>
         ) : (
-          <Text>Sign Up</Text>
+          <Text> {disabled ? `Try Again after 30sec` : `Sign Up`} </Text>
         )}
       </Button>
     </VStack>

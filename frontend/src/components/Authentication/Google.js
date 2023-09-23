@@ -12,7 +12,7 @@ const GoogleLoginButton = () => {
   const submitHandler = async () => {
     if (email && name) {
       try {
-        const { data } = await axios.get(`/api/user/${email}/${name}`);
+        const { data } = await axios.get(`/api/user/searchuser/${email}`);
 
         console.log(data);
         if (data === "Unfound") {

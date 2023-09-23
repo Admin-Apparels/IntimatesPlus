@@ -6,7 +6,21 @@ const User = require("../models/userModel");
 //@route           POST /api/chat/
 //@access          Protected
 const accessChat = asyncHandler(async (req, res) => {
+  const { accounttype } = req.params;
   const { userId } = req.body;
+  const loggedId = req.user._id;
+
+  if (accounttype === "platnum") {
+    try {
+      const time = new Date().getTime() + 24 * 60 * 60 * 1000;
+      const timeOfChat = await User.findByIdAndUpdate(loggedId, {
+        day: time,
+      });
+      console.log(timeOfChat);
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
 
   if (!userId) {
     console.log("UserId param not sent with request");
@@ -15,7 +29,7 @@ const accessChat = asyncHandler(async (req, res) => {
 
   var isChat = await Chat.find({
     $and: [
-      { users: { $elemMatch: { $eq: req.user._id } } },
+      { users: { $elemMatch: { $eq: loggedId } } },
       { users: { $elemMatch: { $eq: userId } } },
     ],
   })
@@ -33,7 +47,7 @@ const accessChat = asyncHandler(async (req, res) => {
     var chatData = {
       chatName: "sender",
 
-      users: [req.user._id, userId],
+      users: [loggedId, userId],
     };
 
     try {

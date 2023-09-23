@@ -5,7 +5,7 @@ const { limiter } = require("../middleware/limiter");
 
 const router = express.Router();
 
-router.route("/").post(protect, limiter, accessChat);
+router.route("/:accounttype").post(protect, limiter, accessChat);
 router.route("/").get(protect, limiter, fetchChats);
 
 module.exports = router;

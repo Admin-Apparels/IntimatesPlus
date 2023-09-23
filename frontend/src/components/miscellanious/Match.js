@@ -14,6 +14,7 @@ import {
   useToast,
   Spinner,
   Box,
+  calc,
 } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 import { useState } from "react";
@@ -36,17 +37,29 @@ const MatchModal = () => {
     const existingChat = chats.find(
       (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
     );
+    const currentDate = new Date();
 
     if (existingChat) {
       setSelectedChat(existingChat);
       onClose();
       return;
     }
+    if (user.accountType === "platnum" && currentDate > user.day) {
+      let timeRemaining = calc(user.day - currentDate);
+      toast({
+        title: "You are all caught up!",
+        description: `wait after ${timeRemaining}`,
+        status: "info",
+        isClosable: true,
+        duration: 5000,
+        position: "bottom",
+      });
+      return;
+    }
     if (user.accountType === "new " || user.accountType === "Bronze") {
       navigate("/paycheck");
       onClose();
     } else {
-      const currentDate = new Date();
       const subscriptionExpiry = new Date(user.subscription);
 
       if (currentDate < subscriptionExpiry) {
@@ -60,7 +73,7 @@ const MatchModal = () => {
           };
 
           const { data } = await axios.post(
-            "/api/chat",
+            `/api/chat/${user.accountType}`,
             { userId, user },
             config
           );
@@ -95,11 +108,13 @@ const MatchModal = () => {
         },
       };
 
-      const { data } = await axios.get(`/api/user/getusers`, config);
+      const { data } = await axios.get("/api/user/female/users", config);
+      console.log(data);
+      setUsers(data);
 
-      setUsers(data.allUsers);
       setLoading(false);
     } catch (error) {
+      setLoading(false);
       toast({
         title: "Error fetching next Matches",
         description: error.message,
@@ -127,7 +142,13 @@ const MatchModal = () => {
   return (
     <>
       {loading ? (
-        <Spinner xs="auto" display="flex" />
+        <Spinner
+          thickness="4px"
+          speed="0.4s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="md"
+        />
       ) : (
         <IconButton
           icon={

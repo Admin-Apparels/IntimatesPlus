@@ -70,19 +70,9 @@ function Homepage() {
             </TabPanels>
           </Tabs>
         </Box>{" "}
-        <Box
-          display={"flex"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-          width={"42%"}
-          mt={5}
-        >
-          {"   "}
-          <Text variant="body2" color="white" align="center">
-            {"Copyright © "}2020-{new Date().getFullYear()}
-            {"."}
-          </Text>
-        </Box>
+        <Text padding={3} variant="body2" color="white" textAlign="center">
+          {`Copyright © ${new Date().getFullYear()}`}
+        </Text>
       </Container>
     </ErrorBoundary>
   );

@@ -40,6 +40,7 @@ const registerUsers = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
       accountType: user.accountType,
       subscription: user.subscription,
+      day: user.day,
     };
 
     res.status(201).json(responseData);
@@ -49,8 +50,8 @@ const registerUsers = asyncHandler(async (req, res) => {
   }
 });
 const searchUser = async (req, res) => {
-  const { email, name } = req.params;
-  const userExists = await User.findOne({ email, name });
+  const { email } = req.params;
+  const userExists = await User.findOne({ email });
   if (!userExists) {
     res.status(201).json("Unfound");
   } else {
@@ -65,6 +66,7 @@ const searchUser = async (req, res) => {
       token: generateToken(userExists._id),
       accountType: userExists.accountType,
       subscription: userExists.subscription,
+      day: userExists.day,
     };
     res.status(201).json(responseData);
   }
@@ -91,6 +93,7 @@ const authUser = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
       accountType: user.accountType,
       subscription: user.subscription,
+      day: user.day,
     });
   } else {
     res.status(401);
@@ -108,23 +111,19 @@ const getUserById = asyncHandler(async (req, res) => {
     res.status(500).json({ error: "Failed to retrieve user" });
   }
 });
-// const randomFemaleUsers = await User.aggregate([
-//   { $match: { gender: "female" } },
-//   { $sample: { size: 10 } },
-// ]);
 
-const getUsers = asyncHandler(async (req, res) => {
+const getUsers = async (req, res) => {
   try {
-    const allUsers = await User.find({
-      gender: "female",
-      $and: [{ deleted: { $ne: true } }],
-    }).lean();
-
-    res.json({ allUsers });
+    const allUsers = await User.aggregate([
+      { $match: { gender: "female", deleted: { $ne: true } } },
+      { $sample: { size: 3 } },
+    ]);
+    console.log(allUsers);
+    res.json(allUsers);
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error404" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
-});
+};
 const block = asyncHandler(async (req, res) => {
   const { userId } = req.params;
   const user = req.user;
@@ -242,11 +241,12 @@ const authorizeUser = async (req, res) => {
     from: "jngatia045@gmail.com",
     to: userEmail,
     subject: "Verify Your Email",
-    text: `Your verification code is: ${verificationCode}`,
+    text: `Your verification code is:  ${verificationCode}
+    
+This is system's generated code, please do not reply.`,
   };
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error(error);
       res.status(400).json({ message: "Email Sending Failed" });
     } else {
       console.log("Email sent: " + info.response);

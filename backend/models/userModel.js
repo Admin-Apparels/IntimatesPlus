@@ -18,6 +18,7 @@ const userSchema = mongoose.Schema(
     deleted: { type: Boolean, default: false },
     accountType: { type: String, default: "new" },
     subscription: { type: String, default: "" },
+    day: { type: String },
   },
   {
     timestamps: true,
