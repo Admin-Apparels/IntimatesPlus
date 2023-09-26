@@ -17,7 +17,7 @@ const express = require("express");
 const router = express.Router();
 
 router.post("/", limiter, registerUsers);
-router.get("searchuser/:email", limiter, searchUser);
+router.get("/searchuser/:email", limiter, searchUser);
 router.route("/login").post(limiter, authUser);
 router.get("/:userEmail", limiter, authorizeUser);
 

@@ -85,7 +85,7 @@ const MatchModal = () => {
           onClose();
         } catch (error) {
           toast({
-            title: "Error fetching the chat",
+            title: "Error creating your chat, try again later",
             description: error.message,
             status: "error",
             duration: 5000,

@@ -1,12 +1,13 @@
 import React from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-import { Button, Image } from "@chakra-ui/react";
+import { Button, Image, useToast } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 
 const GoogleLoginButton = () => {
   const navigate = useNavigate();
+  const toast = useToast();
   const { email, setEmail, name, setName, setPic } = ChatState();
 
   const submitHandler = async () => {
@@ -16,15 +17,20 @@ const GoogleLoginButton = () => {
 
         console.log(data);
         if (data === "Unfound") {
-          console.log("Data not found. Navigating to /googleinfo");
           navigate("/googleinfo");
         } else {
-          console.log("Data found. Storing in localStorage.");
           localStorage.setItem("userInfo", JSON.stringify(data));
           navigate("/chats");
         }
       } catch (error) {
         console.log(error);
+        toast({
+          title: "Error Occurred, please try again later",
+          description: "If this persists, log in using your email and password",
+          status: "error",
+          duration: 5000,
+          position: "bottom",
+        });
       }
     }
   };

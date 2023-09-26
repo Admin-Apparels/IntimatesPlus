@@ -51,6 +51,7 @@ const registerUsers = asyncHandler(async (req, res) => {
 });
 const searchUser = async (req, res) => {
   const { email } = req.params;
+  console.log(email);
   const userExists = await User.findOne({ email });
   if (!userExists) {
     res.status(201).json("Unfound");

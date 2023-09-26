@@ -14,6 +14,11 @@ const protect = asyncHandler(async (req, res, next) => {
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+      if (decoded.exp < Date.now() / 1000) {
+        res.status(401);
+        throw new Error("Not authorized, token has expired");
+      }
+
       req.user = await User.findById(decoded.id).select("-password");
 
       next();

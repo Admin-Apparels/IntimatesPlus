@@ -1,13 +1,16 @@
 import { Box, Stack, Text } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
-import axios from "axios";
+import axiosInstance from "./miscellanious/axios";
+
 import { useCallback, useEffect, useState } from "react";
 import ChatLoading from "./ChatLoading";
 
 import { ChatState } from "./Context/ChatProvider";
+import { useNavigate } from "react-router-dom";
 
-const MyChat = ({ fetchAgain }) => {
+const MyChat = (fetchAgain) => {
   const [loggedUser, setLoggedUser] = useState();
+  const [array, setArray] = useState(undefined);
 
   const {
     selectedChat,
@@ -20,6 +23,7 @@ const MyChat = ({ fetchAgain }) => {
   } = ChatState();
 
   const toast = useToast();
+  const navigate = useNavigate();
 
   const fetchChats = useCallback(async () => {
     try {
@@ -28,34 +32,77 @@ const MyChat = ({ fetchAgain }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
+      axiosInstance
+        .get("/api/chat", config)
+        .then((response) => {
+          console.log(response.data);
 
-      const { data } = await axios.get("/api/chat", config);
-
-      if (data.message) {
-      } else {
-        const chatsWithSenderNames = await Promise.all(
-          data.map(async (chat) => {
-            const resolvedUsers = await Promise.all(chat.users);
-            const senderName =
-              resolvedUsers[0]._id === loggedUser._id
-                ? resolvedUsers[1].name
-                : resolvedUsers[0].name;
-            return { ...chat, senderName };
-          })
-        );
-
-        setChats(chatsWithSenderNames);
-      }
+          if (response.data.message) {
+          } else {
+            setArray(response.data);
+          }
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 401) {
+            console.log("token expired");
+            toast({
+              title: "Your session has expired",
+              description: "Logging out in less than 8 seconds",
+              duration: 8000,
+              status: "loading",
+              position: "bottom",
+            });
+            localStorage.removeItem("userInfo");
+            setTimeout(() => {
+              localStorage.removeItem("userInfo");
+              navigate("/");
+            }, 8000);
+          } else {
+            console.error("An error occurred:", error);
+          }
+        });
     } catch (error) {
+      if (error.response && error.response.status === 429) {
+        toast({
+          title: "Too many request",
+          description: "Try again after some time",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left",
+        });
+      }
       toast({
-        title: "Error Occured Retrieving Chats!",
+        title: "Error occured trying to retrieve Chats",
+        description: "Try again after some time",
         status: "error",
         duration: 5000,
         isClosable: true,
         position: "bottom-left",
       });
     }
-  }, [toast, user, loggedUser, setChats]);
+    if (array) {
+      console.log(array);
+      const chatsWithSenderNames = await Promise.all(
+        array.map(async (chat) => {
+          const resolvedUsers = await Promise.all(chat.users);
+
+          if (resolvedUsers && resolvedUsers.length === 2) {
+            const senderName =
+              resolvedUsers[0]._id === loggedUser._id
+                ? resolvedUsers[1].name
+                : resolvedUsers[0].name;
+            return { ...chat, senderName };
+          } else {
+            console.error("Unexpected resolvedUsers array:", resolvedUsers);
+            return { ...chat, senderName: "Unknown" };
+          }
+        })
+      );
+
+      setChats(chatsWithSenderNames);
+    }
+  }, [toast, user, loggedUser, setChats, navigate, array]);
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));

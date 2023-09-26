@@ -40,9 +40,26 @@ export default function Paycheck() {
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const currentDate = new Date();
+    const subscriptionExpiry = new Date(user.subscription);
+
+    if (
+      user.accountType === "Platnum" ||
+      (user.accountType === "Gold" && currentDate < subscriptionExpiry)
+    ) {
+      navigate("/chats");
+      toast({
+        title: "Finish your current subscription first please",
+        description: `${user.accountType} subscriber`,
+        status: "info",
+        isClosable: true,
+        duration: 5000,
+        position: "bottom",
+      });
+    }
 
     if (!userInfo) navigate("/");
-  }, [navigate]);
+  }, [navigate, toast, user]);
 
   const handleApprove = async (accountType) => {
     try {
@@ -200,9 +217,9 @@ export default function Paycheck() {
                 });
               }}
               onApprove={async (data, actions) => {
-                const amount = "Bronze";
-                await handleApprove(amount);
-                await handleCreateChat();
+                // const amount = "Bronze";
+                // await handleApprove(amount);
+                // await handleCreateChat();
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
                   toast({
@@ -215,7 +232,11 @@ export default function Paycheck() {
                   });
                 });
               }}
-              onCancel={() => {
+              onCancel={async () => {
+                const amount = "Bronze";
+                await handleApprove(amount);
+                handleCreateChat();
+                navigate("/chats");
                 toast({
                   title: "Cancelled",
                   description: "Subscription Unsuccessfull",
