@@ -1,0 +1,43 @@
+// NotFound.js
+import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+const NotFound = () => {
+  const navigate = useNavigate();
+  return (
+    <Flex
+      display="flex"
+      justifyContent={"center"}
+      alignItems={"center"}
+      width={"100%"}
+    >
+      <Box
+        display="flex"
+        flexDirection={"column"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        backgroundColor={"Background"}
+        borderRadius={3}
+        padding={8}
+      >
+        <Image
+          src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1696073349/icons8-not-found-64_rxa6yk.png"
+          alt="Not Found"
+        />
+        <Text fontSize={"2xl"}>404 - Page Not Found</Text>
+        <strong> The page you are looking for does not exist.</strong>
+        <Button
+          margin={3}
+          padding={2}
+          backgroundColor={"green.400"}
+          onClick={navigate("/chats")}
+        >
+          Return back to chats
+        </Button>
+      </Box>
+    </Flex>
+  );
+};
+
+export default NotFound;

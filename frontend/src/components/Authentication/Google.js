@@ -15,7 +15,6 @@ const GoogleLoginButton = () => {
       try {
         const { data } = await axios.get(`/api/user/searchuser/${email}`);
 
-        console.log(data);
         if (data === "Unfound") {
           navigate("/googleinfo");
         } else {
@@ -23,7 +22,6 @@ const GoogleLoginButton = () => {
           navigate("/chats");
         }
       } catch (error) {
-        console.log(error);
         toast({
           title: "Error Occurred, please try again later",
           description: "If this persists, log in using your email and password",
@@ -39,7 +37,6 @@ const GoogleLoginButton = () => {
       "836402802539-eqr9obfujd1q8heagf9luptlmcid62ss.apps.googleusercontent.com",
     onSuccess: async (tokenResponse) => {
       const { access_token } = tokenResponse;
-      console.log(access_token);
 
       try {
         const { data } = await axios.get(

@@ -45,12 +45,10 @@ function Homepage() {
             fontSize="4xl"
             fontFamily="Work sans"
           >
-            Admin{" "}
+            Admin
             <Image
-              top={3}
               height={10}
-              width={"auto"}
-              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1694277552/-18_ndcqj2.png"
+              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1695820899/icons8-no-one-under-eighteen-emoji-48_cznua5.png"
             />
           </Text>
         </Box>
@@ -70,7 +68,14 @@ function Homepage() {
             </TabPanels>
           </Tabs>
         </Box>{" "}
-        <Text padding={3} variant="body2" color="white" textAlign="center">
+        <Text
+          padding={3}
+          variant="body2"
+          color="white"
+          textAlign="center"
+          justifyContent={"space-evenly"}
+        >
+          Resist Slave Mind | Resist Porn | Be The Best Version of Yourself |{" "}
           {`Copyright © ${new Date().getFullYear()}`}
         </Text>
       </Container>

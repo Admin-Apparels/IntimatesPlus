@@ -10,15 +10,21 @@ const accessChat = asyncHandler(async (req, res) => {
   const { userId } = req.body;
   const loggedId = req.user._id;
 
-  if (accounttype === "platnum") {
+  if (accounttype === "Platnum") {
     try {
       const time = new Date().getTime() + 24 * 60 * 60 * 1000;
-      const timeOfChat = await User.findByIdAndUpdate(loggedId, {
-        day: time,
-      });
-      console.log(timeOfChat);
+      const timeOfChat = await User.findByIdAndUpdate(
+        loggedId,
+        {
+          day: time,
+        },
+        { new: true }
+      ).select("day");
+      res.json(timeOfChat);
+      console.log("Updated Platnum time", timeOfChat);
     } catch (error) {
-      res.status(500).json({ error: "Internal Server Error" });
+      console.error("This is the error", error);
+      res.json({ error: "Internal Server Error" });
     }
   }
 

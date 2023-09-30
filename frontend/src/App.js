@@ -5,6 +5,7 @@ import Home from "./components/Pages/Home";
 import GoogleInfo from "./components/Pages/GoogleInfo";
 import Chats from "./components/Pages/ChatsPage";
 import Paycheck from "./components/Pages/Paycheck";
+import NotFound from "./components/Pages/NotFound";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/googleinfo" Component={GoogleInfo} />
         <Route path="/chats" Component={Chats} />
         <Route path="/paycheck" Component={Paycheck} />
+        <Route path="*" Component={NotFound} />
       </Routes>
     </div>
   );

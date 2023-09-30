@@ -36,7 +36,6 @@ export default function Signup() {
     navigate("/");
   }
 
-  console.log(email, name, pic, gender);
   const submitHandler = async () => {
     setPicLoading(true);
     if (!name || !email || !password || !confirmpassword || !isFormValid()) {
@@ -87,7 +86,7 @@ export default function Signup() {
       setTimeout(() => {
         userData.isNewUser = false;
         localStorage.setItem("userInfo", JSON.stringify(userData));
-      }, 2500);
+      }, 3000);
       setPicLoading(false);
       navigate("/chats");
     } catch (error) {

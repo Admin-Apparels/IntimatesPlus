@@ -13,8 +13,6 @@ import {
   Image,
   useToast,
   Spinner,
-  Box,
-  calc,
 } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 import { useState } from "react";
@@ -30,25 +28,29 @@ const MatchModal = () => {
   const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate();
 
-  const { setSelectedChat, user, chats, setChats, setUserId } = ChatState();
+  const { setSelectedChat, user, chats, setChats, setUserId, setUser } =
+    ChatState();
   const toast = useToast();
-
+  console.log(chats, user);
   const accessChat = async (userId) => {
     const existingChat = chats.find(
       (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
     );
-    const currentDate = new Date();
+    const currentDate = new Date().getTime();
+    const ssevenSubDate = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
+    console.log(currentDate);
+    console.log(ssevenSubDate);
 
     if (existingChat) {
       setSelectedChat(existingChat);
       onClose();
       return;
     }
-    if (user.accountType === "platnum" && currentDate > user.day) {
-      let timeRemaining = calc(user.day - currentDate);
+    if (user.accountType === "Platnum" && currentDate < user.day) {
+      let timeRemaining = ((user.day - currentDate) / 3600000).toFixed(2);
       toast({
         title: "You are all caught up!",
-        description: `wait after ${timeRemaining}`,
+        description: `wait after ${timeRemaining}hrs`,
         status: "info",
         isClosable: true,
         duration: 5000,
@@ -56,13 +58,11 @@ const MatchModal = () => {
       });
       return;
     }
-    if (user.accountType === "new " || user.accountType === "Bronze") {
+    if (user.accountType === "new" || user.accountType === "Bronze") {
       navigate("/paycheck");
       onClose();
     } else {
-      const subscriptionExpiry = new Date(user.subscription);
-
-      if (currentDate < subscriptionExpiry) {
+      if (currentDate < user.subscription) {
         try {
           setLoadingChat(true);
           const config = {
@@ -77,13 +77,21 @@ const MatchModal = () => {
             { userId, user },
             config
           );
-
-          setChats([data, ...chats]);
-
-          setSelectedChat(data);
-          setLoadingChat(false);
+          if (data.day) {
+            console.log("setting user");
+            setUser((prev) => ({ ...prev, day: data.day }));
+            console.log(user);
+          } else if (data._id) {
+            console.log("setting the chats");
+            setChats([data, ...chats]);
+            setSelectedChat(data);
+            setLoadingChat(false);
+            onClose();
+          }
           onClose();
         } catch (error) {
+          setLoadingChat(false);
+          onClose();
           toast({
             title: "Error creating your chat, try again later",
             description: error.message,
@@ -94,12 +102,21 @@ const MatchModal = () => {
           });
         }
       } else {
+        toast({
+          title: "You are not subscribed",
+          description: `Subscription expired on ${new Date(user.subscription)}`,
+          status: "info",
+          duration: 5000,
+          position: "bottom",
+        });
         navigate("/paycheck");
       }
     }
   };
 
   const fetchFemaleUsers = async () => {
+    const time = new Date().getTime() + 24 * 60 * 60 * 1000;
+    console.log(time);
     setLoading(true);
     try {
       const config = {
@@ -151,27 +168,32 @@ const MatchModal = () => {
         />
       ) : (
         <IconButton
+          backgroundColor={"transparent"}
+          borderRadius={20}
+          padding={0}
+          margin={0}
           icon={
-            <Box
+            <Text
+              p={0}
+              m={1}
+              fontStyle={"italic"}
               display={"flex"}
-              justifyContent={"center"}
-              alignItems={"center"}
+              color={"red.500"}
             >
-              <Text
-                p={1}
-                fontStyle={"italic"}
-                display={"flex"}
-                color={"red.700"}
-              >
-                Match
-                <Image
-                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1694448680/pngwing.com_jzzs7q.png"
-                  p={0}
-                  m={0}
-                  h={3}
-                />{" "}
-              </Text>
-            </Box>
+              Match
+              <Image
+                src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1695818135/icons8-fruit-48_hirauj.png"
+                p={0}
+                m={0}
+                h={5}
+              />{" "}
+              <Image
+                src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1695818135/icons8-water-48_tlrkf4.png"
+                p={0}
+                m={0}
+                h={5}
+              />
+            </Text>
           }
           onClick={() => {
             setLoading(true);

@@ -45,7 +45,7 @@ function SideDrawer() {
     setChats,
     onlineUsersCount,
   } = ChatState();
-  console.log(chats);
+
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const history = useNavigate();
@@ -122,7 +122,9 @@ function SideDrawer() {
           color={"green"}
           backgroundColor={"transparent"}
         >
-          {formatOnlineUsersCount(onlineUsersCount)}
+          <Text fontFamily={"cursive"}>
+            {formatOnlineUsersCount(onlineUsersCount)}
+          </Text>
         </Tooltip>
 
         <div>

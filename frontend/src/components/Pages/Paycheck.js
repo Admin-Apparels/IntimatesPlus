@@ -36,29 +36,35 @@ export default function Paycheck() {
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [subscription, setSubscription] = useState("");
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+  console.log(user);
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    const currentDate = new Date();
-    const subscriptionExpiry = new Date(user.subscription);
-
-    if (
-      user.accountType === "Platnum" ||
-      (user.accountType === "Gold" && currentDate < subscriptionExpiry)
-    ) {
-      navigate("/chats");
-      toast({
-        title: "Finish your current subscription first please",
-        description: `${user.accountType} subscriber`,
-        status: "info",
-        isClosable: true,
-        duration: 5000,
-        position: "bottom",
-      });
+    const currentDate = new Date().getTime();
+    if (!userInfo) {
+      navigate("/");
     }
 
-    if (!userInfo) navigate("/");
+    try {
+      if (
+        user.accountType === "Platnum" ||
+        (user.accountType === "Gold" && currentDate < user.subscription)
+      ) {
+        navigate("/chats");
+        toast({
+          title: "Finish your current subscription first please",
+          description: `${user.accountType} subscriber`,
+          status: "info",
+          isClosable: true,
+          duration: 5000,
+          position: "bottom",
+        });
+      }
+    } catch (error) {
+      navigate("/chats");
+    }
   }, [navigate, toast, user]);
 
   const handleApprove = async (accountType) => {
@@ -95,10 +101,16 @@ export default function Paycheck() {
         { userId, user },
         config
       );
-
-      setChats([data, ...chats]);
-
-      setSelectedChat(data);
+      if (data.day) {
+        setUser((prev) => ({ ...prev, day: data.day }));
+        console.log("setting user");
+      } else if (data._id) {
+        console.log("setting chats");
+        setChats([data, ...chats]);
+        setSelectedChat(data);
+      } else {
+        console.log("Unexpected data structure:", data);
+      }
     } catch (error) {
       toast({
         title: "Error fetching the chat",
@@ -111,7 +123,6 @@ export default function Paycheck() {
     }
   };
   const makePaymentMpesa = async () => {
-    //COMING SOON
     if (!phoneNumber) return;
     console.log(phoneNumber, subscription, user._id);
     try {
@@ -217,11 +228,11 @@ export default function Paycheck() {
                 });
               }}
               onApprove={async (data, actions) => {
-                // const amount = "Bronze";
-                // await handleApprove(amount);
-                // await handleCreateChat();
+                const amount = "Bronze";
+                await handleApprove(amount);
+                await handleCreateChat();
+                navigate("/chats");
                 return actions.order.capture().then(function (details) {
-                  navigate("/chats");
                   toast({
                     title: "Success",
                     description: "Subcription Successfull",
@@ -232,11 +243,7 @@ export default function Paycheck() {
                   });
                 });
               }}
-              onCancel={async () => {
-                const amount = "Bronze";
-                await handleApprove(amount);
-                handleCreateChat();
-                navigate("/chats");
+              onCancel={() => {
                 toast({
                   title: "Cancelled",
                   description: "Subscription Unsuccessfull",
@@ -406,7 +413,6 @@ export default function Paycheck() {
                 });
               }}
               onApprove={async (data, actions) => {
-                console.log(data);
                 const amount = "Platnum";
                 await handleApprove(amount);
                 await handleCreateChat();
@@ -422,7 +428,10 @@ export default function Paycheck() {
                   });
                 });
               }}
-              onCancel={() => {
+              onCancel={async () => {
+                const amount = "Platnum";
+                handleApprove(amount);
+                await handleCreateChat();
                 toast({
                   title: "Cancelled",
                   description: "Subscription Unsuccessfull",
@@ -522,7 +531,6 @@ export default function Paycheck() {
             <PayPalButtons
               createOrder={(data, actions) => {
                 const amount = 300.0;
-
                 return actions.order.create({
                   purchase_units: [
                     {
@@ -537,8 +545,8 @@ export default function Paycheck() {
               onApprove={async (data, actions) => {
                 console.log(data);
                 const amount = "Gold";
-                await handleCreateChat();
                 await handleApprove(amount);
+                handleCreateChat();
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
                   toast({

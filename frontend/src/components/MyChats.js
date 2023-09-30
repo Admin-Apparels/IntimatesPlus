@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 
 const MyChat = (fetchAgain) => {
   const [loggedUser, setLoggedUser] = useState();
-  const [array, setArray] = useState(undefined);
 
   const {
     selectedChat,
@@ -34,17 +33,26 @@ const MyChat = (fetchAgain) => {
       };
       axiosInstance
         .get("/api/chat", config)
-        .then((response) => {
-          console.log(response.data);
-
+        .then(async (response) => {
           if (response.data.message) {
           } else {
-            setArray(response.data);
+            const chatsWithSenderNames = await Promise.all(
+              response.data.map(async (chat) => {
+                const resolvedUsers = await Promise.all(chat.users);
+
+                const senderName =
+                  resolvedUsers[0]._id === loggedUser._id
+                    ? resolvedUsers[1].name
+                    : resolvedUsers[0].name;
+                return { ...chat, senderName };
+              })
+            );
+
+            setChats(chatsWithSenderNames);
           }
         })
         .catch((error) => {
           if (error.response && error.response.status === 401) {
-            console.log("token expired");
             toast({
               title: "Your session has expired",
               description: "Logging out in less than 8 seconds",
@@ -52,26 +60,24 @@ const MyChat = (fetchAgain) => {
               status: "loading",
               position: "bottom",
             });
-            localStorage.removeItem("userInfo");
+
             setTimeout(() => {
               localStorage.removeItem("userInfo");
               navigate("/");
             }, 8000);
-          } else {
-            console.error("An error occurred:", error);
+          }
+          if (error.response && error.response.status === 429) {
+            toast({
+              title: "Too many request",
+              description: "Try again after some time",
+              status: "error",
+              duration: 5000,
+              isClosable: true,
+              position: "bottom-left",
+            });
           }
         });
     } catch (error) {
-      if (error.response && error.response.status === 429) {
-        toast({
-          title: "Too many request",
-          description: "Try again after some time",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-left",
-        });
-      }
       toast({
         title: "Error occured trying to retrieve Chats",
         description: "Try again after some time",
@@ -81,28 +87,7 @@ const MyChat = (fetchAgain) => {
         position: "bottom-left",
       });
     }
-    if (array) {
-      console.log(array);
-      const chatsWithSenderNames = await Promise.all(
-        array.map(async (chat) => {
-          const resolvedUsers = await Promise.all(chat.users);
-
-          if (resolvedUsers && resolvedUsers.length === 2) {
-            const senderName =
-              resolvedUsers[0]._id === loggedUser._id
-                ? resolvedUsers[1].name
-                : resolvedUsers[0].name;
-            return { ...chat, senderName };
-          } else {
-            console.error("Unexpected resolvedUsers array:", resolvedUsers);
-            return { ...chat, senderName: "Unknown" };
-          }
-        })
-      );
-
-      setChats(chatsWithSenderNames);
-    }
-  }, [toast, user, loggedUser, setChats, navigate, array]);
+  }, [toast, user, loggedUser, setChats, navigate]);
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -110,7 +95,6 @@ const MyChat = (fetchAgain) => {
   }, []);
   useEffect(() => {
     if (loggedUser) {
-      console.log(loggedUser);
       fetchChats();
     }
   }, [fetchChats, loggedUser]);

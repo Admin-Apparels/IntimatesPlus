@@ -182,15 +182,40 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
     socket.on("newUserRegistered", (userName) => {
-      if (userName !== user.name) {
-        toast({
-          title: "New User Registered",
-          description: `${userName} joined`,
-          status: "info",
-          duration: 5000,
-          isClosable: true,
-          position: "top-left",
-        });
+      toast({
+        title: "New User Registered",
+        description: `${userName} joined`,
+        status: "info",
+        duration: 5000,
+        isClosable: true,
+        position: "top-left",
+      });
+      if (user.gender === "female") {
+        setTimeout(() => {
+          toast({
+            title:
+              "Your request is being processed by Admin, you'll be notified soon",
+            description:
+              "Your presence in our journey towards a porn-free world and a return to genuine human interaction fills our hearts with gratitude and hope",
+            status: "info",
+            isClosable: true,
+            duration: 20000,
+            position: "bottom",
+          });
+        }, 5000);
+      } else {
+        setTimeout(() => {
+          toast({
+            title:
+              "Step into the authentic realm of the anti-simulation world, where real connections and experiences await!",
+            description:
+              "Your presence in our journey towards a porn-free world and a return to genuine human interaction fills our hearts with gratitude and hope",
+            status: "info",
+            isClosable: true,
+            duration: 20000,
+            position: "bottom",
+          });
+        }, 5000);
       }
     });
     socket.on("onlineUsers", (count) => {
