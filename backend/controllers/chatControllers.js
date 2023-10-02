@@ -19,7 +19,7 @@ const accessChat = asyncHandler(async (req, res) => {
           day: time,
         },
         { new: true }
-      ).select("day");
+      );
       res.json(timeOfChat);
       console.log("Updated Platnum time", timeOfChat);
     } catch (error) {
@@ -62,10 +62,9 @@ const accessChat = asyncHandler(async (req, res) => {
         "users",
         "-password"
       );
-      res.status(200).json(FullChat);
+      res.json(FullChat);
     } catch (error) {
       res.status(400);
-      throw new Error(error.message);
     }
   }
 });

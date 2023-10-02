@@ -54,7 +54,7 @@ export default function Paycheck() {
       ) {
         navigate("/chats");
         toast({
-          title: "Finish your current subscription first please",
+          title: "Finish your current subscription first please...",
           description: `${user.accountType} subscriber`,
           status: "info",
           isClosable: true,
@@ -102,14 +102,12 @@ export default function Paycheck() {
         config
       );
       if (data.day) {
-        setUser((prev) => ({ ...prev, day: data.day }));
+        setUser(data);
         console.log("setting user");
-      } else if (data._id) {
+      } else {
         console.log("setting chats");
         setChats([data, ...chats]);
         setSelectedChat(data);
-      } else {
-        console.log("Unexpected data structure:", data);
       }
     } catch (error) {
       toast({
@@ -180,7 +178,7 @@ export default function Paycheck() {
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"3xl"}>$</Text>
             <Text fontSize={"6xl"} fontWeight={800}>
-              1
+              2
             </Text>
             <Text color={"gray.500"}>/chat</Text>
           </Stack>
@@ -199,6 +197,10 @@ export default function Paycheck() {
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
               No new features
+            </ListItem>
+            <ListItem>
+              <ListIcon as={CheckIcon} color="green.400" />
+              Get notified on new women around you
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
@@ -272,9 +274,10 @@ export default function Paycheck() {
               src={
                 "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1694007922/mpesa_ppfs6p.png"
               }
+              loading="lazy"
               alt={""}
             />{" "}
-            Pay with Mpesa
+            Pay via Mpesa
           </Button>
           <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
@@ -365,9 +368,9 @@ export default function Paycheck() {
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"3xl"}>$</Text>
             <Text fontSize={"6xl"} fontWeight={800}>
-              25
+              12
             </Text>
-            <Text color={"gray.500"}>/month</Text>
+            <Text color={"gray.500"}>/week</Text>
           </Stack>
         </Stack>
 
@@ -379,11 +382,15 @@ export default function Paycheck() {
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
-              Two chats a day Max
+              One chat a day for seven days
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
               New features
+            </ListItem>
+            <ListItem>
+              <ListIcon as={CheckIcon} color="green.400" />
+              Get notified on new women around you
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
@@ -399,7 +406,7 @@ export default function Paycheck() {
           >
             <PayPalButtons
               createOrder={(data, actions) => {
-                const amount = 25.0;
+                const amount = 12.0;
 
                 return actions.order.create({
                   purchase_units: [
@@ -460,9 +467,10 @@ export default function Paycheck() {
               src={
                 "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1694007922/mpesa_ppfs6p.png"
               }
+              loading="lazy"
               alt={""}
             />{" "}
-            Pay with Mpesa
+            Pay via Mpesa
           </Button>
         </Box>
       </Box>
@@ -496,9 +504,9 @@ export default function Paycheck() {
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"3xl"}>$</Text>
             <Text fontSize={"6xl"} fontWeight={800}>
-              300
+              60
             </Text>
-            <Text color={"gray.500"}>/annually</Text>
+            <Text color={"gray.500"}>/month</Text>
           </Stack>
         </Stack>
 
@@ -515,6 +523,10 @@ export default function Paycheck() {
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
               New features
+            </ListItem>
+            <ListItem>
+              <ListIcon as={CheckIcon} color="green.400" />
+              Get notified on new women around you
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
@@ -589,8 +601,9 @@ export default function Paycheck() {
                 "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1694007922/mpesa_ppfs6p.png"
               }
               alt={""}
+              loading="lazy"
             />{" "}
-            Pay with Mpesa
+            Pay via Mpesa
           </Button>
         </Box>
       </Box>

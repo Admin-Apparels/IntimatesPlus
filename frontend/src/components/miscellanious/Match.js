@@ -32,6 +32,8 @@ const MatchModal = () => {
     ChatState();
   const toast = useToast();
   console.log(chats, user);
+  const ssevenSubDate = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
+  console.log(ssevenSubDate);
   const accessChat = async (userId) => {
     const existingChat = chats.find(
       (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
@@ -56,6 +58,7 @@ const MatchModal = () => {
         duration: 5000,
         position: "bottom",
       });
+      onClose();
       return;
     }
     if (user.accountType === "new" || user.accountType === "Bronze") {
@@ -77,17 +80,16 @@ const MatchModal = () => {
             { userId, user },
             config
           );
-          if (data.day) {
+          if (data.email) {
             console.log("setting user");
-            setUser((prev) => ({ ...prev, day: data.day }));
+            setUser(data);
             console.log(user);
-          } else if (data._id) {
+          } else {
             console.log("setting the chats");
             setChats([data, ...chats]);
             setSelectedChat(data);
-            setLoadingChat(false);
-            onClose();
           }
+          setLoadingChat(false);
           onClose();
         } catch (error) {
           setLoadingChat(false);
@@ -183,12 +185,16 @@ const MatchModal = () => {
               Match
               <Image
                 src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1695818135/icons8-fruit-48_hirauj.png"
+                loading="lazy"
+                alt=""
                 p={0}
                 m={0}
                 h={5}
               />{" "}
               <Image
                 src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1695818135/icons8-water-48_tlrkf4.png"
+                loading="lazy"
+                alt=""
                 p={0}
                 m={0}
                 h={5}
@@ -228,6 +234,7 @@ const MatchModal = () => {
                   boxSize={isFocused ? "20rem" : "10rem"}
                   src={currentUser.pic}
                   alt={currentUser.name}
+                  loading="lazy"
                   cursor="pointer"
                   onClick={toggleFocus}
                   transition="box-size 0.3s ease-in-out"

@@ -51,7 +51,7 @@ const registerUsers = asyncHandler(async (req, res) => {
 });
 const searchUser = async (req, res) => {
   const { email } = req.params;
-  console.log(email);
+
   const userExists = await User.findOne({ email });
   if (!userExists) {
     res.status(201).json("Unfound");
@@ -119,7 +119,6 @@ const getUsers = async (req, res) => {
       { $match: { gender: "female", deleted: { $ne: true } } },
       { $sample: { size: 3 } },
     ]);
-    console.log(allUsers);
     res.json(allUsers);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });

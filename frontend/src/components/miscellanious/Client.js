@@ -222,6 +222,7 @@ const ClientModal = ({ children }) => {
               boxSize={isFocused ? "300px" : "150px"}
               src={user.pic}
               alt={user.name}
+              loading="lazy"
               cursor="pointer"
               onClick={toggleFocus}
               transition="box-size 0.3s ease-in-out"

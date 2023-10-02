@@ -49,6 +49,8 @@ function Homepage() {
             <Image
               height={10}
               src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1695820899/icons8-no-one-under-eighteen-emoji-48_cznua5.png"
+              loading="lazy"
+              alt=""
             />
           </Text>
         </Box>
@@ -75,8 +77,7 @@ function Homepage() {
           textAlign="center"
           justifyContent={"space-evenly"}
         >
-          Resist Slave Mind | Resist Porn | Be The Best Version of Yourself |{" "}
-          {`Copyright © ${new Date().getFullYear()}`}
+          Resist Porn | {`Copyright © ${new Date().getFullYear()}`}
         </Text>
       </Container>
     </ErrorBoundary>

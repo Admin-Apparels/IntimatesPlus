@@ -114,6 +114,7 @@ const ProfileModal = ({ userInfo }) => {
               boxSize={isFocused ? "300px" : "150px"}
               src={userInfo.pic}
               alt={userInfo.name}
+              loading="lazy"
               cursor="pointer"
               onClick={toggleFocus}
               transition="box-size 0.3s ease-in-out"
