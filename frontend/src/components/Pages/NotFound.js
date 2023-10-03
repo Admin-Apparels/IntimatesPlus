@@ -23,6 +23,7 @@ const NotFound = () => {
       >
         <Image
           src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1696073349/icons8-not-found-64_rxa6yk.png"
+          loading="lazy"
           alt="Not Found"
         />
         <Text fontSize={"2xl"}>404 - Page Not Found</Text>
@@ -31,7 +32,7 @@ const NotFound = () => {
           margin={3}
           padding={2}
           backgroundColor={"green.400"}
-          onClick={navigate("/chats")}
+          onClick={() => navigate("/chats")}
         >
           Return back to chats
         </Button>

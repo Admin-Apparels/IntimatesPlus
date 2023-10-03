@@ -216,7 +216,7 @@ export default function Paycheck() {
           >
             <PayPalButtons
               createOrder={(data, actions) => {
-                const amount = 1.0;
+                const amount = 2.0;
 
                 return actions.order.create({
                   purchase_units: [
@@ -233,8 +233,9 @@ export default function Paycheck() {
                 const amount = "Bronze";
                 await handleApprove(amount);
                 await handleCreateChat();
-                navigate("/chats");
+
                 return actions.order.capture().then(function (details) {
+                  navigate("/chats");
                   toast({
                     title: "Success",
                     description: "Subcription Successfull",
@@ -436,9 +437,6 @@ export default function Paycheck() {
                 });
               }}
               onCancel={async () => {
-                const amount = "Platnum";
-                handleApprove(amount);
-                await handleCreateChat();
                 toast({
                   title: "Cancelled",
                   description: "Subscription Unsuccessfull",
@@ -542,7 +540,7 @@ export default function Paycheck() {
           >
             <PayPalButtons
               createOrder={(data, actions) => {
-                const amount = 300.0;
+                const amount = 60.0;
                 return actions.order.create({
                   purchase_units: [
                     {
@@ -558,7 +556,7 @@ export default function Paycheck() {
                 console.log(data);
                 const amount = "Gold";
                 await handleApprove(amount);
-                handleCreateChat();
+                await handleCreateChat();
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
                   toast({
