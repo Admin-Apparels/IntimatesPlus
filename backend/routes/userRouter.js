@@ -1,5 +1,6 @@
 const {
   registerUsers,
+  forgotEmail,
   searchUser,
   authUser,
   getUserById,
@@ -18,6 +19,7 @@ const router = express.Router();
 
 router.post("/", limiter, registerUsers);
 router.get("/searchuser/:email", limiter, searchUser);
+router.get("/accountrecoverly/:email", limiter, forgotEmail);
 router.route("/login").post(limiter, authUser);
 router.get("/:userEmail", limiter, authorizeUser);
 

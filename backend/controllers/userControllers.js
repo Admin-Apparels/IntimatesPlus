@@ -49,6 +49,43 @@ const registerUsers = asyncHandler(async (req, res) => {
     throw new Error("Failed to create the account, try again after some time.");
   }
 });
+const forgotEmail = async (req, res) => {
+  const { email } = req.params;
+
+  const userExists = await User.findOne({ email });
+  if (userExists) {
+    const verificationCode = Math.floor(
+      100000 + Math.random() * 900000
+    ).toString();
+
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "jngatia045@gmail.com",
+        pass: "onnkvpekzzbxdrpl",
+      },
+    });
+    const mailOptions = {
+      from: "jngatia045@gmail.com",
+      to: email,
+      subject: "Recover Your Email",
+      text: `Your recovery code is:  ${verificationCode}
+    
+This is system's generated code, please do not reply.`,
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        res.status(400).json({ message: "Email Sending Failed" });
+      } else {
+        console.log("Email sent: " + info.response);
+        res.status(200).json(verificationCode);
+      }
+    });
+  } else {
+    res.json(false);
+    throw new Error("Email not Found in the database");
+  }
+};
 const searchUser = async (req, res) => {
   const { email } = req.params;
 
@@ -258,6 +295,7 @@ This is system's generated code, please do not reply.`,
 module.exports = {
   authorizeUser,
   registerUsers,
+  forgotEmail,
   searchUser,
   authUser,
   getUserById,

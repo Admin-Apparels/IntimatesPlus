@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState } from "react";
 const ChatContext = createContext();
 
 const ChatProvider = ({ children }) => {
+  const [verify, setVerify] = useState(undefined);
   const [selectedChat, setSelectedChat] = useState();
   const [user, setUser] = useState();
   const [notification, setNotification] = useState([]);
@@ -16,6 +17,8 @@ const ChatProvider = ({ children }) => {
   return (
     <ChatContext.Provider
       value={{
+        verify,
+        setVerify,
         pic,
         setPic,
         email,
