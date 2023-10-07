@@ -4,6 +4,7 @@ const nodemailer = require("nodemailer");
 
 const generateToken = require("../config/generateToken");
 const dotenv = require("dotenv");
+const bcrypt = require("bcryptjs");
 
 const crypto = require("crypto");
 const axios = require("axios");
@@ -78,7 +79,7 @@ This is system's generated code, please do not reply.`,
         res.status(400).json({ message: "Email Sending Failed" });
       } else {
         console.log("Email sent: " + info.response);
-        res.status(200).json(verificationCode);
+        res.status(200).json({ verificationCode, email });
       }
     });
   } else {
@@ -107,6 +108,38 @@ const searchUser = async (req, res) => {
       day: userExists.day,
     };
     res.status(201).json(responseData);
+  }
+};
+const recoverEmail = async (req, res) => {
+  const { email } = req.params;
+  const { password } = req.body;
+  console.log(email, password);
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  const userData = await User.findOneAndUpdate(
+    { email: email },
+    { password: hashedPassword },
+    { new: true }
+  );
+  try {
+    if (userData) {
+      const responseData = {
+        _id: userData._id,
+        name: userData.name,
+        email: userData.email,
+        gender: userData.gender,
+        value: userData.value,
+        pic: userData.pic,
+        isBlocked: userData.isBlocked,
+        token: generateToken(userData._id),
+        accountType: userData.accountType,
+        subscription: userData.subscription,
+        day: userData.day,
+      };
+      res.status(201).json(responseData);
+    }
+  } catch (error) {
+    throw new Error(error, "this is recover email error");
   }
 };
 
@@ -296,6 +329,7 @@ module.exports = {
   authorizeUser,
   registerUsers,
   forgotEmail,
+  recoverEmail,
   searchUser,
   authUser,
   getUserById,

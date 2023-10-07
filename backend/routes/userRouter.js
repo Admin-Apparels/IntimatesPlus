@@ -11,6 +11,7 @@ const {
   deleteUser,
   deleteImage,
   authorizeUser,
+  recoverEmail,
 } = require("../controllers/userControllers");
 const { protect } = require("../middleware/authMiddleware");
 const { limiter } = require("../middleware/limiter");
@@ -19,7 +20,8 @@ const router = express.Router();
 
 router.post("/", limiter, registerUsers);
 router.get("/searchuser/:email", limiter, searchUser);
-router.get("/accountrecoverly/:email", limiter, forgotEmail);
+router.get("/accountrecovery/:email", limiter, forgotEmail);
+router.post("/emailrecovery/:email", limiter, recoverEmail);
 router.route("/login").post(limiter, authUser);
 router.get("/:userEmail", limiter, authorizeUser);
 

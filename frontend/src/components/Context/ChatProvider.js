@@ -13,10 +13,13 @@ const ChatProvider = ({ children }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [pic, setPic] = useState("");
+  const [recoverEmail, setRecoverEmail] = useState();
 
   return (
     <ChatContext.Provider
       value={{
+        recoverEmail,
+        setRecoverEmail,
         verify,
         setVerify,
         pic,

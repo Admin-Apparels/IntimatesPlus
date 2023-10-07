@@ -18,8 +18,8 @@ const NotFound = () => {
         justifyContent={"space-between"}
         alignItems={"center"}
         backgroundColor={"Background"}
-        borderRadius={3}
         padding={8}
+        width={"98%"}
       >
         <Image
           src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1696073349/icons8-not-found-64_rxa6yk.png"
@@ -27,10 +27,12 @@ const NotFound = () => {
           alt="Not Found"
         />
         <Text fontSize={"2xl"}>404 - Page Not Found</Text>
-        <strong> The page you are looking for does not exist.</strong>
+        <Text textAlign={"center"}>
+          {" "}
+          The page you are looking for does not exist.
+        </Text>
         <Button
           margin={3}
-          padding={2}
           backgroundColor={"green.400"}
           onClick={() => navigate("/chats")}
         >

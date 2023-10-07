@@ -16,7 +16,7 @@ function App() {
         <Route path="/googleinfo" Component={GoogleInfo} />
         <Route path="/chats" Component={Chats} />
         <Route path="/paycheck" Component={Paycheck} />
-        <Route path="/accountrecoverly" Component={forgotPassword} />
+        <Route path="/accountrecovery" Component={forgotPassword} />
         <Route path="*" Component={NotFound} />
       </Routes>
     </div>

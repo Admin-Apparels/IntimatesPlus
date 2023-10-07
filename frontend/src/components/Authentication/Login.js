@@ -36,7 +36,8 @@ const Login = () => {
   const { onOpen, isOpen, onClose } = useDisclosure();
   const [forgotEmail, setForgotEmail] = useState();
   const [searching, setSearching] = useState(false);
-  const { setVerify } = ChatState();
+  const { setVerify, setRecoverEmail } = ChatState();
+  const [disable, setDisable] = useState(false);
 
   const submitHandler = async () => {
     setLoading(true);
@@ -82,14 +83,15 @@ const Login = () => {
   };
   const forgotPassword = async () => {
     setSearching(true);
+    setDisable(true);
     try {
       const { data } = await axios.get(
-        `/api/user/accountrecoverly/${forgotEmail}`
+        `/api/user/accountrecovery/${forgotEmail}`
       );
-      console.log(data);
       if (data !== false) {
-        navigate("/accountrecoverly");
-        setVerify(data);
+        navigate("/accountrecovery");
+        setVerify(data.verificationCode);
+        setRecoverEmail(data.email);
       } else {
         toast({
           title: "Email not found",
@@ -100,8 +102,14 @@ const Login = () => {
       }
 
       setSearching(false);
+      setTimeout(() => {
+        setDisable(false);
+      }, 30000);
     } catch (error) {
       setSearching(false);
+      setTimeout(() => {
+        setDisable(false);
+      }, 30000);
       toast({
         title: "Error Occurred!",
         description: error.response.data.message,
@@ -198,11 +206,17 @@ const Login = () => {
                 forgotPassword();
               }}
               colorScheme="green"
+              isDisabled={disable}
             >
-              Search for my Email
+              {disable ? "Try again after 30sec" : "Search for my email"}
             </Button>
           </ModalBody>
-          <ModalFooter display="flex">{searching && <Spinner />}</ModalFooter>
+          <ModalFooter display="flex">
+            <Text textAlign={"start"}>
+              A code will be sent to the above email
+            </Text>
+            {searching && <Spinner />}
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </VStack>
