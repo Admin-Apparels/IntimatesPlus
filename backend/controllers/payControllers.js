@@ -19,7 +19,7 @@ async function generateAccessToken() {
 }
 const createOrder = async (req, res) => {
   const { amount } = req.body;
-  const base = "https://api-m.sandbox.paypal.com";
+  const base = "https://api-m.paypal.com";
 
   const accessToken = await generateAccessToken();
   const url = `${base.sandbox}/v2/checkout/orders`;
@@ -48,7 +48,6 @@ const createOrder = async (req, res) => {
 const updateUser = async (req, res) => {
   const userId = req.params.userId;
   const userAcc = req.query.account;
-  console.log(userId, userAcc);
 
   var Acc;
 

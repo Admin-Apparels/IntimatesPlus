@@ -79,8 +79,6 @@ export default function Paycheck() {
       };
       localStorage.setItem("userInfo", JSON.stringify(userData));
       setUser(userData);
-
-      console.log(user);
     } catch (error) {
       console.log(error);
       throw new Error("Error occurred", error);
@@ -105,7 +103,6 @@ export default function Paycheck() {
         const userData = await { ...user, day: data.day };
         localStorage.setItem("userInfo", JSON.stringify(userData));
         setUser(userData);
-        console.log("setting user", userData);
       } else {
         console.log("setting chats");
         setChats([data, ...chats]);
@@ -218,7 +215,7 @@ export default function Paycheck() {
           >
             <PayPalButtons
               createOrder={(data, actions) => {
-                const amount = 0.5;
+                const amount = 2.0;
 
                 return actions.order.create({
                   purchase_units: [
@@ -409,7 +406,7 @@ export default function Paycheck() {
           >
             <PayPalButtons
               createOrder={(data, actions) => {
-                const amount = 0.5;
+                const amount = 12.0;
 
                 return actions.order.create({
                   purchase_units: [

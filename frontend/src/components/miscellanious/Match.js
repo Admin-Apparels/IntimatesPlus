@@ -31,21 +31,12 @@ const MatchModal = () => {
   const { setSelectedChat, user, chats, setChats, setUserId, setUser } =
     ChatState();
   const toast = useToast();
-  console.log(chats, user);
 
-  const currentDate = new Date().getTime();
-  const ssevenSubDate = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
-  console.log(currentDate);
-  console.log(ssevenSubDate);
-  console.log(ssevenSubDate);
   const accessChat = async (userId) => {
     const existingChat = chats.find(
       (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
     );
     const currentDate = new Date().getTime();
-    const ssevenSubDate = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
-    console.log(currentDate);
-    console.log(ssevenSubDate);
 
     if (existingChat) {
       setSelectedChat(existingChat);
@@ -91,7 +82,6 @@ const MatchModal = () => {
 
             console.log(user);
           } else {
-            console.log("setting the chats");
             setChats([data, ...chats]);
             setSelectedChat(data);
           }
@@ -124,8 +114,6 @@ const MatchModal = () => {
   };
 
   const fetchFemaleUsers = async () => {
-    const time = new Date().getTime() + 24 * 60 * 60 * 1000;
-    console.log(time);
     setLoading(true);
     try {
       const config = {
@@ -135,7 +123,7 @@ const MatchModal = () => {
       };
 
       const { data } = await axios.get("/api/user/female/users", config);
-      console.log(data);
+
       setUsers(data);
 
       setLoading(false);
@@ -170,7 +158,7 @@ const MatchModal = () => {
       {loading ? (
         <Spinner
           thickness="4px"
-          speed="0.4s"
+          speed="0.6s"
           emptyColor="gray.200"
           color="blue.500"
           size="md"

@@ -21,9 +21,7 @@ const accessChat = asyncHandler(async (req, res) => {
         { new: true }
       ).select("day");
       res.json(timeOfChat);
-      console.log("Updated Platnum time", timeOfChat);
     } catch (error) {
-      console.error("This is the error", error);
       res.json({ error: "Internal Server Error" });
     }
   }
