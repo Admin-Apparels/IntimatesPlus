@@ -19,7 +19,7 @@ const accessChat = asyncHandler(async (req, res) => {
           day: time,
         },
         { new: true }
-      );
+      ).select("day");
       res.json(timeOfChat);
       console.log("Updated Platnum time", timeOfChat);
     } catch (error) {

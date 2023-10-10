@@ -1,4 +1,4 @@
-import { Box, Link } from "@chakra-ui/react";
+import { Box, Link, Text } from "@chakra-ui/react";
 import React from "react";
 
 class ErrorBoundary extends React.Component {
@@ -20,17 +20,25 @@ class ErrorBoundary extends React.Component {
       return (
         <Box
           display={"flex"}
+          justifyContent="center"
           alignItems="center"
           backgroundColor={"white"}
-          justifyContent="center"
           width={"100%"}
+          height={"100%"}
         >
-          <p>
-            An error occurred. Please{" "}
+          {" "}
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            justifyContent={"center"}
+            alignItems={"center"}
+          >
+            {" "}
+            <Text fontSize={"2xl"}>An error occurred. Please </Text>
             <Link color="teal.500" href="/chats">
               Go Back...
             </Link>
-          </p>
+          </Box>
         </Box>
       );
     }

@@ -32,7 +32,11 @@ const MatchModal = () => {
     ChatState();
   const toast = useToast();
   console.log(chats, user);
+
+  const currentDate = new Date().getTime();
   const ssevenSubDate = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
+  console.log(currentDate);
+  console.log(ssevenSubDate);
   console.log(ssevenSubDate);
   const accessChat = async (userId) => {
     const existingChat = chats.find(
@@ -80,9 +84,11 @@ const MatchModal = () => {
             { userId, user },
             config
           );
-          if (data.email) {
-            console.log("setting user");
-            setUser(data);
+          if (data.day) {
+            const userData = await { ...user, day: data.day };
+            localStorage.setItem("userInfo", JSON.stringify(userData));
+            setUser(userData);
+
             console.log(user);
           } else {
             console.log("setting the chats");
@@ -109,6 +115,7 @@ const MatchModal = () => {
           description: `Subscription expired on ${new Date(user.subscription)}`,
           status: "info",
           duration: 5000,
+          isClosable: true,
           position: "bottom",
         });
         navigate("/paycheck");
@@ -219,6 +226,8 @@ const MatchModal = () => {
                 fontFamily="Work sans"
                 display="flex"
                 justifyContent="center"
+                bgGradient="linear(to-r, red.700, yellow.300)"
+                bgClip="text"
               >
                 {currentUser.name}
               </ModalHeader>
@@ -257,13 +266,25 @@ const MatchModal = () => {
                     setUserId(currentUser._id);
                     accessChat(currentUser._id);
                   }}
+                  bgGradient="linear(to-r, teal.500, green.500)"
+                  _hover={{
+                    bgGradient: "linear(to-r, red.500, yellow.500)",
+                  }}
                 >
                   Start Chat
                 </Button>
                 {loadingChat ? (
                   <Spinner ml="auto" display="flex" />
                 ) : (
-                  <Button onClick={nextPage}>Next</Button>
+                  <Button
+                    onClick={nextPage}
+                    bgGradient="linear(to-r, teal.500, green.500)"
+                    _hover={{
+                      bgGradient: "linear(to-r, red.500, yellow.500)",
+                    }}
+                  >
+                    Next
+                  </Button>
                 )}
               </ModalFooter>
             </ModalContent>

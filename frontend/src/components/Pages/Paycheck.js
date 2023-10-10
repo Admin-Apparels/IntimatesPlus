@@ -53,19 +53,11 @@ export default function Paycheck() {
         (user.accountType === "Gold" && currentDate < user.subscription)
       ) {
         navigate("/chats");
-        toast({
-          title: "Finish your current subscription first please...",
-          description: `${user.accountType} subscriber`,
-          status: "info",
-          isClosable: true,
-          duration: 5000,
-          position: "bottom",
-        });
       }
     } catch (error) {
       navigate("/chats");
     }
-  }, [navigate, toast, user]);
+  }, [navigate, user]);
 
   const handleApprove = async (accountType) => {
     try {
@@ -79,7 +71,14 @@ export default function Paycheck() {
         {},
         config
       );
-      setUser(data);
+      const userData = await {
+        ...user,
+        accountType: data.accountType,
+        subscription: data.subscription,
+        day: data.day,
+      };
+      localStorage.setItem("userInfo", JSON.stringify(userData));
+      setUser(userData);
 
       console.log(user);
     } catch (error) {
@@ -89,6 +88,7 @@ export default function Paycheck() {
   };
   const handleCreateChat = async () => {
     try {
+      const paycheck = "paycheckChat";
       const config = {
         headers: {
           "Content-type": "application/json",
@@ -97,13 +97,15 @@ export default function Paycheck() {
       };
 
       const { data } = await axios.post(
-        `/api/chat/${user.accountType}`,
-        { userId, user },
+        `/api/chat/${paycheck}`,
+        { userId },
         config
       );
       if (data.day) {
-        setUser(data);
-        console.log("setting user");
+        const userData = await { ...user, day: data.day };
+        localStorage.setItem("userInfo", JSON.stringify(userData));
+        setUser(userData);
+        console.log("setting user", userData);
       } else {
         console.log("setting chats");
         setChats([data, ...chats]);
@@ -216,7 +218,7 @@ export default function Paycheck() {
           >
             <PayPalButtons
               createOrder={(data, actions) => {
-                const amount = 2.0;
+                const amount = 0.5;
 
                 return actions.order.create({
                   purchase_units: [
@@ -407,7 +409,7 @@ export default function Paycheck() {
           >
             <PayPalButtons
               createOrder={(data, actions) => {
-                const amount = 12.0;
+                const amount = 0.5;
 
                 return actions.order.create({
                   purchase_units: [

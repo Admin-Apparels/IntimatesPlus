@@ -153,7 +153,12 @@ const MyChat = (fetchAgain) => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <Text fontFamily={"fantasy"} fontWeight={"medium"}>
+        <Text
+          fontFamily={"fantasy"}
+          fontWeight={"medium"}
+          bgGradient="linear(to-r, red.700, yellow.300)"
+          bgClip="text"
+        >
           My Chats:{" "}
         </Text>
         <Text fontWeight={"bold"}>

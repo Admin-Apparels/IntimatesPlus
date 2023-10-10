@@ -123,9 +123,8 @@ export default function Signup() {
       <Box
         display={"flex"}
         flexDir={"column"}
-        width={"350px"}
+        width={{ base: "350px", md: "500px" }}
         padding={7}
-        borderRadius={5}
         backgroundColor={"white"}
       >
         {" "}
