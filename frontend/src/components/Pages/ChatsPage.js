@@ -6,6 +6,7 @@ import SideDrawer from "../miscellanious/SideDrawer";
 import ErrorBoundary from "./ErrorBoundary";
 import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
+import Ads from "../miscellanious/ads";
 
 const Chatpage = () => {
   const navigate = useNavigate();
@@ -16,7 +17,9 @@ const Chatpage = () => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);
 
-    if (!userInfo) navigate("/");
+    if (!userInfo) {
+      navigate("/");
+    }
     const handleStorageChange = (e) => {
       if (e.key === "userInfo") {
         const updatedUserInfo = JSON.parse(e.newValue);
@@ -31,9 +34,13 @@ const Chatpage = () => {
   }, [navigate, setUser]);
 
   return (
-    <div style={{ width: "100%" }}>
+    <Box width="100%">
       <ErrorBoundary fallback={<p>Something went wrong</p>}>
-        {user && <SideDrawer />}
+        {user && <SideDrawer />}{" "}
+        {user &&
+          (user.accountType === "Platnum" ||
+            user.accountType === "Bronze" ||
+            user.accountType === "new") && <Ads />}
         <Box
           display="flex"
           justifyContent="space-between"
@@ -41,13 +48,14 @@ const Chatpage = () => {
           h="91.5vh"
           p="0.2rem"
         >
+          {" "}
           {user && <MyChats fetchAgain={fetchAgain} />}
           {user && (
             <Chatbox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
           )}
         </Box>
       </ErrorBoundary>
-    </div>
+    </Box>
   );
 };
 
