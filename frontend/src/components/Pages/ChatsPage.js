@@ -6,7 +6,7 @@ import SideDrawer from "../miscellanious/SideDrawer";
 import ErrorBoundary from "./ErrorBoundary";
 import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
-import Ads from "../miscellanious/ads";
+// import Ads from "../miscellanious/ads";
 
 const Chatpage = () => {
   const navigate = useNavigate();
@@ -37,10 +37,10 @@ const Chatpage = () => {
     <Box width="100%">
       <ErrorBoundary fallback={<p>Something went wrong</p>}>
         {user && <SideDrawer />}{" "}
-        {user &&
+        {/* {user &&
           (user.accountType === "Platnum" ||
             user.accountType === "Bronze" ||
-            user.accountType === "new") && <Ads />}
+            user.accountType === "new") && <Ads />} */}
         <Box
           display="flex"
           justifyContent="space-between"

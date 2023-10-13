@@ -99,6 +99,8 @@ const ProfileModal = ({ userInfo }) => {
             fontFamily="Work sans"
             display="flex"
             justifyContent="center"
+            bgGradient="linear(to-r, red.700, yellow.300)"
+            bgClip="text"
           >
             {userInfo.name}
           </ModalHeader>

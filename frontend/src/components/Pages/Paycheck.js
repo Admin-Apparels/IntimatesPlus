@@ -256,7 +256,7 @@ export default function Paycheck() {
               }}
             />
           </PayPalScriptProvider>
-          <Button
+          {/* <Button
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
@@ -278,7 +278,7 @@ export default function Paycheck() {
               alt={""}
             />{" "}
             Pay via Mpesa
-          </Button>
+          </Button> */}
           <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
             <ModalContent padding={5}>
@@ -446,7 +446,7 @@ export default function Paycheck() {
               }}
             />
           </PayPalScriptProvider>
-          <Button
+          {/* <Button
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
@@ -468,7 +468,7 @@ export default function Paycheck() {
               alt={""}
             />{" "}
             Pay via Mpesa
-          </Button>
+          </Button> */}
         </Box>
       </Box>
 
@@ -579,7 +579,7 @@ export default function Paycheck() {
               }}
             />
           </PayPalScriptProvider>
-          <Button
+          {/* <Button
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
@@ -601,7 +601,7 @@ export default function Paycheck() {
               loading="lazy"
             />{" "}
             Pay via Mpesa
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     </VStack>

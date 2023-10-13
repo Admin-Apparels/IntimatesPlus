@@ -160,7 +160,7 @@ const MatchModal = () => {
           thickness="4px"
           speed="0.6s"
           emptyColor="gray.200"
-          color="blue.500"
+          color="green.100"
           size="md"
         />
       ) : (
@@ -169,6 +169,7 @@ const MatchModal = () => {
           borderRadius={20}
           padding={0}
           margin={0}
+          _hover={{ backgroundColor: "green.100" }}
           icon={
             <Text
               p={0}

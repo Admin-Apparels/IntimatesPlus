@@ -56,6 +56,15 @@ function SideDrawer() {
   };
 
   const accessChat = async (userId, user) => {
+    const existingChat = chats.find(
+      (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
+    );
+
+    if (existingChat) {
+      setSelectedChat(existingChat);
+      onClose();
+      return;
+    }
     try {
       setLoadingChat(true);
       const config = {
@@ -107,8 +116,13 @@ function SideDrawer() {
           placement="bottom-end"
           color={"green"}
           backgroundColor={"transparent"}
+          _hover={{ backgroundColor: "green.100" }}
         >
-          <Button variant="ghost" onClick={onOpen}>
+          <Button
+            variant="ghost"
+            onClick={onOpen}
+            _hover={{ backgroundColor: "green.100" }}
+          >
             <i className="fas fa-search"></i>
             <Text display={{ base: "none", md: "flex" }} px={4}>
               Search Chat
@@ -166,7 +180,12 @@ function SideDrawer() {
             </MenuList>
           </Menu>
           <Menu>
-            <MenuButton as={Button} bg="white" rightIcon={<ChevronDownIcon />}>
+            <MenuButton
+              as={Button}
+              bg="white"
+              _hover={{ backgroundColor: "green.100" }}
+              rightIcon={<ChevronDownIcon />}
+            >
               <Avatar
                 size="sm"
                 cursor="pointer"
@@ -192,7 +211,7 @@ function SideDrawer() {
           <DrawerBody>
             <Box display="flex" pb={2}>
               <Input
-                placeholder="Search by name or email"
+                placeholder="Search by name "
                 mr={2}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -205,12 +224,9 @@ function SideDrawer() {
                     chat.users.some(
                       (participant) =>
                         participant._id !== user._id &&
-                        (participant.name
+                        participant.name
                           .toLowerCase()
-                          .includes(search.toLowerCase()) ||
-                          participant.email
-                            .toLowerCase()
-                            .includes(search.toLowerCase()))
+                          .includes(search.toLowerCase())
                     )
                   )
                   .map((chat) => {

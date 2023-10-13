@@ -318,7 +318,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               onClick={() => setSelectedChat("")}
             />
 
-            {getSenderName(user, selectedChat.users)}
+            <Text
+              p={0}
+              m={0}
+              textAlign={"center"}
+              bgGradient="linear(to-r, red.700, yellow.300)"
+              bgClip="text"
+            >
+              {" "}
+              {getSenderName(user, selectedChat.users)}
+            </Text>
 
             <ProfileModal userInfo={getSenderFull(user, selectedChat.users)} />
           </Text>
