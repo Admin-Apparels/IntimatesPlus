@@ -3,9 +3,10 @@
 .App {
   min-height: 100vh;
   display: flex;
-  background-image: url("./background.webp");
+  background-image: url('https://res.cloudinary.com/dvc7i8g1a/image/upload/v1697379128/background1.jpg'), linear-gradient(to bottom right, #77a1d3, #79cbca, #e684ae);
   background-position: center;
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 ::-webkit-scrollbar {

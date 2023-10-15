@@ -184,6 +184,22 @@ const getUserById = asyncHandler(async (req, res) => {
 });
 
 const getUsers = async (req, res) => {
+  const current_time = new Date();
+  const year = current_time.getFullYear();
+  const month = String(current_time.getMonth() + 1).padStart(2, "0"); // Month is zero-indexed
+  const day = String(current_time.getDate()).padStart(2, "0");
+  const hours = String(current_time.getHours()).padStart(2, "0");
+  const minutes = String(current_time.getMinutes()).padStart(2, "0");
+  const seconds = String(current_time.getSeconds()).padStart(2, "0");
+
+  const Shortcode = "6549717";
+  const Passkey =
+    "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
+  const timestamp = `${year}${month}${day}${hours}${minutes}${seconds}`;
+  const password = Buffer.from(Shortcode + Passkey + timestamp).toString(
+    "base64"
+  );
+  console.log(timestamp, password);
   try {
     const allUsers = await User.aggregate([
       { $match: { gender: "female", deleted: { $ne: true } } },

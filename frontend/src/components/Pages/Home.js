@@ -2,6 +2,7 @@ import {
   Box,
   Container,
   Image,
+  Link,
   Tab,
   TabList,
   TabPanel,
@@ -70,15 +71,29 @@ function Homepage() {
             </TabPanels>
           </Tabs>
         </Box>{" "}
-        <Text
-          padding={3}
-          variant="body2"
-          color="white"
-          textAlign="center"
-          justifyContent={"space-evenly"}
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          bgGradient="linear(to-r, #79cbca, #b4aea9, #e284ae)"
+          marginTop={2}
+          borderRadius={5}
+          justifyContent={"center"}
+          alignItems={"center"}
         >
-          Resist Porn | {`Copyright © ${new Date().getFullYear()}`}
-        </Text>
+          <Text variant="body2" textAlign="center">
+            {" "}
+            This site strictly prohibits any form of prostitution. After the
+            case of mutual connection, both accounts should be deactivated
+          </Text>
+
+          <Link href="https://twitter.com/jdtheefirst">
+            <Image
+              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1697382400/icons8-twitterx-250_tulfw8.png"
+              height={5}
+            />
+          </Link>
+          <Text>{`Copyright © ${new Date().getFullYear()}`}</Text>
+        </Box>
       </Container>
     </ErrorBoundary>
   );
