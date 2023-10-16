@@ -36,7 +36,7 @@ const Ads = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [ads, onOpen, countdown]);
+  }, [ads, setAds, onOpen, countdown]);
   const handleClose = () => {
     setTimeout(() => {
       setAds(true);

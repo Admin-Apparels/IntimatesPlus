@@ -4,3 +4,35 @@
     overflow-y: scroll;
     scrollbar-width: none;
 }
+.quote-container {
+    display: flex;
+    justify-content: space-between;
+    color: red;
+    align-items: center;
+    overflow: hidden;
+}
+.quote-current , .quote-next {
+    width: 50%;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    text-align: center;
+}
+
+.page-indicator {
+    display: flex;
+    align-items: center;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ccc;
+    /* Inactive dot color */
+    margin: 0 5px;
+    transition: background-color 0.3s;
+}
+
+.dot.active {
+    background-color: #007bff;
+    /* Active dot color */
+}

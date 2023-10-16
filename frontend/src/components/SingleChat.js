@@ -15,7 +15,8 @@ import {
   Input,
   FormControl,
 } from "@chakra-ui/react";
-import "./styles.css";
+import "../components/styles.css";
+import PageIndicator from "./miscellanious/PageIndicator";
 import Lottie from "react-lottie";
 import { getSenderName, getSenderFull, getUserById } from "./config/ChatLogics";
 import { useCallback, useEffect, useState } from "react";
@@ -34,10 +35,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
-  const { onOpen, onClose, isOpen } = useDisclosure();
+  const { onOpen, onClose } = useDisclosure();
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
   const [wait, setWait] = useState(true);
+  const [quoteIndex, setQuoteIndex] = useState(0);
 
   const toast = useToast();
 
@@ -59,6 +61,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     setOnlineUsersCount,
     setAds,
   } = ChatState();
+
+  const getNextQuote = () => {
+    setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
+  };
+
+  const quotes = [
+    "What is lorem in CS actually a generator. Every time you expand it, it will generate a 30-words dummy text, splitted into a few sentences. You can specify how many words should be generated right in the abbreviation. For example, lorem100 will generate a 100-words dummy text",
+    "With it installed in the code editor you are using, you can type “lorem” and then tab and it will expand into a paragraph of Lorem Ipsum placeholder text. But it can do more! You can control how much you get, place it within HTML structure as",
+    "Just press the shortcut key ( alt+l on all platforms) to insert some lorem ipsum text. Type lorem({word_count}, {paragraph_count}) in your file, make sure that the input curosr is within the region of the lorem{?, ?} expression, then press the shortcut key ( alt+l ).",
+  ];
 
   const fetchMessages = useCallback(async () => {
     if (!selectedChat) return;
@@ -197,6 +209,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
     socket.on("newUserRegistered", (userName) => {
+      setTimeout(() => {
+        setWait(true);
+      }, 25000);
       setWait(true);
       toast({
         title: "New User Registered",
@@ -331,36 +346,54 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               display="flex"
               flexDir="column"
               alignItems="center"
-              justifyContent="space-between"
+              justifyContent="center"
+              className="quote-container"
             >
-              <Text
-                fontSize={{ base: "18px", md: "20px" }}
-                fontFamily="Work sans"
-                textAlign={"center"}
-              >
-                Ads
-              </Text>
+              <Text className="quote-current">{quotes[quoteIndex]}</Text>
             </ModalBody>
             <ModalFooter
               display={"flex"}
-              justifyContent={"flex-end"}
+              justifyContent={"space-between"}
               alignItems={"center"}
             >
               {" "}
-              <Button
-                onClick={() => {
-                  setWait(false);
-                  onClose();
-                }}
-                backgroundColor={"Background"}
-                borderRadius={10}
-                p={0}
-                m={0}
-                _hover={{ bg: "transparent", color: "green" }}
-              >
-                Next
-                {/* <Text fontSize={"2xl"}>{quotes === 3 ? "Accept": "Next"}Next</Text> */}
-              </Button>
+              <PageIndicator
+                totalPages={quotes.length}
+                currentPage={quoteIndex}
+              />
+              {quoteIndex === 2 ? (
+                <Button
+                  onClick={() => {
+                    setWait(false);
+                    setAds(true);
+                    onClose();
+                  }}
+                  p={2}
+                  m={0}
+                  fontSize={"2xs"}
+                  _hover={{ color: "green" }}
+                >
+                  I acceppt this Terms & Conditions
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    getNextQuote();
+                  }}
+                  bgGradient="linear(to-r, teal.500, green.500)"
+                  _hover={{
+                    bgGradient: "linear(to-r, red.200, yellow.200)",
+                    color: "yellow",
+                  }}
+                  p={2}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  m={0}
+                  fontSize={"2xl"}
+                >
+                  {">>>"}
+                </Button>
+              )}
             </ModalFooter>
           </ModalContent>
         </Modal>
