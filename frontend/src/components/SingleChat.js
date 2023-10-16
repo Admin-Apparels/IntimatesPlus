@@ -1,9 +1,22 @@
-import { Button, FormControl } from "@chakra-ui/react";
-import { Input } from "@chakra-ui/react";
-import { Box, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  useDisclosure,
+  ModalHeader,
+  IconButton,
+  Spinner,
+  useToast,
+  ModalOverlay,
+  Button,
+  Input,
+  FormControl,
+} from "@chakra-ui/react";
 import "./styles.css";
 import Lottie from "react-lottie";
-import { IconButton, Spinner, useToast } from "@chakra-ui/react";
 import { getSenderName, getSenderFull, getUserById } from "./config/ChatLogics";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
@@ -21,9 +34,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
-
+  const { onOpen, onClose, isOpen } = useDisclosure();
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
+  const [wait, setWait] = useState(true);
 
   const toast = useToast();
 
@@ -43,6 +57,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     notification,
     setNotification,
     setOnlineUsersCount,
+    setAds,
   } = ChatState();
 
   const fetchMessages = useCallback(async () => {
@@ -182,6 +197,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
     socket.on("newUserRegistered", (userName) => {
+      setWait(true);
       toast({
         title: "New User Registered",
         description: `${userName} joined`,
@@ -300,6 +316,55 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   return (
     <>
+      {console.log(wait)}
+      {wait && (
+        <Modal size="lg" isOpen={onOpen} isCentered closeOnOverlayClick={false}>
+          <ModalOverlay />
+          <ModalContent height="410px" width={"calc(100% - 20px)"}>
+            <ModalHeader
+              fontSize="40px"
+              fontFamily="Work sans"
+              display="flex"
+              justifyContent="center"
+            ></ModalHeader>
+            <ModalBody
+              display="flex"
+              flexDir="column"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Text
+                fontSize={{ base: "18px", md: "20px" }}
+                fontFamily="Work sans"
+                textAlign={"center"}
+              >
+                Ads
+              </Text>
+            </ModalBody>
+            <ModalFooter
+              display={"flex"}
+              justifyContent={"flex-end"}
+              alignItems={"center"}
+            >
+              {" "}
+              <Button
+                onClick={() => {
+                  setWait(false);
+                  onClose();
+                }}
+                backgroundColor={"Background"}
+                borderRadius={10}
+                p={0}
+                m={0}
+                _hover={{ bg: "transparent", color: "green" }}
+              >
+                Next
+                {/* <Text fontSize={"2xl"}>{quotes === 3 ? "Accept": "Next"}Next</Text> */}
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      )}
       {selectedChat ? (
         <>
           <Text

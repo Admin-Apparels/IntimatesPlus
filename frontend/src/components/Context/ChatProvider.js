@@ -14,10 +14,13 @@ const ChatProvider = ({ children }) => {
   const [name, setName] = useState("");
   const [pic, setPic] = useState("");
   const [recoverEmail, setRecoverEmail] = useState();
+  const [ads, setAds] = useState(false);
 
   return (
     <ChatContext.Provider
       value={{
+        ads,
+        setAds,
         recoverEmail,
         setRecoverEmail,
         verify,

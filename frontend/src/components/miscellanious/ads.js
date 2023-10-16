@@ -10,11 +10,12 @@ import {
   Button,
   Text,
 } from "@chakra-ui/react";
+import { ChatState } from "../Context/ChatProvider";
 
 const Ads = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const [ads, setAds] = useState(true);
+  const { ads, setAds } = ChatState();
   const [countdown, setCountdown] = useState(10);
 
   useEffect(() => {
@@ -45,16 +46,7 @@ const Ads = () => {
 
   return (
     <>
-      <Modal
-        size="lg"
-        onClick={() => {
-          handleClose();
-          onClose();
-        }}
-        isOpen={isOpen}
-        isCentered
-        closeOnOverlayClick={false}
-      >
+      <Modal size="lg" isOpen={isOpen} isCentered closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent height="410px" width={"calc(100% - 20px)"}>
           <ModalHeader
