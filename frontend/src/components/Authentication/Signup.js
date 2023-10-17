@@ -264,6 +264,9 @@ const Signup = () => {
           placeholder="Enter Your Email Address"
           onChange={(e) => setEmail(e.target.value)}
         />
+        <FormLabel fontSize={"2xs"}>
+          Your email is for login only. No ads
+        </FormLabel>
       </FormControl>
       <FormControl id="password" isRequired>
         <FormLabel>Password</FormLabel>

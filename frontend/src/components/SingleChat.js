@@ -38,7 +38,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { onOpen, onClose } = useDisclosure();
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
-  const [wait, setWait] = useState(true);
+  const [wait, setWait] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
 
   const toast = useToast();
@@ -65,11 +65,20 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const getNextQuote = () => {
     setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
   };
+  const heading = [
+    "Scammers and Fake Profiles:",
+    "Maintaining a Safe Environment:",
+    "Prohibited Content:",
+    "Purpose of Admin:",
+    "",
+  ];
 
   const quotes = [
-    "What is lorem in CS actually a generator. Every time you expand it, it will generate a 30-words dummy text, splitted into a few sentences. You can specify how many words should be generated right in the abbreviation. For example, lorem100 will generate a 100-words dummy text",
-    "With it installed in the code editor you are using, you can type “lorem” and then tab and it will expand into a paragraph of Lorem Ipsum placeholder text. But it can do more! You can control how much you get, place it within HTML structure as",
-    "Just press the shortcut key ( alt+l on all platforms) to insert some lorem ipsum text. Type lorem({word_count}, {paragraph_count}) in your file, make sure that the input curosr is within the region of the lorem{?, ?} expression, then press the shortcut key ( alt+l ).",
+    " - Be vigilant: Recognize and protect yourself from scammers and fake profiles.- Report: If you encounter suspicious accounts, please report them to our team at admin@fuckmatepro.net.",
+    "- Respect Others: Treat all users with kindness, respect, and consideration. - No Harassment: Harassment, hate speech, or any form of abuse will not be tolerated. - Privacy: Protect your personal information and respect the privacy of others.",
+    " - No Prostitution: Admin strictly prohibits any form of prostitution or solicitation. Such activities will result in immediate account suspension. - Adult Content: We do not encourage or link to adult content sites.",
+    "- Admin is designed to assist individuals dealing with porn addiction/fantasies in finding mutual connections. - Our goal is to help individuals build healthy sexual relationships and encourage human social interations.",
+    "By using Admin, you agree to abide by these safety guidelines and terms of use. Violation of these terms may result in account suspension or termination. Thank you for being part of Admin. If you have any questions or concerns, please contact our team at admin@fuckmatepro.net. Your safety and well-being are important to us.",
   ];
 
   const fetchMessages = useCallback(async () => {
@@ -191,8 +200,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           setMessages((prevMessages) => [...prevMessages, data]);
         } catch (error) {
           toast({
-            title: "Error Occurred!",
-            description: "Failed to send the Message",
+            title: "Failed to send the Message",
+            description: "Please try again after some time",
             status: "error",
             duration: 5000,
             isClosable: true,
@@ -212,7 +221,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       setTimeout(() => {
         setWait(true);
       }, 25000);
-      setWait(true);
       toast({
         title: "New User Registered",
         description: `${userName} joined`,
@@ -337,11 +345,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           <ModalOverlay />
           <ModalContent height="410px" width={"calc(100% - 20px)"}>
             <ModalHeader
-              fontSize="40px"
+              fontSize="100%"
               fontFamily="Work sans"
               display="flex"
               justifyContent="center"
-            ></ModalHeader>
+            >
+              *Safety and Terms of Use*
+            </ModalHeader>
+
             <ModalBody
               display="flex"
               flexDir="column"
@@ -349,6 +360,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               justifyContent="center"
               className="quote-container"
             >
+              <Text fontSize={"2xl"}>{heading[quoteIndex]}</Text>
               <Text className="quote-current">{quotes[quoteIndex]}</Text>
             </ModalBody>
             <ModalFooter
@@ -361,7 +373,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 totalPages={quotes.length}
                 currentPage={quoteIndex}
               />
-              {quoteIndex === 2 ? (
+              {quoteIndex === 4 ? (
                 <Button
                   onClick={() => {
                     setWait(false);
