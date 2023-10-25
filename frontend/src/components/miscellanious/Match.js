@@ -43,8 +43,14 @@ const MatchModal = () => {
       onClose();
       return;
     }
-    if (user.accountType === "Platnum" && currentDate < user.day) {
-      let timeRemaining = ((user.day - currentDate) / 3600000).toFixed(2);
+    if (
+      user.accountType === "Platnum" &&
+      parseInt(currentDate) < parseInt(user.day)
+    ) {
+      let timeRemaining = (
+        (parseInt(user.day) - parseInt(currentDate)) /
+        3600000
+      ).toFixed(2);
       toast({
         title: "You are all caught up!",
         description: `wait after ${timeRemaining}hrs`,
@@ -60,7 +66,7 @@ const MatchModal = () => {
       navigate("/paycheck");
       onClose();
     } else {
-      if (currentDate < user.subscription) {
+      if (parseInt(currentDate) < parseInt(user.subscription)) {
         try {
           setLoadingChat(true);
           const config = {
@@ -102,7 +108,9 @@ const MatchModal = () => {
       } else {
         toast({
           title: "You are not subscribed",
-          description: `Subscription expired on ${new Date(user.subscription)}`,
+          description: `Subscription expired on ${new Date(
+            parseInt(user.subscription)
+          )}`,
           status: "info",
           duration: 5000,
           isClosable: true,

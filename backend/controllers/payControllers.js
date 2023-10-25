@@ -78,8 +78,11 @@ const updateUser = async (req, res) => {
 const makePaymentMpesa = async (req, res) => {
   const { userId } = req.params;
   const { subscription, phoneNumber } = req.body;
+  console.log(subscription, phoneNumber);
 
-  const phone = phoneNumber.slice(1);
+  const phone = parseInt(phoneNumber.slice(1));
+  const URL = process.env.Callback;
+  console.log(phone);
 
   const current_time = new Date();
   const year = current_time.getFullYear();
@@ -89,28 +92,29 @@ const makePaymentMpesa = async (req, res) => {
   const minutes = String(current_time.getMinutes()).padStart(2, "0");
   const seconds = String(current_time.getSeconds()).padStart(2, "0");
 
-  const Shortcode = "8799520";
+  const Shortcode = "6549717";
   const Passkey =
-    "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
+    "9101847e14f66f93ffdec5faeceb315e8918b0bcf4940443dc64b8acd94fd9dd";
   const timestamp = `${year}${month}${day}${hours}${minutes}${seconds}`;
   const password = Buffer.from(Shortcode + Passkey + timestamp).toString(
     "base64"
   );
+  console.log(timestamp, password);
   var Amount;
 
   if (subscription === "Bronze") {
-    Amount = 150;
+    Amount = 1;
   } else if (subscription === "Platnum") {
-    Amount = 1000;
+    Amount = 1;
   } else {
-    Amount = 4000;
+    Amount = 1;
   }
   const generateToken = async () => {
     const secret = process.env.CUSTOMER_SECRET;
     const key = process.env.CUSTOMER_KEY;
     const auth = Buffer.from(key + ":" + secret).toString("base64");
     try {
-      const response = await fetch(
+      const response = await axios.get(
         "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",
         {
           method: "GET",
@@ -130,24 +134,25 @@ const makePaymentMpesa = async (req, res) => {
 
   try {
     const token = await generateToken();
-    const data = await axios.post(
-      "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
+    console.log(token);
+    const { data } = await axios.post(
+      "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
       {
-        body: {
-          BusinessShortCode: "8799520",
-          Password: `${password}`,
-          Timestamp: `${timestamp}`,
-          TransactionType: "CustomerBuyGoodsOnline",
-          Amount: Amount,
-          PartyA: `254${phone}`,
-          PartyB: "8799520",
-          PhoneNumber: `254${phone}`,
-          CallBackURL: `https://localhost:8080/paycheck/${userId}/${subscription}/callback`,
-          AccountReference: "Admin",
-          TransactionDesc: "Subcription",
-        },
+        BusinessShortCode: "6549717",
+        Password: `${password}`,
+        Timestamp: `${timestamp}`,
+        TransactionType: "CustomerBuyGoodsOnline",
+        Amount: Amount,
+        PartyA: `254${phone}`,
+        PartyB: "8863150",
+        PhoneNumber: `254${phone}`,
+        CallBackURL: `${URL}/${userId}/${subscription}`,
+        AccountReference: "Admin",
+        TransactionDesc: "Subcription",
+      },
+      {
         headers: {
-          "Content-Type": "application/json",
+          "Content-type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       }
@@ -157,6 +162,7 @@ const makePaymentMpesa = async (req, res) => {
     console.log("My Error", error);
   }
 };
+
 const CallBackURL = async (req, res) => {
   const { userId, subscription } = req.params;
   const { Body } = req.body;
@@ -168,6 +174,9 @@ const CallBackURL = async (req, res) => {
     "Subcription",
     subscription
   );
+  if (!userId && !subscription) {
+    return res.status(401);
+  }
   if (!Body.stkCallback.CallbackMetadata) {
     return res.status(400).json({ message: "Invalid callback data" });
   }
@@ -186,15 +195,23 @@ const CallBackURL = async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { accountType: Acc, subscription: subscriptionExpiry },
+      {
+        accountType: Acc,
+        subscription: subscriptionExpiry,
+        day: new Date().getTime() + 24 * 60 * 60 * 1000,
+      },
       { new: true }
-    ).select("accountType subscription");
+    ).select("accountType subscription day");
 
-    res.json(updatedUser);
-    console.log(updateUser);
+    console.log(updatedUser);
   } catch (error) {
     console.log(error, "Error updating user");
   }
 };
 
-module.exports = { createOrder, updateUser, makePaymentMpesa, CallBackURL };
+module.exports = {
+  createOrder,
+  updateUser,
+  makePaymentMpesa,
+  CallBackURL,
+};

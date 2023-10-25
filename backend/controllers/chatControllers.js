@@ -10,7 +10,7 @@ const accessChat = asyncHandler(async (req, res) => {
   const { userId } = req.body;
   const loggedId = req.user._id;
 
-  if (accounttype === "Platnum") {
+  if (accounttype && accounttype === "Platnum") {
     try {
       const time = new Date().getTime() + 24 * 60 * 60 * 1000;
       const timeOfChat = await User.findByIdAndUpdate(

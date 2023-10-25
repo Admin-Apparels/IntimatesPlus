@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   Box,
   Text,
@@ -36,7 +36,7 @@ export default function Paycheck() {
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [subscription, setSubscription] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   console.log(user);
 
@@ -49,15 +49,45 @@ export default function Paycheck() {
 
     try {
       if (
-        user.accountType === "Platnum" ||
-        (user.accountType === "Gold" && currentDate < user.subscription)
+        (user.accountType === "Platnum" || user.accountType === "Gold") &&
+        parseInt(currentDate) < parseInt(user.subscription)
       ) {
         navigate("/chats");
       }
     } catch (error) {
-      navigate("/chats");
+      console.log(error);
     }
   }, [navigate, user]);
+  const handleCreateChat = async (url) => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.post(`/api/chat/${url}`, { userId }, config);
+      if (data.day) {
+        const userData = await { ...user, day: data.day };
+        localStorage.setItem("userInfo", JSON.stringify(userData));
+        setUser(userData);
+      } else {
+        console.log("setting chats");
+        setChats([data, ...chats]);
+        setSelectedChat(data);
+      }
+    } catch (error) {
+      toast({
+        title: "Error fetching the chat",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
 
   const handleApprove = async (accountType) => {
     try {
@@ -84,43 +114,13 @@ export default function Paycheck() {
       throw new Error("Error occurred", error);
     }
   };
-  const handleCreateChat = async () => {
-    try {
-      const paycheck = "paycheckChat";
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
 
-      const { data } = await axios.post(
-        `/api/chat/${paycheck}`,
-        { userId },
-        config
-      );
-      if (data.day) {
-        const userData = await { ...user, day: data.day };
-        localStorage.setItem("userInfo", JSON.stringify(userData));
-        setUser(userData);
-      } else {
-        console.log("setting chats");
-        setChats([data, ...chats]);
-        setSelectedChat(data);
-      }
-    } catch (error) {
-      toast({
-        title: "Error fetching the chat",
-        description: error.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom-left",
-      });
-    }
-  };
   const makePaymentMpesa = async () => {
-    if (!phoneNumber) return;
+    setLoading(true);
+    if (!phoneNumber) {
+      console.log("No phone number");
+      return;
+    }
     console.log(phoneNumber, subscription, user._id);
     try {
       const config = {
@@ -135,7 +135,10 @@ export default function Paycheck() {
         config
       );
       console.log(data);
-    } catch (error) {}
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
   };
   console.log(phoneNumber);
 
@@ -231,7 +234,7 @@ export default function Paycheck() {
               onApprove={async (data, actions) => {
                 const amount = "Bronze";
                 await handleApprove(amount);
-                await handleCreateChat();
+                await handleCreateChat("Bronze");
 
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
@@ -256,15 +259,16 @@ export default function Paycheck() {
               }}
             />
           </PayPalScriptProvider>
-          {/* <Button
+          <Button
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
             width={"100%"}
             backgroundColor={"green.400"}
             color={"white"}
+            isLoading={loading}
             onClick={() => {
-              setSubscription("Gold");
+              setSubscription("Bronze");
               onOpen();
             }}
           >
@@ -278,17 +282,21 @@ export default function Paycheck() {
               alt={""}
             />{" "}
             Pay via Mpesa
-          </Button> */}
+          </Button>
           <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
-            <ModalContent padding={5}>
+            <ModalContent padding={5} width={"calc(100% - 20px)"}>
               <ModalHeader
                 fontSize="40px"
                 fontFamily="Work sans"
                 display="flex"
                 justifyContent="center"
               >
-                <Text textAlign={"center"} justifyContent={"center"}>
+                <Text
+                  textAlign={"center"}
+                  justifyContent={"center"}
+                  fontSize={"2xl"}
+                >
                   Enter Your Mpesa Phone Number
                 </Text>
               </ModalHeader>
@@ -300,8 +308,10 @@ export default function Paycheck() {
                 justifyContent="space-between"
               >
                 <Input
-                  fontSize={"2xl"}
-                  placeholder="Example 0710334455"
+                  fontSize={"1.2rem"}
+                  color={"green.400"}
+                  fontWeight={"bold"}
+                  placeholder="i.e 0710334455"
                   type="text"
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   value={phoneNumber}
@@ -322,11 +332,10 @@ export default function Paycheck() {
                       duration: 5000,
                     });
                   }}
-                  // phoneNumber.length !== parseInt(10)
-                  isDisabled={true}
+                  isDisabled={phoneNumber.length !== parseInt(10)}
                   colorScheme="green"
                 >
-                  Comming soon
+                  Proceed
                 </Button>
               </ModalBody>
               <ModalFooter display="flex">
@@ -363,7 +372,7 @@ export default function Paycheck() {
             color={"green.500"}
             rounded={"full"}
           >
-            Platnum
+            Platinum
           </Text>
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"3xl"}>$</Text>
@@ -422,7 +431,7 @@ export default function Paycheck() {
               onApprove={async (data, actions) => {
                 const amount = "Platnum";
                 await handleApprove(amount);
-                await handleCreateChat();
+                await handleCreateChat("Platnum");
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
                   toast({
@@ -435,7 +444,7 @@ export default function Paycheck() {
                   });
                 });
               }}
-              onCancel={async () => {
+              onCancel={() => {
                 toast({
                   title: "Cancelled",
                   description: "Subscription Unsuccessfull",
@@ -446,13 +455,14 @@ export default function Paycheck() {
               }}
             />
           </PayPalScriptProvider>
-          {/* <Button
+          <Button
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
             width={"100%"}
             backgroundColor={"green.400"}
             color={"white"}
+            isLoading={loading}
             onClick={() => {
               setSubscription("Platnum");
               onOpen();
@@ -468,7 +478,7 @@ export default function Paycheck() {
               alt={""}
             />{" "}
             Pay via Mpesa
-          </Button> */}
+          </Button>
         </Box>
       </Box>
 
@@ -555,7 +565,7 @@ export default function Paycheck() {
                 console.log(data);
                 const amount = "Gold";
                 await handleApprove(amount);
-                await handleCreateChat();
+                await handleCreateChat("Gold");
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
                   toast({
@@ -579,13 +589,14 @@ export default function Paycheck() {
               }}
             />
           </PayPalScriptProvider>
-          {/* <Button
+          <Button
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
             width={"100%"}
             backgroundColor={"green.400"}
             color={"white"}
+            isLoading={loading}
             onClick={() => {
               setSubscription("Gold");
               onOpen();
@@ -601,7 +612,7 @@ export default function Paycheck() {
               loading="lazy"
             />{" "}
             Pay via Mpesa
-          </Button> */}
+          </Button>
         </Box>
       </Box>
     </VStack>

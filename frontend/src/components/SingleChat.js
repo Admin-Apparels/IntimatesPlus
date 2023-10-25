@@ -339,7 +339,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   return (
     <>
-      {console.log(wait)}
       {wait && (
         <Modal size="lg" isOpen={onOpen} isCentered closeOnOverlayClick={false}>
           <ModalOverlay />
