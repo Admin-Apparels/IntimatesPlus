@@ -1,6 +1,7 @@
 const { default: axios } = require("axios");
 const User = require("../models/userModel");
 const dotenv = require("dotenv");
+const { getIO } = require("../socket");
 
 dotenv.config({ path: "./secrets.env" });
 
@@ -78,15 +79,13 @@ const updateUser = async (req, res) => {
 const makePaymentMpesa = async (req, res) => {
   const { userId } = req.params;
   const { subscription, phoneNumber } = req.body;
-  console.log(subscription, phoneNumber);
 
   const phone = parseInt(phoneNumber.slice(1));
   const URL = process.env.Callback;
-  console.log(phone);
 
   const current_time = new Date();
   const year = current_time.getFullYear();
-  const month = String(current_time.getMonth() + 1).padStart(2, "0"); // Month is zero-indexed
+  const month = String(current_time.getMonth() + 1).padStart(2, "0");
   const day = String(current_time.getDate()).padStart(2, "0");
   const hours = String(current_time.getHours()).padStart(2, "0");
   const minutes = String(current_time.getMinutes()).padStart(2, "0");
@@ -99,15 +98,15 @@ const makePaymentMpesa = async (req, res) => {
   const password = Buffer.from(Shortcode + Passkey + timestamp).toString(
     "base64"
   );
-  console.log(timestamp, password);
+
   var Amount;
 
   if (subscription === "Bronze") {
     Amount = 1;
   } else if (subscription === "Platnum") {
-    Amount = 1;
+    Amount = 1206;
   } else {
-    Amount = 1;
+    Amount = 6030;
   }
   const generateToken = async () => {
     const secret = process.env.CUSTOMER_SECRET;
@@ -124,7 +123,6 @@ const makePaymentMpesa = async (req, res) => {
         }
       );
       const token = await response.data.access_token;
-      console.log(token, "generated token Object");
 
       return token;
     } catch (error) {
@@ -134,8 +132,8 @@ const makePaymentMpesa = async (req, res) => {
 
   try {
     const token = await generateToken();
-    console.log(token);
-    const { data } = await axios.post(
+
+    await axios.post(
       "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
       {
         BusinessShortCode: "6549717",
@@ -157,7 +155,6 @@ const makePaymentMpesa = async (req, res) => {
         },
       }
     );
-    console.log("api to saf", res.json(data), "sent mpesa data");
   } catch (error) {
     console.log("My Error", error);
   }
@@ -165,20 +162,21 @@ const makePaymentMpesa = async (req, res) => {
 
 const CallBackURL = async (req, res) => {
   const { userId, subscription } = req.params;
+
   const { Body } = req.body;
-  console.log(
-    "This is the body",
-    Body,
-    "UserId",
-    userId,
-    "Subcription",
-    subscription
-  );
+  console.log(Body);
+  const io = getIO();
   if (!userId && !subscription) {
+    console.log("Function returned");
     return res.status(401);
   }
   if (!Body.stkCallback.CallbackMetadata) {
-    return res.status(400).json({ message: "Invalid callback data" });
+    const nothing = "payment cancelled or insufficient amount";
+    io.emit("noPayment", nothing);
+    return res.status(201).json({ message: "Invalid callback data" });
+  }
+  if (Body.stkCallback.ResultDesc) {
+    res.status(201);
   }
   const currentDate = new Date();
   var subscriptionExpiry = new Date().getTime();
@@ -203,7 +201,7 @@ const CallBackURL = async (req, res) => {
       { new: true }
     ).select("accountType subscription day");
 
-    console.log(updatedUser);
+    io.emit("userUpdated", updatedUser);
   } catch (error) {
     console.log(error, "Error updating user");
   }

@@ -148,7 +148,7 @@ const authUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email });
   if (user.deleted) {
-    res.status(400);
+    res.status(401);
     throw new Error("Sign Up please...");
   }
 

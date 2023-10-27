@@ -348,6 +348,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               fontFamily="Work sans"
               display="flex"
               justifyContent="center"
+              background={"transparent"}
+              p={0}
+              m={0}
             >
               *Safety and Terms of Use*
             </ModalHeader>
@@ -356,10 +359,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               display="flex"
               flexDir="column"
               alignItems="center"
-              justifyContent="center"
+              justifyContent="space-between"
               className="quote-container"
+              overflowY={"scroll"}
             >
-              <Text fontSize={"2xl"}>{heading[quoteIndex]}</Text>
+              <Text fontSize={"2xl"} textAlign={"center"}>
+                {heading[quoteIndex]}
+              </Text>
               <Text className="quote-current">{quotes[quoteIndex]}</Text>
             </ModalBody>
             <ModalFooter

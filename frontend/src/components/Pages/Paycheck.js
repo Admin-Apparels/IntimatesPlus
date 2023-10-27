@@ -28,6 +28,7 @@ import { ChatState } from "../Context/ChatProvider";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import socketIOClient from "socket.io-client";
 
 export default function Paycheck() {
   const toast = useToast();
@@ -58,37 +59,79 @@ export default function Paycheck() {
       console.log(error);
     }
   }, [navigate, user]);
-  const handleCreateChat = async (url) => {
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
+  const handleCreateChat = useCallback(
+    async (url) => {
+      try {
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
 
-      const { data } = await axios.post(`/api/chat/${url}`, { userId }, config);
-      if (data.day) {
-        const userData = await { ...user, day: data.day };
-        localStorage.setItem("userInfo", JSON.stringify(userData));
-        setUser(userData);
-      } else {
-        console.log("setting chats");
-        setChats([data, ...chats]);
-        setSelectedChat(data);
+        const { data } = await axios.post(
+          `/api/chat/${url}`,
+          { userId },
+          config
+        );
+        if (data.day) {
+          const userData = await { ...user, day: data.day };
+          localStorage.setItem("userInfo", JSON.stringify(userData));
+          setUser(userData);
+        } else {
+          console.log("setting chats");
+          setChats([data, ...chats]);
+          setSelectedChat(data);
+        }
+      } catch (error) {
+        toast({
+          title: "Error fetching the chat",
+          description: error.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left",
+        });
       }
-    } catch (error) {
+    },
+    [setChats, toast, user, setUser, setSelectedChat, chats, userId]
+  );
+  useEffect(() => {
+    const socket = socketIOClient("http://localhost:8080");
+    socket.on("noPayment", (nothing) => {
       toast({
-        title: "Error fetching the chat",
-        description: error.message,
-        status: "error",
+        title: nothing,
+        description: "Subscription unsuccessful",
+        status: "info",
         duration: 5000,
-        isClosable: true,
-        position: "bottom-left",
+        position: "bottom",
       });
-    }
-  };
+      navigate("/chats");
+    });
+    socket.on("userUpdated", async (updatedUser) => {
+      const userData = await {
+        ...user,
+        accountType: updatedUser.accountType,
+        subscription: updatedUser.subscription,
+        day: updatedUser.day,
+      };
+      localStorage.setItem("userInfo", JSON.stringify(userData));
+      await setUser(userData);
+      await handleCreateChat("mpesa");
+      navigate("/chats");
+      toast({
+        title: "Successfully subscribed",
+        description: `${user.accountType} subscriber`,
+        status: "info",
+        duration: 5000,
+        position: "bottom",
+      });
+    });
 
+    return () => {
+      socket.disconnect();
+    };
+  }, [user, setUser, handleCreateChat, navigate, toast]);
   const handleApprove = async (accountType) => {
     try {
       const config = {
@@ -118,7 +161,7 @@ export default function Paycheck() {
   const makePaymentMpesa = async () => {
     setLoading(true);
     if (!phoneNumber) {
-      console.log("No phone number");
+      setLoading(false);
       return;
     }
     console.log(phoneNumber, subscription, user._id);
@@ -134,14 +177,21 @@ export default function Paycheck() {
         { subscription, phoneNumber },
         config
       );
-      console.log(data);
+      if (data) {
+        toast({
+          title: "You have been prompt to finish your subscription process",
+          status: "info",
+          duration: 1000,
+          position: "bottom",
+        });
+      }
+
       setLoading(false);
     } catch (error) {
       setLoading(false);
     }
   };
-  console.log(phoneNumber);
-
+  console.log(loading);
   return (
     <VStack
       backgroundColor={"grey"}
@@ -266,7 +316,7 @@ export default function Paycheck() {
             width={"100%"}
             backgroundColor={"green.400"}
             color={"white"}
-            isLoading={loading}
+            isDisabled={loading === true}
             onClick={() => {
               setSubscription("Bronze");
               onOpen();
@@ -290,8 +340,29 @@ export default function Paycheck() {
                 fontSize="40px"
                 fontFamily="Work sans"
                 display="flex"
+                flexDirection={"column"}
                 justifyContent="center"
               >
+                <Box
+                  display={"flex"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  p={0}
+                  m={0}
+                >
+                  <Text
+                    fontSize={"sm"}
+                    fontWeight={500}
+                    bg={useColorModeValue("green.100", "green.900")}
+                    p={2}
+                    px={3}
+                    color={"green.500"}
+                    rounded={"full"}
+                  >
+                    *33% off
+                  </Text>
+                </Box>
+
                 <Text
                   textAlign={"center"}
                   justifyContent={"center"}
@@ -325,7 +396,7 @@ export default function Paycheck() {
                     makePaymentMpesa();
                     onClose();
                     toast({
-                      title: "wait as message is sent",
+                      title: "Wait as message is sent",
                       status: "loading",
                       isClosable: true,
                       position: "bottom",
@@ -462,7 +533,7 @@ export default function Paycheck() {
             width={"100%"}
             backgroundColor={"green.400"}
             color={"white"}
-            isLoading={loading}
+            isDisabled={loading === true}
             onClick={() => {
               setSubscription("Platnum");
               onOpen();
@@ -596,7 +667,7 @@ export default function Paycheck() {
             width={"100%"}
             backgroundColor={"green.400"}
             color={"white"}
-            isLoading={loading}
+            isDisabled={loading === true}
             onClick={() => {
               setSubscription("Gold");
               onOpen();

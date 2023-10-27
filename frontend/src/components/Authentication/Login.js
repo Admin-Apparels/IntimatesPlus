@@ -72,7 +72,7 @@ const Login = () => {
     } catch (error) {
       toast({
         title: "Account Missing!",
-        description: error.response.data.message,
+        description: "Wrong Email or Password",
         status: "info",
         duration: 5000,
         isClosable: true,

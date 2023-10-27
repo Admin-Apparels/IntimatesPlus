@@ -4,7 +4,6 @@ const {
   updateUser,
   makePaymentMpesa,
   CallBackURL,
-  callbackMpesa,
 } = require("../controllers/payControllers");
 const { limiter } = require("../middleware/limiter");
 const express = require("express");
