@@ -18,16 +18,15 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT;
-
+app.use("/api/user", userRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/message", messageRoutes);
 const server = app.listen(
   PORT,
   console.log(`Server running on PORT ${PORT}...`)
 );
 initializeSocketIO(server);
 
-app.use("/api/user", userRoutes);
-app.use("/api/chat", chatRoutes);
-app.use("/api/message", messageRoutes);
 app.use("/api/paycheck", payRoutes);
 const __dirname1 = path.resolve();
 

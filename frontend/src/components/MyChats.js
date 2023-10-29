@@ -156,7 +156,7 @@ const MyChat = (fetchAgain) => {
         <Text
           fontFamily={"fantasy"}
           fontWeight={"medium"}
-          bgGradient="linear(to-r, red.700, yellow.300)"
+          bgGradient="linear(to-r, black, grey)"
           bgClip="text"
         >
           My Chats:{" "}

@@ -1,7 +1,5 @@
 import axios from "axios";
 export const isSameSenderMargin = (messages, m, i, userId) => {
-  // console.log(i === messages.length - 1);
-
   if (
     i < messages.length - 1 &&
     messages[i + 1].sender._id === m.sender._id &&
@@ -47,16 +45,17 @@ export const getSenderFull = (loggedUser, user) => {
   return user[0]._id === loggedUser._id ? user[1] : user[0];
 };
 export async function getUserById(userId, token) {
+  if (!userId && !token) {
+    return;
+  }
   try {
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
-    const { data } = await axios.get(`/api/user/${userId}`, config);
-    const user = data.user;
-
-    return user;
+    const { data } = await axios.get(`/api/user/getuserid/${userId}`, config);
+    return data;
   } catch (error) {
     console.error(error);
     throw error;

@@ -77,7 +77,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     " - Be vigilant: Recognize and protect yourself from scammers and fake profiles.- Report: If you encounter suspicious accounts, please report them to our team at admin@fuckmatepro.net.",
     "- Respect Others: Treat all users with kindness, respect, and consideration. - No Harassment: Harassment, hate speech, or any form of abuse will not be tolerated. - Privacy: Protect your personal information and respect the privacy of others.",
     " - No Prostitution: Admin strictly prohibits any form of prostitution or solicitation. Such activities will result in immediate account suspension. - Adult Content: We do not encourage or link to adult content sites.",
-    "- Admin is designed to assist individuals dealing with porn addiction/fantasies in finding mutual connections. - Our goal is to help individuals build healthy sexual relationships and encourage human social interations.",
+    "- This service is designed to assist individuals dealing with porn addiction and or masturbation in finding connections. - Our goal is to help individuals build healthy sexual relationships and encourage human social interations.",
     "By using Admin, you agree to abide by these safety guidelines and terms of use. Violation of these terms may result in account suspension or termination. Thank you for being part of Admin. If you have any questions or concerns, please contact our team at admin@fuckmatepro.net. Your safety and well-being are important to us.",
   ];
 
@@ -97,10 +97,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         `/api/message/${selectedChat._id}`,
         config
       );
-
+      console.log(data);
       const resolvedMessages = await Promise.allSettled(
         data.map(async (message) => {
-          const senderId = message.sender._id;
+          const senderId = await message.sender._id;
+          console.log(senderId);
           const sender = await getUserById(senderId, user.token);
           return {
             ...message,

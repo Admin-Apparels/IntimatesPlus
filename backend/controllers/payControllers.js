@@ -102,7 +102,7 @@ const makePaymentMpesa = async (req, res) => {
   var Amount;
 
   if (subscription === "Bronze") {
-    Amount = 1;
+    Amount = 200;
   } else if (subscription === "Platnum") {
     Amount = 1206;
   } else {
@@ -164,7 +164,7 @@ const CallBackURL = async (req, res) => {
   const { userId, subscription } = req.params;
 
   const { Body } = req.body;
-  console.log(Body);
+
   const io = getIO();
   if (!userId && !subscription) {
     console.log("Function returned");

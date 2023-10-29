@@ -28,7 +28,7 @@ router.get("/:userEmail", limiter, authorizeUser);
 router.get("/female/users", protect, limiter, getUsers);
 router.put("/block/:userId", protect, limiter, block);
 router.put("/unblock/:userId", protect, limiter, Unblock);
-router.get("/:userId", protect, limiter, getUserById);
+router.get("/getuserid/:userId", protect, limiter, getUserById);
 router.put("/update/:userId", protect, limiter, updateUser);
 router.delete("/deleteuser/:userId", protect, limiter, deleteUser);
 router.delete("/delete-image/:publicId", protect, limiter, deleteImage);

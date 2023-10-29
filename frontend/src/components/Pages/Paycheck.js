@@ -106,7 +106,6 @@ export default function Paycheck() {
         duration: 5000,
         position: "bottom",
       });
-      navigate("/chats");
     });
     socket.on("userUpdated", async (updatedUser) => {
       const userData = await {

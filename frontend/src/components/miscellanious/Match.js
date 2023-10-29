@@ -62,11 +62,17 @@ const MatchModal = () => {
       onClose();
       return;
     }
-    if (user.accountType === "new" || user.accountType === "Bronze") {
+    if (
+      (user.accountType === "new" && chats.length >= 1) ||
+      user.accountType === "Bronze"
+    ) {
       navigate("/paycheck");
       onClose();
     } else {
-      if (parseInt(currentDate) < parseInt(user.subscription)) {
+      if (
+        parseInt(currentDate) < parseInt(user.subscription) ||
+        user.accountType === "new"
+      ) {
         try {
           setLoadingChat(true);
           const config = {

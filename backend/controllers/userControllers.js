@@ -172,16 +172,17 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-const getUserById = asyncHandler(async (req, res) => {
+const getUserById = async (req, res) => {
+  const { userId } = req.params;
+
   try {
-    const userId = req.params.userId;
     const user = await User.findById(userId);
 
-    res.json({ user });
+    res.json(user);
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve user" });
   }
-});
+};
 
 const getUsers = async (req, res) => {
   try {
