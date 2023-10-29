@@ -97,11 +97,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         `/api/message/${selectedChat._id}`,
         config
       );
-      console.log(data);
+
       const resolvedMessages = await Promise.allSettled(
         data.map(async (message) => {
           const senderId = await message.sender._id;
-          console.log(senderId);
+
           const sender = await getUserById(senderId, user.token);
           return {
             ...message,
@@ -135,10 +135,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     if ((event && event.key === "Enter") || !event) {
       if (newMessage && selectedChat) {
         socket.emit("stop typing", selectedChat._id);
-        const unBlock1 = user.isBlocked.includes(selectedChat.users[1]._id); //you blocked this user in 1 index;
-        const unblock2 = user.isBlocked.includes(selectedChat.users[0]._id); // you blocked this user in 0 index;
-        const blocked1 = selectedChat.users[0].isBlocked.includes(user._id); //can be in both users due to populate
-        const blocked2 = selectedChat.users[1].isBlocked.includes(user._id);
+
+        const unBlock1 = user.isBlocked.includes(selectedChat.users[1]._id);
+        const unblock2 = user.isBlocked.includes(selectedChat.users[0]._id);
+        const blocked1 =
+          selectedChat.users[0].isBlocked &&
+          selectedChat.users[0].isBlocked.includes(user._id);
+        const blocked2 =
+          selectedChat.users[1].isBlocked &&
+          selectedChat.users[1].isBlocked.includes(user._id);
         const deleted =
           selectedChat.users[0].deleted || selectedChat.users[1].deleted;
         if (blocked1 || blocked2) {
@@ -280,7 +285,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         const audio = new Audio(
           "https://s3.amazonaws.com/freecodecamp/drums/Give_us_a_light.mp3"
         );
-        audio.play();
+        audio.addEventListener("error", (error) => {
+          console.error("Audio playback error:", error);
+        });
+
+        audio.play().catch((error) => {
+          console.error("Audio playback error:", error);
+        });
       } else if (Notification.permission !== "denied") {
         Notification.requestPermission().then((permission) => {
           if (permission === "granted") {
@@ -288,7 +299,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             const audio = new Audio(
               "https://s3.amazonaws.com/freecodecamp/drums/Give_us_a_light.mp3"
             );
-            audio.play();
+            audio.addEventListener("error", (error) => {
+              console.error("Audio playback error:", error);
+            });
+
+            audio.play().catch((error) => {
+              console.error("Audio playback error:", error);
+            });
           }
         });
       }

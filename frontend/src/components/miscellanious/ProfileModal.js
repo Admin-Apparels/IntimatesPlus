@@ -13,6 +13,8 @@ import {
   Text,
   Image,
   useToast,
+  Link,
+  Box,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { ChatState } from "../Context/ChatProvider";
@@ -22,6 +24,11 @@ const ProfileModal = ({ userInfo }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isFocused, setIsFocused] = useState(false);
   const { user, setUser, selectedChat } = ChatState();
+  const [showReportLinks, setShowReportLinks] = useState(false);
+
+  const toggleReportLinks = () => {
+    setShowReportLinks(!showReportLinks);
+  };
 
   const toast = useToast();
 
@@ -38,6 +45,7 @@ const ProfileModal = ({ userInfo }) => {
 
       const { data } = await axios.put(`/api/user/block/${userId}`, {}, config);
       setUser((prev) => ({ ...prev, isBlocked: data.isBlocked }));
+      onClose();
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -63,6 +71,7 @@ const ProfileModal = ({ userInfo }) => {
         config
       );
       setUser((prev) => ({ ...prev, isBlocked: data.isBlocked }));
+      onClose();
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -91,7 +100,15 @@ const ProfileModal = ({ userInfo }) => {
         onClick={onOpen}
       />
 
-      <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
+      <Modal
+        size="lg"
+        onClose={() => {
+          setShowReportLinks();
+          onClose();
+        }}
+        isOpen={isOpen}
+        isCentered
+      >
         <ModalOverlay />
         <ModalContent height="410px" width={"calc(100% - 20px)"}>
           <ModalHeader
@@ -131,7 +148,47 @@ const ProfileModal = ({ userInfo }) => {
               {userInfo.value}
             </Text>
           </ModalBody>
-          <ModalFooter display={isFocused ? "none" : "flex"}>
+          <ModalFooter
+            display={isFocused ? "none" : "flex"}
+            justifyContent={"space-between"}
+            alignItems={"center"}
+          >
+            {showReportLinks ? (
+              <Box
+                display={"flex"}
+                flexDir={"row"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
+                width={"33%"}
+              >
+                <Link
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=jngatia045@gmail.com&su=Reporting%20${userInfo.name}%20${userInfo._id}&body=Please%20describe%20the%20issue%20you%20encountered`}
+                  target="_blank"
+                  colorScheme="blue"
+                >
+                  Gmail
+                </Link>
+                <Link
+                  href={`https://compose.mail.yahoo.com/?to=jngatia045@gmail.com&subject=Reporting%20${userInfo.name}%20${userInfo._id}&body=Please%20describe%20the%20issue%20you%20encountered`}
+                  target="
+                  _blank"
+                  colorScheme="blue"
+                >
+                  Yahoo
+                </Link>
+                <Link
+                  href={`https://outlook.live.com/owa/?path=/mail/action/compose&to=jngatia045@gmail.com&subject=${userInfo.name}%20${userInfo._id}&body=Please%20describe%20the%20issue%20you%20encountered`}
+                  target="_blank"
+                  colorScheme="blue"
+                >
+                  Outlook
+                </Link>
+              </Box>
+            ) : (
+              <Button color="blue" onClick={toggleReportLinks}>
+                Report
+              </Button>
+            )}
             {!deleted &&
               (blocked ? (
                 <Button

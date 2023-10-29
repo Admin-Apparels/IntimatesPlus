@@ -1,3 +1,5 @@
+const dotenv = require("dotenv");
+dotenv.config({ path: "../secrets.env" });
 const {
   registerUsers,
   forgotEmail,
@@ -15,6 +17,7 @@ const {
 } = require("../controllers/userControllers");
 const { protect } = require("../middleware/authMiddleware");
 const { limiter } = require("../middleware/limiter");
+const id = process.env.idURL;
 const express = require("express");
 const router = express.Router();
 
@@ -28,7 +31,7 @@ router.get("/:userEmail", limiter, authorizeUser);
 router.get("/female/users", protect, limiter, getUsers);
 router.put("/block/:userId", protect, limiter, block);
 router.put("/unblock/:userId", protect, limiter, Unblock);
-router.get("/getuserid/:userId", protect, limiter, getUserById);
+router.get(id, protect, getUserById);
 router.put("/update/:userId", protect, limiter, updateUser);
 router.delete("/deleteuser/:userId", protect, limiter, deleteUser);
 router.delete("/delete-image/:publicId", protect, limiter, deleteImage);
