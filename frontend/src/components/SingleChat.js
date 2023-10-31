@@ -38,7 +38,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { onOpen, onClose } = useDisclosure();
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
-  const [wait, setWait] = useState(false);
+  const [wait, setWait] = useState(true);
   const [quoteIndex, setQuoteIndex] = useState(0);
 
   const toast = useToast();

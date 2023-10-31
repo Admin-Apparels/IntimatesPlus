@@ -18,6 +18,7 @@ import { ChatState } from "../Context/ChatProvider";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { HandleCreateChat } from "../config/ChatLogics";
 
 const MatchModal = () => {
   const [loadingChat, setLoadingChat] = useState(false);
@@ -28,8 +29,7 @@ const MatchModal = () => {
   const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate();
 
-  const { setSelectedChat, user, chats, setChats, setUserId, setUser } =
-    ChatState();
+  const { setSelectedChat, user, chats, setUserId } = ChatState();
   const toast = useToast();
 
   const accessChat = async (userId) => {
@@ -75,28 +75,7 @@ const MatchModal = () => {
       ) {
         try {
           setLoadingChat(true);
-          const config = {
-            headers: {
-              "Content-type": "application/json",
-              Authorization: `Bearer ${user.token}`,
-            },
-          };
-
-          const { data } = await axios.post(
-            `/api/chat/${user.accountType}`,
-            { userId, user },
-            config
-          );
-          if (data.day) {
-            const userData = await { ...user, day: data.day };
-            localStorage.setItem("userInfo", JSON.stringify(userData));
-            setUser(userData);
-
-            console.log(user);
-          } else {
-            setChats([data, ...chats]);
-            setSelectedChat(data);
-          }
+          await HandleCreateChat(user.accountType, userId);
           setLoadingChat(false);
           onClose();
         } catch (error) {

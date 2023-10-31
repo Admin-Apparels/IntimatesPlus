@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import {
   Box,
   Text,
@@ -28,18 +28,17 @@ import { ChatState } from "../Context/ChatProvider";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { handleApprove, HandleCreateChat } from "../config/ChatLogics";
 import socketIOClient from "socket.io-client";
 
 export default function Paycheck() {
   const toast = useToast();
-  const { setSelectedChat, user, setUser, chats, setChats, userId } =
-    ChatState();
+  const { user, setUser, userId } = ChatState();
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [subscription, setSubscription] = useState("");
   const [loading, setLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  console.log(user);
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -59,43 +58,7 @@ export default function Paycheck() {
       console.log(error);
     }
   }, [navigate, user]);
-  const handleCreateChat = useCallback(
-    async (url) => {
-      try {
-        const config = {
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
 
-        const { data } = await axios.post(
-          `/api/chat/${url}`,
-          { userId },
-          config
-        );
-        if (data.day) {
-          const userData = await { ...user, day: data.day };
-          localStorage.setItem("userInfo", JSON.stringify(userData));
-          setUser(userData);
-        } else {
-          console.log("setting chats");
-          setChats([data, ...chats]);
-          setSelectedChat(data);
-        }
-      } catch (error) {
-        toast({
-          title: "Error fetching the chat",
-          description: error.message,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-left",
-        });
-      }
-    },
-    [setChats, toast, user, setUser, setSelectedChat, chats, userId]
-  );
   useEffect(() => {
     const socket = socketIOClient("http://localhost:8080");
     socket.on("noPayment", (nothing) => {
@@ -106,6 +69,7 @@ export default function Paycheck() {
         duration: 5000,
         position: "bottom",
       });
+      navigate("/chats");
     });
     socket.on("userUpdated", async (updatedUser) => {
       const userData = await {
@@ -116,7 +80,7 @@ export default function Paycheck() {
       };
       localStorage.setItem("userInfo", JSON.stringify(userData));
       await setUser(userData);
-      await handleCreateChat("mpesa");
+      await HandleCreateChat("mpesa", userId);
       navigate("/chats");
       toast({
         title: "Successfully subscribed",
@@ -130,32 +94,7 @@ export default function Paycheck() {
     return () => {
       socket.disconnect();
     };
-  }, [user, setUser, handleCreateChat, navigate, toast]);
-  const handleApprove = async (accountType) => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      const { data } = await axios.put(
-        `/api/paycheck/${user._id}?account=${accountType}`,
-        {},
-        config
-      );
-      const userData = await {
-        ...user,
-        accountType: data.accountType,
-        subscription: data.subscription,
-        day: data.day,
-      };
-      localStorage.setItem("userInfo", JSON.stringify(userData));
-      setUser(userData);
-    } catch (error) {
-      console.log(error);
-      throw new Error("Error occurred", error);
-    }
-  };
+  }, [user, setUser, navigate, userId, toast]);
 
   const makePaymentMpesa = async () => {
     setLoading(true);
@@ -163,7 +102,6 @@ export default function Paycheck() {
       setLoading(false);
       return;
     }
-    console.log(phoneNumber, subscription, user._id);
     try {
       const config = {
         headers: {
@@ -190,7 +128,6 @@ export default function Paycheck() {
       setLoading(false);
     }
   };
-  console.log(loading);
   return (
     <VStack
       backgroundColor={"grey"}
@@ -283,7 +220,7 @@ export default function Paycheck() {
               onApprove={async (data, actions) => {
                 const amount = "Bronze";
                 await handleApprove(amount);
-                await handleCreateChat("Bronze");
+                await HandleCreateChat("Bronze", userId);
 
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
@@ -501,7 +438,7 @@ export default function Paycheck() {
               onApprove={async (data, actions) => {
                 const amount = "Platnum";
                 await handleApprove(amount);
-                await handleCreateChat("Platnum");
+                await HandleCreateChat("Platnum", userId);
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
                   toast({
@@ -635,7 +572,7 @@ export default function Paycheck() {
                 console.log(data);
                 const amount = "Gold";
                 await handleApprove(amount);
-                await handleCreateChat("Gold");
+                await HandleCreateChat("Gold", userId);
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
                   toast({

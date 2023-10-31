@@ -1,4 +1,6 @@
 import axios from "axios";
+import { ChatState } from "../Context/ChatProvider";
+import { useToast } from "@chakra-ui/react";
 export const isSameSenderMargin = (messages, m, i, userId) => {
   if (
     i < messages.length - 1 &&
@@ -59,5 +61,63 @@ export async function getUserById(userId, token) {
   } catch (error) {
     console.error(error);
     throw error;
+  }
+}
+export async function handleApprove(accountType) {
+  const { user, setUser } = ChatState();
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const { data } = await axios.put(
+      `/api/paycheck/${user._id}?account=${accountType}`,
+      {},
+      config
+    );
+    const userData = await {
+      ...user,
+      accountType: data.accountType,
+      subscription: data.subscription,
+      day: data.day,
+    };
+    localStorage.setItem("userInfo", JSON.stringify(userData));
+    setUser(userData);
+  } catch (error) {
+    console.log(error);
+    throw new Error("Error occurred", error);
+  }
+}
+export async function HandleCreateChat(url, userId) {
+  const toast = useToast();
+  const { user, setChats, setUser, chats, setSelectedChat } = ChatState();
+  try {
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const { data } = await axios.post(`/api/chat/${url}`, { userId }, config);
+    if (data.day) {
+      const userData = { ...user, day: data.day };
+      localStorage.setItem("userInfo", JSON.stringify(userData));
+      setUser(userData);
+    } else {
+      console.log("setting chats");
+      setChats([data, ...chats]);
+      setSelectedChat(data);
+    }
+  } catch (error) {
+    toast({
+      title: "Error fetching the chat",
+      description: error.message,
+      status: "error",
+      duration: 5000,
+      isClosable: true,
+      position: "bottom-left",
+    });
   }
 }

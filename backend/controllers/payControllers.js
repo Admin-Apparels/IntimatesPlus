@@ -165,6 +165,8 @@ const CallBackURL = async (req, res) => {
 
   const { Body } = req.body;
 
+  console.log(Body);
+
   const io = getIO();
   if (!userId && !subscription) {
     console.log("Function returned");
