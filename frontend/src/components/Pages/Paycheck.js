@@ -28,12 +28,13 @@ import { ChatState } from "../Context/ChatProvider";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { handleApprove, HandleCreateChat } from "../config/ChatLogics";
+import { handleApprove, handleCreateChat } from "../config/ChatLogics";
 import socketIOClient from "socket.io-client";
 
 export default function Paycheck() {
   const toast = useToast();
-  const { user, setUser, userId } = ChatState();
+  const { user, setUser, userId, setChats, chats, setSelectedChat } =
+    ChatState();
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [subscription, setSubscription] = useState("");
@@ -80,7 +81,16 @@ export default function Paycheck() {
       };
       localStorage.setItem("userInfo", JSON.stringify(userData));
       await setUser(userData);
-      await HandleCreateChat("mpesa", userId);
+      await handleCreateChat(
+        user.accountType,
+        userId,
+        toast,
+        user,
+        setChats,
+        setUser,
+        chats,
+        setSelectedChat
+      );
       navigate("/chats");
       toast({
         title: "Successfully subscribed",
@@ -94,7 +104,16 @@ export default function Paycheck() {
     return () => {
       socket.disconnect();
     };
-  }, [user, setUser, navigate, userId, toast]);
+  }, [
+    user,
+    setUser,
+    navigate,
+    userId,
+    chats,
+    setChats,
+    setSelectedChat,
+    toast,
+  ]);
 
   const makePaymentMpesa = async () => {
     setLoading(true);
@@ -219,8 +238,17 @@ export default function Paycheck() {
               }}
               onApprove={async (data, actions) => {
                 const amount = "Bronze";
-                await handleApprove(amount, amount);
-                await HandleCreateChat("Bronze", userId);
+                await handleApprove(amount, amount, user, setUser);
+                await handleCreateChat(
+                  "Bronze",
+                  userId,
+                  toast,
+                  user,
+                  setChats,
+                  setUser,
+                  chats,
+                  setSelectedChat
+                );
 
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
@@ -437,8 +465,17 @@ export default function Paycheck() {
               }}
               onApprove={async (data, actions) => {
                 const amount = "Platnum";
-                await handleApprove(amount, amount);
-                await HandleCreateChat("Platnum", userId);
+                await handleApprove(amount, amount, user, setUser);
+                await handleCreateChat(
+                  "Platnum",
+                  userId,
+                  toast,
+                  user,
+                  setChats,
+                  setUser,
+                  chats,
+                  setSelectedChat
+                );
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
                   toast({
@@ -571,8 +608,17 @@ export default function Paycheck() {
               onApprove={async (data, actions) => {
                 console.log(data);
                 const amount = "Gold";
-                await handleApprove(amount, amount);
-                await HandleCreateChat("Gold", userId);
+                await handleApprove(amount, amount, user, setUser);
+                await handleCreateChat(
+                  "Gold",
+                  userId,
+                  toast,
+                  user,
+                  setChats,
+                  setUser,
+                  chats,
+                  setSelectedChat
+                );
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
                   toast({

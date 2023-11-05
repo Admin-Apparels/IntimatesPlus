@@ -70,6 +70,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     "Maintaining a Safe Environment:",
     "Prohibited Content:",
     "Purpose of Admin:",
+    "Privacy and Data Usage Agreement:",
     "",
   ];
 
@@ -78,6 +79,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     "- Respect Others: Treat all users with kindness, respect, and consideration. - No Harassment: Harassment, hate speech, or any form of abuse will not be tolerated. - Privacy: Protect your personal information and respect the privacy of others.",
     " - No Prostitution: Admin strictly prohibits any form of prostitution or solicitation. Such activities will result in immediate account suspension. - Adult Content: We do not encourage or link to adult content sites.",
     "- This service is designed to assist individuals dealing with porn addiction and or masturbation in finding connections. - Our goal is to help individuals build healthy sexual relationships and encourage human social interations.",
+    "Data Protection and Non-Sale:   We are committed to protecting your data and will not sell your personal information to third parties or advertisers.   Matchmaking: In the future, you may be asked to provide location and other data. This data will be used solely for the purpose of finding you a suitable match within the app.   Privacy of User Identities: We respect your privacy, and we will keep the identities of other users confidential in relation to this app. Your identity will also be kept private in a similar manner.",
     "By using Admin, you agree to abide by these safety guidelines and terms of use. Violation of these terms may result in account suspension or termination. Thank you for being part of Admin. If you have any questions or concerns, please contact our team at admin@fuckmatepro.net. Your safety and well-being are important to us.",
   ];
 
@@ -98,11 +100,25 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         config
       );
 
+      // Initialize an empty user data cache.
+      const userDataCache = new Map();
+
       const resolvedMessages = await Promise.allSettled(
         data.map(async (message) => {
-          const senderId = await message.sender._id;
+          const senderId = message.sender._id;
 
-          const sender = await getUserById(senderId, user.token);
+          let sender = userDataCache.get(senderId);
+
+          if (!sender) {
+            try {
+              sender = await getUserById(senderId, user.token);
+
+              userDataCache.set(senderId, sender);
+            } catch (error) {
+              console.error(error);
+            }
+          }
+
           return {
             ...message,
             sender,
@@ -396,7 +412,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 totalPages={quotes.length}
                 currentPage={quoteIndex}
               />
-              {quoteIndex === 4 ? (
+              {quoteIndex === 5 ? (
                 <Button
                   onClick={() => {
                     setWait(false);

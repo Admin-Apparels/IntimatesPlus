@@ -18,7 +18,7 @@ import { ChatState } from "../Context/ChatProvider";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { HandleCreateChat } from "../config/ChatLogics";
+import { handleCreateChat } from "../config/ChatLogics";
 
 const MatchModal = () => {
   const [loadingChat, setLoadingChat] = useState(false);
@@ -29,7 +29,8 @@ const MatchModal = () => {
   const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate();
 
-  const { setSelectedChat, user, chats, setUserId } = ChatState();
+  const { setSelectedChat, user, chats, setUserId, setUser, setChats } =
+    ChatState();
   const toast = useToast();
 
   const accessChat = async (userId) => {
@@ -75,7 +76,17 @@ const MatchModal = () => {
       ) {
         try {
           setLoadingChat(true);
-          await HandleCreateChat(user.accountType, userId);
+          await handleCreateChat(
+            user.accountType,
+            userId,
+            toast,
+            user,
+            setChats,
+            setUser,
+            chats,
+            setSelectedChat
+          );
+
           setLoadingChat(false);
           onClose();
         } catch (error) {
