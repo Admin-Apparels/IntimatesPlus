@@ -19,17 +19,19 @@ import { handleApprove } from "../config/ChatLogics";
 import axios from "axios";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
+import socketIOClient from "socket.io-client";
+
 const Ads = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [disable, setDisable] = useState(false);
-  const { ads, setAds, user } = ChatState();
+  const { ads, setAds, user, setUser } = ChatState();
   const [countdown, setCountdown] = useState(15);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [clicked, setClicked] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
-
+  console.log(loading);
   useEffect(() => {
     if (ads) {
       setTimeout(() => {
@@ -58,12 +60,44 @@ const Ads = () => {
   const handleModels = () => {
     setDisable((prev) => !prev);
   };
+  useEffect(() => {
+    const socket = socketIOClient("http://localhost:8080");
+    socket.on("noPayment", (nothing) => {
+      toast({
+        title: nothing,
+        description: "Subscription unsuccessful",
+        status: "info",
+        duration: 5000,
+        position: "bottom",
+      });
+    });
+    socket.on("noMoreAds", async (updatedUser) => {
+      const userData = await {
+        ...user,
+        adsSubscription: updatedUser.adsSubscription,
+      };
+      localStorage.setItem("userInfo", JSON.stringify(userData));
+      await setUser(userData);
+      toast({
+        title: "Successfully subscribed",
+        description: `You will receive no ads for the next one month`,
+        status: "info",
+        duration: 5000,
+        position: "bottom",
+      });
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, [user, setUser, toast]);
+
   const makePaymentMpesa = async () => {
     setLoading(true);
     if (!phoneNumber) {
       setLoading(false);
       return;
     }
+    const subscription = "Ads";
     try {
       const config = {
         headers: {
@@ -73,10 +107,10 @@ const Ads = () => {
       };
       const { data } = await axios.post(
         `/api/paycheck/makepaymentmpesa/${user._id}`,
-        { phoneNumber },
+        { phoneNumber, subscription },
         config
       );
-      console.log(data);
+      setLoading(false);
       if (data) {
         toast({
           title: "You have been prompt to finish your subscription process",
@@ -85,8 +119,6 @@ const Ads = () => {
           position: "bottom",
         });
       }
-
-      setLoading(false);
     } catch (error) {
       setLoading(false);
     }
@@ -140,9 +172,8 @@ const Ads = () => {
                       }}
                       onApprove={async (data, actions) => {
                         const amount = "Bronze";
-                        await handleApprove(amount);
-                        // user.ads set to false;
-
+                        const ads = "Ads";
+                        await handleApprove(amount, ads);
                         return actions.order.capture().then(function (details) {
                           navigate("/chats");
                           toast({
@@ -174,7 +205,6 @@ const Ads = () => {
                     borderRadius={2}
                     backgroundColor={"green.400"}
                     color={"white"}
-                    isDisabled={loading === true}
                     onClick={() => {
                       setClicked(true);
                     }}

@@ -63,7 +63,7 @@ export async function getUserById(userId, token) {
     throw error;
   }
 }
-export async function handleApprove(accountType) {
+export async function handleApprove(accountType, type) {
   const { user, setUser } = ChatState();
   try {
     const config = {
@@ -72,10 +72,11 @@ export async function handleApprove(accountType) {
       },
     };
     const { data } = await axios.put(
-      `/api/paycheck/${user._id}?account=${accountType}`,
+      `/api/paycheck/${user._id}/${type}/${accountType}`,
       {},
       config
     );
+
     const userData = await {
       ...user,
       accountType: data.accountType,

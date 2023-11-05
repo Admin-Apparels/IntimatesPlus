@@ -12,7 +12,7 @@ const Chatpage = () => {
   const navigate = useNavigate();
   const [fetchAgain, setFetchAgain] = useState(false);
   const { user, setUser } = ChatState();
-
+  console.log(user);
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);
@@ -41,7 +41,10 @@ const Chatpage = () => {
           (user.gender === "female" ||
             user.accountType === "Platnum" ||
             user.accountType === "Bronze" ||
-            user.accountType === "new") && <Ads />}
+            user.accountType === "new") &&
+          parseInt(user.adsSubscription) < parseInt(new Date().getTime()) && (
+            <Ads />
+          )}
         <Box
           display="flex"
           justifyContent="space-between"

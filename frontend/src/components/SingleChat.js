@@ -415,15 +415,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   onClick={() => {
                     getNextQuote();
                   }}
+                  display={"flex"}
                   bgGradient="linear(to-r, teal.500, green.500)"
                   _hover={{
                     bgGradient: "linear(to-r, red.200, yellow.200)",
-                    color: "yellow",
+                    color: "white",
                   }}
-                  p={2}
                   justifyContent={"center"}
                   alignItems={"center"}
-                  m={0}
                   fontSize={"2xl"}
                 >
                   {">>>"}

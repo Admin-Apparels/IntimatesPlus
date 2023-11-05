@@ -18,11 +18,11 @@ const userSchema = mongoose.Schema(
     deleted: { type: Boolean, default: false },
     accountType: { type: String, default: "new" },
     subscription: { type: String, default: () => new Date().getTime() },
+    adsSubscription: { type: String, default: () => new Date().getTime() },
     day: { type: String, default: () => new Date().getTime() },
   },
-  {
-    timestamps: true,
-  }
+  { versionKey: false },
+  { timestamps: true }
 );
 
 userSchema.methods.comparePassword = async function (enteredPassword) {

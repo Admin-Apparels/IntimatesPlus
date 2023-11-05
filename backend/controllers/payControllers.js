@@ -44,18 +44,34 @@ const createOrder = async (req, res) => {
   });
   const data = await response.json();
   res.json(data);
-  console.log(data);
 };
 const updateUser = async (req, res) => {
   const userId = req.params.userId;
-  const userAcc = req.query.account;
+  const userAcc = req.query.accountType;
+  const type = req.params.type;
+  const io = getIO();
 
   var Acc;
 
   var currentDate = new Date();
   var subscriptionExpiry = new Date().getTime();
 
-  if (userAcc === "Bronze") {
+  if (type === "Ads") {
+    subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+          adsSubscription: subscriptionExpiry,
+        },
+        { new: true }
+      ).select("adsSubscription");
+      io.emit("noMoreAds", updatedUser);
+    } catch (error) {
+      console.log(error);
+    }
+    return;
+  } else if (userAcc === "Bronze") {
     Acc = "Bronze";
   } else if (userAcc === "Platnum") {
     Acc = "Platnum";
@@ -105,8 +121,10 @@ const makePaymentMpesa = async (req, res) => {
     Amount = 200;
   } else if (subscription === "Platnum") {
     Amount = 1206;
-  } else {
+  } else if (subscription === "Gold") {
     Amount = 6030;
+  } else {
+    Amount = 300;
   }
   const generateToken = async () => {
     const secret = process.env.CUSTOMER_SECRET;
@@ -162,7 +180,7 @@ const makePaymentMpesa = async (req, res) => {
 
 const CallBackURL = async (req, res) => {
   const { userId, subscription } = req.params;
-
+  console.log(subscription);
   const { Body } = req.body;
 
   console.log(Body);
@@ -187,6 +205,23 @@ const CallBackURL = async (req, res) => {
   } else if (subscription === "Platnum") {
     Acc = "Platnum";
     subscriptionExpiry = currentDate.getTime() + 7 * 24 * 60 * 60 * 1000;
+  } else if (subscription === "Ads") {
+    subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+          adsSubscription: subscriptionExpiry,
+        },
+        { new: true }
+      ).select("adsSubscription");
+      console.log(updatedUser);
+      io.emit("noMoreAds", updatedUser);
+      res.json(updatedUser);
+    } catch (error) {
+      console.log(error);
+    }
+    return;
   } else {
     Acc = "Gold";
     subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;

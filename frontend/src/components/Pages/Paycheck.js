@@ -219,7 +219,7 @@ export default function Paycheck() {
               }}
               onApprove={async (data, actions) => {
                 const amount = "Bronze";
-                await handleApprove(amount);
+                await handleApprove(amount, amount);
                 await HandleCreateChat("Bronze", userId);
 
                 return actions.order.capture().then(function (details) {
@@ -437,7 +437,7 @@ export default function Paycheck() {
               }}
               onApprove={async (data, actions) => {
                 const amount = "Platnum";
-                await handleApprove(amount);
+                await handleApprove(amount, amount);
                 await HandleCreateChat("Platnum", userId);
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
@@ -571,7 +571,7 @@ export default function Paycheck() {
               onApprove={async (data, actions) => {
                 console.log(data);
                 const amount = "Gold";
-                await handleApprove(amount);
+                await handleApprove(amount, amount);
                 await HandleCreateChat("Gold", userId);
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");

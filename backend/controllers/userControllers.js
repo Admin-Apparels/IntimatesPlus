@@ -41,6 +41,7 @@ const registerUsers = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
       accountType: user.accountType,
       subscription: user.subscription,
+      adsSubscription: user.adsSubscription,
       day: user.day,
     };
 
@@ -105,6 +106,7 @@ const searchUser = async (req, res) => {
       token: generateToken(userExists._id),
       accountType: userExists.accountType,
       subscription: userExists.subscription,
+      adsSubscription: userExists.adsSubscription,
       day: userExists.day,
     };
     res.status(201).json(responseData);
@@ -113,7 +115,6 @@ const searchUser = async (req, res) => {
 const recoverEmail = async (req, res) => {
   const { email } = req.params;
   const { password } = req.body;
-  console.log(email, password);
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
   const userData = await User.findOneAndUpdate(
@@ -134,6 +135,7 @@ const recoverEmail = async (req, res) => {
         token: generateToken(userData._id),
         accountType: userData.accountType,
         subscription: userData.subscription,
+        adsSubscription: userData.adsSubscription,
         day: userData.day,
       };
       res.status(201).json(responseData);
@@ -164,6 +166,7 @@ const authUser = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
       accountType: user.accountType,
       subscription: user.subscription,
+      adsSubscription: user.adsSubscription,
       day: user.day,
     });
   } else {
