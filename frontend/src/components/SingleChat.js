@@ -61,6 +61,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     setOnlineUsersCount,
     setAds,
   } = ChatState();
+  console.log(selectedChat);
 
   const getNextQuote = () => {
     setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
@@ -100,7 +101,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         config
       );
 
-      // Initialize an empty user data cache.
       const userDataCache = new Map();
 
       const resolvedMessages = await Promise.allSettled(
@@ -370,6 +370,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       }
     }, timerLength);
   };
+  const handleDotClick = (index) => {
+    setQuoteIndex(index);
+  };
 
   return (
     <>
@@ -383,6 +386,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               display="flex"
               justifyContent="center"
               background={"transparent"}
+              userSelect={"none"}
               p={0}
               m={0}
             >
@@ -397,10 +401,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               className="quote-container"
               overflowY={"scroll"}
             >
-              <Text fontSize={"2xl"} textAlign={"center"}>
+              <Text fontSize={"2xl"} textAlign={"center"} userSelect={"none"}>
                 {heading[quoteIndex]}
               </Text>
-              <Text className="quote-current">{quotes[quoteIndex]}</Text>
+              <Text className="quote-current" userSelect={"none"}>
+                {quotes[quoteIndex]}
+              </Text>
             </ModalBody>
             <ModalFooter
               display={"flex"}
@@ -411,6 +417,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               <PageIndicator
                 totalPages={quotes.length}
                 currentPage={quoteIndex}
+                handleDotClick={handleDotClick}
               />
               {quoteIndex === 5 ? (
                 <Button
@@ -470,8 +477,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               p={0}
               m={0}
               textAlign={"center"}
-              bgGradient="linear(to-r, red.700, yellow.300)"
+              bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
               bgClip="text"
+              userSelect={"none"}
             >
               {" "}
               {getSenderName(user, selectedChat.users)}
@@ -556,7 +564,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           justifyContent="center"
           h="100%"
         >
-          <Text fontSize="3xl" pb={3} fontFamily="Work sans">
+          <Text
+            fontSize="3xl"
+            pb={3}
+            fontFamily="Work sans"
+            userSelect={"none"}
+          >
             Click on a user to start chatting
           </Text>
         </Box>

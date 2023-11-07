@@ -154,7 +154,7 @@ const MyChat = (fetchAgain) => {
         alignItems="center"
       >
         <Text
-          fontFamily={"fantasy"}
+          fontFamily="cursive"
           fontWeight={"medium"}
           bgGradient="linear(to-r, black, grey)"
           bgClip="text"

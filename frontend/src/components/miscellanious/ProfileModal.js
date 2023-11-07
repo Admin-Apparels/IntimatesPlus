@@ -22,6 +22,7 @@ import { useState } from "react";
 
 const ProfileModal = ({ userInfo }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [verified, setVerified] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const { user, setUser, selectedChat } = ChatState();
   const [showReportLinks, setShowReportLinks] = useState(false);
@@ -92,12 +93,31 @@ const ProfileModal = ({ userInfo }) => {
       : selectedChat.users[1]._id;
   const deleted =
     selectedChat.users[0].deleted || selectedChat.users[1].deleted;
+  const setVerifieding = () => {
+    if (userInfo.accountType === "Bronze") {
+      setVerified(
+        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699185606/icons8-gold-medal-80_ceco9h.png"
+      );
+    } else if (userInfo.accountType === "Platnum") {
+      setVerified(
+        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699185606/icons8-silver-medal-80_kplixh.png"
+      );
+    } else if (userInfo.accountType === "Gold") {
+      setVerified(
+        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699185606/icons8-bronze-medal-80_xvl7po.png"
+      );
+    }
+  };
+
   return (
     <>
       <IconButton
         display={{ base: "flex" }}
         icon={<ViewIcon />}
-        onClick={onOpen}
+        onClick={() => {
+          onOpen();
+          setVerifieding();
+        }}
       />
 
       <Modal
@@ -110,23 +130,28 @@ const ProfileModal = ({ userInfo }) => {
         isCentered
       >
         <ModalOverlay />
-        <ModalContent height="410px" width={"calc(100% - 20px)"}>
+        <ModalContent width={"calc(100% - 20px)"}>
           <ModalHeader
             fontSize="40px"
             fontFamily="Work sans"
             display="flex"
             justifyContent="center"
-            bgGradient="linear(to-r, red.700, yellow.300)"
+            bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
             bgClip="text"
+            userSelect={"none"}
+            p={0}
+            m={2}
           >
             {userInfo.name}
+            <Image src={verified} alt="" height={7} />
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
             display="flex"
             flexDir="column"
             alignItems="center"
-            justifyContent="space-between"
+            justifyContent="center"
+            position={"relative"}
           >
             <Image
               borderRadius="full"
@@ -144,6 +169,7 @@ const ProfileModal = ({ userInfo }) => {
               fontFamily="Work sans"
               textAlign={"center"}
               display={isFocused ? "none" : "flex"}
+              userSelect={"none"}
             >
               {userInfo.value}
             </Text>
@@ -165,6 +191,7 @@ const ProfileModal = ({ userInfo }) => {
                   href={`https://mail.google.com/mail/?view=cm&fs=1&to=jngatia045@gmail.com&su=Reporting%20${userInfo.name}%20${userInfo._id}&body=Please%20describe%20the%20issue%20you%20encountered`}
                   target="_blank"
                   colorScheme="blue"
+                  userSelect={"none"}
                 >
                   Gmail
                 </Link>
@@ -173,6 +200,7 @@ const ProfileModal = ({ userInfo }) => {
                   target="
                   _blank"
                   colorScheme="blue"
+                  userSelect={"none"}
                 >
                   Yahoo
                 </Link>
@@ -180,12 +208,17 @@ const ProfileModal = ({ userInfo }) => {
                   href={`https://outlook.live.com/owa/?path=/mail/action/compose&to=jngatia045@gmail.com&subject=${userInfo.name}%20${userInfo._id}&body=Please%20describe%20the%20issue%20you%20encountered`}
                   target="_blank"
                   colorScheme="blue"
+                  userSelect={"none"}
                 >
                   Outlook
                 </Link>
               </Box>
             ) : (
-              <Button color="blue" onClick={toggleReportLinks}>
+              <Button
+                color="blue"
+                onClick={toggleReportLinks}
+                userSelect={"none"}
+              >
                 Report
               </Button>
             )}
@@ -194,6 +227,7 @@ const ProfileModal = ({ userInfo }) => {
                 <Button
                   color={"green.400"}
                   onClick={() => handleUnBlock(userId, user)}
+                  userSelect={"none"}
                 >
                   Unblock
                 </Button>
@@ -201,6 +235,7 @@ const ProfileModal = ({ userInfo }) => {
                 <Button
                   color={"red.400"}
                   onClick={() => handleBlock(userId, user)}
+                  userSelect={"none"}
                 >
                   Block
                 </Button>

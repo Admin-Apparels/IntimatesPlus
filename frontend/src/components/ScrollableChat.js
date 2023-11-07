@@ -10,10 +10,14 @@ import {
 import { Text } from "@chakra-ui/react";
 import { ChatState } from "./Context/ChatProvider";
 
+import Message from "./Message";
+
 const ScrollableChat = ({ messages }) => {
   const { user, selectedChat } = ChatState();
+
   const deleted =
     selectedChat.users[0].deleted || selectedChat.users[1].deleted;
+
   return (
     <ScrollableFeed>
       {messages &&
@@ -23,7 +27,12 @@ const ScrollableChat = ({ messages }) => {
           }
 
           return (
-            <div style={{ display: "flex" }} key={m._id}>
+            <div
+              style={{
+                display: "flex",
+              }}
+              key={m._id}
+            >
               {(isSameSender(messages, m, i, user._id) ||
                 isLastMessage(messages, i, user._id)) && (
                 <Tooltip
@@ -41,6 +50,7 @@ const ScrollableChat = ({ messages }) => {
                   />
                 </Tooltip>
               )}
+
               <span
                 style={{
                   backgroundColor: `${
@@ -53,7 +63,7 @@ const ScrollableChat = ({ messages }) => {
                   maxWidth: "75%",
                 }}
               >
-                {m.content}
+                <Message key={m._id} m={m} />
               </span>
             </div>
           );

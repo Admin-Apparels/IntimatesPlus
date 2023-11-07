@@ -20,6 +20,12 @@
 .page-indicator {
     display: flex;
     align-items: center;
+    
+}
+
+.dot:hover {
+    cursor: pointer;
+    color: #007bff;
 }
 
 .dot {

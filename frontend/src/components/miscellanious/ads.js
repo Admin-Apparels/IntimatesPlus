@@ -27,11 +27,11 @@ const Ads = () => {
   const { ads, setAds, user, setUser } = ChatState();
   const [countdown, setCountdown] = useState(15);
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [loading, setLoading] = useState(false);
+
   const [clicked, setClicked] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
-  console.log(loading);
+
   useEffect(() => {
     if (ads) {
       setTimeout(() => {
@@ -92,9 +92,7 @@ const Ads = () => {
   }, [user, setUser, toast]);
 
   const makePaymentMpesa = async () => {
-    setLoading(true);
     if (!phoneNumber) {
-      setLoading(false);
       return;
     }
     const subscription = "Ads";
@@ -110,7 +108,7 @@ const Ads = () => {
         { phoneNumber, subscription },
         config
       );
-      setLoading(false);
+
       if (data) {
         toast({
           title: "You have been prompt to finish your subscription process",
@@ -119,9 +117,7 @@ const Ads = () => {
           position: "bottom",
         });
       }
-    } catch (error) {
-      setLoading(false);
-    }
+    } catch (error) {}
   };
 
   return (
@@ -270,7 +266,7 @@ const Ads = () => {
               <Button
                 onClick={() => {
                   handleClose();
-                  setDisable(true);
+                  setDisable(false);
                   setClicked(false);
                   onClose();
                 }}

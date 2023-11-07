@@ -12,7 +12,7 @@ const Chatpage = () => {
   const navigate = useNavigate();
   const [fetchAgain, setFetchAgain] = useState(false);
   const { user, setUser } = ChatState();
-  console.log(user);
+
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);

@@ -3,4 +3,5 @@ node_modules
 node_modules/
 /frontend/node_modules/
 frontend/node_modules
-.env
+secrets.env
+/secrets.env

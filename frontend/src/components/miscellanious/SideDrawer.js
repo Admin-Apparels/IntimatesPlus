@@ -124,7 +124,11 @@ function SideDrawer() {
             _hover={{ backgroundColor: "green.100" }}
           >
             <i className="fas fa-search"></i>
-            <Text display={{ base: "none", md: "flex" }} px={4}>
+            <Text
+              display={{ base: "none", md: "flex" }}
+              px={4}
+              userSelect={"none"}
+            >
               Search Chat
             </Text>
           </Button>
@@ -245,10 +249,12 @@ function SideDrawer() {
                     );
                   })
               ) : (
-                <Text>No chats were found.</Text>
+                <Text userSelect={"none"}>No chats were found.</Text>
               )
             ) : (
-              <Text>Start typing to search for chats...</Text>
+              <Text userSelect={"none"}>
+                Start typing to search for chats...
+              </Text>
             )}
             {loadingChat && <Spinner ml="auto" display="flex" />}
           </DrawerBody>

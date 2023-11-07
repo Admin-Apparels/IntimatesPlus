@@ -30,6 +30,7 @@ const ClientModal = ({ children }) => {
   const [picLoading, setPicLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [pic, setPic] = useState(undefined);
+  const [verified, setVerified] = useState("");
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -187,16 +188,40 @@ const ClientModal = ({ children }) => {
       });
     }
   };
+  const setVerifieding = () => {
+    if (user.accountType === "Bronze") {
+      setVerified(
+        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699185606/icons8-gold-medal-80_ceco9h.png"
+      );
+    } else if (user.accountType === "Platnum") {
+      setVerified(
+        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699185606/icons8-silver-medal-80_kplixh.png"
+      );
+    } else if (user.accountType === "Gold") {
+      setVerified(
+        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699185606/icons8-bronze-medal-80_xvl7po.png"
+      );
+    }
+  };
 
   return (
     <>
       {children ? (
-        <span onClick={onOpen}>{children}</span>
+        <span
+          onClick={() => {
+            onOpen();
+            setVerifieding();
+          }}
+        >
+          {children}
+        </span>
       ) : (
         <IconButton
           display={{ base: "flex" }}
           icon={<ViewIcon />}
-          onClick={onOpen}
+          onClick={() => {
+            onOpen();
+          }}
         />
       )}
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
@@ -209,6 +234,7 @@ const ClientModal = ({ children }) => {
             justifyContent="center"
           >
             {user.name}
+            <Image src={verified} alt="" height={7} />
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
@@ -216,6 +242,7 @@ const ClientModal = ({ children }) => {
             flexDir="column"
             alignItems="center"
             justifyContent="space-between"
+            position="relative"
           >
             <Image
               borderRadius="full"
@@ -227,6 +254,7 @@ const ClientModal = ({ children }) => {
               onClick={toggleFocus}
               transition="box-size 0.3s ease-in-out"
             />
+
             <Text
               fontSize={{ base: "28px", md: "30px" }}
               fontFamily="Work sans"
