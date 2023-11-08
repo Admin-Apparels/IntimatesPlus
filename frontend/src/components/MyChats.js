@@ -161,13 +161,13 @@ const MyChat = (fetchAgain) => {
         >
           My Chats:{" "}
         </Text>
-        <Text fontWeight={"bold"}>
+        <Text fontWeight={"bold"} fontFamily={"cursive"}>
           {Array.isArray(chats) &&
             chats.length === 0 &&
             user.gender === "female" &&
             "Wait from Admin"}
         </Text>
-        <Text fontWeight={"bold"}>
+        <Text fontWeight={"bold"} fontFamily={"cursive"}>
           {Array.isArray(chats) &&
             chats.length === 0 &&
             user.gender === "male" &&

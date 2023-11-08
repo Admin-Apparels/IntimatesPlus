@@ -256,6 +256,7 @@ const Ads = () => {
                 fontSize={{ base: "18px", md: "20px" }}
                 fontFamily="Work sans"
                 textAlign={"center"}
+                userSelect={"none"}
               >
                 Ads
               </Box>
@@ -273,16 +274,21 @@ const Ads = () => {
                 backgroundColor={"Background"}
                 _hover={{ bg: "green.400", color: "white" }}
               >
-                <Text display={"flex"} justifyContent={"center"}>
+                <Text
+                  display={"flex"}
+                  justifyContent={"center"}
+                  userSelect={"none"}
+                >
                   Skip{" "}
                   <Image
                     src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1698741090/icons8-tick-30_mv3bjk.png"
                     height={6}
+                    userSelect={"none"}
                   />
                 </Text>
               </Button>
             ) : (
-              <Text>Skip in {countdown}</Text>
+              <Text userSelect={"none"}>Skip in {countdown}</Text>
             )}
             <Button
               margin={0}
@@ -299,6 +305,7 @@ const Ads = () => {
                 marginBottom={0}
                 marginRight={0}
                 marginTop={"15px"}
+                userSelect={"none"}
               >
                 $2/month
               </Text>

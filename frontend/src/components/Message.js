@@ -41,10 +41,17 @@ function Message({ m }) {
     <>
       {deleted ? (
         <Text
+          display={"flex"}
+          justifyContent={"space-between"}
           fontFamily={"cursive"}
           textDecoration={"underline"}
           colorScheme="grey"
         >
+          <Image
+            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699434297/icons8-unavailable-40_xh1ham.png"
+            height={7}
+            p={1}
+          />
           deleted
         </Text>
       ) : (
@@ -59,6 +66,7 @@ function Message({ m }) {
             <Button
               onClick={() => {
                 onDeleteMessage(m._id);
+                setDeleted(true);
               }}
               position={"absolute"}
               left={-10}

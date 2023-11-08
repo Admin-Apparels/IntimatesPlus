@@ -33,23 +33,24 @@ const ScrollableChat = ({ messages }) => {
               }}
               key={m._id}
             >
-              {(isSameSender(messages, m, i, user._id) ||
-                isLastMessage(messages, i, user._id)) && (
-                <Tooltip
-                  label={m.sender.name}
-                  placement="bottom-start"
-                  hasArrow
-                >
-                  <Avatar
-                    mt="7px"
-                    mr={1}
-                    size="sm"
-                    cursor="pointer"
-                    name={m.sender.name}
-                    src={m.sender.pic}
-                  />
-                </Tooltip>
-              )}
+              {m &&
+                (isSameSender(messages, m, i, user._id) ||
+                  isLastMessage(messages, i, user._id)) && (
+                  <Tooltip
+                    label={m.sender.name}
+                    placement="bottom-start"
+                    hasArrow
+                  >
+                    <Avatar
+                      mt="7px"
+                      mr={1}
+                      size="sm"
+                      cursor="pointer"
+                      name={m.sender.name}
+                      src={m.sender.pic}
+                    />
+                  </Tooltip>
+                )}
 
               <span
                 style={{
