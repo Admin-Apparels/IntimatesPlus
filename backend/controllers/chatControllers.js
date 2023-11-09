@@ -67,7 +67,43 @@ const accessChat = asyncHandler(async (req, res) => {
   }
 });
 const fetchChats = asyncHandler(async (req, res) => {
+  const ADMIN_EMAIL = "jngatia045@gmail.com";
+  const ADMIN_CHAT_NAME = "Admin";
+  const ADMIN_MESSAGE_CONTENT = "Hello from Admin!";
   try {
+    const userChats = await Chat.find({
+      users: { $elemMatch: { $eq: req.user._id } },
+    });
+
+    if (!userChats || userChats.length === 0) {
+      const adminUser = await User.findOne({ email: ADMIN_EMAIL });
+
+      if (req.user.gender === "female" && adminUser) {
+        const defaultChatData = {
+          chatName: ADMIN_CHAT_NAME,
+          users: [req.user._id, adminUser._id],
+        };
+
+        const defaultChat = await Chat.create(defaultChatData);
+
+        const defaultMessageData = {
+          sender: adminUser._id,
+          content: ADMIN_MESSAGE_CONTENT,
+          chat: defaultChat._id,
+        };
+        const defaultMessage = await Message.create(defaultMessageData);
+
+        const FullChat = await Chat.findByIdAndUpdate(
+          defaultChat._id,
+          {
+            latestMessage: defaultMessage._id,
+          },
+          { new: true }
+        );
+
+        return res.status(200).json(FullChat);
+      }
+    }
     const results = await Chat.find({
       users: { $elemMatch: { $eq: req.user._id } },
     })
