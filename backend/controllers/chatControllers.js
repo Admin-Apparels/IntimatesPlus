@@ -1,11 +1,9 @@
-const asyncHandler = require("express-async-handler");
+const expressAsyncHandler = require("express-async-handler");
+const Message = require("../models/messageModel");
 const Chat = require("../models/chatModel");
 const User = require("../models/userModel");
 
-//@description     Create or fetch One to One Chat
-//@route           POST /api/chat/
-//@access          Protected
-const accessChat = asyncHandler(async (req, res) => {
+const accessChat = async (req, res) => {
   const { accounttype } = req.params;
   const { userId } = req.body;
   const loggedId = req.user._id;
@@ -65,46 +63,33 @@ const accessChat = asyncHandler(async (req, res) => {
       res.status(400);
     }
   }
-});
-const fetchChats = asyncHandler(async (req, res) => {
+};
+const fetchChats = expressAsyncHandler(async (req, res) => {
   const ADMIN_EMAIL = "jngatia045@gmail.com";
   const ADMIN_CHAT_NAME = "Admin";
-  const ADMIN_MESSAGE_CONTENT = "Hello from Admin!";
+  const ADMIN_MESSAGE_CONTENT =
+    "Hello from Admin! We aim to respond to your description within 24 hours.";
   try {
-    const userChats = await Chat.find({
-      users: { $elemMatch: { $eq: req.user._id } },
-    });
+    const adminUser = await User.findOneAndUpdate(
+      { email: ADMIN_EMAIL },
+      {},
+      { upsert: true, new: true }
+    );
 
-    if (!userChats || userChats.length === 0) {
-      const adminUser = await User.findOne({ email: ADMIN_EMAIL });
+    const adminChat = await Chat.findOneAndUpdate(
+      {
+        chatName: ADMIN_CHAT_NAME,
+        users: { $elemMatch: { $eq: req.user._id } },
+      },
+      { $addToSet: { users: adminUser._id } },
+      { upsert: true, new: true }
+    ).populate("users", "-password");
 
-      if (req.user.gender === "female" && adminUser) {
-        const defaultChatData = {
-          chatName: ADMIN_CHAT_NAME,
-          users: [req.user._id, adminUser._id],
-        };
-
-        const defaultChat = await Chat.create(defaultChatData);
-
-        const defaultMessageData = {
-          sender: adminUser._id,
-          content: ADMIN_MESSAGE_CONTENT,
-          chat: defaultChat._id,
-        };
-        const defaultMessage = await Message.create(defaultMessageData);
-
-        const FullChat = await Chat.findByIdAndUpdate(
-          defaultChat._id,
-          {
-            latestMessage: defaultMessage._id,
-          },
-          { new: true }
-        );
-
-        return res.status(200).json(FullChat);
-      }
+    if (req.user.gender === "male") {
+      return res.json(adminChat);
     }
-    const results = await Chat.find({
+
+    const userChats = await Chat.find({
       users: { $elemMatch: { $eq: req.user._id } },
     })
       .populate("users", "-password")
@@ -112,17 +97,47 @@ const fetchChats = asyncHandler(async (req, res) => {
       .sort({ updatedAt: -1 })
       .exec();
 
-    if (results.length === 0) {
-      return res.status(200).json({ message: "No chats found." });
+    if (userChats.length === 0) {
+      const defaultChatData = {
+        chatName: ADMIN_CHAT_NAME,
+        users: [req.user._id, adminUser._id],
+      };
+
+      const defaultChat = await Chat.create(defaultChatData);
+
+      const defaultMessageData = {
+        sender: adminUser._id,
+        content: ADMIN_MESSAGE_CONTENT,
+        chat: defaultChat._id,
+      };
+
+      const defaultMessage = await Message.create(defaultMessageData);
+
+      const FullChat = await Chat.findByIdAndUpdate(
+        defaultChat._id,
+        { latestMessage: defaultMessage._id },
+        { new: true }
+      )
+        .populate("users", "-password")
+        .populate("latestMessage")
+        .exec();
+
+      const populatedResults = await User.populate(FullChat, {
+        path: "latestMessage.sender",
+        select: "name pic email isBlocked",
+      });
+
+      return res.json(populatedResults);
     }
 
-    const populatedResults = await User.populate(results, {
+    const results = await User.populate(userChats, {
       path: "latestMessage.sender",
       select: "name pic email isBlocked",
     });
 
-    res.status(200).json(populatedResults);
+    res.status(200).json(results);
   } catch (error) {
+    console.log("This is the Error", error);
     res.status(400).json({ error: error.message });
   }
 });

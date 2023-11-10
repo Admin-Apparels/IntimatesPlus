@@ -128,7 +128,7 @@ export default function Signup() {
         backgroundColor={"white"}
       >
         {" "}
-        <Text fontFamily={"fantasy"} textAlign={"center"}>
+        <Text fontFamily={"cursive"} textAlign={"center"}>
           Additional Information
         </Text>
         <FormControl id="given-name" isRequired>

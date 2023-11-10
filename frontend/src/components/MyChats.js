@@ -7,6 +7,7 @@ import ChatLoading from "./ChatLoading";
 
 import { ChatState } from "./Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
+import { Image } from "@chakra-ui/react";
 
 const MyChat = (fetchAgain) => {
   const [loggedUser, setLoggedUser] = useState();
@@ -94,14 +95,22 @@ const MyChat = (fetchAgain) => {
     setLoggedUser(userInfo);
   }, []);
   useEffect(() => {
-    if (loggedUser) {
-      fetchChats();
-    }
+    const fetchData = async () => {
+      if (loggedUser) {
+        await fetchChats();
+        setTimeout(async () => {
+          await fetchChats();
+        }, 2000);
+      }
+    };
+
+    fetchData();
   }, [fetchChats, loggedUser]);
 
   const renderChatItems = () => {
     return chats.map((chat) => (
       <Box
+        key={chat._id}
         onClick={() => {
           setSelectedChat(chat);
           const otherNotifications = notification.filter(
@@ -115,9 +124,19 @@ const MyChat = (fetchAgain) => {
         px={3}
         py={2}
         borderRadius="lg"
-        key={chat._id}
       >
-        <Text>{chat.senderName}</Text>
+        <Text display={"flex"} textAlign={"center"}>
+          {chat.senderName}{" "}
+          {chat.chatName === "Admin" ? (
+            <Image
+              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699615402/icons8-verified-account-64_1_amfufo.png"
+              height={4}
+              m={1}
+            />
+          ) : (
+            ""
+          )}
+        </Text>
         {chat.latestMessage && (
           <Text fontSize="xs">
             <b>

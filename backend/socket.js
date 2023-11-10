@@ -24,7 +24,7 @@ const initializeSocketIO = (server) => {
       io.emit("onlineUsers", onlineUsers.size);
 
       if (userData.isNewUser) {
-        io.emit("newUserRegistered", userData.name);
+        io.emit("newUserRegistered", userData);
       }
     });
 

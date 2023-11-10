@@ -38,7 +38,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { onOpen, onClose } = useDisclosure();
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
-  const [wait, setWait] = useState(true);
+  const [wait, setWait] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
 
   const toast = useToast();
@@ -238,32 +238,33 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket.emit("setup", user);
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
-    socket.on("newUserRegistered", (userName) => {
-      setTimeout(() => {
-        setWait(true);
-      }, 25000);
+    socket.on("newUserRegistered", (userData) => {
       toast({
         title: "New User Registered",
-        description: `${userName} joined`,
+        description: `${userData.name} joined`,
         status: "info",
         duration: 5000,
         isClosable: true,
         position: "top-left",
       });
-      if (user.gender === "female") {
+      if (userData._id === user._id && user.gender === "female") {
+        setTimeout(() => {
+          setWait(true);
+        }, 25000);
         setTimeout(() => {
           toast({
             title:
               "Your request is being processed by Admin, you'll be notified soon",
-            description:
-              "Your presence in our journey towards a porn-free world and a return to genuine human interaction fills our hearts with gratitude and hope",
             status: "info",
             isClosable: true,
             duration: 20000,
             position: "bottom",
           });
         }, 5000);
-      } else {
+      } else if (userData._id === user._id && user.gender === "male") {
+        setTimeout(() => {
+          setWait(true);
+        }, 25000);
         setTimeout(() => {
           toast({
             title:
@@ -479,6 +480,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
               bgClip="text"
               userSelect={"none"}
+              fontFamily={"cursive"}
             >
               {" "}
               {getSenderName(user, selectedChat.users)}

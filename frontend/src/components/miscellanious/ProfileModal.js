@@ -143,7 +143,16 @@ const ProfileModal = ({ userInfo }) => {
             m={2}
           >
             {userInfo.name}
-            <Image src={verified} alt="" height={7} />
+            {userInfo.email === "jngatia045@gmail.com" ? (
+              <Image
+                src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699615402/icons8-verified-account-64_1_amfufo.png"
+                height={7}
+                m={1}
+                loading="lazy"
+              />
+            ) : (
+              <Image src={verified} alt="" height={7} loading="lazy" />
+            )}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody

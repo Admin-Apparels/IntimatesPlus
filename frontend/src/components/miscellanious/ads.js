@@ -37,7 +37,7 @@ const Ads = () => {
       setTimeout(() => {
         onOpen();
         setAds(false);
-      }, 3000);
+      }, 60000);
     }
     const interval = setInterval(() => {
       if (countdown > 0) {
@@ -55,7 +55,7 @@ const Ads = () => {
     setTimeout(() => {
       setAds(true);
       setCountdown(15);
-    }, 120000);
+    }, 180000);
   };
   const handleModels = () => {
     setDisable((prev) => !prev);
@@ -131,7 +131,7 @@ const Ads = () => {
             display="flex"
             justifyContent="center"
           >
-            <Text display={"flex"} color={"blue.400"}>
+            <Text display={"flex"} color={"blue.400"} userSelect={"none"}>
               <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1698738202/icons8-info_kvegkg.gif" />
               ad break
             </Text>
