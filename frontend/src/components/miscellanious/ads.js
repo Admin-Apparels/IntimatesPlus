@@ -153,7 +153,7 @@ const Ads = () => {
                   >
                     <PayPalButtons
                       createOrder={(data, actions) => {
-                        const amount = 2.0;
+                        const amount = 3.0;
 
                         return actions.order.create({
                           purchase_units: [
@@ -169,7 +169,7 @@ const Ads = () => {
                       onApprove={async (data, actions) => {
                         const amount = "Bronze";
                         const ads = "Ads";
-                        await handleApprove(amount, ads);
+                        await handleApprove(amount, ads, user, setUser);
                         return actions.order.capture().then(function (details) {
                           navigate("/chats");
                           toast({
@@ -307,7 +307,7 @@ const Ads = () => {
                 marginTop={"15px"}
                 userSelect={"none"}
               >
-                $2/month
+                $3/month
               </Text>
             </Button>
           </ModalFooter>

@@ -59,7 +59,7 @@ function Message({ m }) {
           display={deleted ? "none" : "flex"}
           flexDir={"column"}
           position={"relative"}
-          onMouseEnter={() => setShowDeleteText(true)}
+          onClick={() => setShowDeleteText(true)}
           onMouseLeave={() => setShowDeleteText(false)}
         >
           {showDeleteText && m.sender._id === user._id && (

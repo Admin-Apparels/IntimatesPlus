@@ -36,6 +36,7 @@ const ProfileModal = ({ userInfo }) => {
   const toggleFocus = () => {
     setIsFocused((prevState) => !prevState);
   };
+  const ADMIN_EMAIL = "jngatia045@gmail.com";
   const handleBlock = async (userId, user) => {
     try {
       const config = {
@@ -143,7 +144,7 @@ const ProfileModal = ({ userInfo }) => {
             m={2}
           >
             {userInfo.name}
-            {userInfo.email === "jngatia045@gmail.com" ? (
+            {userInfo.email === ADMIN_EMAIL ? (
               <Image
                 src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699615402/icons8-verified-account-64_1_amfufo.png"
                 height={7}
@@ -188,50 +189,52 @@ const ProfileModal = ({ userInfo }) => {
             justifyContent={"space-between"}
             alignItems={"center"}
           >
-            {showReportLinks ? (
-              <Box
-                display={"flex"}
-                flexDir={"row"}
-                justifyContent={"space-between"}
-                alignItems={"center"}
-                width={"33%"}
-              >
-                <Link
-                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=jngatia045@gmail.com&su=Reporting%20${userInfo.name}%20${userInfo._id}&body=Please%20describe%20the%20issue%20you%20encountered`}
-                  target="_blank"
-                  colorScheme="blue"
-                  userSelect={"none"}
+            {userInfo.email !== ADMIN_EMAIL &&
+              (showReportLinks ? (
+                <Box
+                  display={"flex"}
+                  flexDir={"row"}
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                  width={"33%"}
                 >
-                  Gmail
-                </Link>
-                <Link
-                  href={`https://compose.mail.yahoo.com/?to=jngatia045@gmail.com&subject=Reporting%20${userInfo.name}%20${userInfo._id}&body=Please%20describe%20the%20issue%20you%20encountered`}
-                  target="
+                  <Link
+                    href={`https://mail.google.com/mail/?view=cm&fs=1&to=jngatia045@gmail.com&su=Reporting%20${userInfo.name}%20${userInfo._id}&body=Please%20describe%20the%20issue%20you%20encountered`}
+                    target="_blank"
+                    colorScheme="blue"
+                    userSelect={"none"}
+                  >
+                    Gmail
+                  </Link>
+                  <Link
+                    href={`https://compose.mail.yahoo.com/?to=jngatia045@gmail.com&subject=Reporting%20${userInfo.name}%20${userInfo._id}&body=Please%20describe%20the%20issue%20you%20encountered`}
+                    target="
                   _blank"
-                  colorScheme="blue"
+                    colorScheme="blue"
+                    userSelect={"none"}
+                  >
+                    Yahoo
+                  </Link>
+                  <Link
+                    href={`https://outlook.live.com/owa/?path=/mail/action/compose&to=jngatia045@gmail.com&subject=${userInfo.name}%20${userInfo._id}&body=Please%20describe%20the%20issue%20you%20encountered`}
+                    target="_blank"
+                    colorScheme="blue"
+                    userSelect={"none"}
+                  >
+                    Outlook
+                  </Link>
+                </Box>
+              ) : (
+                <Button
+                  color="blue"
+                  onClick={toggleReportLinks}
                   userSelect={"none"}
                 >
-                  Yahoo
-                </Link>
-                <Link
-                  href={`https://outlook.live.com/owa/?path=/mail/action/compose&to=jngatia045@gmail.com&subject=${userInfo.name}%20${userInfo._id}&body=Please%20describe%20the%20issue%20you%20encountered`}
-                  target="_blank"
-                  colorScheme="blue"
-                  userSelect={"none"}
-                >
-                  Outlook
-                </Link>
-              </Box>
-            ) : (
-              <Button
-                color="blue"
-                onClick={toggleReportLinks}
-                userSelect={"none"}
-              >
-                Report
-              </Button>
-            )}
+                  Report
+                </Button>
+              ))}
             {!deleted &&
+              userInfo.email !== "jngatia045@gmail.com" &&
               (blocked ? (
                 <Button
                   color={"green.400"}

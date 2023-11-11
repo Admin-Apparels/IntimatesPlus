@@ -140,7 +140,7 @@ function SideDrawer() {
           color={"green"}
           backgroundColor={"transparent"}
         >
-          <Text fontFamily={"cursive"}>
+          <Text fontFamily={"cursive"} fontSize={"13px"}>
             {formatOnlineUsersCount(onlineUsersCount)}
           </Text>
         </Tooltip>

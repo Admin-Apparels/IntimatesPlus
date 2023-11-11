@@ -124,7 +124,7 @@ const makePaymentMpesa = async (req, res) => {
   } else if (subscription === "Gold") {
     Amount = 6030;
   } else {
-    Amount = 300;
+    Amount = 500;
   }
   const generateToken = async () => {
     const secret = process.env.CUSTOMER_SECRET;
@@ -180,7 +180,7 @@ const makePaymentMpesa = async (req, res) => {
 
 const CallBackURL = async (req, res) => {
   const { userId, subscription } = req.params;
-  console.log(subscription);
+
   const { Body } = req.body;
 
   console.log(Body);

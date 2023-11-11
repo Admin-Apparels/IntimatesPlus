@@ -38,10 +38,7 @@ const Chatpage = () => {
       <ErrorBoundary fallback={<p>Something went wrong</p>}>
         {user && <SideDrawer />}{" "}
         {user &&
-          (user.gender === "female" ||
-            user.accountType === "Platnum" ||
-            user.accountType === "Bronze" ||
-            user.accountType === "new") &&
+          user.accountType !== "Gold" &&
           parseInt(user.adsSubscription) < parseInt(new Date().getTime()) && (
             <Ads />
           )}

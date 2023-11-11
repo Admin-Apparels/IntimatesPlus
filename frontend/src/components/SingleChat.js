@@ -62,6 +62,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     setAds,
   } = ChatState();
 
+  console.log(user);
+
   const getNextQuote = () => {
     setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
   };

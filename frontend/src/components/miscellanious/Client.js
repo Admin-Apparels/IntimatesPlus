@@ -19,7 +19,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 
@@ -31,6 +31,7 @@ const ClientModal = ({ children }) => {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [pic, setPic] = useState(undefined);
   const [verified, setVerified] = useState("");
+  const [displayToast, setDisplayToast] = useState(true);
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -203,6 +204,37 @@ const ClientModal = ({ children }) => {
       );
     }
   };
+  const handleMouseEnter = () => {
+    if (displayToast) {
+      toast({
+        title: "You are about to delete your Account",
+        status: "warning",
+        duration: 5000,
+        position: "bottom",
+        isClosable: true,
+      });
+
+      setDisplayToast(false);
+
+      setTimeout(() => {
+        setDisplayToast(true);
+      }, 5000);
+    }
+  };
+
+  useEffect(() => {
+    let timeout;
+
+    if (!displayToast) {
+      timeout = setTimeout(() => {
+        setDisplayToast(true);
+      }, 5000);
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [displayToast]);
 
   return (
     <>
@@ -226,7 +258,7 @@ const ClientModal = ({ children }) => {
       )}
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
-        <ModalContent height="510px" width={"calc(100% - 20px)"}>
+        <ModalContent width={"calc(100% - 20px)"}>
           <ModalHeader
             fontSize="40px"
             fontFamily="Work sans"
@@ -256,9 +288,10 @@ const ClientModal = ({ children }) => {
             />
 
             <Text
-              fontSize={{ base: "28px", md: "30px" }}
-              fontFamily="Work sans"
+              fontSize={{ base: "20px", md: "22px" }}
+              fontFamily="cursive"
               display={isFocused ? "none" : "flex"}
+              textAlign={"center"}
             >
               Email: {user.email}
             </Text>
@@ -295,15 +328,7 @@ const ClientModal = ({ children }) => {
 
               <Button
                 backgroundColor={"red.400"}
-                onMouseEnter={() => {
-                  toast({
-                    title: "You are about to delete your Account",
-                    status: "warning",
-                    duration: 5000,
-                    position: "bottom",
-                    isClosable: true,
-                  });
-                }}
+                onMouseEnter={handleMouseEnter}
                 onClick={() => {
                   if (
                     window.confirm(
