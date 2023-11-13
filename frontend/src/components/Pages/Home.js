@@ -1,6 +1,7 @@
 import {
   Box,
   Container,
+  Flex,
   Image,
   Link,
   Tab,
@@ -72,27 +73,88 @@ function Homepage() {
           </Tabs>
         </Box>{" "}
         <Box
-          display={"flex"}
-          flexDirection={"column"}
-          bgGradient="linear(to-r, #79cbca, #b4aea9, #e284ae)"
+          display="flex"
+          width="100vw"
+          background="blackAlpha.600"
+          color={"white"}
           marginTop={2}
+          p={2}
           borderRadius={5}
-          justifyContent={"center"}
-          alignItems={"center"}
+          flex={1}
         >
-          <Text variant="body2" textAlign="center">
-            {" "}
-            This site strictly prohibits any form of prostitution. After the
-            case of mutual connection, both accounts should be deactivated
-          </Text>
+          <Flex
+            flexDirection={{ base: "column", md: "row" }}
+            justifyContent={{ base: "center", md: "space-between" }}
+            alignItems={{ base: "center", md: "flex-start" }}
+            marginTop={4}
+          >
+            {/* Box 1 */}
+            <Box
+              display={"flex"}
+              flexDir={"column"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              width={{ base: "100%", md: "30%" }}
+              marginBottom={{ base: 4, md: 0 }}
+            >
+              <Text variant="body2" textAlign="center">
+                This site strictly prohibits any form of prostitution. After the
+                case of mutual connection, both accounts should be deactivated
+                or deleted.
+              </Text>
+              <Link href="#" textDecoration={"underline"} color="blue.100">
+                Terms and Conditions
+              </Link>
+            </Box>
 
-          <Link href="https://twitter.com/jdtheefirst">
-            <Image
-              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1697382400/icons8-twitterx-250_tulfw8.png"
-              height={5}
-            />
-          </Link>
-          <Text>{`Copyright © ${new Date().getFullYear()}`}</Text>
+            {/* Box 2 */}
+            <Box
+              display={"flex"}
+              flexDir={"column"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              width={{ base: "100%", md: "30%" }}
+              p={0}
+              m={0}
+            >
+              <Text fontWeight="bold" p={0} m={0}>
+                FUCKMATE.BOO{" "}
+              </Text>
+              <Text textAlign={"center"}>
+                Discover meaningful connections on our premier dating platform.
+                We bring together individuals seeking companionship, romance,
+                and genuine connections.
+              </Text>
+              <Text color="blue.100">{`Copyright © ${new Date().getFullYear()}`}</Text>
+            </Box>
+
+            <Box
+              display={"flex"}
+              flexDir={{ base: "row", md: "column" }}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+              width={{ base: "90%", md: "30%" }}
+            >
+              <Link href="#">
+                <Image
+                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1697382400/icons8-twitterx-250_tulfw8.png"
+                  height={7}
+                />
+              </Link>
+              <Link href="#">
+                <Image
+                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699869638/icons8-instagram-48_wfs0ek.png"
+                  height={7}
+                />
+              </Link>
+              <Link href="#">
+                <Image
+                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699869920/icons8-facebook-48_vcxsai.png"
+                  height={7}
+                />
+              </Link>
+            </Box>
+          </Flex>
         </Box>
       </Container>
     </ErrorBoundary>

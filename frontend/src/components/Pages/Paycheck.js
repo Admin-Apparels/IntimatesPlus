@@ -149,16 +149,18 @@ export default function Paycheck() {
   };
   return (
     <VStack
-      backgroundColor={"grey"}
-      w={"100%"}
-      justifyContent={"space-between"}
+      display={"flex"}
+      flexDir={{ base: "row", md: "column" }}
+      justifyContent={"space-evenly"}
       alignItems={"center"}
+      width={"100%"}
       flexWrap={"wrap"}
+      height={"100vh"}
       padding={5}
     >
       <Box
         maxW={"330px"}
-        w={"full"}
+        width={"full"}
         bg={useColorModeValue("white", "gray.800")}
         boxShadow={"2xl"}
         rounded={"md"}

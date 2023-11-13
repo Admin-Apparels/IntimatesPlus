@@ -3,10 +3,23 @@
 .App {
   min-height: 100vh;
   display: flex;
-  background-image: linear-gradient(to bottom right, white, grey, white);
+  position: relative;
+}
+
+.App::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699870625/finalbackgroundpic_qtxhea.png");
+
+  background-size: cover;
   background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
+  opacity: 0.5;
+  z-index: -1;
+
 }
 
 ::-webkit-scrollbar {

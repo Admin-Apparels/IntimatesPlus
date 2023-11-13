@@ -32,6 +32,7 @@ const Chatpage = () => {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, [navigate, setUser]);
+  console.log(parseInt(new Date().getTime()));
 
   return (
     <Box width="100%">
