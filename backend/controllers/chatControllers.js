@@ -65,7 +65,8 @@ const accessChat = async (req, res) => {
   }
 };
 const fetchChats = expressAsyncHandler(async (req, res) => {
-  const ADMIN_EMAIL = "jngatia045@gmail.com";
+  console.log(process.env.emailpass);
+  const ADMIN_EMAIL = "admin@fuckmate.boo";
   const ADMIN_CHAT_NAME = "Admin";
   const ADMIN_MESSAGE_CONTENT =
     "Hello from Admin! We aim to respond to your description within 24 hours.";

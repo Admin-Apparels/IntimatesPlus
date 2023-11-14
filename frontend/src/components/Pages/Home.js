@@ -45,9 +45,11 @@ function Homepage() {
             justifyContent={"center"}
             alignItems={"space-between"}
             fontSize="4xl"
-            fontFamily="Work sans"
+            fontWeight={"bold"}
+            userSelect={"none"}
+            textColor={"blue.500"}
           >
-            Admin
+            fuckmate.boo
             <Image
               height={10}
               src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1695820899/icons8-no-one-under-eighteen-emoji-48_cznua5.png"
@@ -88,7 +90,6 @@ function Homepage() {
             alignItems={{ base: "center", md: "flex-start" }}
             marginTop={4}
           >
-            {/* Box 1 */}
             <Box
               display={"flex"}
               flexDir={"column"}
@@ -97,17 +98,21 @@ function Homepage() {
               width={{ base: "100%", md: "30%" }}
               marginBottom={{ base: 4, md: 0 }}
             >
-              <Text variant="body2" textAlign="center">
+              <Text variant="body2" textAlign="center" userSelect={"none"}>
                 This site strictly prohibits any form of prostitution. After the
                 case of mutual connection, both accounts should be deactivated
                 or deleted.
               </Text>
-              <Link href="#" textDecoration={"underline"} color="blue.100">
+              <Link
+                href="#"
+                textDecoration={"underline"}
+                color="blue.100"
+                userSelect={"none"}
+              >
                 Terms and Conditions
               </Link>
             </Box>
 
-            {/* Box 2 */}
             <Box
               display={"flex"}
               flexDir={"column"}
@@ -117,10 +122,17 @@ function Homepage() {
               p={0}
               m={0}
             >
-              <Text fontWeight="bold" p={0} m={0}>
+              <Text
+                fontWeight="bold"
+                p={0}
+                m={0}
+                userSelect={"none"}
+                textColor={"blue.800"}
+                textDecoration={"underline"}
+              >
                 FUCKMATE.BOO{" "}
               </Text>
-              <Text textAlign={"center"}>
+              <Text textAlign={"center"} userSelect={"none"}>
                 Discover meaningful connections on our premier dating platform.
                 We bring together individuals seeking companionship, romance,
                 and genuine connections.
@@ -151,6 +163,13 @@ function Homepage() {
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699869920/icons8-facebook-48_vcxsai.png"
                   height={7}
+                />
+              </Link>
+              <Link href="https://www.fuckmate.boo">
+                <Image
+                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699960322/APP_LOGO_lcbdbj.png"
+                  height={6}
+                  borderRadius={"50%"}
                 />
               </Link>
             </Box>

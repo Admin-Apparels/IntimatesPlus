@@ -63,12 +63,12 @@ const forgotEmail = async (req, res) => {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "jngatia045@gmail.com",
-        pass: "onnkvpekzzbxdrpl",
+        user: "admin@fuckmate.boo",
+        pass: "qiwq-bses-wpjf-swno",
       },
     });
     const mailOptions = {
-      from: "jngatia045@gmail.com",
+      from: "admin@fuckmate.boo",
       to: email,
       subject: "Recover Your Email",
       text: `Your recovery code is:  ${verificationCode}
@@ -299,7 +299,9 @@ const deleteImage = async (req, res) => {
   }
 };
 const authorizeUser = async (req, res) => {
+  console.log(process.env.emailpass);
   const { userEmail } = req.params;
+  console.log(userEmail);
   const verificationCode = Math.floor(
     100000 + Math.random() * 900000
   ).toString();
@@ -307,12 +309,12 @@ const authorizeUser = async (req, res) => {
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "jngatia045@gmail.com",
-      pass: "onnkvpekzzbxdrpl",
+      user: "admin@fuckmate.boo",
+      pass: "qiwq-bses-wpjf-swno",
     },
   });
   const mailOptions = {
-    from: "jngatia045@gmail.com",
+    from: "admin@fuckmate.boo",
     to: userEmail,
     subject: "Verify Your Email",
     text: `Your verification code is:  ${verificationCode}
@@ -322,6 +324,7 @@ This is system's generated code, please do not reply.`,
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       res.status(400).json({ message: "Email Sending Failed" });
+      console.log(error);
     } else {
       console.log("Email sent: " + info.response);
       res.status(200).json(verificationCode);
