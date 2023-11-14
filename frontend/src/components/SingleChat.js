@@ -62,8 +62,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     setAds,
   } = ChatState();
 
-  console.log(user);
-
   const getNextQuote = () => {
     setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
   };
@@ -71,18 +69,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     "Scammers and Fake Profiles:",
     "Maintaining a Safe Environment:",
     "Prohibited Content:",
-    "Purpose of Admin:",
+    "Purpose of fuckmate.boo",
     "Privacy and Data Usage Agreement:",
     "",
   ];
 
   const quotes = [
-    " - Be vigilant: Recognize and protect yourself from scammers and fake profiles.- Report: If you encounter suspicious accounts, please report them to our team at admin@fuckmatepro.net.",
+    " - Be vigilant: Recognize and protect yourself from scammers and fake profiles.- Report: If you encounter suspicious accounts, please report them to our team at admin@fuckmate.boo.",
     "- Respect Others: Treat all users with kindness, respect, and consideration. - No Harassment: Harassment, hate speech, or any form of abuse will not be tolerated. - Privacy: Protect your personal information and respect the privacy of others.",
     " - No Prostitution: Admin strictly prohibits any form of prostitution or solicitation. Such activities will result in immediate account suspension. - Adult Content: We do not encourage or link to adult content sites.",
     "- This service is designed to assist individuals dealing with porn addiction and or masturbation in finding connections. - Our goal is to help individuals build healthy sexual relationships and encourage human social interations.",
     "Data Protection and Non-Sale:   We are committed to protecting your data and will not sell your personal information to third parties or advertisers.   Matchmaking: In the future, you may be asked to provide location and other data. This data will be used solely for the purpose of finding you a suitable match within the app.   Privacy of User Identities: We respect your privacy, and we will keep the identities of other users confidential in relation to this app. Your identity will also be kept private in a similar manner.",
-    "By using Admin, you agree to abide by these safety guidelines and terms of use. Violation of these terms may result in account suspension or termination. Thank you for being part of Admin. If you have any questions or concerns, please contact our team at admin@fuckmatepro.net. Your safety and well-being are important to us.",
+    "By using fuckmate.boo, you agree to abide by these safety guidelines and terms of use. Violation of these terms may result in account suspension or termination. Thank you for being part of Admin. If you have any questions or concerns, please contact our team at admin@fuckmate.boo. Your safety and well-being are important to us.",
   ];
 
   const fetchMessages = useCallback(async () => {

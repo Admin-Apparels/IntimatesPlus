@@ -10,6 +10,8 @@ const crypto = require("crypto");
 const axios = require("axios");
 
 dotenv.config({ path: "./secrets.env" });
+const privateEmailPass = process.env.privateEmailPass;
+const privateEmail = "admin@fuckmate.boo";
 
 const registerUsers = asyncHandler(async (req, res) => {
   const { name, email, password, gender, pic, value } = req.body;
@@ -63,12 +65,12 @@ const forgotEmail = async (req, res) => {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "admin@fuckmate.boo",
-        pass: "qiwq-bses-wpjf-swno",
+        user: privateEmail,
+        pass: privateEmailPass,
       },
     });
     const mailOptions = {
-      from: "admin@fuckmate.boo",
+      from: privateEmail,
       to: email,
       subject: "Recover Your Email",
       text: `Your recovery code is:  ${verificationCode}
@@ -299,22 +301,23 @@ const deleteImage = async (req, res) => {
   }
 };
 const authorizeUser = async (req, res) => {
-  console.log(process.env.emailpass);
   const { userEmail } = req.params;
-  console.log(userEmail);
+
   const verificationCode = Math.floor(
     100000 + Math.random() * 900000
   ).toString();
 
-  let transporter = nodemailer.createTransport({
-    service: "gmail",
+  const transporter = nodemailer.createTransport({
+    host: "mail.privateemail.com",
+    port: 465,
+    secure: true,
     auth: {
-      user: "admin@fuckmate.boo",
-      pass: "qiwq-bses-wpjf-swno",
+      user: privateEmail,
+      pass: privateEmailPass,
     },
   });
   const mailOptions = {
-    from: "admin@fuckmate.boo",
+    from: privateEmail,
     to: userEmail,
     subject: "Verify Your Email",
     text: `Your verification code is:  ${verificationCode}

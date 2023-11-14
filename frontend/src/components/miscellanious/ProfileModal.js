@@ -37,6 +37,7 @@ const ProfileModal = ({ userInfo }) => {
     setIsFocused((prevState) => !prevState);
   };
   const ADMIN_EMAIL = "admin@fuckmate.boo";
+  console.log(userInfo.email, ADMIN_EMAIL);
   const handleBlock = async (userId, user) => {
     try {
       const config = {
@@ -234,7 +235,7 @@ const ProfileModal = ({ userInfo }) => {
                 </Button>
               ))}
             {!deleted &&
-              userInfo.email !== "jngatia045@gmail.com" &&
+              userInfo.email !== ADMIN_EMAIL &&
               (blocked ? (
                 <Button
                   color={"green.400"}
