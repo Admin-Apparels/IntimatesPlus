@@ -4,11 +4,11 @@
   "description": "chat-app",
   "main": "./backend/index.js",
  "scripts": {
-     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
     "frontend": "cd frontend && npm start",
-    "backend": "cd backend && nodemon index.js",
+    "backend": "cd backend && node index.js",
     "heroku-postbuild": "cd frontend && npm install && npm run build"
   },
+  "heroku-run-build-script": true,
   "author": "jdtheefirst",
   "license": "ISC",
   "dependencies": {

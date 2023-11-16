@@ -168,8 +168,8 @@ function Homepage() {
               <Link href="https://www.fuckmate.boo">
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699960322/APP_LOGO_lcbdbj.png"
-                  height={6}
-                  borderRadius={"50%"}
+                  height={5}
+                  borderRadius={5}
                 />
               </Link>
             </Box>
