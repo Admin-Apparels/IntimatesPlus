@@ -28,7 +28,8 @@ import io from "socket.io-client";
 import { ChatState } from "./Context/ChatProvider";
 import animation from "../animations/typing.json";
 
-const ENDPOINT = "http://localhost:8080";
+const ENDPOINT = "https://www.fuckmate.boo";
+
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
