@@ -127,7 +127,7 @@ function Homepage() {
                 p={0}
                 m={0}
                 userSelect={"none"}
-                textColor={"blue.800"}
+                textColor={"blue.100"}
                 textDecoration={"underline"}
               >
                 FUCKMATE.BOO{" "}
@@ -147,29 +147,29 @@ function Homepage() {
               alignItems={"center"}
               width={{ base: "90%", md: "30%" }}
             >
-              <Link href="#">
+              <Link href="#" m={1}>
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1697382400/icons8-twitterx-250_tulfw8.png"
                   height={7}
                 />
               </Link>
-              <Link href="#">
+              <Link href="#" m={1}>
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699869638/icons8-instagram-48_wfs0ek.png"
                   height={7}
                 />
               </Link>
-              <Link href="#">
+              <Link href="#" m={1}>
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699869920/icons8-facebook-48_vcxsai.png"
                   height={7}
                 />
               </Link>
-              <Link href="https://www.fuckmate.boo">
+              <Link href="https://www.fuckmate.boo" m={1} target="blank">
                 <Image
-                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699960322/APP_LOGO_lcbdbj.png"
+                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1700415178/APP_LOGO_2_pforwh.png"
                   height={5}
-                  borderRadius={5}
+                  borderRadius={4}
                 />
               </Link>
             </Box>
