@@ -92,6 +92,22 @@ const Ads = () => {
     };
   }, [user, setUser, toast]);
 
+  useEffect(() => {
+    const script = document.createElement("script");
+
+    script.async = true;
+    script.src =
+      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5708660695345943";
+    script.crossOrigin = "anonymous";
+
+    const adsContainer = document.querySelector(".ads-container");
+    adsContainer.appendChild(script);
+
+    return () => {
+      adsContainer.removeChild(script);
+    };
+  }, []);
+
   const makePaymentMpesa = async () => {
     if (!phoneNumber) {
       return;
@@ -254,13 +270,12 @@ const Ads = () => {
               )
             ) : (
               <Box
+                className="ads-container"
                 fontSize={{ base: "18px", md: "20px" }}
                 fontFamily="Work sans"
                 textAlign={"center"}
                 userSelect={"none"}
-              >
-                Ads
-              </Box>
+              ></Box>
             )}
           </ModalBody>
           <ModalFooter display={"flex"} justifyContent={"space-between"}>
