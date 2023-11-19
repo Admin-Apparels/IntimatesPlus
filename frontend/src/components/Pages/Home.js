@@ -103,14 +103,31 @@ function Homepage() {
                 case of mutual connection, both accounts should be deactivated
                 or deleted.
               </Text>
-              <Link
-                href="#"
-                textDecoration={"underline"}
-                color="blue.100"
-                userSelect={"none"}
+              <Text
+                display="flex"
+                justifyContent={"space-around"}
+                width={"100%"}
               >
-                Terms and Conditions
-              </Link>
+                {" "}
+                <Link
+                  href="https://www.termsandconditionsgenerator.com/live.php?token=iuJtB9N5PKNTX5iM90p7B8cd8h6vCCdJ"
+                  textDecoration={"underline"}
+                  color="blue.100"
+                  userSelect={"none"}
+                  target="blank"
+                >
+                  Terms of Use
+                </Link>
+                <Link
+                  href="https://www.privacypolicygenerator.info/live.php?token=XoLCzcvHWA3NIQ1iBqO8IVaTRxQMVbff"
+                  textDecoration={"underline"}
+                  color="blue.100"
+                  userSelect={"none"}
+                  target="blank"
+                >
+                  Privacy Policy
+                </Link>
+              </Text>
             </Box>
 
             <Box

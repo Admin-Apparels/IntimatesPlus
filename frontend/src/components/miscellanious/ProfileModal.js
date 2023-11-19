@@ -37,7 +37,7 @@ const ProfileModal = ({ userInfo }) => {
     setIsFocused((prevState) => !prevState);
   };
   const ADMIN_EMAIL = "admin@fuckmate.boo";
-  console.log(userInfo.email, ADMIN_EMAIL);
+
   const handleBlock = async (userId, user) => {
     try {
       const config = {

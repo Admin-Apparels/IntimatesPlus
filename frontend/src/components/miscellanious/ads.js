@@ -57,11 +57,12 @@ const Ads = () => {
       setCountdown(15);
     }, 180000);
   };
+
   const handleModels = () => {
-    setDisable((prev) => !prev);
+    setDisable((...prev) => !prev);
   };
   useEffect(() => {
-    const socket = socketIOClient("http://localhost:8080");
+    const socket = socketIOClient("https://www.fuckmate.boo");
     socket.on("noPayment", (nothing) => {
       toast({
         title: nothing,

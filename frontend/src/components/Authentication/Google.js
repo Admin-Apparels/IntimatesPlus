@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const GoogleLoginButton = () => {
   const navigate = useNavigate();
   const toast = useToast();
-  const { email, setEmail, name, setName, setPic } = ChatState();
+  const { email, setEmail, name, setName, setPic, setAds } = ChatState();
 
   const submitHandler = async () => {
     if (email && name) {
@@ -19,6 +19,7 @@ const GoogleLoginButton = () => {
           navigate("/googleinfo");
         } else {
           localStorage.setItem("userInfo", JSON.stringify(data));
+          setAds(true);
           navigate("/chats");
         }
       } catch (error) {
