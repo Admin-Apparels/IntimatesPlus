@@ -20,6 +20,7 @@ import axios from "axios";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import socketIOClient from "socket.io-client";
+import YourComponent from "./adSense";
 
 const Ads = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -91,22 +92,6 @@ const Ads = () => {
       socket.disconnect();
     };
   }, [user, setUser, toast]);
-
-  useEffect(() => {
-    const script = document.createElement("script");
-
-    script.async = true;
-    script.src =
-      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5708660695345943";
-    script.crossOrigin = "anonymous";
-
-    const adsContainer = document.querySelector(".ads-container");
-    adsContainer.appendChild(script);
-
-    return () => {
-      adsContainer.removeChild(script);
-    };
-  }, []);
 
   const makePaymentMpesa = async () => {
     if (!phoneNumber) {
@@ -269,13 +254,7 @@ const Ads = () => {
                 </>
               )
             ) : (
-              <Box
-                className="ads-container"
-                fontSize={{ base: "18px", md: "20px" }}
-                fontFamily="Work sans"
-                textAlign={"center"}
-                userSelect={"none"}
-              ></Box>
+              <YourComponent />
             )}
           </ModalBody>
           <ModalFooter display={"flex"} justifyContent={"space-between"}>
