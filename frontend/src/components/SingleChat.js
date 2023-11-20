@@ -28,7 +28,7 @@ import io from "socket.io-client";
 import { ChatState } from "./Context/ChatProvider";
 import animation from "../animations/typing.json";
 
-const ENDPOINT = "https://www.fuckmate.boo";
+const ENDPOINT = "https://fuckmate.boo";
 
 var socket, selectedChatCompare;
 

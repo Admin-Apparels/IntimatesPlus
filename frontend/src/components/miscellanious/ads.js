@@ -60,7 +60,7 @@ const Ads = () => {
     setDisable((prev) => !prev);
   };
   useEffect(() => {
-    const socket = socketIOClient("https://www.fuckmate.boo");
+    const socket = socketIOClient("https://fuckmate.boo");
     socket.on("noPayment", (nothing) => {
       toast({
         title: nothing,
