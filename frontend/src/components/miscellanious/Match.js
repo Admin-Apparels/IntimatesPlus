@@ -213,7 +213,7 @@ const MatchModal = () => {
         {currentUser && (
           <>
             <ModalOverlay />
-            <ModalContent height="80vh" width={"calc(100% - 20px)"}>
+            <ModalContent width={"calc(100% - 20px)"}>
               <ModalHeader
                 fontSize="40px"
                 fontFamily="Work sans"
@@ -232,7 +232,7 @@ const MatchModal = () => {
                 justifyContent="space-between"
               >
                 <Image
-                  borderRadius="5%"
+                  borderRadius={isFocused ? "50%" : "5%"}
                   boxSize={isFocused ? "20rem" : "10rem"}
                   src={currentUser.pic}
                   alt={currentUser.name}
