@@ -98,7 +98,12 @@ function Homepage() {
               width={{ base: "100%", md: "30%" }}
               marginBottom={{ base: 4, md: 0 }}
             >
-              <Text variant="body2" textAlign="center" userSelect={"none"}>
+              <Text
+                variant="body2"
+                textAlign="center"
+                userSelect={"none"}
+                fontFamily={"mono"}
+              >
                 This site strictly prohibits any form of prostitution. After the
                 case of mutual connection, both accounts should be deactivated
                 or deleted.
@@ -111,7 +116,6 @@ function Homepage() {
                 {" "}
                 <Link
                   href="https://www.termsandconditionsgenerator.com/live.php?token=iuJtB9N5PKNTX5iM90p7B8cd8h6vCCdJ"
-                  textDecoration={"underline"}
                   color="blue.100"
                   userSelect={"none"}
                   target="blank"
@@ -120,7 +124,6 @@ function Homepage() {
                 </Link>
                 <Link
                   href="https://www.privacypolicygenerator.info/live.php?token=XoLCzcvHWA3NIQ1iBqO8IVaTRxQMVbff"
-                  textDecoration={"underline"}
                   color="blue.100"
                   userSelect={"none"}
                   target="blank"
@@ -149,7 +152,11 @@ function Homepage() {
               >
                 FUCKMATE.BOO{" "}
               </Text>
-              <Text textAlign={"center"} userSelect={"none"}>
+              <Text
+                textAlign={"center"}
+                userSelect={"none"}
+                fontFamily={"mono"}
+              >
                 Discover meaningful connections on our premier dating platform.
                 We bring together individuals seeking companionship, romance,
                 and genuine connections.
