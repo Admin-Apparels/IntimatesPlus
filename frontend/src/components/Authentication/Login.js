@@ -36,7 +36,7 @@ const Login = () => {
   const { onOpen, isOpen, onClose } = useDisclosure();
   const [forgotEmail, setForgotEmail] = useState();
   const [searching, setSearching] = useState(false);
-  const { setVerify, setRecoverEmail, setAds } = ChatState();
+  const { setVerify, setRecoverEmail } = ChatState();
   const [disable, setDisable] = useState(false);
 
   const submitHandler = async () => {
@@ -68,7 +68,7 @@ const Login = () => {
 
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      setAds(true);
+
       navigate("/chats");
     } catch (error) {
       toast({

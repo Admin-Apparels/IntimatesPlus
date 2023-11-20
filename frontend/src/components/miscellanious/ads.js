@@ -24,7 +24,7 @@ const Ads = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [disable, setDisable] = useState(false);
   const { ads, setAds, user, setUser } = ChatState();
-  const [countdown, setCountdown] = useState(15);
+  const [countdown, setCountdown] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const [clicked, setClicked] = useState(false);
@@ -32,11 +32,10 @@ const Ads = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (ads) {
+    if (ads || user.isNewUser === undefined) {
       setTimeout(() => {
         onOpen();
-        setAds(false);
-      }, 60000);
+      }, 10000);
     }
     const interval = setInterval(() => {
       if (countdown > 0) {
@@ -49,16 +48,16 @@ const Ads = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [ads, setAds, onOpen, countdown]);
+  }, [ads, setAds, onOpen, countdown, user.adsSubscription, user.isNewUser]);
   const handleClose = () => {
     setTimeout(() => {
+      setCountdown(25);
       setAds(true);
-      setCountdown(15);
-    }, 180000);
+    }, 120000);
   };
 
   const handleModels = () => {
-    setDisable((...prev) => !prev);
+    setDisable((prev) => !prev);
   };
   useEffect(() => {
     const socket = socketIOClient("https://www.fuckmate.boo");
@@ -282,13 +281,7 @@ const Ads = () => {
             ) : (
               <Text userSelect={"none"}>Skip in {countdown}</Text>
             )}
-            <Button
-              margin={0}
-              padding={2}
-              onClick={() => {
-                handleModels();
-              }}
-            >
+            <Button margin={0} padding={2} onClick={() => handleModels()}>
               <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1698738794/icons8-speaker-48_gfxa1m.png" />
               No ads
               <Text
