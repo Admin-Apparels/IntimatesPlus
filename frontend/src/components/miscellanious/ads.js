@@ -9,7 +9,6 @@ import {
   ModalOverlay,
   Button,
   Input,
-  Box,
   Text,
   Image,
   useToast,
@@ -20,8 +19,7 @@ import axios from "axios";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import socketIOClient from "socket.io-client";
-import YourComponent from "./adSense";
-
+import AdSenseComponent from "./adSense";
 const Ads = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [disable, setDisable] = useState(false);
@@ -92,7 +90,6 @@ const Ads = () => {
       socket.disconnect();
     };
   }, [user, setUser, toast]);
-
   const makePaymentMpesa = async () => {
     if (!phoneNumber) {
       return;
@@ -254,7 +251,7 @@ const Ads = () => {
                 </>
               )
             ) : (
-              <YourComponent />
+              <AdSenseComponent />
             )}
           </ModalBody>
           <ModalFooter display={"flex"} justifyContent={"space-between"}>
