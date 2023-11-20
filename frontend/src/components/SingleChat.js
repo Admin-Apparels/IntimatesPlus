@@ -14,6 +14,8 @@ import {
   Button,
   Input,
   FormControl,
+  Checkbox,
+  Link,
 } from "@chakra-ui/react";
 import "../components/styles.css";
 import PageIndicator from "./miscellanious/PageIndicator";
@@ -421,8 +423,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 handleDotClick={handleDotClick}
               />
               {quoteIndex === 5 ? (
-                <Button
-                  onClick={() => {
+                <Checkbox
+                  onChange={() => {
                     setWait(false);
                     setAds(true);
                     onClose();
@@ -430,10 +432,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   p={2}
                   m={0}
                   fontSize={"2xs"}
-                  _hover={{ color: "green" }}
                 >
-                  I acceppt this Terms & Conditions
-                </Button>
+                  I'm 18+ and have agreed to{" "}
+                  <Link
+                    href="https://www.termsandconditionsgenerator.com/live.php?token=iuJtB9N5PKNTX5iM90p7B8cd8h6vCCdJ"
+                    textColor={"blue"}
+                    target="blank"
+                  >
+                    Terms of Use
+                  </Link>{" "}
+                </Checkbox>
               ) : (
                 <Button
                   onClick={() => {

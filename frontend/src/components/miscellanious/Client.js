@@ -86,6 +86,7 @@ const ClientModal = ({ children }) => {
         isClosable: true,
         position: "bottom",
       });
+      setPicLoading(false);
       return;
     }
     const defaultImageUrl =

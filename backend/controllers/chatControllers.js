@@ -85,7 +85,7 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
       { upsert: true, new: true }
     ).populate("users", "-password");
 
-    if (req.user.gender === "male") {
+    if (req.user.email === ADMIN_EMAIL) {
       return res.json(adminChat);
     }
 
