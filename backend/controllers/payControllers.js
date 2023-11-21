@@ -118,7 +118,7 @@ const makePaymentMpesa = async (req, res) => {
   var Amount;
 
   if (subscription === "Bronze") {
-    Amount = 200;
+    Amount = 1;
   } else if (subscription === "Platnum") {
     Amount = 1206;
   } else if (subscription === "Gold") {
@@ -162,7 +162,7 @@ const makePaymentMpesa = async (req, res) => {
         PartyA: `254${phone}`,
         PartyB: "8863150",
         PhoneNumber: `254${phone}`,
-        CallBackURL: `${URL}/${userId}/${subscription}`,
+        CallBackURL: `https://fuckmate.boo/api/paycheck/${userId}/${subscription}`,
         AccountReference: "Admin",
         TransactionDesc: "Subcription",
       },
