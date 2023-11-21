@@ -69,23 +69,24 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
   const ADMIN_CHAT_NAME = "Admin";
   const ADMIN_MESSAGE_CONTENT =
     "Hello from Admin! We aim to respond to your description within 24 hours.";
+  let adminUser;
   try {
-    const adminUser = await User.findOneAndUpdate(
-      { email: ADMIN_EMAIL },
-      {},
-      { upsert: true, new: true }
-    );
-
-    const adminChat = await Chat.findOneAndUpdate(
-      {
-        chatName: ADMIN_CHAT_NAME,
-        users: { $elemMatch: { $eq: req.user._id } },
-      },
-      { $addToSet: { users: adminUser._id } },
-      { upsert: true, new: true }
-    ).populate("users", "-password");
-
     if (req.user.email === ADMIN_EMAIL) {
+      adminUser = await User.findOneAndUpdate(
+        { email: ADMIN_EMAIL },
+        {},
+        { upsert: true, new: true }
+      );
+
+      const adminChat = await Chat.findOneAndUpdate(
+        {
+          chatName: ADMIN_CHAT_NAME,
+          users: { $elemMatch: { $eq: req.user._id } },
+        },
+        { $addToSet: { users: adminUser._id } },
+        { upsert: true, new: true }
+      ).populate("users", "-password");
+
       return res.json(adminChat);
     }
 
@@ -97,7 +98,8 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
       .sort({ updatedAt: -1 })
       .exec();
 
-    if (userChats.length === 0) {
+    if (userChats.length === 0 && req.user.gender === "female") {
+      adminUser = await User.findOne({ email: ADMIN_EMAIL });
       const defaultChatData = {
         chatName: ADMIN_CHAT_NAME,
         users: [req.user._id, adminUser._id],

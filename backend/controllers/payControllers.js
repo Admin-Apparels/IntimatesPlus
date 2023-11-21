@@ -5,6 +5,9 @@ const { getIO } = require("../socket");
 
 dotenv.config({ path: "./secrets.env" });
 
+let userId;
+let subscription;
+
 async function generateAccessToken() {
   const { CLIENT_ID, APP_SECRET } = process.env;
   const auth = Buffer.from(CLIENT_ID + ":" + APP_SECRET).toString("base64");
@@ -93,11 +96,11 @@ const updateUser = async (req, res) => {
   res.json(updatedUser);
 };
 const makePaymentMpesa = async (req, res) => {
-  const { userId } = req.params;
-  const { subscription, phoneNumber } = req.body;
+  userId = req.params.userId;
+  subscription = req.body.subscription;
+  const phoneNumber = req.body.phoneNumber;
 
   const phone = parseInt(phoneNumber.slice(1));
-  const URL = process.env.Callback;
 
   const current_time = new Date();
   const year = current_time.getFullYear();
@@ -151,7 +154,7 @@ const makePaymentMpesa = async (req, res) => {
   try {
     const token = await generateToken();
 
-    await axios.post(
+    const { data } = await axios.post(
       "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
       {
         BusinessShortCode: "6549717",
@@ -162,7 +165,7 @@ const makePaymentMpesa = async (req, res) => {
         PartyA: `254${phone}`,
         PartyB: "8863150",
         PhoneNumber: `254${phone}`,
-        CallBackURL: `https://fuckmate.boo/api/paycheck/${userId}/${subscription}`,
+        CallBackURL: `https://39b9-154-76-145-180.ngrok-free.app/api/paycheck/callback`,
         AccountReference: "Admin",
         TransactionDesc: "Subcription",
       },
@@ -173,21 +176,17 @@ const makePaymentMpesa = async (req, res) => {
         },
       }
     );
+    res.json(data);
   } catch (error) {
     console.log("My Error", error);
   }
 };
 
 const CallBackURL = async (req, res) => {
-  const { userId, subscription } = req.params;
-
   const { Body } = req.body;
-
-  console.log(Body);
 
   const io = getIO();
   if (!userId && !subscription) {
-    console.log("Function returned");
     return res.status(401);
   }
   if (!Body.stkCallback.CallbackMetadata) {
