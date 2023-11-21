@@ -33,27 +33,29 @@ const Ads = () => {
 
   useEffect(() => {
     if (ads || user.isNewUser === undefined) {
-      setTimeout(() => {
+      const openModalTimeout = setTimeout(() => {
+        setCountdown(15);
         onOpen();
-      }, 10000);
-    }
-    const interval = setInterval(() => {
-      if (countdown > 0) {
-        setCountdown(countdown - 1);
-      } else {
-        clearInterval(interval);
-      }
-    }, 1000);
+      }, 60000);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [ads, setAds, onOpen, countdown, user.adsSubscription, user.isNewUser]);
+      const countdownInterval = setInterval(() => {
+        if (countdown > 0) {
+          setCountdown(countdown - 1);
+        } else {
+          clearInterval(countdownInterval);
+        }
+      }, 1000);
+
+      return () => {
+        clearTimeout(openModalTimeout);
+        clearInterval(countdownInterval);
+      };
+    }
+  }, [ads, onOpen, countdown, user.adsSubscription, user.isNewUser]);
+
   const handleClose = () => {
-    setTimeout(() => {
-      setCountdown(25);
-      setAds(true);
-    }, 120000);
+    setCountdown(15);
+    setAds(true);
   };
 
   const handleModels = () => {
