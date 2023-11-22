@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "chat-app",
   "main": "./backend/index.js",
- "scripts": {
+  "scripts": {
     "start": "concurrently \"npm run frontend\" \"npm run backend\"",
     "frontend": "cd frontend && npm start",
     "backend": "cd backend && nodemon index.js",
@@ -27,7 +27,8 @@
     "nodemailer": "^6.9.5",
     "nodemon": "^3.0.1",
     "react-social-icons": "^5.15.0",
-    "socket.io": "^4.6.1"
+    "socket.io": "^4.6.1",
+    "xmldom": "^0.6.0"
   },
   "engines": {
     "node": "18.5.0",

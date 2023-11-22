@@ -1,23 +1,49 @@
-import React, { useEffect } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { ChatState } from "../Context/ChatProvider";
 
-const AdSenseComponent = () => {
+const DisplayAdsComponent = () => {
+  const [ads, setAds] = useState([]);
+  const { user } = ChatState();
+
   useEffect(() => {
-    (window.adsbygoogle = window.adsbygoogle || []).push({});
-  }, []);
+    const fetchAds = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+        const { data } = await axios.get(
+          "/api/user/getadsninfo/advertisement",
+          config
+        );
+
+        setAds(data);
+      } catch (error) {
+        console.error("Error fetching/displaying ads:", error);
+      }
+    };
+
+    fetchAds();
+  }, [user.token]);
+
+  const getRandomAd = () => {
+    const randomIndex = Math.floor(Math.random() * ads.length);
+    return ads[randomIndex];
+  };
 
   return (
-    <amp-ad
-      width="100vw"
-      height="320"
-      type="adsense"
-      data-ad-client="ca-pub-5708660695345943"
-      data-ad-slot="4463217552"
-      data-auto-format="rspv"
-      data-full-width=""
-    >
-      <div overflow=""></div>
-    </amp-ad>
+    <div>
+      <h1>Display Ads</h1>
+      {ads.length}
+      {ads.length > 0 && (
+        <div>
+          <p>{getRandomAd().someProperty}</p>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default AdSenseComponent;
+export default DisplayAdsComponent;

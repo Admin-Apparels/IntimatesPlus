@@ -84,7 +84,7 @@ export default function Signup() {
       localStorage.setItem("userInfo", JSON.stringify(userData));
 
       setTimeout(() => {
-        userData.isNewUser = false;
+        delete userData.isNewUser;
         localStorage.setItem("userInfo", JSON.stringify(userData));
       }, 3000);
       setPicLoading(false);

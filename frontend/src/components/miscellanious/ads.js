@@ -19,7 +19,8 @@ import axios from "axios";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import socketIOClient from "socket.io-client";
-import AdSenseComponent from "./adSense";
+import DisplayAdsComponent from "./adSense";
+
 const Ads = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [disable, setDisable] = useState(false);
@@ -32,7 +33,7 @@ const Ads = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (ads || user.isNewUser === undefined) {
+    if (ads || (user.isNewUser === undefined && !ads)) {
       const openModalTimeout = setTimeout(() => {
         setCountdown(15);
         onOpen();
@@ -252,7 +253,10 @@ const Ads = () => {
                 </>
               )
             ) : (
-              <AdSenseComponent />
+              <>
+                Ads Come Here
+                <DisplayAdsComponent />
+              </>
             )}
           </ModalBody>
           <ModalFooter display={"flex"} justifyContent={"space-between"}>

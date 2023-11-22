@@ -115,11 +115,11 @@ const Signup = () => {
         },
         config
       );
-      const userData = await { ...data, isNewUser: true };
+      let userData = await { ...data, isNewUser: true };
       localStorage.setItem("userInfo", JSON.stringify(userData));
 
       setTimeout(() => {
-        userData.isNewUser = false;
+        delete userData.isNewUser;
         localStorage.setItem("userInfo", JSON.stringify(userData));
       }, 2500);
       setPicLoading(false);

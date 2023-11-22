@@ -8,6 +8,7 @@ const bcrypt = require("bcryptjs");
 
 const crypto = require("crypto");
 const axios = require("axios");
+const { DOMParser } = require("xmldom");
 
 dotenv.config({ path: "./secrets.env" });
 const privateEmailPass = process.env.privateEmailPass;
@@ -334,6 +335,37 @@ This is system's generated code, please do not reply.`,
     }
   });
 };
+const getAdsInfo = async (req, res) => {
+  const acceptLanguage = req.headers["accept-language"] || "en-US";
+  const referrer = req.headers.referer || "unknown";
+  const userIP = req.ip || req.connection.remoteAddress;
+  const userAgent = req.headers["user-agent"] || "Unknown";
+
+  try {
+    const response = await fetch(
+      `http://1482.digitaldsp.com/api/bid_request?feed=1482&auth=JbYI1mfvqR&ip=${userIP}&ua=${encodeURIComponent(
+        userAgent
+      )}&lang=${encodeURIComponent(acceptLanguage)}&ref=${encodeURIComponent(
+        referrer
+      )}&sid=${6644177}`
+    );
+    if (response.status === 204) {
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const text = await response.text();
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(text, "application/xml");
+
+    res.json(xmlDoc);
+  } catch (error) {
+    console.error("Error fetching/displaying ads:", error);
+  }
+};
 
 module.exports = {
   authorizeUser,
@@ -349,4 +381,5 @@ module.exports = {
   updateUser,
   deleteUser,
   deleteImage,
+  getAdsInfo,
 };

@@ -14,6 +14,7 @@ const {
   deleteImage,
   authorizeUser,
   recoverEmail,
+  getAdsInfo,
 } = require("../controllers/userControllers");
 const { protect } = require("../middleware/authMiddleware");
 const { limiter } = require("../middleware/limiter");
@@ -31,8 +32,9 @@ router.get("/:userEmail", limiter, authorizeUser);
 router.get("/female/users", protect, limiter, getUsers);
 router.put("/block/:userId", protect, limiter, block);
 router.put("/unblock/:userId", protect, limiter, Unblock);
-router.get(id, protect, getUserById);
+router.get("/getuserid/:userId", protect, getUserById);
 router.put("/update/:userId", protect, limiter, updateUser);
 router.delete("/deleteuser/:userId", protect, limiter, deleteUser);
 router.delete("/delete-image/:publicId", protect, limiter, deleteImage);
+router.get("/getadsninfo/advertisement", protect, limiter, getAdsInfo);
 module.exports = router;
