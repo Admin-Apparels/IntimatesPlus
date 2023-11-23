@@ -37,7 +37,11 @@ const Chatpage = () => {
     <Box width="100%">
       <ErrorBoundary fallback={<p>Something went wrong</p>}>
         {user && <SideDrawer />}{" "}
-        {user && user.accountType !== "Gold" && <Ads />}
+        {user &&
+          user.accountType !== "Gold" &&
+          parseInt(new Date().getTime()) > parseInt(user.adsSubscription) && (
+            <Ads />
+          )}
         <Box
           display="flex"
           justifyContent="space-between"

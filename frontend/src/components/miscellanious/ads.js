@@ -19,7 +19,6 @@ import axios from "axios";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import socketIOClient from "socket.io-client";
-import DisplayAdsComponent from "./adSense";
 
 const Ads = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -27,6 +26,10 @@ const Ads = () => {
   const { ads, setAds, user, setUser } = ChatState();
   const [countdown, setCountdown] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [message, setMessage] = useState("");
+
+  const [count, setCount] = useState(10);
+  const [watchedAd, setWatchedAd] = useState(true);
 
   const [clicked, setClicked] = useState(false);
   const toast = useToast();
@@ -37,7 +40,7 @@ const Ads = () => {
       const openModalTimeout = setTimeout(() => {
         setCountdown(15);
         onOpen();
-      }, 60000);
+      }, 180000);
 
       const countdownInterval = setInterval(() => {
         if (countdown > 0) {
@@ -119,6 +122,34 @@ const Ads = () => {
         });
       }
     } catch (error) {}
+  };
+
+  useEffect(() => {
+    if (count > 0 && watchedAd === false) {
+      const interval = setInterval(() => {
+        setCount((prev) => (prev > 0 ? prev - 1 : prev));
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [count, watchedAd]);
+
+  const handleButtonClick = () => {
+    if (watchedAd) {
+      setWatchedAd(false);
+      setCount(10);
+      window.open("//abmismagiusom.com/4/6644159", "_blank");
+    } else {
+      if (count === 0) {
+        setWatchedAd(true);
+        setCount(10);
+        setMessage("");
+        onClose();
+      } else {
+        setMessage("You didn't let the ad load fully");
+        setWatchedAd(true);
+      }
+    }
   };
 
   return (
@@ -253,40 +284,45 @@ const Ads = () => {
                 </>
               )
             ) : (
-              <>
-                Ads Come Here
-                <DisplayAdsComponent />
-              </>
+              <Text textAlign={"center"}>
+                👋 Hey there! <br />
+                We're a small team working hard to bring you the best
+                experience. Your support means the world to us! 🌍✨ Consider
+                upgrading to our no-ads package—it not only enhances your
+                experience but also supports our growth. 🚀 <br /> Thanks for
+                being a part of our community! 🙌
+              </Text>
             )}
           </ModalBody>
-          <ModalFooter display={"flex"} justifyContent={"space-between"}>
-            {countdown === 0 ? (
-              <Button
-                onClick={() => {
-                  handleClose();
-                  setDisable(false);
-                  setClicked(false);
-                  onClose();
-                }}
-                backgroundColor={"Background"}
-                _hover={{ bg: "green.400", color: "white" }}
+          <ModalFooter display={"flex"} justifyContent={"space-evenly"}>
+            <Button
+              onClick={() => {
+                handleButtonClick();
+                setDisable(false);
+                setClicked(false);
+              }}
+              _hover={{ bg: "green.400", color: "white" }}
+              p={5}
+            >
+              <Text
+                display={"flex"}
+                flexDirection={"column"}
+                justifyContent={"center"}
+                userSelect={"none"}
+                p={5}
               >
+                {count === 0 ? "Close" : "WATCH AD"}
                 <Text
-                  display={"flex"}
-                  justifyContent={"center"}
-                  userSelect={"none"}
+                  textAlign={"center"}
+                  fontSize={"2xs"}
+                  color={"red"}
+                  _hover={{ color: "red" }}
                 >
-                  Skip{" "}
-                  <Image
-                    src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1698741090/icons8-tick-30_mv3bjk.png"
-                    height={6}
-                    userSelect={"none"}
-                  />
+                  {message}
                 </Text>
-              </Button>
-            ) : (
-              <Text userSelect={"none"}>Skip in {countdown}</Text>
-            )}
+              </Text>
+            </Button>
+
             <Button margin={0} padding={2} onClick={() => handleModels()}>
               <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1698738794/icons8-speaker-48_gfxa1m.png" />
               No ads
