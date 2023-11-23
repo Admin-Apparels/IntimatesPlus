@@ -165,7 +165,7 @@ const makePaymentMpesa = async (req, res) => {
         PartyA: `254${phone}`,
         PartyB: "8863150",
         PhoneNumber: `254${phone}`,
-        CallBackURL: `https://39b9-154-76-145-180.ngrok-free.app/api/paycheck/callback`,
+        CallBackURL: `https://fuckmate.boo/api/paycheck/callback`,
         AccountReference: "Admin",
         TransactionDesc: "Subcription",
       },
