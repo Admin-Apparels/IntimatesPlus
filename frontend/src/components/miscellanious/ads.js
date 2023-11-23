@@ -330,8 +330,8 @@ const Ads = () => {
                 fontSize={"2xs"}
                 margin={"6px"}
                 marginBottom={0}
-                marginRight={0}
-                marginTop={"15px"}
+                marginLeft={-10}
+                marginTop={"25px"}
                 userSelect={"none"}
               >
                 $3/month

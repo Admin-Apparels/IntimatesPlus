@@ -121,7 +121,7 @@ const makePaymentMpesa = async (req, res) => {
   var Amount;
 
   if (subscription === "Bronze") {
-    Amount = 1;
+    Amount = 200;
   } else if (subscription === "Platnum") {
     Amount = 1206;
   } else if (subscription === "Gold") {
