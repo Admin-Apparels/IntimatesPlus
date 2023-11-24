@@ -140,7 +140,6 @@ function SideDrawer() {
           color={"green"}
           backgroundColor={"transparent"}
           fontFamily={"cursive"}
-          fontSize={"13px"}
           userSelect={"none"}
         >
           {formatOnlineUsersCount(onlineUsersCount)}

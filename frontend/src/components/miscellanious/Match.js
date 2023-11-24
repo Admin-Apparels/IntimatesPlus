@@ -182,7 +182,6 @@ const MatchModal = () => {
               display={"flex"}
               color={"red.500"}
             >
-              Match
               <Image
                 src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1695818135/icons8-fruit-48_hirauj.png"
                 loading="lazy"

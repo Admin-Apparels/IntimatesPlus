@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-import { Button, Image, useToast } from "@chakra-ui/react";
+import { Button, Image, useToast, Text, Box } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 
 const GoogleLoginButton = () => {
   const navigate = useNavigate();
   const toast = useToast();
+  const [tryAgain, setTryAgain] = useState(false);
   const { email, setEmail, name, setName, setPic } = ChatState();
 
   const submitHandler = async () => {
@@ -63,20 +64,35 @@ const GoogleLoginButton = () => {
   });
 
   return (
-    <Button
-      onClick={() => googleLogin()}
+    <Box
       display={"flex"}
+      flexDirection={"column"}
       justifyContent={"center"}
       width={"100%"}
     >
-      <Image
-        height={5}
-        margin={1}
-        src="https://developers.google.com/identity/images/g-logo.png"
-        alt="Google Logo"
-      />
-      Sign in with Google
-    </Button>
+      <Button
+        onClick={() => {
+          googleLogin();
+          setTryAgain((prev) => !prev);
+        }}
+        display={"flex"}
+        justifyContent={"center"}
+        width={"100%"}
+      >
+        <Image
+          height={5}
+          margin={1}
+          src="https://developers.google.com/identity/images/g-logo.png"
+          alt="Google Logo"
+        />
+        Sign in with Google
+      </Button>
+      <Text fontSize={"15px"} color={"red.400"}>
+        {tryAgain
+          ? "Oops! Login unsuccessful. Please give it another shot."
+          : ""}
+      </Text>
+    </Box>
   );
 };
 

@@ -184,7 +184,7 @@ export default function Signup() {
             <Textarea
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder="Hi Admin, I am Nina from Nairobi looking for a..."
+              placeholder="Hello Admin! I'm Nina, a young woman based in Nairobi. I'm passionate about my work but sometimes lonely during my free time, I'd love ..."
               size="sm"
               minLength={MIN_CHARACTERS}
               maxLength={MAX_CHARACTERS}

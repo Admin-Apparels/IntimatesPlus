@@ -89,6 +89,8 @@ function Homepage() {
             justifyContent={{ base: "center", md: "space-between" }}
             alignItems={{ base: "center", md: "flex-start" }}
             marginTop={4}
+            p={0}
+            m={0}
           >
             <Box
               display={"flex"}
@@ -112,6 +114,8 @@ function Homepage() {
                 display="flex"
                 justifyContent={"space-around"}
                 width={"100%"}
+                p={0}
+                m={0}
               >
                 {" "}
                 <Link
@@ -170,6 +174,8 @@ function Homepage() {
               justifyContent={"space-between"}
               alignItems={"center"}
               width={{ base: "90%", md: "30%" }}
+              p={0}
+              m={0}
             >
               <Link href="#" m={1}>
                 <Image
