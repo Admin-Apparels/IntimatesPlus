@@ -311,7 +311,7 @@ const Ads = () => {
                 userSelect={"none"}
                 p={5}
               >
-                {count === 0 ? "Close" : "WATCH AD"}
+                {count === 0 || !watchedAd ? "Close" : "WATCH AD"}
                 <Text
                   textAlign={"center"}
                   fontSize={"2xs"}
