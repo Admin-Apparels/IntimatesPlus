@@ -87,7 +87,7 @@ const GoogleLoginButton = () => {
         />
         Sign in with Google
       </Button>
-      <Text fontSize={"15px"} color={"red.400"}>
+      <Text fontSize={"15px"} color={"red.400"} p={0} m={0}>
         {tryAgain
           ? "Oops! Login unsuccessful. Please give it another shot."
           : ""}

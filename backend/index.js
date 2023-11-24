@@ -8,6 +8,7 @@ const payRoutes = require("./routes/payRouter");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const path = require("path");
 const bodyParser = require("body-parser");
+
 const { initializeSocketIO } = require("./socket");
 initializeSocketIO();
 dotenv.config({ path: "./secrets.env" });
