@@ -180,16 +180,17 @@ const MyChat = (fetchAgain) => {
           fontWeight={"medium"}
           bgGradient="linear(to-r, black, grey)"
           bgClip="text"
+          userSelect={"none"}
         >
           My Chats:{" "}
         </Text>
-        <Text fontWeight={"bold"} fontFamily={"cursive"}>
+        <Text fontWeight={"bold"} fontFamily={"cursive"} userSelect={"none"}>
           {Array.isArray(chats) &&
             chats.length === 0 &&
             user.gender === "female" &&
             "Wait from Admin"}
         </Text>
-        <Text fontWeight={"bold"} fontFamily={"cursive"}>
+        <Text fontWeight={"bold"} fontFamily={"cursive"} userSelect={"none"}>
           {Array.isArray(chats) &&
             chats.length === 0 &&
             user.gender === "male" &&

@@ -35,7 +35,7 @@ const Chatpage = () => {
 
   return (
     <Box width="100%">
-      <ErrorBoundary fallback={<p>Something went wrong</p>}>
+      <ErrorBoundary fallback={<p>Something went wrong</p>} userSelect={"none"}>
         {user && <SideDrawer />}{" "}
         {user &&
           user.accountType !== "Gold" &&

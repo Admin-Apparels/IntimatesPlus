@@ -139,10 +139,11 @@ function SideDrawer() {
           placement="top"
           color={"green"}
           backgroundColor={"transparent"}
+          fontFamily={"cursive"}
+          fontSize={"13px"}
+          userSelect={"none"}
         >
-          <Text fontFamily={"cursive"} fontSize={"13px"} userSelect={"none"}>
-            {formatOnlineUsersCount(onlineUsersCount)}
-          </Text>
+          {formatOnlineUsersCount(onlineUsersCount)}
         </Tooltip>
 
         <div>
