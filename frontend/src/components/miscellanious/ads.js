@@ -303,6 +303,8 @@ const Ads = () => {
               }}
               _hover={{ bg: "green.400", color: "white" }}
               p={5}
+              borderRight={"1px"}
+              borderLeft={"1px"}
             >
               <Text
                 display={"flex"}
@@ -323,7 +325,13 @@ const Ads = () => {
               </Text>
             </Button>
 
-            <Button margin={0} padding={2} onClick={() => handleModels()}>
+            <Button
+              margin={0}
+              padding={2}
+              onClick={() => handleModels()}
+              borderLeft={"1px"}
+              borderRight={"1px"}
+            >
               <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1698738794/icons8-speaker-48_gfxa1m.png" />
               No ads
               <Text

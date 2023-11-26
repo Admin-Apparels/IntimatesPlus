@@ -189,14 +189,6 @@ const MatchModal = () => {
                 p={0}
                 m={0}
                 h={5}
-              />{" "}
-              <Image
-                src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1695818135/icons8-water-48_tlrkf4.png"
-                loading="lazy"
-                alt=""
-                p={0}
-                m={0}
-                h={5}
               />
             </Text>
           }

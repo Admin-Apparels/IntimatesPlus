@@ -50,12 +50,6 @@ function Homepage() {
             textColor={"blue.500"}
           >
             fuckmate.boo
-            <Image
-              height={10}
-              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1695820899/icons8-no-one-under-eighteen-emoji-48_cznua5.png"
-              loading="lazy"
-              alt=""
-            />
           </Text>
         </Box>
         <Box bg="white" w="100%" p={4} borderRadius="lg" borderWidth="1px">
@@ -104,6 +98,7 @@ function Homepage() {
                 variant="body2"
                 textAlign="center"
                 userSelect={"none"}
+                textColor={"whiteAlpha.700"}
                 fontFamily={"mono"}
               >
                 This site strictly prohibits any form of prostitution. After the
@@ -157,6 +152,7 @@ function Homepage() {
                 FUCKMATE.BOO{" "}
               </Text>
               <Text
+                textColor={"whiteAlpha.700"}
                 textAlign={"center"}
                 userSelect={"none"}
                 fontFamily={"mono"}
@@ -177,10 +173,10 @@ function Homepage() {
               p={0}
               m={0}
             >
-              <Link href="#" m={1}>
+              <Link href="https://twitter.com/fuckmateboo" m={0} target="blank">
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1697382400/icons8-twitterx-250_tulfw8.png"
-                  height={7}
+                  height={6}
                 />
               </Link>
               <Link href="#" m={1}>

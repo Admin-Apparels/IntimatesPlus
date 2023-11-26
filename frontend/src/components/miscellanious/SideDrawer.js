@@ -2,7 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
-import { Badge } from "@chakra-ui/react";
+import { Badge, Image, useBreakpointValue } from "@chakra-ui/react";
 import {
   Menu,
   MenuButton,
@@ -54,6 +54,12 @@ function SideDrawer() {
     localStorage.removeItem("userInfo");
     history("/");
   };
+  const displayValue = useBreakpointValue({ base: "none", md: "flex" });
+
+  const textVisibility = useBreakpointValue({
+    base: "hidden",
+    md: "visible",
+  });
 
   const accessChat = async (userId, user) => {
     const existingChat = chats.find(
@@ -104,13 +110,25 @@ function SideDrawer() {
   return (
     <>
       <Box
-        display="flex"
+        display={"flex"}
         justifyContent="space-between"
         alignItems="center"
         bg="white"
         w="100%"
         p="5px 10px 5px 10px"
       >
+        <Text
+          display={displayValue}
+          justifyContent={"center"}
+          alignItems={"space-between"}
+          fontSize="2xl"
+          fontWeight={"bold"}
+          userSelect={"none"}
+          textColor={"blue.500"}
+          visibility={textVisibility}
+        >
+          fuckmate.boo
+        </Text>
         <Tooltip
           label="Search Users to chat"
           placement="bottom-end"
@@ -133,16 +151,46 @@ function SideDrawer() {
             </Text>
           </Button>
         </Tooltip>
-        {user.gender === "male" && <MatchModal />}
+        {user.gender === "male" ? (
+          <MatchModal />
+        ) : (
+          <Tooltip
+            label="This feature is under development"
+            color={"green"}
+            background={"transparent"}
+            fontFamily={"cursive"}
+            cursor="pointer"
+          >
+            <Image
+              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1695818135/icons8-water-48_tlrkf4.png"
+              loading="lazy"
+              alt=""
+              p={0}
+              m={0}
+              _hover={{ backgroundColor: "green.100" }}
+              borderRadius={"50%"}
+              h={5}
+            />
+          </Tooltip>
+        )}
         <Tooltip
           label="Users Online"
-          placement="top"
+          placement="bottom"
           color={"green"}
           backgroundColor={"transparent"}
           fontFamily={"cursive"}
           userSelect={"none"}
         >
-          {formatOnlineUsersCount(onlineUsersCount)}
+          <Text
+            fontSize={"14px"}
+            fontFamily={"cursive"}
+            userSelect={"none"}
+            _hover={{ backgroundColor: "green.100" }}
+            borderRadius={"50%"}
+            p={2}
+          >
+            {formatOnlineUsersCount(onlineUsersCount)}
+          </Text>
         </Tooltip>
 
         <div>
