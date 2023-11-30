@@ -175,7 +175,7 @@ function Homepage() {
             >
               <Link href="https://twitter.com/fuckmateboo" m={0} target="blank">
                 <Image
-                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1697382400/icons8-twitterx-250_tulfw8.png"
+                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701357033/icons8-twitter-50_3_vz8pfu.png"
                   height={6}
                 />
               </Link>
