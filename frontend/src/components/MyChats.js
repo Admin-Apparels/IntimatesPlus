@@ -190,7 +190,13 @@ const MyChat = (fetchAgain) => {
             user.gender === "female" &&
             "Wait from Admin"}
         </Text>
-        <Text fontWeight={"bold"} fontFamily={"cursive"} userSelect={"none"}>
+        <Text
+          fontWeight={"bold"}
+          fontFamily={"cursive"}
+          userSelect={"none"}
+          bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
+          bgClip="text"
+        >
           {Array.isArray(chats) &&
             chats.length === 0 &&
             user.gender === "male" &&

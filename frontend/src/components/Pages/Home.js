@@ -161,7 +161,7 @@ function Homepage() {
                 We bring together individuals seeking companionship, romance,
                 and genuine connections.
               </Text>
-              <Text color="blue.100">{`Copyright © ${new Date().getFullYear()}`}</Text>
+              <Text color="blue.100">{`18+ Copyright © ${new Date().getFullYear()}`}</Text>
             </Box>
 
             <Box

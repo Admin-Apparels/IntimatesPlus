@@ -154,13 +154,7 @@ function SideDrawer() {
         {user.gender === "male" ? (
           <MatchModal />
         ) : (
-          <Tooltip
-            label="This feature is under development"
-            color={"green"}
-            background={"transparent"}
-            fontFamily={"cursive"}
-            cursor="pointer"
-          >
+          <Button borderRadius={"50%"}>
             <Image
               src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1695818135/icons8-water-48_tlrkf4.png"
               loading="lazy"
@@ -168,10 +162,9 @@ function SideDrawer() {
               p={0}
               m={0}
               _hover={{ backgroundColor: "green.100" }}
-              borderRadius={"50%"}
               h={5}
             />
-          </Tooltip>
+          </Button>
         )}
         <Tooltip
           label="Users Online"

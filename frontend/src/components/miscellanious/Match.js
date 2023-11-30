@@ -169,7 +169,6 @@ const MatchModal = () => {
         />
       ) : (
         <IconButton
-          backgroundColor={"transparent"}
           borderRadius={20}
           padding={0}
           margin={0}
@@ -177,7 +176,7 @@ const MatchModal = () => {
           icon={
             <Text
               p={0}
-              m={1}
+              m={0}
               fontStyle={"italic"}
               display={"flex"}
               color={"red.500"}
@@ -188,7 +187,7 @@ const MatchModal = () => {
                 alt=""
                 p={0}
                 m={0}
-                h={5}
+                h={6}
               />
             </Text>
           }

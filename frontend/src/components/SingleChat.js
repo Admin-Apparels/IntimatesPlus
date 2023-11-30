@@ -579,6 +579,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             pb={3}
             fontFamily="Work sans"
             userSelect={"none"}
+            bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
+            bgClip="text"
           >
             Click on a user to start chatting
           </Text>
