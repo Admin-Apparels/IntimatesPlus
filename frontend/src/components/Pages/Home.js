@@ -47,7 +47,8 @@ function Homepage() {
             fontSize="4xl"
             fontWeight={"bold"}
             userSelect={"none"}
-            textColor={"blue.500"}
+            textColor={"red.500"}
+            fontFamily={"cursive"}
           >
             fuckmate.boo
           </Text>
@@ -146,8 +147,9 @@ function Homepage() {
                 p={0}
                 m={0}
                 userSelect={"none"}
-                textColor={"blue.100"}
                 textDecoration={"underline"}
+                textColor={"red.500"}
+                fontFamily={"cursive"}
               >
                 FUCKMATE.BOO{" "}
               </Text>

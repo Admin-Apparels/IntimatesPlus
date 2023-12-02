@@ -31,6 +31,7 @@ import { getSenderName } from "../config/ChatLogics";
 import UserListItem from "../userAvatar/UserListItem";
 import { ChatState } from "../Context/ChatProvider";
 import MatchModal from "./Match";
+import LoveIcon from "./loveIcon";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -43,7 +44,6 @@ function SideDrawer() {
     setNotification,
     chats,
     setChats,
-    onlineUsersCount,
   } = ChatState();
 
   const toast = useToast();
@@ -97,15 +97,6 @@ function SideDrawer() {
       });
     }
   };
-  function formatOnlineUsersCount(onlineUsersCount) {
-    if (onlineUsersCount < 1000) {
-      return onlineUsersCount.toString();
-    } else if (onlineUsersCount < 10000) {
-      return `${(onlineUsersCount / 1000).toFixed(1)}k`;
-    } else {
-      return `${(onlineUsersCount / 1000).toFixed(1)}k`;
-    }
-  }
 
   return (
     <>
@@ -124,7 +115,8 @@ function SideDrawer() {
           fontSize="2xl"
           fontWeight={"bold"}
           userSelect={"none"}
-          textColor={"blue.500"}
+          textColor={"red.500"}
+          fontFamily={"cursive"}
           visibility={textVisibility}
         >
           fuckmate.boo
@@ -166,25 +158,8 @@ function SideDrawer() {
             />
           </Button>
         )}
-        <Tooltip
-          label="Users Online"
-          placement="bottom"
-          color={"green"}
-          backgroundColor={"transparent"}
-          fontFamily={"cursive"}
-          userSelect={"none"}
-        >
-          <Text
-            fontSize={"14px"}
-            fontFamily={"cursive"}
-            userSelect={"none"}
-            _hover={{ backgroundColor: "green.100" }}
-            borderRadius={"50%"}
-            p={2}
-          >
-            {formatOnlineUsersCount(onlineUsersCount)}
-          </Text>
-        </Tooltip>
+
+        <LoveIcon />
 
         <div>
           <Menu>

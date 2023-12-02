@@ -7,7 +7,7 @@ import ChatLoading from "./ChatLoading";
 
 import { ChatState } from "./Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
-import { Image } from "@chakra-ui/react";
+import { Image, calc } from "@chakra-ui/react";
 
 const MyChat = (fetchAgain) => {
   const [loggedUser, setLoggedUser] = useState();
@@ -184,12 +184,6 @@ const MyChat = (fetchAgain) => {
         >
           My Chats:{" "}
         </Text>
-        <Text fontWeight={"bold"} fontFamily={"cursive"} userSelect={"none"}>
-          {Array.isArray(chats) &&
-            chats.length === 0 &&
-            user.gender === "female" &&
-            "Wait from Admin"}
-        </Text>
         <Text
           fontWeight={"bold"}
           fontFamily={"cursive"}
@@ -197,10 +191,7 @@ const MyChat = (fetchAgain) => {
           bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
           bgClip="text"
         >
-          {Array.isArray(chats) &&
-            chats.length === 0 &&
-            user.gender === "male" &&
-            "Create Chats Above"}
+          {!chats ? calc(chats.length) : 0} Boos
         </Text>
       </Box>
       <Box
@@ -212,8 +203,25 @@ const MyChat = (fetchAgain) => {
         h="100%"
         borderRadius="lg"
         overflowY="hidden"
+        position={"relative"}
       >
-        {" "}
+        {chats.length === 0 && (
+          <Box
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            position={"absolute"}
+            width={"100%"}
+            height={"100%"}
+            overflowX={"auto"}
+            userSelect={"none"}
+            bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
+            bgClip="text"
+          >
+            <Text>You have no chats available, create one above</Text>
+          </Box>
+        )}
+
         {chats && Array.isArray(chats) ? (
           <Stack overflowY="scroll">{renderChatItems()}</Stack>
         ) : (
