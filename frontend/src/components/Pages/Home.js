@@ -47,7 +47,7 @@ function Homepage() {
             fontSize="4xl"
             fontWeight={"bold"}
             userSelect={"none"}
-            textColor={"red.500"}
+            textColor={"purple.500"}
           >
             fuckmate.boo
           </Text>
@@ -146,10 +146,9 @@ function Homepage() {
                 p={0}
                 m={0}
                 userSelect={"none"}
-                textDecoration={"underline"}
-                textColor={"red.500"}
+                textColor={"blue.500"}
               >
-                FUCKMATE.BOO{" "}
+                fuckmate.boo
               </Text>
               <Text
                 textColor={"whiteAlpha.700"}
@@ -165,7 +164,7 @@ function Homepage() {
                 {" "}
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701515284/icons8-18-plus-48_jf2fci.png"
-                  height={7}
+                  height={6}
                 />
                 {`Copyright © ${new Date().getFullYear()}`}
               </Text>

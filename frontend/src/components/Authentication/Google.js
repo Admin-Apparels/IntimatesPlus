@@ -83,7 +83,7 @@ const GoogleLoginButton = () => {
           height={5}
           margin={1}
           src="https://developers.google.com/identity/images/g-logo.png"
-          alt="Google Logo"
+          alt=""
         />
         Sign in with Google
       </Button>

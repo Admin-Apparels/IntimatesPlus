@@ -188,8 +188,8 @@ const MyChat = (fetchAgain) => {
         <Text
           display={"flex"}
           justifyContent={"space-between"}
-          fontWeight={"bold"}
           userSelect={"none"}
+          fontFamily={"cursive"}
         >
           {chats !== undefined ? chats.length : 0}
           <Text color={"red.500"} paddingLeft={2}>
