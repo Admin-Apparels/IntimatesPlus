@@ -116,7 +116,6 @@ function SideDrawer() {
           fontWeight={"bold"}
           userSelect={"none"}
           textColor={"red.500"}
-          fontFamily={"cursive"}
           visibility={textVisibility}
         >
           fuckmate.boo

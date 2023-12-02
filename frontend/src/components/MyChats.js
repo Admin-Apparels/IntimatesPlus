@@ -7,7 +7,7 @@ import ChatLoading from "./ChatLoading";
 
 import { ChatState } from "./Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
-import { Image, calc } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/react";
 
 const MyChat = (fetchAgain) => {
   const [loggedUser, setLoggedUser] = useState();
@@ -184,14 +184,18 @@ const MyChat = (fetchAgain) => {
         >
           My Chats:{" "}
         </Text>
+
         <Text
+          display={"flex"}
+          justifyContent={"space-between"}
           fontWeight={"bold"}
           fontFamily={"cursive"}
           userSelect={"none"}
-          bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
-          bgClip="text"
         >
-          {!chats ? calc(chats.length) : 0} Boos
+          {chats !== undefined ? chats.length : 0}
+          <Text color={"red.500"} paddingLeft={2}>
+            :Boo
+          </Text>
         </Text>
       </Box>
       <Box
@@ -208,16 +212,17 @@ const MyChat = (fetchAgain) => {
         {chats.length === 0 && (
           <Box
             display={"flex"}
+            flexDirection={"column"}
             justifyContent={"center"}
             alignItems={"center"}
             position={"absolute"}
             width={"100%"}
             height={"100%"}
-            overflowX={"auto"}
-            userSelect={"none"}
             bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
-            bgClip="text"
+            bgClip={"text"}
+            userSelect={"none"}
           >
+            <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701516427/icons8-not-found-48_sfynmt.png" />
             <Text>You have no chats available, create one above</Text>
           </Box>
         )}

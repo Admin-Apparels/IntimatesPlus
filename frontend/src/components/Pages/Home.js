@@ -48,7 +48,6 @@ function Homepage() {
             fontWeight={"bold"}
             userSelect={"none"}
             textColor={"red.500"}
-            fontFamily={"cursive"}
           >
             fuckmate.boo
           </Text>
@@ -149,7 +148,6 @@ function Homepage() {
                 userSelect={"none"}
                 textDecoration={"underline"}
                 textColor={"red.500"}
-                fontFamily={"cursive"}
               >
                 FUCKMATE.BOO{" "}
               </Text>
@@ -163,7 +161,14 @@ function Homepage() {
                 We bring together individuals seeking companionship, romance,
                 and genuine connections.
               </Text>
-              <Text color="blue.100">{`18+ Copyright © ${new Date().getFullYear()}`}</Text>
+              <Text color="blue.100" display={"flex"}>
+                {" "}
+                <Image
+                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701515284/icons8-18-plus-48_jf2fci.png"
+                  height={7}
+                />
+                {`Copyright © ${new Date().getFullYear()}`}
+              </Text>
             </Box>
 
             <Box

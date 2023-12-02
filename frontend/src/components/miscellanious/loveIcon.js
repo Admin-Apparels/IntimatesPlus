@@ -30,7 +30,12 @@ const IconWithText = ({ iconSize }) => {
         color={"green"}
         backgroundColor={"transparent"}
       >
-        <Text position="absolute" fontSize="2xs" fontFamily={"cursive"}>
+        <Text
+          position="absolute"
+          fontSize="2xs"
+          fontFamily={"cursive"}
+          userSelect={"none"}
+        >
           {formatOnlineUsersCount(onlineUsersCount)}
         </Text>
       </Tooltip>
