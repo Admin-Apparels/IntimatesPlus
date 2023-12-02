@@ -189,7 +189,6 @@ const MyChat = (fetchAgain) => {
           display={"flex"}
           justifyContent={"space-between"}
           fontWeight={"bold"}
-          fontFamily={"cursive"}
           userSelect={"none"}
         >
           {chats !== undefined ? chats.length : 0}
