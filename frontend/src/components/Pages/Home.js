@@ -11,12 +11,12 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Login from "../Authentication/Login";
 import Signup from "../Authentication/Signup";
 import ErrorBoundary from "./ErrorBoundary";
+import AnimatedTyping from "../miscellanious/animatedText";
 
 function Homepage() {
   const navigate = useNavigate();
@@ -40,17 +40,13 @@ function Homepage() {
           borderRadius="lg"
           borderWidth="1px"
         >
-          <Text
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"space-between"}
-            fontSize="4xl"
-            fontWeight={"bold"}
+          <AnimatedTyping />
+
+          <Image
+            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701779357/icons8-sex-64_a1hki1.png"
+            height={10}
             userSelect={"none"}
-            textColor={"purple.500"}
-          >
-            fuckmate.boo
-          </Text>
+          />
         </Box>
         <Box bg="white" w="100%" p={4} borderRadius="lg" borderWidth="1px">
           <Tabs isFitted variant="soft-rounded">
@@ -146,7 +142,7 @@ function Homepage() {
                 p={0}
                 m={0}
                 userSelect={"none"}
-                textColor={"blue.500"}
+                textColor={"purple.500"}
               >
                 fuckmate.boo
               </Text>
