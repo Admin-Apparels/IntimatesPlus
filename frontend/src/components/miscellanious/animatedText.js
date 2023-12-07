@@ -47,7 +47,7 @@ const AnimatedTyping = () => {
           fontSize="3xl"
           fontWeight="bold"
           userSelect="none"
-          textColor={"purple"}
+          textColor={"red.500"}
           border={"none"}
           padding="5px"
         />

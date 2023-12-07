@@ -94,7 +94,6 @@ function Homepage() {
                 variant="body2"
                 textAlign="center"
                 userSelect={"none"}
-                textColor={"whiteAlpha.700"}
                 fontFamily={"mono"}
               >
                 This site strictly prohibits any form of prostitution. After the
@@ -142,12 +141,11 @@ function Homepage() {
                 p={0}
                 m={0}
                 userSelect={"none"}
-                textColor={"purple.500"}
+                textColor={"red.500"}
               >
                 fuckmate.boo
               </Text>
               <Text
-                textColor={"whiteAlpha.700"}
                 textAlign={"center"}
                 userSelect={"none"}
                 fontFamily={"mono"}
