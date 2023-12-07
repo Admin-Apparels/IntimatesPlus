@@ -215,8 +215,10 @@ const MyChat = (fetchAgain) => {
             justifyContent={"center"}
             alignItems={"center"}
             position={"absolute"}
-            width={"100%"}
-            height={"100%"}
+            width={"96%"}
+            p={0}
+            m={0}
+            height={"76%"}
             bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
             bgClip={"text"}
             userSelect={"none"}
