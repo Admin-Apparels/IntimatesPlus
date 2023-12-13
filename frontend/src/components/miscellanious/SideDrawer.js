@@ -118,6 +118,10 @@ function SideDrawer() {
           textColor={"red.500"}
           visibility={textVisibility}
         >
+          <Image
+            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1702459043/icons8-fm-96_wl6d1g.png"
+            height={9}
+          />
           fuckmate.boo
         </Text>
         <Tooltip

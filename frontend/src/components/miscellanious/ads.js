@@ -284,7 +284,7 @@ const Ads = () => {
                 </>
               )
             ) : (
-              <Text textAlign={"center"}>
+              <Text textAlign={"center"} userSelect={"none"}>
                 👋 Hey there! <br />
                 We're a small team working hard to bring you the best
                 experience. Your support means the world to us! 🌍✨ Consider

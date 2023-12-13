@@ -211,6 +211,9 @@ const MatchModal = () => {
                 justifyContent="center"
                 bgGradient="linear(to-r, red.700, yellow.300)"
                 bgClip="text"
+                userSelect={"none"}
+                p={0}
+                m={0}
               >
                 {currentUser.name}
               </ModalHeader>
@@ -226,16 +229,20 @@ const MatchModal = () => {
                   boxSize={isFocused ? "20rem" : "10rem"}
                   src={currentUser.pic}
                   alt={currentUser.name}
-                  loading="lazy"
+                  height={"50vh"}
+                  width={"auto"}
+                  loading="eager"
                   cursor="pointer"
                   onClick={toggleFocus}
                   transition="box-size 0.3s ease-in-out"
+                  userSelect={"none"}
                 />{" "}
                 <Text
                   fontSize={{ base: "15px", md: "15px" }}
                   fontFamily="Work sans"
                   display={isFocused ? "none" : "flex"}
                   textAlign={"center"}
+                  userSelect={"none"}
                 >
                   {currentUser.value}
                 </Text>

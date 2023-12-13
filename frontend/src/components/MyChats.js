@@ -219,8 +219,6 @@ const MyChat = (fetchAgain) => {
             p={0}
             m={0}
             height={"76%"}
-            bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
-            bgClip={"text"}
             userSelect={"none"}
           >
             <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701516427/icons8-not-found-48_sfynmt.png" />

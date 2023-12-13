@@ -16,6 +16,7 @@ import {
   FormControl,
   Checkbox,
   Link,
+  Image,
 } from "@chakra-ui/react";
 import "../components/styles.css";
 import PageIndicator from "./miscellanious/PageIndicator";
@@ -572,18 +573,26 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           display="flex"
           alignItems="center"
           justifyContent="center"
+          position="relative"
           h="100%"
         >
           <Text
             fontSize="3xl"
             pb={3}
             fontFamily="Work sans"
-            userSelect={"none"}
-            bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
-            bgClip="text"
+            userSelect="none"
+            zIndex={1} // Ensure the text is above the image
           >
             Click on a user to start chatting
           </Text>
+          <Image
+            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1702457056/icons8-love_srfnyx.gif"
+            display="flex"
+            position="absolute"
+            justifyContent="center"
+            alignItems="center"
+            zIndex={0} // Set a lower z-index to place the image behind the text
+          />
         </Box>
       )}
     </>
