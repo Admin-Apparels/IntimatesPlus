@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import io from 'socket.io-client';
 
 const ChatContext = createContext();
 
@@ -15,6 +16,15 @@ const ChatProvider = ({ children }) => {
   const [pic, setPic] = useState("");
   const [recoverEmail, setRecoverEmail] = useState();
   const [ads, setAds] = useState(false);
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+ 
+    const newSocket = io('http://localhost:8080');
+    setSocket(newSocket);
+
+    return () => newSocket.close();
+}, []);
 
   return (
     <ChatContext.Provider
@@ -43,6 +53,7 @@ const ChatProvider = ({ children }) => {
         setOnlineUsersCount,
         userId,
         setUserId,
+        socket,
       }}
     >
       {children}

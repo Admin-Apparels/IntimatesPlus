@@ -115,7 +115,7 @@ function SideDrawer() {
           fontSize="2xl"
           fontWeight={"bold"}
           userSelect={"none"}
-          textColor={"red.500"}
+          textColor={"red.200"}
           visibility={textVisibility}
         >
           <Image

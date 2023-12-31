@@ -172,24 +172,10 @@ const MatchModal = () => {
           borderRadius={20}
           padding={0}
           margin={0}
-          _hover={{ backgroundColor: "green.100" }}
+          _hover={{backgroundColor: "transparent"}}
+          backgroundColor={"transparent"}
           icon={
-            <Text
-              p={0}
-              m={0}
-              fontStyle={"italic"}
-              display={"flex"}
-              color={"red.500"}
-            >
-              <Image
-                src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1695818135/icons8-fruit-48_hirauj.png"
-                loading="lazy"
-                alt=""
-                p={0}
-                m={0}
-                h={6}
-              />
-            </Text>
+            <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1702454939/icons8-love-circled_q6q3t5.gif" height={7}/>
           }
           onClick={() => {
             setLoading(true);

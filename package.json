@@ -28,6 +28,7 @@
     "nodemon": "^3.0.1",
     "react-social-icons": "^5.15.0",
     "socket.io": "^4.6.1",
+    "socket.io-client": "^4.7.2",
     "xmldom": "^0.6.0"
   },
   "engines": {

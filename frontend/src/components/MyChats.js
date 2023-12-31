@@ -189,12 +189,11 @@ const MyChat = (fetchAgain) => {
           display={"flex"}
           justifyContent={"space-between"}
           userSelect={"none"}
-          fontFamily={"cursive"}
+          fontSize={"small"}
+          p={2}
         >
           {chats !== undefined ? chats.length : 0}
-          <Text color={"red.500"} paddingLeft={2}>
-            :Boo
-          </Text>
+          <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1703952426/icons8-chat-100_x8ue9d.png" height={6} mt={-1} />
         </Text>
       </Box>
       <Box

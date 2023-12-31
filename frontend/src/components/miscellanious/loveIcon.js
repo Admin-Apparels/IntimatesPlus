@@ -1,11 +1,31 @@
-import React from "react";
-import { Box, Image, Text, Tooltip } from "@chakra-ui/react";
+import React, { useEffect, useState} from "react";
+import { Box, Image, Text, Tooltip, calc } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 
-const IconWithText = ({ iconSize }) => {
+const LoveIcon = () => {
   const { onlineUsersCount } = ChatState();
-  const loveIcon =
-    "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701504387/icons8-love-96_g8sqwd.png";
+
+  const [randomNum, setRandomNum] = useState(generateRandomNumber);
+
+  function generateRandomNumber() {
+    return Math.floor(Math.random() * (900 - 100 + 1)) + 100;
+  }
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+     
+      const change = Math.floor(Math.random() * 11);
+
+     
+      const sign = Math.random() < 0.5 ? 1 : -1;
+
+      setRandomNum((prevNum) => prevNum + sign * change);
+    }, 2000);
+
+
+    return () => clearInterval(intervalId);
+  }, []); 
+
   function formatOnlineUsersCount(onlineUsersCount) {
     if (onlineUsersCount < 1000) {
       return onlineUsersCount.toString();
@@ -18,33 +38,29 @@ const IconWithText = ({ iconSize }) => {
   return (
     <Box
       display="flex"
+      flexDir={"column"}
       justifyContent={"center"}
       alignItems={"center"}
-      position="relative"
       p={0}
       m={0}
     >
-      <Image src={loveIcon} alt="Love Icon" boxSize={iconSize} height={10} />
+      <Image alt="" src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1702563265/icons8-community-50_oyasvg.png" height={5}
+      top={7}/>
+        
       <Tooltip
         label="Users Online"
         color={"green"}
         backgroundColor={"transparent"}
+        
       >
-        <Text
-          position="absolute"
-          fontSize="2xs"
-          fontFamily={"cursive"}
-          userSelect={"none"}
-        >
-          {formatOnlineUsersCount(onlineUsersCount)}
-        </Text>
+      <Text display={"flex"} flexDir={"column"} m={-1} fontSize={"x-small"} fontFamily={"cursive"}>{randomNum}</Text>
+        
+     
       </Tooltip>
     </Box>
   );
 };
 
-function LoveIcon() {
-  return <IconWithText text="4245" iconSize={10} />;
-}
+
 
 export default LoveIcon;

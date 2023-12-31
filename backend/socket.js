@@ -45,6 +45,40 @@ const initializeSocketIO = (server) => {
         socket.in(user._id).emit("message received", newMessageRecieved);
       });
     });
+    socket.on("callUser", ({ offer, to }) => {
+      io.to(to).emit("callMade", {
+        offer,
+        caller: socket.id,
+      });
+    });
+
+    socket.on("makeAnswer", ({ to, answer }) => {
+      io.to(to).emit("answerMade", {
+        socket: socket.id,
+        answer,
+      });
+    });
+
+    socket.on("iceCandidate", ({ to, candidate }) => {
+      io.to(to).emit("iceCandidateReceived", {
+        socket: socket.id,
+        candidate,
+      });
+    });
+    socket.on("call initiated", (roomId) => {
+      // Emit 'ringing' to the room when a call is initiated
+      io.to(roomId).emit("ringing");
+    });
+    socket.on("call answered", (roomId) => {
+      // Emit 'connecting' when the call is being answered
+      io.to(roomId).emit("connecting");
+    });
+
+    socket.on("call ended", (roomId) => {
+      // Emit 'call ended' to the room when a call is ended
+      io.to(roomId).emit("call ended");
+    });
+
 
     socket.on("disconnect", () => {
       if (socket.userData && socket.userData._id) {

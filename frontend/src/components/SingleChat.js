@@ -27,13 +27,12 @@ import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import ProfileModal from "../components/miscellanious/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
-import io from "socket.io-client";
 import { ChatState } from "./Context/ChatProvider";
 import animation from "../animations/typing.json";
+import VideoCallComponent from "./miscellanious/vedioCall";
 
-const ENDPOINT = "https://fuckmate.boo";
 
-var socket, selectedChatCompare;
+var selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
@@ -44,6 +43,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
   const [wait, setWait] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
+  const [isCallStarted, setIsCallStarted] = useState(false);
+  
+
+  
+    const startCall = () => {
+        setIsCallStarted(true);
+    };
 
   const toast = useToast();
 
@@ -64,6 +70,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     setNotification,
     setOnlineUsersCount,
     setAds,
+    socket
   } = ChatState();
 
   const getNextQuote = () => {
@@ -148,7 +155,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         position: "bottom",
       });
     }
-  }, [selectedChat, toast, user.token]);
+  }, [selectedChat, toast, user.token, socket]);
 
   const sendMessage = async (event) => {
     if ((event && event.key === "Enter") || !event) {
@@ -238,7 +245,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    if(!socket) return;
     socket.emit("setup", user);
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
@@ -290,7 +297,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     return () => {
       socket.disconnect();
     };
-  }, [user, toast, setOnlineUsersCount]);
+  }, [user, toast, setOnlineUsersCount, socket]);
 
   useEffect(() => {
     fetchMessages();
@@ -351,7 +358,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     return () => {
       socket.off("message received");
     };
-  }, [notification, setNotification, setFetchAgain]);
+  }, [notification, setNotification, setFetchAgain, socket]);
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
@@ -377,6 +384,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const handleDotClick = (index) => {
     setQuoteIndex(index);
   };
+
 
   return (
     <>
@@ -495,8 +503,24 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               {" "}
               {getSenderName(user, selectedChat.users)}
             </Text>
-
-            <ProfileModal userInfo={getSenderFull(user, selectedChat.users)} />
+            {!isCallStarted ? (
+                         <IconButton
+                         borderRadius={20}
+                         padding={0}
+                         margin={0}
+                         _hover={{backgroundColor: "transparent"}}
+                         backgroundColor={"transparent"}
+                         icon={
+                           <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1704001228/icons8-video-call-48_qzxzxs.png" height={7}/>
+                         }
+                         onClick={() => {
+                          startCall();
+                         }}
+                       />
+                    ) : (
+                        <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1704000962/icons8-ongoing-call-24_erbgdy.png"/>
+                    )}
+<ProfileModal userInfo={getSenderFull(user, selectedChat.users)} />
           </Text>
           <Box
             display="flex"
@@ -518,8 +542,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 margin="auto"
               />
             ) : (
-              <div className="messages">
-                <ScrollableChat messages={messages} />
+              <div className="messages" style={{overflowX: "hidden"}}>
+                {!isCallStarted ? (
+                       <ScrollableChat messages={messages} />
+                    ) : (
+                        <VideoCallComponent userId={user._id} otherUserId={getSenderFull(user, selectedChat.users)}/>
+                    )}
+                
               </div>
             )}
 
