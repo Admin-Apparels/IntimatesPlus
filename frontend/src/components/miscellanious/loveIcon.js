@@ -53,7 +53,7 @@ const LoveIcon = () => {
         backgroundColor={"transparent"}
         
       >
-      <Text display={"flex"} flexDir={"column"} m={-1} fontSize={"x-small"} fontFamily={"cursive"}>{randomNum}</Text>
+      <Text display={"flex"} flexDir={"column"} m={-1} fontSize={"x-small"} fontFamily={"cursive"}>{formatOnlineUsersCount(calc(onlineUsersCount + randomNum))}</Text>
         
      
       </Tooltip>

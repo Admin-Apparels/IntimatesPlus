@@ -17,6 +17,7 @@ const ChatProvider = ({ children }) => {
   const [recoverEmail, setRecoverEmail] = useState();
   const [ads, setAds] = useState(false);
   const [socket, setSocket] = useState(null);
+  const [isCallStarted, setIsCallStarted] = useState(false);
 
   useEffect(() => {
  
@@ -54,6 +55,8 @@ const ChatProvider = ({ children }) => {
         userId,
         setUserId,
         socket,
+        isCallStarted,
+        setIsCallStarted
       }}
     >
       {children}

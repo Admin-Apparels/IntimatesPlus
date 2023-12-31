@@ -130,9 +130,10 @@ const ProfileModal = ({ userInfo }) => {
         }}
         isOpen={isOpen}
         isCentered
+        
       >
         <ModalOverlay />
-        <ModalContent width={"calc(100% - 20px)"}>
+        <ModalContent width={"calc(90%)"}>
           <ModalHeader
             fontSize="40px"
             fontFamily="Work sans"
@@ -150,10 +151,10 @@ const ProfileModal = ({ userInfo }) => {
                 src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699615402/icons8-verified-account-64_1_amfufo.png"
                 height={7}
                 m={1}
-                loading="lazy"
+               
               />
             ) : (
-              <Image src={verified} alt="" height={7} loading="lazy" />
+              <Image src={verified} alt="" height={7} />
             )}
           </ModalHeader>
           <ModalCloseButton />
@@ -165,18 +166,21 @@ const ProfileModal = ({ userInfo }) => {
             position={"relative"}
           >
             <Image
-              borderRadius="full"
-              boxSize={isFocused ? "300px" : "150px"}
+             borderRadius={isFocused ? "50%" : "5%"}
+             boxSize={isFocused ? "15rem" : "5rem"}
               src={userInfo.pic}
               alt={userInfo.name}
-              loading="lazy"
+              height={"40vh"}
+              width={"auto"}
+              loading="eager"
               cursor="pointer"
               onClick={toggleFocus}
               transition="box-size 0.3s ease-in-out"
+              userSelect={"none"}
             />
 
             <Text
-              fontSize={{ base: "18px", md: "20px" }}
+              fontSize={{ base: "13px", md: "17px" }}
               fontFamily="Work sans"
               textAlign={"center"}
               display={isFocused ? "none" : "flex"}

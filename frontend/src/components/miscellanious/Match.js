@@ -189,7 +189,7 @@ const MatchModal = () => {
         {currentUser && (
           <>
             <ModalOverlay />
-            <ModalContent width={"calc(100% - 20px)"}>
+            <ModalContent width={"calc(90%)"}>
               <ModalHeader
                 fontSize="40px"
                 fontFamily="Work sans"

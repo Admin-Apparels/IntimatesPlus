@@ -1,14 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Peer from 'simple-peer';
 import { Box, Button, useToast } from '@chakra-ui/react';
 import { ChatState } from '../Context/ChatProvider'; // Import ChatState
 
-const VideoCall = ({ userId, otherUserId }) => {
-    const { socket } = ChatState(); // Use socket from ChatState
+const VideoCall = ({ userId, otherUserId}) => {
+    const { socket, setIsCallStarted } = ChatState(); // Use socket from ChatState
     const userVideo = useRef();
     const otherUserVideo = useRef();
     const peerRef = useRef();
-    const [isCallStarted, setIsCallStarted] = useState(false);
     const toast = useToast();
 
     useEffect(() => {
@@ -64,14 +63,14 @@ const VideoCall = ({ userId, otherUserId }) => {
   
   
       socket.on('connecting', () => {
-          toast({
-              title: "Connecting",
-              description: "Establishing connection with the other user...",
-              status: "info",
-              duration: null,
-              isClosable: true,
-          });
-      });
+        toast({
+            title: "Connecting",
+            description: "Establishing connection with the other user...",
+            status: "info",
+            duration: 2000,
+            isClosable: true,
+        });
+    });
 
         function createRoomId(userId1, userId2) {
             return [userId1, userId2].sort().join('_');
@@ -114,13 +113,42 @@ const VideoCall = ({ userId, otherUserId }) => {
           socket.off('connecting');
           peerRef.current?.destroy();
         };
-    }, [userId, otherUserId, socket, toast]);
+    }, [userId, otherUserId, socket, toast, setIsCallStarted]);
 
     const endCall = () => {
-        peerRef.current?.destroy();
-        socket.emit('endCall');
-        setIsCallStarted(false);
-    };
+      if (userVideo.current && userVideo.current.srcObject) {
+          userVideo.current.srcObject.getTracks().forEach(track => track.stop());
+          userVideo.current.srcObject = null;
+      }
+  
+      if (peerRef.current) {
+          peerRef.current.destroy();
+          peerRef.current = null;
+      }
+  
+      if (otherUserVideo.current) {
+          otherUserVideo.current.srcObject = null;
+      }
+  
+
+      socket.emit('endCall');
+  
+
+      setIsCallStarted(false);
+  
+      
+  };
+  
+  socket.on('call ended', () => {
+      endCall();
+      toast({
+          title: "Call Ended",
+          description: "The other user has hung up.",
+          status: "info",
+          duration: 5000,
+          isClosable: true,
+      });
+  });
     const videoStyle = {
       display: "flex",
       maxWidth: '100vw',     

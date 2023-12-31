@@ -43,13 +43,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
   const [wait, setWait] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
-  const [isCallStarted, setIsCallStarted] = useState(false);
+
   
 
   
-    const startCall = () => {
-        setIsCallStarted(true);
-    };
+   
 
   const toast = useToast();
 
@@ -70,8 +68,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     setNotification,
     setOnlineUsersCount,
     setAds,
-    socket
+    socket,
+    isCallStarted,
+    setIsCallStarted
   } = ChatState();
+
+ const startCall = () => {
+        setIsCallStarted(true);
+    };
 
   const getNextQuote = () => {
     setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
@@ -503,7 +507,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               {" "}
               {getSenderName(user, selectedChat.users)}
             </Text>
-            {!isCallStarted ? (
+            <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}> {!isCallStarted ? (
                          <IconButton
                          borderRadius={20}
                          padding={0}
@@ -511,16 +515,17 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                          _hover={{backgroundColor: "transparent"}}
                          backgroundColor={"transparent"}
                          icon={
-                           <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1704001228/icons8-video-call-48_qzxzxs.png" height={7}/>
+                           <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1704001228/icons8-video-call-48_qzxzxs.png" m={3} height={7}/>
                          }
                          onClick={() => {
                           startCall();
                          }}
                        />
                     ) : (
-                        <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1704000962/icons8-ongoing-call-24_erbgdy.png"/>
-                    )}
-<ProfileModal userInfo={getSenderFull(user, selectedChat.users)} />
+                        <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1704000962/icons8-ongoing-call-24_erbgdy.png" m={3}/>
+                    )}<ProfileModal userInfo={getSenderFull(user, selectedChat.users)} /></Box>
+           
+
           </Text>
           <Box
             display="flex"
@@ -546,7 +551,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 {!isCallStarted ? (
                        <ScrollableChat messages={messages} />
                     ) : (
-                        <VideoCallComponent userId={user._id} otherUserId={getSenderFull(user, selectedChat.users)}/>
+                      <VideoCallComponent 
+                      userId={user._id} 
+                      otherUserId={getSenderFull(user, selectedChat.users)}
+                      isCallStarted={isCallStarted}
+                      setIsCallStarted={setIsCallStarted}
+                    />
                     )}
                 
               </div>
