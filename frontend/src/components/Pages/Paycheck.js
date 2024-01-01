@@ -29,11 +29,11 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { handleApprove, handleCreateChat } from "../config/ChatLogics";
-import socketIOClient from "socket.io-client";
+
 
 export default function Paycheck() {
   const toast = useToast();
-  const { user, setUser, userId, setChats, chats, setSelectedChat } =
+  const { user, setUser, userId, setChats, chats, setSelectedChat, socket } =
     ChatState();
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -61,7 +61,7 @@ export default function Paycheck() {
   }, [navigate, user]);
 
   useEffect(() => {
-    const socket = socketIOClient("https://fuckmate.boo");
+  
     socket.on("noPayment", (nothing) => {
       toast({
         title: nothing,
@@ -113,6 +113,7 @@ export default function Paycheck() {
     setChats,
     setSelectedChat,
     toast,
+    socket
   ]);
 
   const makePaymentMpesa = async () => {

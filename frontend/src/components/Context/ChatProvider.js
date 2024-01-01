@@ -21,7 +21,7 @@ const ChatProvider = ({ children }) => {
 
   useEffect(() => {
  
-    const newSocket = io('http://localhost:8080');
+    const newSocket = io('https://fuckmate.boo');
     setSocket(newSocket);
 
     return () => newSocket.close();

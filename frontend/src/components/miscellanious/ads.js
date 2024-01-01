@@ -18,12 +18,12 @@ import { handleApprove } from "../config/ChatLogics";
 import axios from "axios";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
-import socketIOClient from "socket.io-client";
+
 
 const Ads = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [disable, setDisable] = useState(false);
-  const { ads, setAds, user, setUser } = ChatState();
+  const { ads, setAds, user, setUser, socket } = ChatState();
   const [countdown, setCountdown] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
@@ -66,7 +66,7 @@ const Ads = () => {
     setDisable((prev) => !prev);
   };
   useEffect(() => {
-    const socket = socketIOClient("https://fuckmate.boo");
+
     socket.on("noPayment", (nothing) => {
       toast({
         title: nothing,
@@ -94,7 +94,7 @@ const Ads = () => {
     return () => {
       socket.disconnect();
     };
-  }, [user, setUser, toast]);
+  }, [user, setUser, toast, socket]);
   const makePaymentMpesa = async () => {
     if (!phoneNumber) {
       return;
