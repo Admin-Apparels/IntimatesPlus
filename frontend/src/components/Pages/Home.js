@@ -33,8 +33,8 @@ function Homepage() {
         <Box
           display="flex"
           justifyContent="center"
-          p={3}
-          bg="white"
+          p={1}
+          bg="black"
           w="100%"
           m="40px 0 15px 0"
           borderRadius="lg"
@@ -48,7 +48,7 @@ function Homepage() {
             userSelect={"none"}
           />
         </Box>
-        <Box bg="white" w="100%" p={4} borderRadius="lg" borderWidth="1px">
+        <Box bg="black" w="100%" p={4} borderRadius="lg" borderWidth="1px">
           <Tabs isFitted variant="soft-rounded">
             <TabList mb="1em">
               <Tab>Login</Tab>
@@ -94,7 +94,7 @@ function Homepage() {
                 variant="body2"
                 textAlign="center"
                 userSelect={"none"}
-                fontFamily={"mono"}
+                fontSize={"small"}
               >
                 This site strictly prohibits any form of prostitution. After the
                 case of mutual connection, both accounts should be deactivated
@@ -112,6 +112,7 @@ function Homepage() {
                   href="https://www.termsandconditionsgenerator.com/live.php?token=iuJtB9N5PKNTX5iM90p7B8cd8h6vCCdJ"
                   color="blue.100"
                   userSelect={"none"}
+                  fontSize={"small"}
                   target="blank"
                 >
                   Terms of Use
@@ -120,6 +121,7 @@ function Homepage() {
                   href="https://www.privacypolicygenerator.info/live.php?token=XoLCzcvHWA3NIQ1iBqO8IVaTRxQMVbff"
                   color="blue.100"
                   userSelect={"none"}
+                  fontSize={"small"}
                   target="blank"
                 >
                   Privacy Policy
@@ -149,12 +151,13 @@ function Homepage() {
                 textAlign={"center"}
                 userSelect={"none"}
                 fontFamily={"mono"}
+                fontSize={"small"}
               >
                 Discover meaningful connections on our premier dating platform.
                 We bring together individuals seeking companionship, romance,
                 and genuine connections.
               </Text>
-              <Text color="blue.100" display={"flex"}>
+              <Text color="blue.100" display={"flex"} fontSize={"small"}>
                 {" "}
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701515284/icons8-18-plus-48_jf2fci.png"
@@ -185,7 +188,7 @@ function Homepage() {
                   height={7}
                 />
               </Link>
-              <Link href="#" m={1}>
+              <Link href="https://web.facebook.com/profile.php?id=61554735039262" m={1}>
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699869920/icons8-facebook-48_vcxsai.png"
                   height={7}

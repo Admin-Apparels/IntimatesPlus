@@ -125,19 +125,21 @@ const Login = () => {
   return (
     <VStack spacing="10px">
       <FormControl id="email" isRequired>
-        <FormLabel>Email Address</FormLabel>
+        <FormLabel textColor={"white"}>Email Address</FormLabel>
         <Input
           value={email}
           type="email"
+          textColor={"white"}
           placeholder="Enter Your Email Address"
           onChange={(e) => setEmail(e.target.value)}
         />
       </FormControl>
       <FormControl id="password" isRequired>
-        <FormLabel>Password</FormLabel>
+        <FormLabel textColor={"white"}>Password</FormLabel>
         <InputGroup size="md">
           <Input
             value={password}
+            textColor={"white"}
             onChange={(e) => setPassword(e.target.value)}
             type={show ? "text" : "password"}
             placeholder="Enter password"
@@ -162,6 +164,7 @@ const Login = () => {
         <GoogleLoginButton />
       </GoogleOAuthProvider>
       <Link
+      textColor={"white"}
         onClick={() => {
           onOpen();
         }}
@@ -181,6 +184,7 @@ const Login = () => {
               textAlign={"center"}
               justifyContent={"center"}
               fontSize={"2xl"}
+              textColor={"white"}
             >
               Enter your Email below
             </Text>
@@ -193,6 +197,7 @@ const Login = () => {
             justifyContent="space-between"
           >
             <Input
+            textColor={"white"}
               fontSize={"2xl"}
               placeholder={`example@mymail.com`}
               type="text"
@@ -213,7 +218,7 @@ const Login = () => {
             </Button>
           </ModalBody>
           <ModalFooter display="flex">
-            <Text textAlign={"start"}>
+            <Text textAlign={"start"} textColor={"white"}>
               A code will be sent to the above email
             </Text>
             {searching && <Spinner />}

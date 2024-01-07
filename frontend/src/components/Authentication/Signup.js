@@ -205,6 +205,7 @@ const Signup = () => {
               textAlign={"center"}
               justifyContent={"center"}
               fontSize={"2xl"}
+              textColor={"white"}
             >
               Enter Code sent to: ~{email}~
             </Text>
@@ -218,6 +219,7 @@ const Signup = () => {
           >
             <Input
               fontSize={"2xl"}
+              textColor={"white"}
               placeholder={`i.e 126413`}
               type="text"
               textAlign="center"
@@ -242,6 +244,7 @@ const Signup = () => {
           <ModalFooter display="flex">
             <Text
               textAlign={"center"}
+              textColor={"white"}
               justifyContent={"center"}
               color={code !== inputCode ? "red" : "green"}
             >
@@ -251,16 +254,18 @@ const Signup = () => {
         </ModalContent>
       </Modal>
       <FormControl id="first-name" isRequired>
-        <FormLabel>Name</FormLabel>
+        <FormLabel textColor={"white"}>Name</FormLabel>
         <Input
           placeholder="Enter Your Name"
+          textColor={"white"}
           onChange={(e) => setName(e.target.value)}
         />
       </FormControl>
       <FormControl id="email" isRequired>
-        <FormLabel>Email Address</FormLabel>
+        <FormLabel textColor={"white"}>Email Address</FormLabel>
         <Input
           type="email"
+          textColor={"white"}
           placeholder="Enter Your Email Address"
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -271,6 +276,7 @@ const Signup = () => {
             m={0}
             color={"green.400"}
             userSelect={"none"}
+            textColor={"white"}
           >
             Your email is for login only. No ads
           </FormLabel>
@@ -279,10 +285,11 @@ const Signup = () => {
         )}
       </FormControl>
       <FormControl id="password" isRequired>
-        <FormLabel>Password</FormLabel>
+        <FormLabel textColor={"white"}>Password</FormLabel>
         <InputGroup size="md">
           <Input
             type={show ? "text" : "password"}
+            textColor={"white"}
             placeholder="Enter Password"
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -294,11 +301,12 @@ const Signup = () => {
         </InputGroup>
       </FormControl>
       <FormControl id="password" isRequired>
-        <FormLabel>Confirm Password</FormLabel>
+        <FormLabel textColor={"white"}>Confirm Password</FormLabel>
         <InputGroup size="md">
           <Input
             type={show ? "text" : "password"}
             placeholder="Confirm password"
+            textColor={"white"}
             onChange={(e) => setConfirmpassword(e.target.value)}
           />
           <InputRightElement width="4.5rem">
@@ -309,8 +317,8 @@ const Signup = () => {
         </InputGroup>
       </FormControl>
       <FormControl id="gender" isRequired>
-        <FormLabel>Gender</FormLabel>
-        <RadioGroup onChange={setGender} value={gender} isRequired>
+        <FormLabel textColor={"white"}>Gender</FormLabel>
+        <RadioGroup onChange={setGender} value={gender} textColor={"white"} isRequired>
           <Stack direction="row">
             <Radio value="male">Male</Radio>
             <Radio value="female">Female</Radio>
@@ -318,18 +326,19 @@ const Signup = () => {
         </RadioGroup>
       </FormControl>
       {gender === "female" && (
-        <FormControl id="description" isRequired>
+        <FormControl id="description" textColor={"white"} isRequired>
           <FormLabel>Description</FormLabel>
           <Textarea
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="Hello Admin! I'm Nina, a young woman based in Nairobi. I'm passionate about my work but sometimes lonely during my free time, I'd love ..."
+            placeholder="Hi there, I'm Nina from LA looking for something thrilling..."
             size="sm"
             minLength={MIN_CHARACTERS}
             maxLength={MAX_CHARACTERS}
           />
           <Text
             fontSize="sm"
+            textColor={"white"}
             color={value.length >= MIN_CHARACTERS ? "green.500" : "red.500"}
           >
             {`${value.length}/${MIN_CHARACTERS}`}
@@ -337,10 +346,11 @@ const Signup = () => {
         </FormControl>
       )}
       <FormControl id="pic">
-        <FormLabel>Upload your Picture</FormLabel>
+        <FormLabel textColor={"white"}>Upload your Picture</FormLabel>
         <Input
           type="file"
           p={1.5}
+          textColor={"white"}
           accept="image/*"
           onChange={(e) => postDetails(e.target.files[0])}
         />
