@@ -24,7 +24,7 @@ const ProfileModal = ({ userInfo }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [verified, setVerified] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const { user, setUser, selectedChat } = ChatState();
+  const { user, setUser, selectedChat } = ChatState() || {};
   const [showReportLinks, setShowReportLinks] = useState(false);
 
   const toggleReportLinks = () => {

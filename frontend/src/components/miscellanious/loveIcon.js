@@ -1,9 +1,9 @@
 import React, { useEffect, useState} from "react";
-import { Box, Image, Text, Tooltip, calc } from "@chakra-ui/react";
+import { Box, Image, Text, Tooltip } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 
 const LoveIcon = () => {
-  const { onlineUsersCount } = ChatState();
+  const { onlineUsersCount } = ChatState() || {};
 
   const [randomNum, setRandomNum] = useState(generateRandomNumber);
 
@@ -53,7 +53,7 @@ const LoveIcon = () => {
         backgroundColor={"transparent"}
         
       >
-      <Text display={"flex"} flexDir={"column"} m={-1} fontSize={"x-small"} fontFamily={"cursive"}>{formatOnlineUsersCount(calc(onlineUsersCount + randomNum))}</Text>
+      <Text display={"flex"} flexDir={"column"} m={-1} fontSize={"x-small"} fontFamily={"cursive"}>{formatOnlineUsersCount(onlineUsersCount.length + randomNum)}</Text>
         
      
       </Tooltip>

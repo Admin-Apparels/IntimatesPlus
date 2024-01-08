@@ -34,7 +34,7 @@ import { handleApprove, handleCreateChat } from "../config/ChatLogics";
 export default function Paycheck() {
   const toast = useToast();
   const { user, setUser, userId, setChats, chats, setSelectedChat, socket } =
-    ChatState();
+  ChatState() || {};
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [subscription, setSubscription] = useState("");

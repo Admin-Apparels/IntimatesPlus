@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 const Ads = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [disable, setDisable] = useState(false);
-  const { ads, setAds, user, setUser, socket } = ChatState();
+  const { ads, setAds, user, setUser, socket } = ChatState() || {};
   const [countdown, setCountdown] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");

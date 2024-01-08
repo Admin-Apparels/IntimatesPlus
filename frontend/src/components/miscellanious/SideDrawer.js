@@ -44,7 +44,7 @@ function SideDrawer() {
     setNotification,
     chats,
     setChats,
-  } = ChatState();
+  } = ChatState() || {};
 
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();

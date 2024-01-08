@@ -152,7 +152,7 @@ function Homepage() {
                 userSelect={"none"}
                 fontFamily={"mono"}
                 fontSize={"small"}
-              >
+              >🌟 Welcome to fuckmate.boo, where connection transcends self-pleasure! 🌟
                 Discover meaningful connections on our premier dating platform.
                 We bring together individuals seeking companionship, romance,
                 and genuine connections.

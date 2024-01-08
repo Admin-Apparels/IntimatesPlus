@@ -18,19 +18,20 @@ const ChatProvider = ({ children }) => {
   const [ads, setAds] = useState(false);
   const [socket, setSocket] = useState(null);
   const [isCallStarted, setIsCallStarted] = useState(false);
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   useEffect(() => {
-    if (userInfo) { // Check if userInfo is not null
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if (userInfo && userInfo.token) {
       const token = userInfo.token;
-    
+  
       const newSocket = io('https://fuckmate.boo', {
         query: { token }});
       setSocket(newSocket);
   
       return () => newSocket.close();
     }
-  }, [userInfo?.token, userInfo]);
+  },[]);
+  
   
 
   return (

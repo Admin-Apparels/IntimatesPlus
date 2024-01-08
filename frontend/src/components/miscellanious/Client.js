@@ -26,7 +26,7 @@ import { useNavigate } from "react-router-dom";
 const ClientModal = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isFocused, setIsFocused] = useState(false);
-  const { user, setUser } = ChatState();
+  const { user, setUser } = ChatState() || {};
   const [picLoading, setPicLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [pic, setPic] = useState(undefined);

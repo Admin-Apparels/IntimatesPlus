@@ -52,7 +52,7 @@ const initializeSocketIO = (server) => {
       }
     });
 
-    // Joining a room for a video call
+
     socket.on("join room", (roomId) => {
       socket.join(roomId);
       const otherUsers = io.sockets.adapter.rooms.get(roomId);
@@ -61,7 +61,6 @@ const initializeSocketIO = (server) => {
       }
     });
 
-    // Handling signaling data for WebRTC
     socket.on("signal", ({ to, from, signal, room }) => {
       io.to(to).emit("signal", { signal, callerID: from });
     });
@@ -89,11 +88,13 @@ const initializeSocketIO = (server) => {
       if (socket.userData && socket.userData._id) {
         onlineUsers.delete(socket.userData._id);
         io.emit("onlineUsers", Array.from(onlineUsers));
-        userStatuses.set(userId, 'available');
+        userStatuses.set(socket.userData?._id, 'available');
+
       }
     });
     userStatuses.delete(socket.userData?._id);
   });
+  
 
   return io;
 };

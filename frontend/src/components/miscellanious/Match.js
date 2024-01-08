@@ -30,7 +30,7 @@ const MatchModal = () => {
   const navigate = useNavigate();
 
   const { setSelectedChat, user, chats, setUserId, setUser, setChats } =
-    ChatState();
+  ChatState();
   const toast = useToast();
 
   const accessChat = async (userId) => {

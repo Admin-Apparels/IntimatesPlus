@@ -9,7 +9,7 @@ const GoogleLoginButton = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const [tryAgain, setTryAgain] = useState(false);
-  const { email, setEmail, name, setName, setPic } = ChatState();
+  const { email, setEmail, name, setName, setPic } = ChatState() || {};
 
   const submitHandler = async () => {
     if (email && name) {

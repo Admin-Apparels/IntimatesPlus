@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import Peer from 'simple-peer';
 import { Box, Button, useToast } from '@chakra-ui/react';
-import { ChatState } from '../Context/ChatProvider'; // Import ChatState
+import { ChatState } from '../Context/ChatProvider';
 
 const VideoCall = ({ userId, otherUserId}) => {
-    const { socket, setIsCallStarted } = ChatState(); // Use socket from ChatState
+    const { socket, setIsCallStarted } = ChatState() || {};
     const userVideo = useRef();
     const otherUserVideo = useRef();
     const peerRef = useRef();
@@ -105,9 +105,8 @@ const VideoCall = ({ userId, otherUserId}) => {
                 endCall();
                 toast({
                     title: "Call Ended",
-                    description: "The other user has hung up.",
                     status: "info",
-                    duration: 5000,
+                    duration: 2000,
                     isClosable: true,
                 });
             });
@@ -115,9 +114,8 @@ const VideoCall = ({ userId, otherUserId}) => {
         socket.on('ringing', () => {
             toast({
                 title: "Ringing",
-                description: "Waiting for the other user to pick up...",
                 status: "info",
-                duration: null,
+                duration: 2000,
                 isClosable: true,
             });
         });
@@ -125,7 +123,6 @@ const VideoCall = ({ userId, otherUserId}) => {
         socket.on('connecting', () => {
             toast({
                 title: "Connecting",
-                description: "Establishing connection with the other user...",
                 status: "info",
                 duration: 2000,
                 isClosable: true,
