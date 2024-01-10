@@ -25,12 +25,14 @@ const ChatProvider = ({ children }) => {
       const token = userInfo.token;
   
       const newSocket = io('https://fuckmate.boo', {
-        query: { token }});
+        query: { token },
+      });
       setSocket(newSocket);
   
       return () => newSocket.close();
     }
-  },[]);
+  }, []);
+  
   
   
 

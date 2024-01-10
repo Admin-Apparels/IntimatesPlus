@@ -265,6 +265,8 @@ const ClientModal = ({ children }) => {
             fontFamily="Work sans"
             display="flex"
             justifyContent="center"
+            p={0}
+            m={0}
           >
             {user.name}
             <Image src={verified} alt="" height={7} />
@@ -278,11 +280,12 @@ const ClientModal = ({ children }) => {
             position="relative"
           >
             <Image
-              borderRadius="full"
-              boxSize={isFocused ? "300px" : "150px"}
+             borderRadius={isFocused ? "50%" : "5%"}
+             boxSize={isFocused ? "20rem" : "10rem"}
+             height={"50vh"}
+              width={"auto"}
               src={user.pic}
               alt={user.name}
-              loading="lazy"
               cursor="pointer"
               onClick={toggleFocus}
               transition="box-size 0.3s ease-in-out"

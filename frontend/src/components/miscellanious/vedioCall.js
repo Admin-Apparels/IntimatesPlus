@@ -4,7 +4,7 @@ import { Box, Button, useToast } from '@chakra-ui/react';
 import { ChatState } from '../Context/ChatProvider';
 
 const VideoCall = ({ userId, otherUserId}) => {
-    const { socket, setIsCallStarted } = ChatState() || {};
+    const { socket, setIsCallStarted } = ChatState();
     const userVideo = useRef();
     const otherUserVideo = useRef();
     const peerRef = useRef();

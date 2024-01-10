@@ -336,6 +336,20 @@ const Signup = () => {
             minLength={MIN_CHARACTERS}
             maxLength={MAX_CHARACTERS}
           />
+          {value ? (
+          <FormLabel
+            fontSize={"2xs"}
+            p={0}
+            m={0}
+            color={"green.400"}
+            userSelect={"none"}
+            textColor={"white"}
+          >
+            Welcome! Please include a close location to enhance your matching experience. Happy matching! 🌐
+          </FormLabel>
+        ) : (
+          ""
+        )}
           <Text
             fontSize="sm"
             textColor={"white"}

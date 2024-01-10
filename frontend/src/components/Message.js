@@ -12,18 +12,35 @@ function Message({ m }) {
 
   const formatMessageTime = (timestamp) => {
     const messageTime = new Date(timestamp);
-    const hours = messageTime.getHours();
-    const minutes = messageTime.getMinutes();
+    const currentTime = new Date();
 
-    const amOrPm = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12;
+    const timeDifference = currentTime - messageTime;
+    const seconds = Math.floor(timeDifference / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
 
-    const formattedTime = `${formattedHours}:${
-      minutes < 10 ? "0" : ""
-    }${minutes} ${amOrPm}`;
-
-    return formattedTime;
-  };
+    if (seconds < 60) {
+        return 'Just now';
+    } else if (minutes < 60) {
+        return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+    } else if (hours < 24) {
+        return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+    } else if (days === 1) {
+        return 'Yesterday';
+    } else if (days < 7) {
+        return `${days} day${days === 1 ? '' : 's'} ago`;
+    } else {
+        const options = {
+            hour: 'numeric',
+            minute: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+        };
+        return messageTime.toLocaleDateString('en-US', options);
+    }
+};
   const onDeleteMessage = async (messageId) => {
     if (!messageId) {
       return;
@@ -61,6 +78,7 @@ function Message({ m }) {
           position={"relative"}
           onClick={() => setShowDeleteText(true)}
           onMouseLeave={() => setShowDeleteText(false)}
+          fontSize={"small"}
         >
           {showDeleteText && m.sender._id === user._id && (
             <Button

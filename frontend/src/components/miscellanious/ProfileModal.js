@@ -24,7 +24,7 @@ const ProfileModal = ({ userInfo }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [verified, setVerified] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const { user, setUser, selectedChat } = ChatState() || {};
+  const { user, setUser, selectedChat } = ChatState();
   const [showReportLinks, setShowReportLinks] = useState(false);
 
   const toggleReportLinks = () => {
@@ -148,8 +148,8 @@ const ProfileModal = ({ userInfo }) => {
             {userInfo.name}
             {userInfo.email === ADMIN_EMAIL ? (
               <Image
-                src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699615402/icons8-verified-account-64_1_amfufo.png"
-                height={7}
+                src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701779357/icons8-sex-64_a1hki1.png"
+                height={10}
                 m={1}
                
               />

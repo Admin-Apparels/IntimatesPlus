@@ -68,7 +68,7 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
   const ADMIN_EMAIL = "admin@fuckmate.boo";
   const ADMIN_CHAT_NAME = "Admin";
   const ADMIN_MESSAGE_CONTENT =
-    "Hello from Admin! We aim to respond to your description within 24 hours.";
+    "👋 Welcome to fuckmate.boo! Admin here. Your description is in good hands and will be reviewed within 24 hours. Feel free to share your success stories with us after finding that special connection in the future! Best wishes on your journey. 🌟";
   let adminUser;
   try {
     if (req.user.email === ADMIN_EMAIL) {
@@ -98,7 +98,7 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
       .sort({ updatedAt: -1 })
       .exec();
 
-    if (userChats.length === 0 && req.user.gender === "female") {
+    if (userChats.length === 0) {
       adminUser = await User.findOne({ email: ADMIN_EMAIL });
       const defaultChatData = {
         chatName: ADMIN_CHAT_NAME,

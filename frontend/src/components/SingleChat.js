@@ -44,11 +44,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [wait, setWait] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
 
-  
-
-  
-   
-
   const toast = useToast();
 
   const defaultOptions = {
@@ -417,10 +412,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               className="quote-container"
               overflowY={"scroll"}
             >
-              <Text fontSize={"2xl"} textAlign={"center"} userSelect={"none"}>
+              <Text fontSize={"small"} textAlign={"center"} userSelect={"none"}>
                 {heading[quoteIndex]}
               </Text>
-              <Text className="quote-current" userSelect={"none"}>
+              <Text className="quote-current" fontSize={"small"} userSelect={"none"}>
                 {quotes[quoteIndex]}
               </Text>
             </ModalBody>

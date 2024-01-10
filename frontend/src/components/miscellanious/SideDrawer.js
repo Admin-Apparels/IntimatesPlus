@@ -2,7 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
-import { Badge, Image, useBreakpointValue } from "@chakra-ui/react";
+import { Badge, Image, useBreakpointValue, IconButton } from "@chakra-ui/react";
 import {
   Menu,
   MenuButton,
@@ -115,7 +115,7 @@ function SideDrawer() {
           fontSize="2xl"
           fontWeight={"bold"}
           userSelect={"none"}
-          textColor={"red.200"}
+          textColor={"green.500"}
           visibility={textVisibility}
         >
           <Image
@@ -149,17 +149,16 @@ function SideDrawer() {
         {user.gender === "male" ? (
           <MatchModal />
         ) : (
-          <Button borderRadius={"50%"}>
-            <Image
-              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1695818135/icons8-water-48_tlrkf4.png"
-              loading="lazy"
-              alt=""
-              p={0}
-              m={0}
-              _hover={{ backgroundColor: "green.100" }}
-              h={5}
-            />
-          </Button>
+          <IconButton
+          borderRadius={20}
+          padding={0}
+          margin={0}
+          _hover={{backgroundColor: "transparent"}}
+          backgroundColor={"transparent"}
+          icon={
+            <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1702454939/icons8-love-circled_q6q3t5.gif" height={7}/>
+          }
+        />
         )}
 
         <LoveIcon />

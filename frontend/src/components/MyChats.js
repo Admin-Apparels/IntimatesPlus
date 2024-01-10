@@ -163,7 +163,8 @@ const MyChat = (fetchAgain) => {
       flexDir="column"
       alignItems="center"
       p={2}
-      bg="white"
+      bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
+      bgClip="border-box"
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"

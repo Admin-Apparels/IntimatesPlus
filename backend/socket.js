@@ -7,10 +7,9 @@ const initializeSocketIO = (server) => {
   io = socketIO(server, {
     pingTimeout: 60000,
     cors: {
-      origin: "http://localhost:3000",
+      origin: "https://fuckmate.boo",
     },
   });
-
   const onlineUsers = new Set();
   const userStatuses = new Map(); 
 
@@ -71,13 +70,15 @@ const initializeSocketIO = (server) => {
       } else {
         userStatuses.set(recipientId, 'busy'); // Mark recipient as busy
         userStatuses.set(socket.userData._id, 'busy'); // Mark caller as busy
-        io.to(recipientId).emit("call initiated", socket.userData._id); // Notify recipient
+        const roomId = createRoomId(socket.userData._id, recipientId); // Create a unique room ID
+        io.to(recipientId).emit("call initiated", roomId); // Notify recipient with the room ID
       }
     });
     
     socket.on("call initiated", (roomId) => {
       io.to(roomId).emit("ringing");
     });
+    
 
     socket.on("endCall", (roomId) => {
       io.to(roomId).emit("call ended");

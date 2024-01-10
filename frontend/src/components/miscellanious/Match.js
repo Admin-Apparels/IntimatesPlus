@@ -64,7 +64,7 @@ const MatchModal = () => {
       return;
     }
     if (
-      (user.accountType === "new" && chats.length >= 1) ||
+      (user.accountType === "new" && chats.length >= 2) ||
       user.accountType === "Bronze"
     ) {
       navigate("/paycheck");
