@@ -34,9 +34,9 @@ class ErrorBoundary extends React.Component {
             alignItems={"center"}
           >
             {" "}
-            <Text fontSize={"2xl"}>An error occurred. Please </Text>
+            <Text fontSize={"2xl"}>Looks like there's an issue.</Text>
             <Link color="teal.500" href="/chats">
-              Go Back...
+            Let's head back to the chat page...
             </Link>
           </Box>
         </Box>

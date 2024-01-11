@@ -8,10 +8,21 @@ import ChatLoading from "./ChatLoading";
 import { ChatState } from "./Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 import { Image } from "@chakra-ui/react";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  useDisclosure,
+  ModalBody,
+  ModalCloseButton,
+  Flex
+} from "@chakra-ui/react";
 
 const MyChat = (fetchAgain) => {
   const [loggedUser, setLoggedUser] = useState();
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     selectedChat,
     setSelectedChat,
@@ -109,54 +120,102 @@ const MyChat = (fetchAgain) => {
 
     fetchData();
   }, [fetchChats, loggedUser]);
+  const canOpenChat = (chat) => {
+
+    if (!chat.paidMonthly || typeof chat.oneChatOnly === 'undefined') {
+      return false;
+    }
+  
+    const currentDate = new Date();
+    const paidMonthlyExpirationDate = new Date(chat.paidMonthly);
+  
+    if (chat.paidMonthly && paidMonthlyExpirationDate > currentDate) {
+      return true;
+    }
+  
+    if (chat.oneChatOnly) {
+      return true;
+    }
+  
+    return false;
+  };
+  
 
   const renderChatItems = () => {
-    return chats.map((chat) => (
-      <Box
-        key={chat._id}
-        onClick={() => {
-          setSelectedChat(chat);
-          const otherNotifications = notification.filter(
-            (n) => n.chat._id !== chat._id
-          );
-          setNotification(otherNotifications);
-        }}
-        cursor="pointer"
-        bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
-        color={selectedChat === chat ? "white" : "black"}
-        px={3}
-        py={2}
-        borderRadius="lg"
-      >
-        <Text display={"flex"} textAlign={"center"}>
-          {chat.senderName}{" "}
-          {chat.chatName === "Admin" ? (
-            <Image
-              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699615402/icons8-verified-account-64_1_amfufo.png"
-              height={4}
-              m={1}
-            />
-          ) : (
-            ""
-          )}
-        </Text>
-        {chat.latestMessage && chat.latestMessage.sender && (
-          <Text fontSize="xs">
-            <b>
-              {chat.latestMessage.sender.name === user.name
-                ? "You"
-                : chat.latestMessage.sender.name}
-              {":"}{" "}
-            </b>
-            {chat.latestMessage.content.length > 50
-              ? chat.latestMessage.content.substring(0, 51) + "..."
-              : chat.latestMessage.content}
-          </Text>
-        )}
-      </Box>
-    ));
-  };
+    return chats.map((chat) => {
+      const isChatOpen = canOpenChat(chat);
+  
+      return (
+        <Box
+          key={chat._id}
+          onClick={() => {
+            if (isChatOpen || user.gender === "male") {
+              setSelectedChat(chat);
+              const otherNotifications = notification.filter(
+                (n) => n.chat._id !== chat._id
+              );
+              setNotification(otherNotifications);
+            } else {
+              onOpen()
 
+            }
+          }}
+          cursor="pointer"
+          bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
+          color={selectedChat === chat ? "white" : "black"}
+          px={3}
+          py={2}
+          borderRadius="lg"
+          opacity={isChatOpen ? 1 : 0.5}
+          position={"relative"}
+        >
+          <Text display={"flex"} textAlign={"center"}>
+            {chat.senderName}{" "}
+            {chat.chatName === "Admin" ? (
+              <Image
+                src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699615402/icons8-verified-account-64_1_amfufo.png"
+                height={4}
+                m={1}
+              />
+            ) : (
+              ""
+            )}
+          </Text>
+          {chat.latestMessage && chat.latestMessage.sender && (
+            <Text fontSize="xs">
+              <b>
+                {chat.latestMessage.sender.name === user.name
+                  ? "You"
+                  : chat.latestMessage.sender.name}
+                {":"}{" "}
+              </b>
+              {chat.latestMessage.content.length > 50
+                ? chat.latestMessage.content.substring(0, 51) + "..."
+                : chat.latestMessage.content}
+            </Text>
+          )}
+         {!canOpenChat(chat) && user.gender === "female" && (
+  <Flex
+    position="absolute"
+    align="center"
+    justify="center"
+    w="90%"
+    h="100%"
+    mt={3}
+  >
+    <Image
+      src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1704985511/icons8-padlock_jebelc.gif"
+      alt="Padlock"
+      height={8}
+      m={1}
+    />
+  </Flex>
+)}
+        </Box>
+      );
+    });
+  };
+  
   return (
     <Box
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
@@ -168,7 +227,38 @@ const MyChat = (fetchAgain) => {
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
-    >
+    > <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
+       
+          <>
+            <ModalOverlay />
+            <ModalContent width={"calc(90%)"}>
+              <ModalHeader
+                fontSize="40px"
+                fontFamily="Work sans"
+                display="flex"
+                justifyContent="center"
+                bgGradient="linear(to-r, red.700, yellow.300)"
+                bgClip="text"
+                userSelect={"none"}
+                p={0}
+                m={0}
+              >
+              </ModalHeader>
+              <ModalCloseButton />
+              <ModalBody
+                display="flex"
+                flexDir="column"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+              
+              </ModalBody>
+              <ModalFooter
+              >
+              </ModalFooter>
+            </ModalContent>
+          </>
+      </Modal>
       <Box
         display="flex"
         p={2}
