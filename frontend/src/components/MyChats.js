@@ -4,10 +4,11 @@ import axiosInstance from "./miscellanious/axios";
 
 import { useCallback, useEffect, useState } from "react";
 import ChatLoading from "./ChatLoading";
-
+import { handleApprove } from "./config/ChatLogics";
 import { ChatState } from "./Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 import { Image } from "@chakra-ui/react";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import {
   Modal,
   ModalOverlay,
@@ -17,16 +18,23 @@ import {
   useDisclosure,
   ModalBody,
   ModalCloseButton,
-  Flex
+  Flex,
+  Button,
+  Input,
+  
 } from "@chakra-ui/react";
+import { makePaymentMpesa } from "./config/ChatLogics";
 
 const MyChat = (fetchAgain) => {
   const [loggedUser, setLoggedUser] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [clicked, setClicked] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const {
     selectedChat,
     setSelectedChat,
     user,
+    setUser,
     chats,
     setChats,
     notification,
@@ -227,22 +235,36 @@ const MyChat = (fetchAgain) => {
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
-    > <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
+    > <Modal size="lg" onClose={() => {
+  onClose();
+  setClicked(false);
+}} isOpen={isOpen} isCentered>
        
           <>
             <ModalOverlay />
-            <ModalContent width={"calc(90%)"}>
+            <ModalContent width={"calc(90%)"} p={10}>
               <ModalHeader
                 fontSize="40px"
                 fontFamily="Work sans"
                 display="flex"
+                flexDir={"column"}
                 justifyContent="center"
+                alignItems={"center"}
                 bgGradient="linear(to-r, red.700, yellow.300)"
                 bgClip="text"
                 userSelect={"none"}
                 p={0}
                 m={0}
               >
+                Premium
+                 <Stack direction={"row"} align={"center"} justify={"center"}>
+            <Text fontSize={"2xl"}>$</Text>
+            <Text fontSize={"2xl"} fontWeight={800}>
+              3.99
+            </Text>
+            <Text color={"gray.500"} fontSize={"2xl"}>/month</Text>
+          </Stack>
+                <Text fontSize={"small"}>-Open all chats -Get instant Admin replies -Boost following</Text>
               </ModalHeader>
               <ModalCloseButton />
               <ModalBody
@@ -251,6 +273,105 @@ const MyChat = (fetchAgain) => {
                 alignItems="center"
                 justifyContent="space-between"
               >
+                {!clicked ? (
+                <>
+                  <PayPalScriptProvider
+                    options={{
+                      clientId:
+                        "ASgI4T_UWqJJpTSaNkqcXbQ9H8ub0f_DAMR8SJByA19N4HtPK0XRgTv4xJjj4Mpx_KxenyLzBDapnJ82",
+                    }}
+                  >
+                    <PayPalButtons
+                      createOrder={(data, actions) => {
+                        const amount = 3.0;
+
+                        return actions.order.create({
+                          purchase_units: [
+                            {
+                              amount: {
+                                currency_code: "USD",
+                                value: amount.toFixed(2),
+                              },
+                            },
+                          ],
+                        });
+                      }}
+                      onApprove={async (data, actions) => {
+                        const amount = "Bronze";
+                        const ads = "femaleSub";
+                        await handleApprove(amount, ads, user, setUser);
+                        return actions.order.capture().then(function (details) {
+                         
+                        });
+                      }}
+                      onCancel={() => {
+                        toast({
+                          title: "Cancelled",
+                          description: "Subscription Unsuccessfull",
+                          status: "info",
+                          isClosable: true,
+                          position: "bottom",
+                        });
+                      }}
+                    />
+                  </PayPalScriptProvider>
+                  <Button
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    width={"12.5rem"}
+                    borderRadius={2}
+                    backgroundColor={"green.400"}
+                    color={"white"}
+                    onClick={() => {
+                      setClicked(true);
+                    }}
+                  >
+                    <Image
+                      height={5}
+                      width={"auto"}
+                      src={
+                        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1694007922/mpesa_ppfs6p.png"
+                      }
+                      loading="lazy"
+                      alt={""}
+                    />{" "}
+                    Pay via Mpesa
+                  </Button>{" "}
+                </>
+              ) : (
+                <>
+                  <Input
+                    fontSize={"1.2rem"}
+                    color={"green.400"}
+                    fontWeight={"bold"}
+                    placeholder="i.e 0710334455"
+                    type="text"
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    value={phoneNumber}
+                    minLength={10}
+                    maxLength={10}
+                  />
+                  <Button
+                    width={"100%"}
+                    onClick={() => {
+                      makePaymentMpesa("premium", phoneNumber, user, toast);
+                      onClose();
+                      toast({
+                        title: "Wait as message is sent",
+                        status: "loading",
+                        isClosable: true,
+                        position: "bottom",
+                        duration: 5000,
+                      });
+                    }}
+                    isDisabled={phoneNumber.length !== parseInt(10)}
+                    colorScheme="green"
+                  >
+                    Proceed
+                  </Button>
+                </>
+              )}
               
               </ModalBody>
               <ModalFooter

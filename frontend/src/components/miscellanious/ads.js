@@ -14,8 +14,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
-import { handleApprove } from "../config/ChatLogics";
-import axios from "axios";
+import { handleApprove, makePaymentMpesa } from "../config/ChatLogics";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 
@@ -91,38 +90,25 @@ const Ads = () => {
         position: "bottom",
       });
     });
+    socket.on("premium", async (updatedUser) => {
+      const userData = await {
+        ...user,
+        subscription: updatedUser.subscription,
+      };
+      localStorage.setItem("userInfo", JSON.stringify(userData));
+      await setUser(userData);
+      toast({
+        title: "Successfully subscribed",
+        status: "info",
+        duration: 5000,
+        position: "bottom",
+      });
+    });
     return () => {
       socket.disconnect();
     };
   }, [user, setUser, toast, socket]);
-  const makePaymentMpesa = async () => {
-    if (!phoneNumber) {
-      return;
-    }
-    const subscription = "Ads";
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      const { data } = await axios.post(
-        `/api/paycheck/makepaymentmpesa/${user._id}`,
-        { phoneNumber, subscription },
-        config
-      );
-
-      if (data) {
-        toast({
-          title: "You have been prompt to finish your subscription process",
-          status: "info",
-          duration: 1000,
-          position: "bottom",
-        });
-      }
-    } catch (error) {}
-  };
+ 
 
   useEffect(() => {
     if (count > 0 && watchedAd === false) {
@@ -265,7 +251,7 @@ const Ads = () => {
                   <Button
                     width={"100%"}
                     onClick={() => {
-                      makePaymentMpesa();
+                      makePaymentMpesa("Ads", phoneNumber, user, toast);
                       handleClose();
                       onClose();
                       toast({
@@ -336,7 +322,7 @@ const Ads = () => {
               No ads
               <Text
                 fontSize={"2xs"}
-                margin={"6px"}
+                margin={"10px"}
                 marginBottom={0}
                 marginLeft={-10}
                 marginTop={"25px"}

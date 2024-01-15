@@ -74,6 +74,22 @@ const updateUser = async (req, res) => {
       console.log(error);
     }
     return;
+  }else if(type === "femaleSub"){
+    subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+          subscription: subscriptionExpiry,
+        },
+        { new: true }
+      ).select("subscription");
+      io.emit("premium", updatedUser);
+    } catch (error) {
+      console.log(error);
+    }
+    return;
+
   } else if (userAcc === "Bronze") {
     Acc = "Bronze";
   } else if (userAcc === "Platnum") {
@@ -121,11 +137,14 @@ const makePaymentMpesa = async (req, res) => {
   var Amount;
 
   if (subscription === "Bronze") {
-    Amount = 200;
+    Amount = 150;
   } else if (subscription === "Platnum") {
-    Amount = 1206;
+    Amount = 898;
   } else if (subscription === "Gold") {
-    Amount = 6030;
+    Amount = 3000;
+  }
+  else if(subscription === "premium"){
+    Amount = 599;
   } else {
     Amount = 500;
   }
@@ -221,6 +240,23 @@ const CallBackURL = async (req, res) => {
       console.log(error);
     }
     return;
+  }
+  else if (subscription === "premium"){
+  subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
+   try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        subscription: subscriptionExpiry,
+      },
+      { new: true }
+    ).select("subscription");
+
+    io.emit("premium", updatedUser);
+  } catch (error) {
+    console.log(error, "Error updating user");
+  }
+  return;
   } else {
     Acc = "Gold";
     subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;

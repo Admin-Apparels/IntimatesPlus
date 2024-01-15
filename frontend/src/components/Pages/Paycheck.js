@@ -188,7 +188,7 @@ export default function Paycheck() {
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"3xl"}>$</Text>
             <Text fontSize={"6xl"} fontWeight={800}>
-              2
+              1
             </Text>
             <Text color={"gray.500"}>/chat</Text>
           </Stack>
@@ -415,7 +415,7 @@ export default function Paycheck() {
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"3xl"}>$</Text>
             <Text fontSize={"6xl"} fontWeight={800}>
-              12
+              5.99
             </Text>
             <Text color={"gray.500"}>/week</Text>
           </Stack>
@@ -558,7 +558,7 @@ export default function Paycheck() {
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"3xl"}>$</Text>
             <Text fontSize={"6xl"} fontWeight={800}>
-              60
+              20
             </Text>
             <Text color={"gray.500"}>/month</Text>
           </Stack>
