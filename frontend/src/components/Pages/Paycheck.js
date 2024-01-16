@@ -23,12 +23,11 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
-import axios from "axios";
 import { ChatState } from "../Context/ChatProvider";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { handleApprove, handleCreateChat } from "../config/ChatLogics";
+import { handleApprove, handleCreateChat, makePaymentMpesa } from "../config/ChatLogics";
 
 
 export default function Paycheck() {
@@ -38,7 +37,6 @@ export default function Paycheck() {
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [subscription, setSubscription] = useState("");
-  const [loading, setLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
@@ -115,39 +113,6 @@ export default function Paycheck() {
     toast,
     socket
   ]);
-
-  const makePaymentMpesa = async () => {
-    setLoading(true);
-    if (!phoneNumber) {
-      setLoading(false);
-      return;
-    }
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      const { data } = await axios.post(
-        `/api/paycheck/makepaymentmpesa/${user._id}`,
-        { subscription, phoneNumber },
-        config
-      );
-      if (data) {
-        toast({
-          title: "You have been prompt to finish your subscription process",
-          status: "info",
-          duration: 1000,
-          position: "bottom",
-        });
-      }
-
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
   return (
     <VStack
       display={"flex"}
@@ -226,7 +191,7 @@ export default function Paycheck() {
           >
             <PayPalButtons
               createOrder={(data, actions) => {
-                const amount = 2.0;
+                const amount = 1.0;
 
                 return actions.order.create({
                   purchase_units: [
@@ -283,7 +248,6 @@ export default function Paycheck() {
             width={"100%"}
             backgroundColor={"green.400"}
             color={"white"}
-            isDisabled={loading === true}
             onClick={() => {
               setSubscription("Bronze");
               onOpen();
@@ -346,10 +310,11 @@ export default function Paycheck() {
                 justifyContent="space-between"
               >
                 <Input
-                  fontSize={"1.2rem"}
+                  fontSize={"small"}
                   color={"green.400"}
                   fontWeight={"bold"}
                   placeholder="i.e 0710334455"
+                  textAlign={"center"}
                   type="text"
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   value={phoneNumber}
@@ -360,7 +325,7 @@ export default function Paycheck() {
                 <Button
                   width={"100%"}
                   onClick={() => {
-                    makePaymentMpesa();
+                    makePaymentMpesa(subscription, phoneNumber, user, toast);
                     onClose();
                     toast({
                       title: "Wait as message is sent",
@@ -453,7 +418,7 @@ export default function Paycheck() {
           >
             <PayPalButtons
               createOrder={(data, actions) => {
-                const amount = 12.0;
+                const amount = 5.99;
 
                 return actions.order.create({
                   purchase_units: [
@@ -509,7 +474,6 @@ export default function Paycheck() {
             width={"100%"}
             backgroundColor={"green.400"}
             color={"white"}
-            isDisabled={loading === true}
             onClick={() => {
               setSubscription("Platnum");
               onOpen();
@@ -596,7 +560,7 @@ export default function Paycheck() {
           >
             <PayPalButtons
               createOrder={(data, actions) => {
-                const amount = 60.0;
+                const amount = 20.0;
                 return actions.order.create({
                   purchase_units: [
                     {
@@ -652,7 +616,6 @@ export default function Paycheck() {
             width={"100%"}
             backgroundColor={"green.400"}
             color={"white"}
-            isDisabled={loading === true}
             onClick={() => {
               setSubscription("Gold");
               onOpen();

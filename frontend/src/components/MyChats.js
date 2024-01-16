@@ -7,7 +7,7 @@ import ChatLoading from "./ChatLoading";
 import { handleApprove } from "./config/ChatLogics";
 import { ChatState } from "./Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
-import { Image } from "@chakra-ui/react";
+import { Image, useColorModeValue } from "@chakra-ui/react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import {
   Modal,
@@ -30,6 +30,7 @@ const MyChat = (fetchAgain) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [clicked, setClicked] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const colorModeValue = useColorModeValue("green.50", "green.900");
   const {
     selectedChat,
     setSelectedChat,
@@ -257,6 +258,7 @@ const MyChat = (fetchAgain) => {
                 m={0}
               >
                 Premium
+                
                  <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"2xl"}>$</Text>
             <Text fontSize={"2xl"} fontWeight={800}>
@@ -340,15 +342,26 @@ const MyChat = (fetchAgain) => {
                   </Button>{" "}
                 </>
               ) : (
-                <>
+                <> <Text
+            fontSize={"sm"}
+            fontWeight={500}
+            bg={colorModeValue}
+            p={2}
+            px={3}
+            color={"green.500"}
+            rounded={"full"}
+          >
+            *6% off
+          </Text>
                   <Input
-                    fontSize={"1.2rem"}
+                    fontSize={"sm"}
                     color={"green.400"}
                     fontWeight={"bold"}
-                    placeholder="i.e 0710334455"
+                    placeholder="i.e 0710334455..."
                     type="text"
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     value={phoneNumber}
+                    textAlign={"center"}
                     minLength={10}
                     maxLength={10}
                   />

@@ -144,9 +144,9 @@ const makePaymentMpesa = async (req, res) => {
     Amount = 3000;
   }
   else if(subscription === "premium"){
-    Amount = 599;
-  } else {
     Amount = 500;
+  } else {
+    Amount = 300;
   }
   const generateToken = async () => {
     const secret = process.env.CUSTOMER_SECRET;

@@ -259,7 +259,7 @@ const MatchModal = () => {
                       bgGradient: "linear(to-r, red.500, yellow.500)",
                     }}
                   >
-                    Next
+                    Pass
                   </Button>
                 )}
               </ModalFooter>
