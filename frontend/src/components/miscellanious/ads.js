@@ -144,7 +144,7 @@ const Ads = () => {
     <>
       <Modal size="lg" isOpen={isOpen} isCentered closeOnOverlayClick={false}>
         <ModalOverlay />
-        <ModalContent width={"calc(100% - 20px)"}  p={5}>
+        <ModalContent width={"calc(100% - 20px)"}  p={1}>
           <ModalHeader
             fontSize="40px"
             fontFamily="Work sans"

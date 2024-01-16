@@ -130,22 +130,11 @@ const MyChat = (fetchAgain) => {
     fetchData();
   }, [fetchChats, loggedUser]);
   const canOpenChat = (chat) => {
-
-    if (!chat.paidMonthly || typeof chat.oneChatOnly === 'undefined') {
-      return false;
-    }
-  
-    const currentDate = new Date();
-    const paidMonthlyExpirationDate = new Date(chat.paidMonthly);
-  
-    if (chat.paidMonthly && paidMonthlyExpirationDate > currentDate) {
+    const currentDate = new Date().getTime();
+    const expirey = parseInt(user.subscription);
+    if (expirey > currentDate) {
       return true;
     }
-  
-    if (chat.oneChatOnly) {
-      return true;
-    }
-  
     return false;
   };
   
@@ -351,7 +340,7 @@ const MyChat = (fetchAgain) => {
             color={"green.500"}
             rounded={"full"}
           >
-            *6% off
+            *20% off
           </Text>
                   <Input
                     fontSize={"sm"}
