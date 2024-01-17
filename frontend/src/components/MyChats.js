@@ -18,7 +18,6 @@ import {
   useDisclosure,
   ModalBody,
   ModalCloseButton,
-  Flex,
   Button,
   Input,
   
@@ -129,34 +128,22 @@ const MyChat = (fetchAgain) => {
 
     fetchData();
   }, [fetchChats, loggedUser]);
-  const canOpenChat = (chat) => {
-    const currentDate = new Date().getTime();
-    const expirey = parseInt(user.subscription);
-    if (expirey > currentDate) {
-      return true;
-    }
-    return false;
-  };
   
 
   const renderChatItems = () => {
     return chats.map((chat) => {
-      const isChatOpen = canOpenChat(chat);
   
       return (
         <Box
           key={chat._id}
           onClick={() => {
-            if (isChatOpen || user.gender === "male") {
+          
               setSelectedChat(chat);
               const otherNotifications = notification.filter(
                 (n) => n.chat._id !== chat._id
               );
               setNotification(otherNotifications);
-            } else {
-              onOpen()
-
-            }
+           
           }}
           cursor="pointer"
           bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
@@ -164,7 +151,6 @@ const MyChat = (fetchAgain) => {
           px={3}
           py={2}
           borderRadius="lg"
-          opacity={isChatOpen ? 1 : 0.5}
           position={"relative"}
         >
           <Text display={"flex"} textAlign={"center"}>
@@ -192,23 +178,7 @@ const MyChat = (fetchAgain) => {
                 : chat.latestMessage.content}
             </Text>
           )}
-         {!canOpenChat(chat) && user.gender === "female" && (
-  <Flex
-    position="absolute"
-    align="center"
-    justify="center"
-    w="90%"
-    h="100%"
-    mt={3}
-  >
-    <Image
-      src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1704985511/icons8-padlock_jebelc.gif"
-      alt="Padlock"
-      height={8}
-      m={1}
-    />
-  </Flex>
-)}
+       
         </Box>
       );
     });

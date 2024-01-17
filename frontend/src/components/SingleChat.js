@@ -21,7 +21,7 @@ import {
 import "../components/styles.css";
 import PageIndicator from "./miscellanious/PageIndicator";
 import Lottie from "react-lottie";
-import { getSenderName, getSenderFull, getUserById } from "./config/ChatLogics";
+import { getSenderName, getSenderFull, getUserById, getSenderId } from "./config/ChatLogics";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
@@ -41,6 +41,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { onOpen, onClose } = useDisclosure();
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
+  const [isOnline, setIsOnline] = useState(false);
   const [wait, setWait] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
 
@@ -61,6 +62,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     user,
     notification,
     setNotification,
+    onlineUsersCount,
     setOnlineUsersCount,
     setAds,
     socket,
@@ -383,6 +385,17 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const handleDotClick = (index) => {
     setQuoteIndex(index);
   };
+ useEffect(() => {
+    const checkUserOnline = () => {
+       if (!selectedChat || !Array.isArray(onlineUsersCount)) return false;
+      return onlineUsersCount.includes(getSenderId(user, selectedChat.users));
+    };
+    setIsOnline(checkUserOnline());
+
+    return () => {
+
+    };
+  }, [onlineUsersCount, selectedChat, user]);
 
 
   return (
@@ -502,7 +515,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               {" "}
               {getSenderName(user, selectedChat.users)}
             </Text>
-            <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}> {!isCallStarted ? (
+            <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>{isOnline? <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1705510176/icons8-online-48_vitzy6.png" height={5}/>: <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1705510176/icons8-offline-50_uvljtp.png" height={5}/>} {!isCallStarted ? (
                          <IconButton
                          borderRadius={20}
                          padding={0}
