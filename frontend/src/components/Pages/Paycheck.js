@@ -28,17 +28,21 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { handleApprove, handleCreateChat, makePaymentMpesa } from "../config/ChatLogics";
+import { io } from 'socket.io-client';
 
 
 export default function Paycheck() {
   const toast = useToast();
-  const { user, setUser, userId, setChats, chats, setSelectedChat, socket } =
+  const { user, setUser, userId, setChats, chats, setSelectedChat} =
   ChatState();
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [subscription, setSubscription] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const token = user.token;
+  const socketPaycheck = io('https://fuckmate.boo', {
+      query: { token },
+    });
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const currentDate = new Date().getTime();
@@ -60,8 +64,8 @@ export default function Paycheck() {
 
   useEffect(() => {
   
-    socket.on("noPayment", (nothing) => {
-      toast({
+    socketPaycheck.on("noPayment", (nothing) => {
+     toast({
         title: nothing,
         description: "Subscription unsuccessful",
         status: "info",
@@ -70,7 +74,7 @@ export default function Paycheck() {
       });
       navigate("/chats");
     });
-    socket.on("userUpdated", async (updatedUser) => {
+    socketPaycheck.on("userUpdated", async (updatedUser) => {
       const userData = await {
         ...user,
         accountType: updatedUser.accountType,
@@ -100,7 +104,7 @@ export default function Paycheck() {
     });
 
     return () => {
-      socket.disconnect();
+      socketPaycheck.disconnect();
     };
   }, [
     user,
@@ -111,7 +115,7 @@ export default function Paycheck() {
     setChats,
     setSelectedChat,
     toast,
-    socket
+    socketPaycheck
   ]);
   return (
     <VStack

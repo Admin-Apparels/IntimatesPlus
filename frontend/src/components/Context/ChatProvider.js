@@ -20,18 +20,28 @@ const ChatProvider = ({ children }) => {
   const [isCallStarted, setIsCallStarted] = useState(false);
 
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    if (userInfo && userInfo.token) {
-      const token = userInfo.token;
-  
-      const newSocket = io('https://fuckmate.boo', {
-        query: { token },
-      });
-      setSocket(newSocket);
-  
-      return () => newSocket.close();
-    }
-  }, []);
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  if (userInfo && userInfo.token) {
+    const token = userInfo.token;
+
+   const newSocket = io('https://fuckmate.boo', {
+      query: { token },
+    });
+
+    newSocket.on("connect", () => {
+      console.log("Socket connected");
+    });
+
+    newSocket.on("disconnect", () => {
+      console.log("Socket disconnected");
+    });
+
+    setSocket(newSocket);
+
+    return () => newSocket.close();
+  }
+}, []);
+
   
   
   

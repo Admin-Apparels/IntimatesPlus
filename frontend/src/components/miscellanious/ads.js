@@ -67,16 +67,9 @@ const Ads = () => {
     setDisable((prev) => !prev);
   };
   useEffect(() => {
-
-    socket.on("noPayment", (nothing) => {
-      toast({
-        title: nothing,
-        description: "Subscription unsuccessful",
-        status: "info",
-        duration: 5000,
-        position: "bottom",
-      });
-    });
+    socket.on("connect", () => {
+      console.log("socket connected")
+    })
     socket.on("noMoreAds", async (updatedUser) => {
       const userData = await {
         ...user,
@@ -87,6 +80,15 @@ const Ads = () => {
       toast({
         title: "Successfully subscribed",
         description: `You will receive no ads for the next one month`,
+        status: "info",
+        duration: 5000,
+        position: "bottom",
+      });
+    });
+     socket.on("noPayment", (nothing) => {
+     toast({
+        title: nothing,
+        description: "Subscription unsuccessful",
         status: "info",
         duration: 5000,
         position: "bottom",

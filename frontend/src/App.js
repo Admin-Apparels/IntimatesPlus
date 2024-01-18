@@ -5,7 +5,7 @@ import Home from "./components/Pages/Home";
 import GoogleInfo from "./components/Pages/GoogleInfo";
 import Chats from "./components/Pages/ChatsPage";
 import Paycheck from "./components/Pages/Paycheck";
-import NotFound from "./components/Pages/NotFound";
+// import NotFound from "./components/Pages/NotFound";
 import forgotPassword from "./components/Pages/ForgotPassword";
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
         <Route path="/chats" Component={Chats} />
         <Route path="/paycheck" Component={Paycheck} />
         <Route path="/accountrecovery" Component={forgotPassword} />
-        <Route path="*" Component={NotFound} />
+        {/* <Route path="*" Component={NotFound} /> */}
       </Routes>
     </div>
   );

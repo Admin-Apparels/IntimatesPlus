@@ -137,7 +137,7 @@ const makePaymentMpesa = async (req, res) => {
   var Amount;
 
   if (subscription === "Bronze") {
-    Amount = 150;
+    Amount = 1;
   } else if (subscription === "Platnum") {
     Amount = 898;
   } else if (subscription === "Gold") {
@@ -205,10 +205,11 @@ const CallBackURL = async (req, res) => {
   const { Body } = req.body;
 
   const io = getIO();
+ 
   if (!userId && !subscription) {
     return res.status(401);
   }
-  if (!Body.stkCallback.CallbackMetadata) {
+  if (!Body.stkCallback.CallbackMetadata || Body.stkCallback.CallbackMetadata === undefined) {
     const nothing = "payment cancelled or insufficient amount";
     io.emit("noPayment", nothing);
     return res.status(201).json({ message: "Invalid callback data" });
@@ -233,7 +234,6 @@ const CallBackURL = async (req, res) => {
         },
         { new: true }
       ).select("adsSubscription");
-      console.log(updatedUser);
       io.emit("noMoreAds", updatedUser);
       res.json(updatedUser);
     } catch (error) {
@@ -261,7 +261,6 @@ const CallBackURL = async (req, res) => {
     Acc = "Gold";
     subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
   }
-
   try {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
