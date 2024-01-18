@@ -260,6 +260,7 @@ const MatchModal = () => {
                     }}
                   >
                     Pass
+                    <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1705591008/icons8-broken-heart-48_xlns32.png" height={5}/>
                   </Button>
                 )}
               </ModalFooter>
