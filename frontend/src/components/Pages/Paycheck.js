@@ -157,7 +157,7 @@ export default function Paycheck() {
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"3xl"}>$</Text>
             <Text fontSize={"6xl"} fontWeight={800}>
-              1
+              1.99
             </Text>
             <Text color={"gray.500"}>/chat</Text>
           </Stack>
@@ -195,7 +195,7 @@ export default function Paycheck() {
           >
             <PayPalButtons
               createOrder={(data, actions) => {
-                const amount = 1.0;
+                const amount = 1.99;
 
                 return actions.order.create({
                   purchase_units: [
