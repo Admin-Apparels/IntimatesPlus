@@ -42,7 +42,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
-  const [wait, setWait] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
 
   const toast = useToast();
@@ -60,6 +59,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     selectedChat,
     setSelectedChat,
     user,
+    setUser,
     notification,
     setNotification,
     onlineUsersCount,
@@ -259,37 +259,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         isClosable: true,
         position: "top-left",
       });
-      if (userData._id === user._id && user.gender === "female") {
-        setTimeout(() => {
-          setWait(true);
-        }, 25000);
-        setTimeout(() => {
-          toast({
-            title:
-              "Your request is being processed by Admin, you'll be notified soon",
-            status: "info",
-            isClosable: true,
-            duration: 20000,
-            position: "bottom",
-          });
-        }, 5000);
-      } else if (userData._id === user._id && user.gender === "male") {
-        setTimeout(() => {
-          setWait(true);
-        }, 25000);
-        setTimeout(() => {
-          toast({
-            title:
-              "Step into the authentic realm of the anti-simulation world, where real connections and experiences await!",
-            description:
-              "Your presence in our journey towards a porn-free world and a return to genuine human interaction fills our hearts with gratitude and hope",
-            status: "info",
-            isClosable: true,
-            duration: 20000,
-            position: "bottom",
-          });
-        }, 5000);
-      }
+     
     });
     socket.on("onlineUsers", (count) => {
       setOnlineUsersCount(count);
@@ -397,13 +367,21 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     };
   }, [onlineUsersCount, selectedChat, user]);
 
+  const deleteNewUser = () => {
+    const userData = JSON.parse(localStorage.getItem("userInfo"));
+    delete userData.isNewUser;
+    localStorage.setItem('userInfo', JSON.stringify(userData));
+    setUser(userData);
+  
+};
+
 
   return (
     <>
-      {wait && (
+      {user.isNewUser && (
         <Modal size="lg" isOpen={onOpen} isCentered closeOnOverlayClick={false}>
           <ModalOverlay />
-          <ModalContent height="410px" width={"calc(100% - 20px)"}>
+          <ModalContent width={"calc(100% - 20px)"}>
             <ModalHeader
               fontSize="100%"
               fontFamily="Work sans"
@@ -411,8 +389,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               justifyContent="center"
               background={"transparent"}
               userSelect={"none"}
-              p={0}
-              m={0}
+             
             >
               *Safety and Terms of Use*
             </ModalHeader>
@@ -421,14 +398,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               display="flex"
               flexDir="column"
               alignItems="center"
-              justifyContent="space-between"
+              justifyContent="center"
               className="quote-container"
               overflowY={"scroll"}
+            
             >
-              <Text fontSize={"small"} textAlign={"center"} userSelect={"none"}>
+              <Text fontSize={"larger"} textAlign={"center"} userSelect={"none"} textColor={"blue.400"} p={3}>
                 {heading[quoteIndex]}
               </Text>
-              <Text className="quote-current" fontSize={"small"} userSelect={"none"}>
+              <Text className="quote-current" fontSize={"sm"} userSelect={"none"}>
                 {quotes[quoteIndex]}
               </Text>
             </ModalBody>
@@ -446,9 +424,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               {quoteIndex === 5 ? (
                 <Checkbox
                   onChange={() => {
-                    setWait(false);
                     setAds(true);
                     onClose();
+                    deleteNewUser()
                   }}
                   p={2}
                   m={0}

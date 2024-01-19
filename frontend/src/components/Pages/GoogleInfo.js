@@ -83,10 +83,6 @@ export default function Signup() {
       const userData = await { ...data, isNewUser: true };
       localStorage.setItem("userInfo", JSON.stringify(userData));
 
-      setTimeout(() => {
-        delete userData.isNewUser;
-        localStorage.setItem("userInfo", JSON.stringify(userData));
-      }, 3000);
       setPicLoading(false);
       navigate("/chats");
     } catch (error) {

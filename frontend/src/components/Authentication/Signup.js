@@ -117,11 +117,6 @@ const Signup = () => {
       );
       let userData = await { ...data, isNewUser: true };
       localStorage.setItem("userInfo", JSON.stringify(userData));
-
-      setTimeout(() => {
-        delete userData.isNewUser;
-        localStorage.setItem("userInfo", JSON.stringify(userData));
-      }, 2500);
       setPicLoading(false);
       navigate("/chats");
     } catch (error) {
@@ -196,19 +191,13 @@ const Signup = () => {
         <ModalOverlay />
         <ModalContent padding={5}>
           <ModalHeader
-            fontSize="40px"
+            fontSize="medium"
             fontFamily="Work sans"
             display="flex"
             justifyContent="center"
           >
-            <Text
-              textAlign={"center"}
-              justifyContent={"center"}
-              fontSize={"2xl"}
-              textColor={"white"}
-            >
               Enter Code sent to: ~{email}~
-            </Text>
+   
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
@@ -218,8 +207,7 @@ const Signup = () => {
             justifyContent="space-between"
           >
             <Input
-              fontSize={"2xl"}
-              textColor={"white"}
+              fontSize={"medium"}
               placeholder={`i.e 126413`}
               type="text"
               textAlign="center"
