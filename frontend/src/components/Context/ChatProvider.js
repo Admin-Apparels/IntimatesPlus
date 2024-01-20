@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import io from 'socket.io-client';
+import React, { createContext, useContext, useState } from "react";
 
 const ChatContext = createContext();
 
@@ -16,34 +15,7 @@ const ChatProvider = ({ children }) => {
   const [pic, setPic] = useState("");
   const [recoverEmail, setRecoverEmail] = useState();
   const [ads, setAds] = useState(false);
-  const [socket, setSocket] = useState(null);
   const [isCallStarted, setIsCallStarted] = useState(false);
-
-  useEffect(() => {
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-  if (userInfo && userInfo.token) {
-    const token = userInfo.token;
-
-   const newSocket = io('https://fuckmate.boo', {
-      query: { token },
-    });
-
-    newSocket.on("connect", () => {
-      console.log("Socket connected");
-    });
-
-    newSocket.on("disconnect", () => {
-      console.log("Socket disconnected");
-    });
-
-    setSocket(newSocket);
-
-    return () => newSocket.close();
-  }
-}, []);
-
-  
-  
   
 
   return (
@@ -73,7 +45,6 @@ const ChatProvider = ({ children }) => {
         setOnlineUsersCount,
         userId,
         setUserId,
-        socket,
         isCallStarted,
         setIsCallStarted
       }}

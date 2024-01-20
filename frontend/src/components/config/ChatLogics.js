@@ -1,4 +1,8 @@
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+
+let socketInstance;
 
 export const isSameSenderMargin = (messages, m, i, userId) => {
   if (
@@ -156,4 +160,37 @@ export async function handleCreateChat(
       position: "bottom-left",
     });
   }
+}
+
+export function useConnectSocket(token) {
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    if (socketInstance) {
+      setSocket(socketInstance);
+      return;
+    }
+
+    const newSocket = io('http://localhost:8080', {
+      query: { token },
+    });
+
+    socketInstance = newSocket;
+
+    newSocket.on('connect', () => {
+      console.log("Socket Connected");
+    });
+
+    newSocket.on("disconnect", () => {
+      console.log("Socket disconnected");
+    });
+
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [token]);
+
+  return socket;
 }

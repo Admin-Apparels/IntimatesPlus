@@ -21,7 +21,7 @@ import {
 import "../components/styles.css";
 import PageIndicator from "./miscellanious/PageIndicator";
 import Lottie from "react-lottie";
-import { getSenderName, getSenderFull, getUserById, getSenderId } from "./config/ChatLogics";
+import { getSenderName, getSenderFull, getUserById, getSenderId, useConnectSocket} from "./config/ChatLogics";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
@@ -30,7 +30,6 @@ import ScrollableChat from "./ScrollableChat";
 import { ChatState } from "./Context/ChatProvider";
 import animation from "../animations/typing.json";
 import VideoCallComponent from "./miscellanious/vedioCall";
-import { useNavigate } from "react-router-dom";
 
 
 var selectedChatCompare;
@@ -44,8 +43,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
-  const navigate = useNavigate();
-
+  
   const toast = useToast();
 
   const defaultOptions = {
@@ -67,10 +65,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     onlineUsersCount,
     setOnlineUsersCount,
     setAds,
-    socket,
     isCallStarted,
     setIsCallStarted
   } = ChatState();
+
+ const socket = useConnectSocket(user.token);
 
  const startCall = () => {
         setIsCallStarted(true);
@@ -280,8 +279,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   useEffect(() => {
     if(!socket) return;
-    socket.on("connect", () => {
-    });
     const showNotification = (title, options) => {
       if (Notification.permission === "granted") {
         new Notification(title, options);
@@ -334,7 +331,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     return () => {
       socket.off("message received");
     };
-  }, [notification, setNotification, setFetchAgain, socket, navigate]);
+  }, [notification, setNotification, setFetchAgain, socket]);
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);

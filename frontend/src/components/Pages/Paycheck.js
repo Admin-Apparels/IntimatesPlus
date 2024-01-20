@@ -27,7 +27,7 @@ import { ChatState } from "../Context/ChatProvider";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { handleApprove, handleCreateChat, makePaymentMpesa } from "../config/ChatLogics";
+import {handleApprove, handleCreateChat, makePaymentMpesa, useConnectSocket } from "../config/ChatLogics";
 import { io } from 'socket.io-client';
 
 
@@ -39,10 +39,15 @@ export default function Paycheck() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [subscription, setSubscription] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const token = user.token;
-  const socketPaycheck = io('https://fuckmate.boo', {
-      query: { token },
-    });
+
+  const socket = useConnectSocket(user.token);
+
+  // const token = user.token;
+  // const socketPaycheck = io('https://fuckmate.boo', {
+  //     query: { token },
+  //   });
+  console.log(socket);
+
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const currentDate = new Date().getTime();
@@ -63,7 +68,8 @@ export default function Paycheck() {
   }, [navigate, user]);
 
   useEffect(() => {
-    socketPaycheck.on("noPayment", (nothing) => {
+    if(!socket) return;
+    socket.on("noPayment", (nothing) => {
      toast({
         title: nothing,
         description: "Subscription unsuccessful",
@@ -73,7 +79,7 @@ export default function Paycheck() {
       });
       navigate("/chats");
     });
-    socketPaycheck.on("userUpdated", async (updatedUser) => {
+    socket.on("userUpdated", async (updatedUser) => {
       const userData = await {
         ...user,
         accountType: updatedUser.accountType,
@@ -103,7 +109,7 @@ export default function Paycheck() {
     });
 
     return () => {
-      socketPaycheck.disconnect();
+      socket.disconnect();
     };
   }, [
     user,
@@ -114,7 +120,7 @@ export default function Paycheck() {
     setChats,
     setSelectedChat,
     toast,
-    socketPaycheck
+    socket
   ]);
   return (
     <VStack

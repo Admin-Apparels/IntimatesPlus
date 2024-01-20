@@ -15,7 +15,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
-import { handleApprove, makePaymentMpesa } from "../config/ChatLogics";
+import { useConnectSocket, handleApprove, makePaymentMpesa } from "../config/ChatLogics";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 
@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 const Ads = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [disable, setDisable] = useState(false);
-  const { ads, setAds, user, setUser, socket } = ChatState();
+  const { ads, setAds, user, setUser} = ChatState();
   const [countdown, setCountdown] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
@@ -31,10 +31,15 @@ const Ads = () => {
 
   const [count, setCount] = useState(10);
   const [watchedAd, setWatchedAd] = useState(true);
+  
 
   const [clicked, setClicked] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
+
+
+ const socket = useConnectSocket(user.token);
+
 
   useEffect(() => {
     if (ads || (user.isNewUser === undefined && !ads)) {
@@ -68,8 +73,6 @@ const Ads = () => {
   };
   useEffect(() => {
     if(!socket) return;
-    socket.on("connect", () => {
-    })
     socket.on("noMoreAds", async (updatedUser) => {
       const userData = await {
         ...user,
