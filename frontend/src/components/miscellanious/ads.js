@@ -67,6 +67,7 @@ const Ads = () => {
     setDisable((prev) => !prev);
   };
   useEffect(() => {
+    if(!socket) return;
     socket.on("connect", () => {
       console.log("socket connected")
     })

@@ -277,6 +277,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   }, [selectedChat, fetchMessages, toast, user.token]);
 
   useEffect(() => {
+    if(!socket) return;
     const showNotification = (title, options) => {
       if (Notification.permission === "granted") {
         new Notification(title, options);
