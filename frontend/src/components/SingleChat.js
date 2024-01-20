@@ -279,9 +279,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   }, [selectedChat, fetchMessages, toast, user.token]);
 
   useEffect(() => {
-    if(!socket.connected){
-      navigate('/');
-    }
+    if(!socket) return;
+    socket.on("connect", () => {
+    });
     const showNotification = (title, options) => {
       if (Notification.permission === "granted") {
         new Notification(title, options);
