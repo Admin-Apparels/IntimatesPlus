@@ -69,7 +69,6 @@ const Ads = () => {
   useEffect(() => {
     if(!socket) return;
     socket.on("connect", () => {
-      console.log("socket connected")
     })
     socket.on("noMoreAds", async (updatedUser) => {
       const userData = await {

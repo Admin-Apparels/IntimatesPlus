@@ -30,6 +30,7 @@ import ScrollableChat from "./ScrollableChat";
 import { ChatState } from "./Context/ChatProvider";
 import animation from "../animations/typing.json";
 import VideoCallComponent from "./miscellanious/vedioCall";
+import { useNavigate } from "react-router-dom";
 
 
 var selectedChatCompare;
@@ -43,6 +44,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
+  const navigate = useNavigate();
 
   const toast = useToast();
 
@@ -277,7 +279,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   }, [selectedChat, fetchMessages, toast, user.token]);
 
   useEffect(() => {
-    if(!socket) return;
+    if(!socket.connected){
+      navigate('/chats');
+    }
     const showNotification = (title, options) => {
       if (Notification.permission === "granted") {
         new Notification(title, options);
@@ -330,7 +334,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     return () => {
       socket.off("message received");
     };
-  }, [notification, setNotification, setFetchAgain, socket]);
+  }, [notification, setNotification, setFetchAgain, socket, navigate]);
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);

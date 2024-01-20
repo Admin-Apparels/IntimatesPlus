@@ -63,7 +63,6 @@ export default function Paycheck() {
   }, [navigate, user]);
 
   useEffect(() => {
-    if(!socketPaycheck) return;
     socketPaycheck.on("noPayment", (nothing) => {
      toast({
         title: nothing,
