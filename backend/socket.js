@@ -7,7 +7,7 @@ const initializeSocketIO = (server) => {
   io = socketIO(server, {
     pingTimeout: 60000,
     cors: {
-      origin: "http://localhost:3000",
+      origin: "https://fuckmate.boo",
     },
   });
   const onlineUsers = new Set();

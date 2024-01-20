@@ -28,7 +28,6 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {handleApprove, handleCreateChat, makePaymentMpesa, useConnectSocket } from "../config/ChatLogics";
-import { io } from 'socket.io-client';
 
 
 export default function Paycheck() {
@@ -42,11 +41,6 @@ export default function Paycheck() {
 
   const socket = useConnectSocket(user.token);
 
-  // const token = user.token;
-  // const socketPaycheck = io('https://fuckmate.boo', {
-  //     query: { token },
-  //   });
-  console.log(socket);
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));

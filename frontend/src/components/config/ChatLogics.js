@@ -171,24 +171,22 @@ export function useConnectSocket(token) {
       return;
     }
 
-    const newSocket = io('http://localhost:8080', {
+    const newSocket = io('https://fuckmate.boo', {
       query: { token },
     });
 
-    socketInstance = newSocket;
-
     newSocket.on('connect', () => {
-      console.log("Socket Connected");
     });
 
     newSocket.on("disconnect", () => {
-      console.log("Socket disconnected");
     });
 
     setSocket(newSocket);
+    socketInstance = newSocket;
 
     return () => {
       newSocket.disconnect();
+      socketInstance = null;
     };
   }, [token]);
 
