@@ -280,7 +280,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   useEffect(() => {
     if(!socket.connected){
-      navigate('/chats');
+      navigate('/');
     }
     const showNotification = (title, options) => {
       if (Notification.permission === "granted") {
