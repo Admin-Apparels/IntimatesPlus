@@ -69,7 +69,6 @@ const Signup = () => {
     }
     try {
       const { data } = await axios.get(`/api/user/${email}`);
-      console.log(data);
       setCode(data);
       onOpen();
       setPicLoading(false);
