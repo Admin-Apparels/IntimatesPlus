@@ -8,7 +8,7 @@ import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 import Ads from "../miscellanious/ads";
 import { Button, Image } from "@chakra-ui/react";
-import {Text, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure } from "@chakra-ui/react";
+import {Text, Link, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure } from "@chakra-ui/react";
 
 
 const Chatpage = () => {
@@ -81,6 +81,7 @@ const Chatpage = () => {
     >
       Love Shared, Love Grows
       <Text textAlign={"center"} fontSize={"small"}>Share your story today!</Text>
+      💬 Dec 23, 2023
     </ModalHeader>
     <ModalBody
       display={"flex"}
@@ -95,10 +96,10 @@ const Chatpage = () => {
         {Story}
       
     </ModalBody>
-    <ModalFooter display={"flex"} flexDir={"column"} textAlign={"center"} fontSize={"small"} p={0} m={0}>
+    <ModalFooter display={"flex"} flexDir={"column"} textAlign={"center"} textColor={"Background"} fontSize={"small"} backgroundColor={"grey"} p={0} m={1} borderRadius={2}>
       <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1706012485/icons8-eye_g5kvhn.gif" height={3}/>
         <Text fontSize={"smaller"} p={0} m={0}>11k</Text>
-        For more stories and inspiration, follow us on Twitter: @fuckmateboo.
+        For more stories and inspiration, follow us on Twitter: <Link href="https://twitter.com/fuckmateboo" textColor={"blue.200"}>@fuckmateboo</Link>
     </ModalFooter>
     </ModalContent>
     </Modal>
