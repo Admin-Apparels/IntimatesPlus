@@ -4,6 +4,12 @@
     overflow-y: scroll;
     scrollbar-width: none;
 }
+.Content{
+    
+            justify-content: flex-start;
+            padding-inline: 2rem;
+    
+}
 .quote-container {
     display: flex;
     justify-content: space-between;
