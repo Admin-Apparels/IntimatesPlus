@@ -122,6 +122,7 @@ const Chatpage = () => {
   borderRadius="50%"
   fontSize="large"
   textColor="orange"
+  p={6}
   _hover={{ backgroundColor: "red" }}
   onClick={() => { handleButtonClick(); }}
 >
@@ -136,6 +137,7 @@ const Chatpage = () => {
       borderRadius="50%"
       width="12px"
       height="12px"
+      p={2}
     ></Box>
   )}
 </Button>}
