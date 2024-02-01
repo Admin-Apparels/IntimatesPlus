@@ -99,7 +99,7 @@ function Homepage() {
                This is a realm where connections evolve beyond fleeting moments. Once a mutual spark is ignited, both accounts shall transcend to new heights. Deactivation becomes a symphony of shared passion, a crescendo of genuine connection. 🌟 #fuckmateboo #RealConnections 
               </Text>
               <Text
-                display="flex"
+                display="flex" 
                 justifyContent={"space-around"}
                 width={"100%"}
                 p={0}
@@ -142,6 +142,7 @@ function Homepage() {
                 m={0}
                 userSelect={"none"}
                 textColor={"red.500"}
+                textAlign={"center"}
               >
                 fuckmate.boo
               </Text>
