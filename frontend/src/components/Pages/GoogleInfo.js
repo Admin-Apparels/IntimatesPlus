@@ -98,7 +98,7 @@ export default function Signup() {
     }
   };
 
-  const MIN_CHARACTERS = 100;
+  const MIN_CHARACTERS = 20;
   const MAX_CHARACTERS = 200;
   const isFormValid = () => {
     if (gender === "female") {

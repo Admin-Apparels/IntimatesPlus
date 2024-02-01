@@ -1,17 +1,29 @@
 @import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap");
 
+/* Default styles for all screens */
 .App {
   min-height: 100vh;
   display: flex;
   position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701955241/Untitled_2_1_iu5ecx.webp");
-    background-size: cover;
-    background-position: center;
-    overflow-y: scroll;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  background-size: cover;
+  background-position: center;
+}
+
+@media (max-width: 767px) {
+  .App {
+    background-image: url("https://res.cloudinary.com/dvc7i8g1a/image/upload/v1706799118/1_f5nbyb.jpg");
+  }
+}
+
+@media (min-width: 768px) {
+  .App {
+    background-image: url("https://res.cloudinary.com/dvc7i8g1a/image/upload/v1706799118/physical-signs-of-female-arousal_gqkthn.jpg");
+  }
 }
 
 ::-webkit-scrollbar {
