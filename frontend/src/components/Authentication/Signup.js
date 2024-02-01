@@ -235,7 +235,7 @@ const Signup = () => {
               justifyContent={"center"}
               color={code !== inputCode ? "red" : "green"}
             >
-              Please Enter the Exact Code Recieved
+              Please enter the exact code received, refresh your inbox.
             </Text>
           </ModalFooter>
         </ModalContent>
