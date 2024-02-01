@@ -56,7 +56,7 @@ const Chatpage = () => {
   };
 
   return (
-    <Box width="100%">
+    <Box width="100%" backgroundColor={"Background"}>
       <ErrorBoundary fallback={<p>Something went wrong</p>} userSelect={"none"}>
         {user && <SideDrawer />}{" "}
         {user &&
