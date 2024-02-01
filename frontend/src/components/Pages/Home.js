@@ -96,9 +96,7 @@ function Homepage() {
                 userSelect={"none"}
                 fontSize={"small"}
               >
-                This site strictly prohibits any form of prostitution. After the
-                case of mutual connection, both accounts should be deactivated
-                or deleted.
+               This is a realm where connections evolve beyond fleeting moments. Once a mutual spark is ignited, both accounts shall transcend to new heights. Deactivation becomes a symphony of shared passion, a crescendo of genuine connection. 🌟 #fuckmateboo #RealConnections 
               </Text>
               <Text
                 display="flex"
