@@ -39,16 +39,9 @@ const Chatpage = () => {
 
 
     const Story = `
-    "I want to express my gratitude for this incredible platform. Initially,
-     I was unsure about what to write in my profile. I had just watched some adult content and was
-      feeling quite aroused when I stumbled upon the ad that led me here.
-       After a painful breakup due to infidelity, I had been living independently, often preferring my sex toy to the complications of relationships.
-       But in that moment, I thought, why not look for someone nearby just for the night? That's when Luke, now my boyfriend, messaged me.
-        We agreed to meet, although I was initially apprehensive about being scammed or worse. However, the connection was immediate and undeniable.
-        We spent an amazing night together and discovered we had much in common. From that day on,
-         we've been exclusively bonded emotionally. He's a self-sufficient man with a small social circle,
-          which suits me perfectly. Since being together, we've both stopped watching porn – there's simply no need anymore as our needs are fulfilled in each other's company.
-         Thank you for helping me find not just a partner, but a true companion." -Emily`
+    Hi there, I'm Evelyn, 24 years old, and I work as an accountant. I handle all my bills, and after a deployment to a new location, I was looking to catch a good time. Frustrated with the usual online options, I recalled seeing an ad for this site on Facebook. After some Googling, here I am.
+    I've been DM'd by two charming guys, one local and another from a different state. Oh, and there's one from Kenya 😂. It's a fantastic platform where I not only find sexual relief but also encounter men with genuine intentions, invested in establishing both a physical and emotional connection.
+     It's a relief because, after spending almost an hour on Pornhub without satisfaction, I was quite frustrated. Wanted to share my story—thanks!" -anonymous`
 
   const handleButtonClick = () => {
     onOpen();
