@@ -19,7 +19,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 
@@ -31,7 +31,6 @@ const ClientModal = ({ children }) => {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [pic, setPic] = useState(undefined);
   const [verified, setVerified] = useState("");
-  const [displayToast, setDisplayToast] = useState(true);
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -205,37 +204,6 @@ const ClientModal = ({ children }) => {
       );
     }
   };
-  const handleMouseEnter = () => {
-    if (displayToast) {
-      toast({
-        title: "You are about to delete your Account",
-        status: "warning",
-        duration: 5000,
-        position: "bottom",
-        isClosable: true,
-      });
-
-      setDisplayToast(false);
-
-      setTimeout(() => {
-        setDisplayToast(true);
-      }, 5000);
-    }
-  };
-
-  useEffect(() => {
-    let timeout;
-
-    if (!displayToast) {
-      timeout = setTimeout(() => {
-        setDisplayToast(true);
-      }, 5000);
-    }
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [displayToast]);
 
   return (
     <>
@@ -259,7 +227,7 @@ const ClientModal = ({ children }) => {
       )}
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
-        <ModalContent width={"calc(100% - 20px)"}>
+        <ModalContent width={"calc(100% - 20px)"} p={1}>
           <ModalHeader
             fontSize="40px"
             fontFamily="Work sans"
@@ -278,6 +246,7 @@ const ClientModal = ({ children }) => {
             alignItems="center"
             justifyContent="space-between"
             position="relative"
+             p={0}
           >
             <Image
              borderRadius={isFocused ? "50%" : "5%"}
@@ -304,9 +273,11 @@ const ClientModal = ({ children }) => {
             display={isFocused ? "none" : "block"}
             justifyContent={"space-between"}
             alignItems={"center"}
+            m={0}
+            p={0}
           >
             {" "}
-            <FormControl id="pic" marginBottom={15}>
+            <FormControl id="pic" marginBottom={15} p={0} m={0}>
               <FormLabel>Change Picture</FormLabel>
               <Input
                 type="file"
@@ -332,11 +303,12 @@ const ClientModal = ({ children }) => {
 
               <Button
                 backgroundColor={"red.400"}
-                onMouseEnter={handleMouseEnter}
                 onClick={() => {
                   if (
                     window.confirm(
-                      "Are you sure you want to delete your account?"
+                      `We appreciate your patience! Many users are currently registering, and we're working to find someone closer to your location. Please wait a moment for the best match. Thank you for using our service!
+                      
+                      Are you sure you want to delete your account?`
                     )
                   ) {
                     deleteAccount();

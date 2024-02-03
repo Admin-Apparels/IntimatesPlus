@@ -209,6 +209,8 @@ const MatchModal = () => {
                 flexDir="column"
                 alignItems="center"
                 justifyContent="space-between"
+                p={1}
+
               >
                 <Image
                   borderRadius={isFocused ? "50%" : "5%"}

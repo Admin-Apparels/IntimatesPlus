@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Container,
   Flex,
   Image,
@@ -11,7 +12,7 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Login from "../Authentication/Login";
 import Signup from "../Authentication/Signup";
@@ -20,12 +21,40 @@ import AnimatedTyping from "../miscellanious/animatedText";
 
 function Homepage() {
   const navigate = useNavigate();
+  const [showWelcome, setShowWelcome] = useState(true);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userInfo"));
 
     if (user) navigate("/chats");
   }, [navigate]);
+
+  const handleAgreeClick = () => {
+    setShowWelcome(false);
+  };
+
+  const WelcomeComponent = ({ onAgreeClick }) => {
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      bg="black"
+      w="100%"
+      m="40px 0 15px 0"
+      textColor={"background"}
+      borderRadius={3}
+      p={1}
+      border={'1px solid #d142f5'}
+      backgroundImage={"https://res.cloudinary.com/dvc7i8g1a/image/upload/v1706888156/horny-tonight_adgy02.gif"}
+    ><Text>🔒#PrivacyFirst</Text>
+      <Text textAlign={"center"}>Sign up effortlessly! Your email is only taken for uniqueness and won't be used for marketing. While age is optional, remember our commitment to privacy – we respect and keep others' identities secret. Ready for genuine connections? Let's get started!</Text>
+      <Button m={4} onClick={onAgreeClick} border={'1px solid #d142f5'} background={"black"} textColor={"white"}>
+        I Agree
+      </Button>
+    </Box>
+  );
+};
 
   return (
     <ErrorBoundary fallback={<p>Something went wrong</p>}>
@@ -49,20 +78,24 @@ function Homepage() {
           />
         </Box>
         <Box bg="black" w="100%" p={4} borderRadius="lg" borderWidth="1px">
-          <Tabs isFitted variant="soft-rounded">
-            <TabList mb="1em">
-              <Tab>Login</Tab>
-              <Tab>Sign Up</Tab>
-            </TabList>
-            <TabPanels>
-              <TabPanel>
-                <Login />
-              </TabPanel>
-              <TabPanel>
-                <Signup />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
+          {showWelcome ? (
+        <WelcomeComponent onAgreeClick={handleAgreeClick} />
+      ) : (
+        <Tabs isFitted variant="soft-rounded">
+          <TabList mb="1em">
+            <Tab color={"lightblue"}>Login</Tab>
+            <Tab color={"lightblue"}>Sign Up</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <Login />
+            </TabPanel>
+            <TabPanel>
+              <Signup />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      )}
         </Box>{" "}
         <Box
           display="flex"
