@@ -25,7 +25,7 @@ export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
-  console.log(verify);
+  
   const submitHandler = async () => {
     setLoading(true);
     if (!password || !confirmpassword) {

@@ -8,7 +8,6 @@ import {
   useToast,
   Link,
   useDisclosure,
-  Text,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -87,9 +86,11 @@ const Login = () => {
     setDisable(true);
     try {
       const { data } = await axios.get(
-        `/api/user/accountrecovery/${forgotEmail}`
+        `/api/user/account/${forgotEmail}`
       );
+      console.log(data);
       if (data !== false) {
+        console.log(data);
         navigate("/accountrecovery");
         setVerify(data.verificationCode);
         setRecoverEmail(data.email);
@@ -107,6 +108,7 @@ const Login = () => {
         setDisable(false);
       }, 30000);
     } catch (error) {
+      console.log(error)
       setSearching(false);
       setTimeout(() => {
         setDisable(false);
@@ -171,23 +173,16 @@ const Login = () => {
       >
         Forgot password?
       </Link>
-      <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
+      <Modal size="sm" onClose={onClose} isOpen={isOpen} fontSize={"sm"} isCentered>
         <ModalOverlay />
-        <ModalContent padding={5}>
+        <ModalContent padding={1}>
           <ModalHeader
-            fontSize="40px"
             fontFamily="Work sans"
             display="flex"
-            justifyContent="center"
+            textAlign={"center"}
+            justifyContent={"center"}
           >
-            <Text
-              textAlign={"center"}
-              justifyContent={"center"}
-              fontSize={"2xl"}
-              textColor={"white"}
-            >
               Enter your Email below
-            </Text>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
@@ -197,8 +192,6 @@ const Login = () => {
             justifyContent="space-between"
           >
             <Input
-            textColor={"white"}
-              fontSize={"2xl"}
               placeholder={`example@mymail.com`}
               type="text"
               textAlign="center"
@@ -217,10 +210,8 @@ const Login = () => {
               {disable ? "Try again after 30sec" : "Search for my email"}
             </Button>
           </ModalBody>
-          <ModalFooter display="flex">
-            <Text textAlign={"start"} textColor={"white"}>
-              A code will be sent to the above email
-            </Text>
+          <ModalFooter display="flex" textAlign={"start"} p={1}>
+              {forgotEmail && `A code will be sent to the above email`}
             {searching && <Spinner />}
           </ModalFooter>
         </ModalContent>

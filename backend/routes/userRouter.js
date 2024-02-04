@@ -24,7 +24,7 @@ const router = express.Router();
 
 router.post("/", limiter, registerUsers);
 router.get("/searchuser/:email", limiter, searchUser);
-router.get("/accountrecovery/:email", limiter, forgotEmail);
+router.get("/account/:email", limiter, forgotEmail);
 router.post("/emailrecovery/:email", limiter, recoverEmail);
 router.route("/login").post(limiter, authUser);
 router.get("/:userEmail", limiter, authorizeUser);

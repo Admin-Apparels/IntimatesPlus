@@ -57,6 +57,8 @@ const registerUsers = asyncHandler(async (req, res) => {
 const forgotEmail = async (req, res) => {
   const { email } = req.params;
 
+  console.log(email)
+
   const userExists = await User.findOne({ email });
   if (userExists) {
     const verificationCode = Math.floor(
@@ -93,6 +95,7 @@ This is system's generated code, please do not reply.`,
 };
 const searchUser = async (req, res) => {
   const { email } = req.params;
+  
 
   const userExists = await User.findOne({ email });
   if (!userExists) {

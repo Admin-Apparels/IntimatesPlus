@@ -48,7 +48,7 @@ function Homepage() {
       border={'1px solid #d142f5'}
       backgroundImage={"https://res.cloudinary.com/dvc7i8g1a/image/upload/v1706888156/horny-tonight_adgy02.gif"}
     ><Text>🔒#PrivacyFirst</Text>
-      <Text textAlign={"center"}>Sign up effortlessly! Your email is only taken for uniqueness and won't be used for marketing. While age is optional, remember our commitment to privacy – we respect and keep others' identities secret. Ready for genuine connections? Let's get started!</Text>
+      <Text textAlign={"center"} userSelect={"none"}>Sign up effortlessly! Your email is only taken for uniqueness and won't be used for marketing. While age is optional, remember our commitment to privacy – we respect and keep others' identities secret. Ready for genuine connections? Let's get started!</Text>
       <Button m={4} onClick={onAgreeClick} border={'1px solid #d142f5'} background={"black"} textColor={"white"}>
         I Agree
       </Button>
