@@ -68,7 +68,7 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
   const ADMIN_EMAIL = "admin@fuckmate.boo";
   const ADMIN_CHAT_NAME = "Admin";
   const ADMIN_MESSAGE_CONTENT =
-    "👋 Welcome to fuckmate.boo! I'm Admin. Your description is in good hands and will be reviewed within 24 hours. Feel free to share your success stories with us after finding that special connection in the future. Don't forget to follow our Twitter Page @fuckmateboo where we share them! Best wishes on your journey. 🌟";
+    "👋 Welcome to fuckmate.boo! Admin here. Exciting news – our algorithm is hard at work, sorting potential matches based on your preferences and location. Share your success stories with us in the future and follow our Twitter Page @fuckmateboo for updates! Best wishes on your journey. 🌟";
   let adminUser;
   try {
     if (req.user.email === ADMIN_EMAIL) {
