@@ -81,7 +81,7 @@ function Homepage() {
           {showWelcome ? (
         <WelcomeComponent onAgreeClick={handleAgreeClick} />
       ) : (
-        <Tabs isFitted variant="soft-rounded" backgroundImage={"https://res.cloudinary.com/dvc7i8g1a/image/upload/v1707305979/coupless_brk1gk.jpg"}  backgroundPosition="center" borderRadius={3}>
+        <Tabs isFitted variant="soft-rounded" backgroundImage={"https://res.cloudinary.com/dvc7i8g1a/image/upload/v1707305979/coupless_brk1gk.jpg"}  backgroundPosition="center" borderRadius={3} defaultIndex={1}>
           <TabList mb="1em">
             <Tab color={"lightblue"}>Login</Tab>
             <Tab color={"lightblue"}>Sign Up</Tab>
