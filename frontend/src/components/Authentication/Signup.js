@@ -19,10 +19,12 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/toast";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import axios from "axios";
 import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
+import GoogleLoginButton from "./Google";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -193,9 +195,11 @@ const Signup = () => {
             fontSize="medium"
             fontFamily="Work sans"
             display="flex"
+            flexDirection={"column"}
             justifyContent="center"
           >
-              Enter Code sent to: ~{email}~
+              Please enter the code sent to: ~{email}~
+              <Text textColor={"red"} textAlign={"center"}>Do not close this page</Text>
    
           </ModalHeader>
           <ModalCloseButton />
@@ -208,8 +212,10 @@ const Signup = () => {
             <Input
               fontSize={"medium"}
               placeholder={`i.e 126413`}
+              _placeholder={{color: "#fff0f5"}}
               type="text"
               textAlign="center"
+              textColor={inputCode !== code ? "red" : "green"}
               onChange={(e) => setInputCode(e.target.value)}
               value={inputCode}
               minLength={6}
@@ -231,9 +237,7 @@ const Signup = () => {
           <ModalFooter display="flex">
             <Text
               textAlign={"center"}
-              textColor={"white"}
               justifyContent={"center"}
-              color={code !== inputCode ? "red" : "green"}
             >
               Please enter the exact code received, refresh your inbox.
             </Text>
@@ -244,6 +248,7 @@ const Signup = () => {
         <FormLabel textColor={"white"}>Name</FormLabel>
         <Input
           placeholder="Enter Your Name"
+          _placeholder={{color: "#fff0f5"}}
           textColor={"white"}
           onChange={(e) => setName(e.target.value)}
         />
@@ -254,6 +259,7 @@ const Signup = () => {
           type="email"
           textColor={"white"}
           placeholder="Enter Your Email Address"
+          _placeholder={{color: "#fff0f5"}}
           onChange={(e) => setEmail(e.target.value)}
         />
         {email ? (
@@ -278,6 +284,7 @@ const Signup = () => {
             type={show ? "text" : "password"}
             textColor={"white"}
             placeholder="Enter Password"
+            _placeholder={{color: "#fff0f5"}}
             onChange={(e) => setPassword(e.target.value)}
           />
           <InputRightElement width="4.5rem">
@@ -293,6 +300,7 @@ const Signup = () => {
           <Input
             type={show ? "text" : "password"}
             placeholder="Confirm password"
+            _placeholder={{color: "#fff0f5"}}
             textColor={"white"}
             onChange={(e) => setConfirmpassword(e.target.value)}
           />
@@ -318,7 +326,8 @@ const Signup = () => {
           <Textarea
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="Hi there, I'm Nina from LA looking for something thrilling..."
+            placeholder="Hi there, I'm Nina from LA..."
+            _placeholder={{color: "#fff0f5"}}
             size="sm"
             minLength={MIN_CHARACTERS}
             maxLength={MAX_CHARACTERS}
@@ -347,7 +356,7 @@ const Signup = () => {
         </FormControl>
       )}
       <FormControl id="pic">
-        <FormLabel textColor={"white"}>Upload your Picture</FormLabel>
+        <FormLabel textColor={"white"}>Upload your Picture(optional)</FormLabel>
         <Input
           type="file"
           p={1.5}
@@ -371,6 +380,10 @@ const Signup = () => {
           <Text> {disabled ? `Try Again after 30sec` : `Sign Up`} </Text>
         )}
       </Button>
+      <Text textColor={"white"}>Or</Text>
+      <GoogleOAuthProvider clientId="836402802539-eqr9obfujd1q8heagf9luptlmcid62ss.apps.googleusercontent.com">
+        <GoogleLoginButton />
+      </GoogleOAuthProvider>
     </VStack>
   );
 };

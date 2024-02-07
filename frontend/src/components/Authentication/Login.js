@@ -133,6 +133,7 @@ const Login = () => {
           type="email"
           textColor={"white"}
           placeholder="Enter Your Email Address"
+          _placeholder={{color: "#fff0f5"}}
           onChange={(e) => setEmail(e.target.value)}
         />
       </FormControl>
@@ -145,6 +146,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             type={show ? "text" : "password"}
             placeholder="Enter password"
+            _placeholder={{color: "#fff0f5"}}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>
