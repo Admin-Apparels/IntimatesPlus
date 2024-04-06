@@ -21,7 +21,13 @@ import {
 import "../components/styles.css";
 import PageIndicator from "./miscellanious/PageIndicator";
 import Lottie from "react-lottie";
-import { getSenderName, getSenderFull, getUserById, getSenderId, useConnectSocket} from "./config/ChatLogics";
+import {
+  getSenderName,
+  getSenderFull,
+  getUserById,
+  getSenderId,
+  useConnectSocket,
+} from "./config/ChatLogics";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
@@ -30,7 +36,6 @@ import ScrollableChat from "./ScrollableChat";
 import { ChatState } from "./Context/ChatProvider";
 import animation from "../animations/typing.json";
 import VideoCallComponent from "./miscellanious/vedioCall";
-
 
 var selectedChatCompare;
 
@@ -43,7 +48,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
-  
+
   const toast = useToast();
 
   const defaultOptions = {
@@ -66,14 +71,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     setOnlineUsersCount,
     setAds,
     isCallStarted,
-    setIsCallStarted
+    setIsCallStarted,
   } = ChatState();
 
- const socket = useConnectSocket(user.token);
+  const socket = useConnectSocket(user.token);
 
- const startCall = () => {
-        setIsCallStarted(true);
-    };
+  const startCall = () => {
+    setIsCallStarted(true);
+  };
 
   const getNextQuote = () => {
     setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
@@ -247,7 +252,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   useEffect(() => {
-    if(!socket) return;
+    if (!socket) return;
     socket.emit("setup", user);
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
@@ -260,7 +265,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         isClosable: true,
         position: "top-left",
       });
-     
     });
     socket.on("onlineUsers", (count) => {
       setOnlineUsersCount(count);
@@ -278,7 +282,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   }, [selectedChat, fetchMessages, toast, user.token]);
 
   useEffect(() => {
-    if(!socket) return;
+    if (!socket) return;
     const showNotification = (title, options) => {
       if (Notification.permission === "granted") {
         new Notification(title, options);
@@ -357,26 +361,22 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const handleDotClick = (index) => {
     setQuoteIndex(index);
   };
- useEffect(() => {
+  useEffect(() => {
     const checkUserOnline = () => {
-       if (!selectedChat || !Array.isArray(onlineUsersCount)) return false;
+      if (!selectedChat || !Array.isArray(onlineUsersCount)) return false;
       return onlineUsersCount.includes(getSenderId(user, selectedChat.users));
     };
     setIsOnline(checkUserOnline());
 
-    return () => {
-
-    };
+    return () => {};
   }, [onlineUsersCount, selectedChat, user]);
 
   const deleteNewUser = () => {
     const userData = JSON.parse(localStorage.getItem("userInfo"));
     delete userData.isNewUser;
-    localStorage.setItem('userInfo', JSON.stringify(userData));
+    localStorage.setItem("userInfo", JSON.stringify(userData));
     setUser(userData);
-  
-};
-
+  };
 
   return (
     <>
@@ -391,7 +391,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               justifyContent="center"
               background={"transparent"}
               userSelect={"none"}
-             
             >
               *Safety and Terms of Use*
             </ModalHeader>
@@ -403,12 +402,21 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               justifyContent="center"
               className="quote-container"
               overflowY={"scroll"}
-            
             >
-              <Text fontSize={"larger"} textAlign={"center"} userSelect={"none"} textColor={"blue.400"} p={3}>
+              <Text
+                fontSize={"larger"}
+                textAlign={"center"}
+                userSelect={"none"}
+                textColor={"blue.400"}
+                p={3}
+              >
                 {heading[quoteIndex]}
               </Text>
-              <Text className="quote-current" fontSize={"sm"} userSelect={"none"}>
+              <Text
+                className="quote-current"
+                fontSize={"sm"}
+                userSelect={"none"}
+              >
                 {quotes[quoteIndex]}
               </Text>
             </ModalBody>
@@ -428,7 +436,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   onChange={() => {
                     setAds(true);
                     onClose();
-                    deleteNewUser()
+                    deleteNewUser();
                   }}
                   p={2}
                   m={0}
@@ -495,25 +503,51 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               {" "}
               {getSenderName(user, selectedChat.users)}
             </Text>
-            <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>{isOnline? <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1705510176/icons8-online-48_vitzy6.png" height={5}/>: <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1705510176/icons8-offline-50_uvljtp.png" height={5}/>} {!isCallStarted ? (
-                         <IconButton
-                         borderRadius={20}
-                         padding={0}
-                         margin={0}
-                         _hover={{backgroundColor: "transparent"}}
-                         backgroundColor={"transparent"}
-                         icon={
-                           <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1704001228/icons8-video-call-48_qzxzxs.png" m={3} height={7}/>
-                         }
-                         onClick={() => {
-                          startCall();
-                         }}
-                       />
-                    ) : (
-                        <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1704000962/icons8-ongoing-call-24_erbgdy.png" m={3}/>
-                    )}<ProfileModal userInfo={getSenderFull(user, selectedChat.users)} /></Box>
-           
-
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
+              {isOnline ? (
+                <Image
+                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1705510176/icons8-online-48_vitzy6.png"
+                  height={5}
+                />
+              ) : (
+                <Image
+                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1705510176/icons8-offline-50_uvljtp.png"
+                  height={5}
+                />
+              )}{" "}
+              {!isCallStarted ? (
+                <IconButton
+                  borderRadius={20}
+                  padding={0}
+                  margin={0}
+                  _hover={{ backgroundColor: "transparent" }}
+                  backgroundColor={"transparent"}
+                  isDisabled={!isOnline}
+                  icon={
+                    <Image
+                      src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1704001228/icons8-video-call-48_qzxzxs.png"
+                      m={3}
+                      height={7}
+                    />
+                  }
+                  onClick={() => {
+                    startCall();
+                  }}
+                />
+              ) : (
+                <Image
+                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1704000962/icons8-ongoing-call-24_erbgdy.png"
+                  m={3}
+                />
+              )}
+              <ProfileModal
+                userInfo={getSenderFull(user, selectedChat.users)}
+              />
+            </Box>
           </Text>
           <Box
             display="flex"
@@ -535,18 +569,17 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 margin="auto"
               />
             ) : (
-              <div className="messages" style={{overflowX: "hidden"}}>
+              <div className="messages" style={{ overflowX: "hidden" }}>
                 {!isCallStarted ? (
-                       <ScrollableChat messages={messages} />
-                    ) : (
-                      <VideoCallComponent 
-                      userId={user._id} 
-                      otherUserId={getSenderFull(user, selectedChat.users)}
-                      isCallStarted={isCallStarted}
-                      setIsCallStarted={setIsCallStarted}
-                    />
-                    )}
-                
+                  <ScrollableChat messages={messages} />
+                ) : (
+                  <VideoCallComponent
+                    userId={user._id}
+                    otherUserId={getSenderFull(user, selectedChat.users)}
+                    isCallStarted={isCallStarted}
+                    setIsCallStarted={setIsCallStarted}
+                  />
+                )}
               </div>
             )}
 

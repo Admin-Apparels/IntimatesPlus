@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import { ChatState } from "../Context/ChatProvider";
 
 let socketInstance;
 
@@ -69,33 +70,33 @@ export async function getUserById(userId, token) {
     throw error;
   }
 }
- export async function makePaymentMpesa(subscription, phoneNumber, user, toast){
-    if (!phoneNumber) {
-      return;
-    }
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      const { data } = await axios.post(
-        `/api/paycheck/makepaymentmpesa/${user._id}`,
-        { phoneNumber, subscription },
-        config
-      );
+export async function makePaymentMpesa(subscription, phoneNumber, user, toast) {
+  if (!phoneNumber) {
+    return;
+  }
+  try {
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const { data } = await axios.post(
+      `/api/paycheck/makepaymentmpesa/${user._id}`,
+      { phoneNumber, subscription },
+      config
+    );
 
-      if (data) {
-        toast({
-          title: "You have been prompt to finish your subscription process",
-          status: "info",
-          duration: 1000,
-          position: "bottom",
-        });
-      }
-    } catch (error) {}
-  };
+    if (data) {
+      toast({
+        title: "You have been prompt to finish your subscription process",
+        status: "info",
+        duration: 1000,
+        position: "bottom",
+      });
+    }
+  } catch (error) {}
+}
 export async function handleApprove(accountType, type, user, setUser) {
   try {
     const config = {
@@ -164,22 +165,25 @@ export async function handleCreateChat(
 
 export function useConnectSocket(token) {
   const [socket, setSocket] = useState(null);
+  const { user } = ChatState();
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
     if (socketInstance) {
       setSocket(socketInstance);
       return;
     }
+    const userId = user._id;
 
-    const newSocket = io('https://fuckmate.boo', {
-      query: { token },
+    const newSocket = io("http://localhost:8080", {
+      query: { token, userId },
     });
 
-    newSocket.on('connect', () => {
-    });
+    newSocket.on("connect", () => {});
 
-    newSocket.on("disconnect", () => {
-    });
+    newSocket.on("disconnect", () => {});
 
     setSocket(newSocket);
     socketInstance = newSocket;
@@ -188,7 +192,7 @@ export function useConnectSocket(token) {
       newSocket.disconnect();
       socketInstance = null;
     };
-  }, [token]);
+  }, [token, user]);
 
   return socket;
 }
