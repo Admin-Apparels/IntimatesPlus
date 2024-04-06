@@ -1,203 +1,153 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { io } from "socket.io-client";
 import Peer from "simple-peer";
-import { Box, Button, useToast } from "@chakra-ui/react";
-import { ChatState } from "../Context/ChatProvider";
-import { useConnectSocket } from "../config/ChatLogics";
+import {
+  Button,
+  Container,
+  TextField,
+  Grid,
+  Typography,
+  Paper,
+  AppBar,
+} from "@mui/material";
+import { Textarea } from "@chakra-ui/react";
+
+const socket = io("https://ad-video-call-app.herokuapp.com/");
 
 const VideoCall = ({ userId, otherUserId }) => {
-  const { setIsCallStarted, IsCallStarted, selectedChat, user } = ChatState();
-  const [localStream, setLocalStream] = useState(null);
-  const [remoteStream, setRemoteStream] = useState(null);
-  const [roomId, setRoomId] = useState(null);
-  const userVideoRef = useRef();
-  const otherUserVideoRef = useRef();
-  const peerRef = useRef();
-  const toast = useToast();
-  const socket = useConnectSocket(user?.token);
-  console.log(socket);
-
-  const endCall = useCallback(() => {
-    if (localStream) {
-      localStream.getTracks().forEach((track) => track.stop());
-      setLocalStream(null);
-    }
-
-    if (remoteStream) {
-      remoteStream.getTracks().forEach((track) => track.stop());
-      setRemoteStream(null);
-    }
-
-    if (peerRef.current) {
-      peerRef.current.destroy();
-      peerRef.current = null;
-    }
-
-    socket.emit("endCall", roomId); // Emit endCall event with roomId
-    setIsCallStarted(false);
-  }, [socket, setIsCallStarted, localStream, remoteStream, roomId]);
+  const [stream, setStream] = useState(null);
+  const [me, setMe] = useState("");
+  const [call, setCall] = useState({});
+  const [callAccepted, setCallAccepted] = useState(false);
+  const [callEnded, setCallEnded] = useState(false);
+  const [Name, setName] = useState("");
+  const myVideo = useRef();
+  const userVideo = useRef();
+  const connectionRef = useRef();
 
   useEffect(() => {
-    if (!socket) {
-      console.log("Not connected yet");
-      return;
-    }
-
-    if (IsCallStarted && !selectedChat) {
-      endCall();
-    }
-
-    let isMounted = true;
-
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        if (isMounted) {
-          setLocalStream(stream);
-          userVideoRef.current.srcObject = stream;
-        }
-
-        socket.emit("initiate call", {
-          callerId: userId,
-          recipientId: otherUserId._id,
-        });
-        socket.on("user busy", (recipientId) => {
-          toast({
-            title: "User Busy!",
-            description: `${recipientId}`,
-            status: "info",
-          });
-        });
-
-        socket.on("call initiated", (roomId) => {
-          setRoomId(roomId);
-          socket.emit("join room", roomId);
-          toast({
-            title: "Ringing",
-            status: "info",
-            duration: 2000,
-            isClosable: true,
-          });
-        });
-
-        socket.on("other user", (data) => {
-          const { otherUserId, roomId } = data;
-          const peer = new Peer({
-            initiator: true,
-            trickle: false,
-            stream,
-          });
-          peerRef.current = peer;
-          peer.on("signal", (signal) => {
-            socket.emit("signal", {
-              to: otherUserId,
-              from: userId,
-              signal,
-              room: roomId,
-            });
-          });
-          setIsCallStarted(true);
-        });
-
-        socket.on("signal", (payload) => {
-          const { signal, callerID, room } = payload;
-          const peer = new Peer({
-            initiator: false,
-            trickle: false,
-            stream: localStream,
-          });
-          peerRef.current = peer;
-          peer.on("signal", (signal) => {
-            socket.emit("signal", {
-              to: callerID,
-              from: userId,
-              signal,
-              room: roomId,
-            });
-          });
-          peer.signal(signal);
-          setIsCallStarted(true);
-        });
-
-        peerRef.current?.on("stream", (remoteStream) => {
-          setRemoteStream(remoteStream);
-          otherUserVideoRef.current.srcObject = remoteStream;
-        });
-      })
-      .catch((error) => {
-        console.error("Media Device access error:", error);
-        toast({
-          title: "Media Device access error",
-          duration: 2000,
-          status: "error",
-          position: "bottom",
-          isClosable: true,
-        });
+      .then((currentStream) => {
+        setStream(currentStream);
+        myVideo.current.srcObject = currentStream;
       });
 
-    socket.on("call ended", () => {
-      endCall();
-      toast({
-        title: "Call Ended",
-        status: "info",
-        duration: 2000,
-        isClosable: true,
+    socket.on("me", (id) => setMe(id));
+
+    socket.on("calluser", ({ from, name: callerName, signal }) => {
+      setCall({ isReceivedCall: true, from, name: callerName, signal });
+    });
+  }, []);
+
+  const answerCall = () => {
+    setCallAccepted(true);
+
+    const peer = new Peer({ initiator: false, trickle: false, stream: stream });
+
+    peer.on("signal", (data) => {
+      socket.emit("answercall", { signal: data, to: call.from });
+    });
+
+    peer.on("stream", (currentStream) => {
+      userVideo.current.srcObject = currentStream;
+    });
+
+    peer.signal(call.signal);
+
+    connectionRef.current = peer;
+  };
+
+  const callUser = () => {
+    const peer = new Peer({ initiator: true, trickle: false, stream: stream });
+
+    peer.on("signal", (data) => {
+      socket.emit("calluser", {
+        userToCall: otherUserId._id,
+        signalData: data,
+        from: userId,
+        name: Name,
       });
     });
 
-    return () => {
-      socket.emit("leave room", roomId);
-      socket.off("call ended");
-      socket.off("initiate call");
-      socket.off("user busy");
-      socket.off("user joined");
-      socket.off("signal");
-      socket.off("other user");
-      isMounted = false;
-      peerRef.current?.destroy();
-    };
-  }, [
-    userId,
-    otherUserId,
-    socket,
-    toast,
-    setIsCallStarted,
-    endCall,
-    localStream,
-    roomId,
-    IsCallStarted,
-    selectedChat,
-  ]);
+    peer.on("stream", (currentStream) => {
+      userVideo.current.srcObject = currentStream;
+    });
 
-  const videoContainerStyle = {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "relative",
-    width: "100vw",
-    height: "100vh",
-    overflow: "hidden",
+    socket.on("callaccepted", (signal) => {
+      setCallAccepted(true);
+
+      peer.signal(signal);
+    });
+
+    connectionRef.current = peer;
   };
 
-  const videoStyle = {
-    objectFit: "contain",
-    width: "50%",
-    height: "50%",
-  };
+  const leaveCall = () => {
+    setCallEnded(true);
 
-  const buttonStyle = {
-    position: "absolute",
-    bottom: "10px",
-    right: "10px",
+    connectionRef.current.destroy();
+
+    window.location.reload();
   };
 
   return (
-    <Box style={videoContainerStyle}>
-      <video ref={userVideoRef} autoPlay playsInline muted style={videoStyle} />
-      <video ref={otherUserVideoRef} autoPlay playsInline style={videoStyle} />
-      <Button onClick={endCall} style={buttonStyle}>
-        Hang Up
-      </Button>
-    </Box>
+    <Container>
+      <AppBar position="static" color="inherit">
+        <Typography variant="h2" align="center">
+          Video Chat
+        </Typography>
+      </AppBar>
+
+      <Grid container>
+        <Grid item xs={12} md={6}>
+          <Paper>
+            <Typography variant="h5" gutterBottom>
+              {Name || "Name"}
+            </Typography>
+            <video playsInline muted ref={myVideo} autoPlay />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Paper>
+            <Typography variant="h5" gutterBottom>
+              {call.name || "Name"}
+            </Typography>
+            <video playsInline ref={userVideo} autoPlay />
+          </Paper>
+        </Grid>
+      </Grid>
+
+      <Grid container>
+        <Grid item xs={12} md={6}>
+          <Textarea
+            label="Name"
+            value={otherUserId.name}
+            onChange={(e) => setName(e.target.value)}
+            isDisabled
+            fullWidth
+          />
+          <Button variant="contained" color="primary" onClick={callUser}>
+            Call
+          </Button>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          {call.isReceivedCall && !callAccepted && (
+            <div>
+              <Typography>{call.name} is calling:</Typography>
+              <Button variant="contained" color="primary" onClick={answerCall}>
+                Answer
+              </Button>
+            </div>
+          )}
+          {callAccepted && !callEnded && (
+            <Button variant="contained" color="secondary" onClick={leaveCall}>
+              Hang Up
+            </Button>
+          )}
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

@@ -62,6 +62,7 @@ const initializeSocketIO = (server) => {
 
     socket.on("join room", (roomId) => {
       socket.join(roomId);
+      console.log("Room created");
       const otherUsers = io.sockets.adapter.rooms.get(roomId);
       if (otherUsers.size > 1) {
         socket
@@ -74,26 +75,35 @@ const initializeSocketIO = (server) => {
       io.to(to).emit("signal", { signal, callerID: from });
     });
     socket.on("initiate call", ({ callerId, recipientId }) => {
-      console.log("Call initiation listener", recipientId);
+      console.log("We initiated the call successfully", recipientId, callerId);
       const recipientStatus = userStatuses.get(recipientId) || "available";
       if (recipientStatus === "busy") {
-        socket.emit("user busy", recipientId);
+        console.log("This user is busy", recipientStatus);
+        // If recipient is busy, emit the event only if it hasn't been sent before
+        if (!userStatuses.get(recipientId + "_busy")) {
+          userStatuses.set(recipientId + "_busy", true); // Mark that busy notification has been sent
+          socket.emit("user busy", recipientId);
+        }
       } else {
+        console.log("This user is not busy", recipientStatus);
         userStatuses.set(recipientId, "busy"); // Mark recipient as busy
         userStatuses.set(callerId, "busy"); // Mark caller as busy
         const roomId = createRoomId(callerId, recipientId); // Create a unique room ID
 
-        // Store the recipient's socket ID or user ID for later use
         const recipientSocketId = getUserSocket(recipientId);
-        console.log(recipientSocketId); // Implement this function to get the recipient's socket ID
-
+        console.log("This user is not busy", roomId, recipientSocketId);
         if (recipientSocketId) {
-          io.to(recipientSocketId).emit("call initiated", roomId);
-          console.log("sending a signal");
-        } else {
-          socket.emit("recipient unavailable", recipientId);
+          socket.to(recipientSocketId).emit("call initiated", roomId); // Emit for recipient
         }
+        socket.emit("call initiated", roomId);
       }
+    });
+    socket.on("calluser", ({ userToCall, signalData, from, name }) => {
+      io.to(userToCall).emit("calluser", { signal: signalData, from, name });
+    });
+
+    socket.on("answercall", (data) => {
+      io.to(data.to).emit("callaccepted", data.signal);
     });
 
     socket.on("endCall", (roomId) => {
