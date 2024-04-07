@@ -1,18 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
-import { io } from "socket.io-client";
 import Peer from "simple-peer";
 import {
+  Box,
   Button,
   Container,
-  TextField,
   Grid,
-  Typography,
-  Paper,
-  AppBar,
-} from "@mui/material";
-import { Textarea } from "@chakra-ui/react";
-
-const socket = io("https://ad-video-call-app.herokuapp.com/");
+  GridItem,
+  Text,
+  Textarea,
+} from "@chakra-ui/react";
+import { useConnectSocket } from "../config/ChatLogics";
+import { ChatState } from "../Context/ChatProvider";
 
 const VideoCall = ({ userId, otherUserId }) => {
   const [stream, setStream] = useState(null);
@@ -24,8 +22,13 @@ const VideoCall = ({ userId, otherUserId }) => {
   const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
+  const { user } = ChatState();
+  const socket = useConnectSocket(user?.token);
 
   useEffect(() => {
+    if (!socket) {
+      return;
+    }
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
@@ -38,7 +41,7 @@ const VideoCall = ({ userId, otherUserId }) => {
     socket.on("calluser", ({ from, name: callerName, signal }) => {
       setCall({ isReceivedCall: true, from, name: callerName, signal });
     });
-  }, []);
+  }, [socket, setCall, setStream]);
 
   const answerCall = () => {
     setCallAccepted(true);
@@ -93,55 +96,69 @@ const VideoCall = ({ userId, otherUserId }) => {
 
   return (
     <Container>
-      <AppBar position="static" color="inherit">
-        <Typography variant="h2" align="center">
+      <Box>
+        <Text fontSize="2xl" align="center">
           Video Chat
-        </Typography>
-      </AppBar>
+        </Text>
+      </Box>
 
       <Grid container>
-        <Grid item xs={12} md={6}>
-          <Paper>
-            <Typography variant="h5" gutterBottom>
-              {Name || "Name"}
-            </Typography>
-            <video playsInline muted ref={myVideo} autoPlay />
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper>
-            <Typography variant="h5" gutterBottom>
-              {call.name || "Name"}
-            </Typography>
+        <GridItem item xs={12} md={6}>
+          <Box>
+            <Text fontSize="xl" marginBottom={2}>
+              Me
+            </Text>
+            <video
+              playsInline
+              muted
+              ref={myVideo}
+              autoPlay
+              style={{ borderRadius: 20 }}
+            />
+          </Box>
+        </GridItem>
+        <GridItem item xs={12} md={6}>
+          <Box>
+            <Text fontSize="xl" marginBottom={2}>
+              {otherUserId.name}
+            </Text>
             <video playsInline ref={userVideo} autoPlay />
-          </Paper>
-        </Grid>
+          </Box>
+        </GridItem>
       </Grid>
 
       <Grid container>
         <Grid item xs={12} md={6}>
-          <Textarea
-            label="Name"
-            value={otherUserId.name}
-            onChange={(e) => setName(e.target.value)}
-            isDisabled
-            fullWidth
-          />
-          <Button variant="contained" color="primary" onClick={callUser}>
+          <Button
+            variant="contained"
+            colorScheme="blue"
+            onClick={callUser}
+            background={"green"}
+          >
             Call
           </Button>
         </Grid>
         <Grid item xs={12} md={6}>
           {call.isReceivedCall && !callAccepted && (
-            <div>
-              <Typography>{call.name} is calling:</Typography>
-              <Button variant="contained" color="primary" onClick={answerCall}>
+            <Box>
+              <Text>{call.name} is calling:</Text>
+              <Button
+                variant="contained"
+                colorScheme="blue"
+                onClick={answerCall}
+                background={"green"}
+              >
                 Answer
               </Button>
-            </div>
+            </Box>
           )}
           {callAccepted && !callEnded && (
-            <Button variant="contained" color="secondary" onClick={leaveCall}>
+            <Button
+              variant="contained"
+              colorScheme="red"
+              onClick={leaveCall}
+              background={"red"}
+            >
               Hang Up
             </Button>
           )}
