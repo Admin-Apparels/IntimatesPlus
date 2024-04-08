@@ -7,6 +7,7 @@ import Chats from "./components/Pages/ChatsPage";
 import Paycheck from "./components/Pages/Paycheck";
 import NotFound from "./components/Pages/NotFound";
 import forgotPassword from "./components/Pages/ForgotPassword";
+import VideoCall from "./components/Pages/vedioCall";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/chats" Component={Chats} />
         <Route path="/paycheck" Component={Paycheck} />
         <Route path="/accountrecovery" Component={forgotPassword} />
+        <Route path="/videocalls/:receiver" Component={VideoCall} />
         <Route path="*" Component={NotFound} />
       </Routes>
     </div>

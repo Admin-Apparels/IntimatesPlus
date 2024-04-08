@@ -35,7 +35,7 @@ import ProfileModal from "../components/miscellanious/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import { ChatState } from "./Context/ChatProvider";
 import animation from "../animations/typing.json";
-import VideoCallComponent from "./miscellanious/vedioCall";
+import { useNavigate } from "react-router-dom";
 
 var selectedChatCompare;
 
@@ -48,6 +48,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
+  const [otherUser, setOtherUser] = useState(undefined);
+  const navigate = useNavigate();
 
   const toast = useToast();
 
@@ -76,7 +78,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   const socket = useConnectSocket(user.token);
 
-  const startCall = () => {
+  const startCall = async () => {
+    const otherUser = await getSenderFull(user, selectedChat.users);
+    console.log(otherUser);
+    navigate(
+      `/videocalls/${JSON.stringify({
+        _id: otherUser._id,
+        name: otherUser.name,
+      })}`
+    );
     setIsCallStarted(true);
   };
 
@@ -153,14 +163,21 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
       socket.emit("join chat", selectedChat._id);
     } catch (error) {
-      toast({
-        title: "Error Occured!",
-        description: "Failed to Load the Messages",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
+      if (error.status === 429) {
+        toast({
+          title: "Too many requests!",
+          status: "warning",
+        });
+      } else {
+        toast({
+          title: "Error Occured!",
+          description: "Failed to Load the Messages",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+      }
     }
   }, [selectedChat, toast, user.token, socket]);
 
@@ -569,18 +586,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 margin="auto"
               />
             ) : (
-              <div className="messages" style={{ overflowX: "hidden" }}>
-                {!isCallStarted ? (
-                  <ScrollableChat messages={messages} />
-                ) : (
-                  <VideoCallComponent
-                    userId={user._id}
-                    otherUserId={getSenderFull(user, selectedChat.users)}
-                    isCallStarted={isCallStarted}
-                    setIsCallStarted={setIsCallStarted}
-                  />
-                )}
-              </div>
+              <ScrollableChat messages={messages} />
             )}
 
             <FormControl id="first-name" isRequired mt={3}>

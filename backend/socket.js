@@ -48,6 +48,7 @@ const initializeSocketIO = (server) => {
     setUserSocket(userId, socket.id);
 
     socket.on("setup", (userData) => {
+      console.log("conncted to socket and setup");
       const userId = userData._id;
       socket.join(userId);
       socket.emit("connected");
@@ -74,36 +75,46 @@ const initializeSocketIO = (server) => {
     socket.on("signal", ({ to, from, signal, room }) => {
       io.to(to).emit("signal", { signal, callerID: from });
     });
-    socket.on("initiate call", ({ callerId, recipientId }) => {
-      console.log("We initiated the call successfully", recipientId, callerId);
-      const recipientStatus = userStatuses.get(recipientId) || "available";
-      if (recipientStatus === "busy") {
-        console.log("This user is busy", recipientStatus);
-        // If recipient is busy, emit the event only if it hasn't been sent before
-        if (!userStatuses.get(recipientId + "_busy")) {
-          userStatuses.set(recipientId + "_busy", true); // Mark that busy notification has been sent
-          socket.emit("user busy", recipientId);
-        }
-      } else {
-        console.log("This user is not busy", recipientStatus);
-        userStatuses.set(recipientId, "busy"); // Mark recipient as busy
-        userStatuses.set(callerId, "busy"); // Mark caller as busy
-        const roomId = createRoomId(callerId, recipientId); // Create a unique room ID
+    // socket.on("initiate call", ({ callerId, recipientId }) => {
+    //   console.log("We initiated the call successfully", recipientId, callerId);
+    //   const recipientStatus = userStatuses.get(recipientId) || "available";
+    //   if (recipientStatus === "busy") {
+    //     console.log("This user is busy", recipientStatus);
+    //     // If recipient is busy, emit the event only if it hasn't been sent before
+    //     if (!userStatuses.get(recipientId + "_busy")) {
+    //       userStatuses.set(recipientId + "_busy", true); // Mark that busy notification has been sent
+    //       socket.emit("user busy", recipientId);
+    //     }
+    //   } else {
+    //     console.log("This user is not busy", recipientStatus);
+    //     userStatuses.set(recipientId, "busy"); // Mark recipient as busy
+    //     userStatuses.set(callerId, "busy"); // Mark caller as busy
+    //     const roomId = createRoomId(callerId, recipientId); // Create a unique room ID
 
-        const recipientSocketId = getUserSocket(recipientId);
-        console.log("This user is not busy", roomId, recipientSocketId);
-        if (recipientSocketId) {
-          socket.to(recipientSocketId).emit("call initiated", roomId); // Emit for recipient
-        }
-        socket.emit("call initiated", roomId);
-      }
-    });
-    socket.on("calluser", ({ userToCall, signalData, from, name }) => {
-      io.to(userToCall).emit("calluser", { signal: signalData, from, name });
+    //     const recipientSocketId = getUserSocket(recipientId);
+    //     console.log("This user is not busy", roomId, recipientSocketId);
+    //     if (recipientSocketId) {
+    //       socket.to(recipientSocketId).emit("call initiated", roomId); // Emit for recipient
+    //     }
+    //     socket.emit("call initiated", roomId);
+    //   }
+    // });
+
+    socket.on("calluser", async ({ userToCall, signalData, from, name }) => {
+      console.log("Emitting call to user:", userToCall);
+      socket.emit("call initiated");
+      const userTosend = getUserSocket(userToCall);
+      console.log(userTosend);
+
+      // Emit the event directly to the specific socket
+      await socket
+        .to(`${userTosend}`)
+        .emit("callusering", { signal: signalData, from, name });
     });
 
     socket.on("answercall", (data) => {
-      io.to(data.to).emit("callaccepted", data.signal);
+      console.log("Call accepted!", data.to);
+      socket.to(data.to).emit("callaccepted", data.signal);
     });
 
     socket.on("endCall", (roomId) => {

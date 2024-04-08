@@ -1,20 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import Peer from "simple-peer";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  GridItem,
-  Text,
-  Textarea,
-} from "@chakra-ui/react";
+import { Box, Button, Container, Grid, GridItem, Text } from "@chakra-ui/react";
 import { useConnectSocket } from "../config/ChatLogics";
 import { ChatState } from "../Context/ChatProvider";
+import { useParams } from "react-router-dom";
 
-const VideoCall = ({ userId, otherUserId }) => {
+const VideoCall = () => {
   const [stream, setStream] = useState(null);
-  const [me, setMe] = useState("");
   const [call, setCall] = useState({});
   const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
@@ -22,26 +14,45 @@ const VideoCall = ({ userId, otherUserId }) => {
   const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
+  const { receiver } = useParams();
+
+  const otherUser = JSON.parse(receiver);
+
   const { user } = ChatState();
+
   const socket = useConnectSocket(user?.token);
+
+  console.log(user.token, socket);
 
   useEffect(() => {
     if (!socket) {
       return;
     }
+    console.log(socket);
+
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
+      .getUserMedia({
+        video: true,
+        audio: true,
+      })
       .then((currentStream) => {
         setStream(currentStream);
-        myVideo.current.srcObject = currentStream;
+        if (myVideo.current) {
+          myVideo.current.srcObject = currentStream;
+        }
       });
 
-    socket.on("me", (id) => setMe(id));
-
-    socket.on("calluser", ({ from, name: callerName, signal }) => {
+    socket.on("callusering", ({ from, name: callerName, signal }) => {
+      console.log("we have something!");
       setCall({ isReceivedCall: true, from, name: callerName, signal });
     });
-  }, [socket, setCall, setStream]);
+    socket.on("call initiated", () => {
+      console.log("WE ahave emit here ");
+    });
+    return () => {
+      socket.off("callusering");
+    };
+  }, [socket]);
 
   const answerCall = () => {
     setCallAccepted(true);
@@ -66,9 +77,9 @@ const VideoCall = ({ userId, otherUserId }) => {
 
     peer.on("signal", (data) => {
       socket.emit("calluser", {
-        userToCall: otherUserId._id,
+        userToCall: otherUser._id,
         signalData: data,
-        from: userId,
+        from: user._id,
         name: Name,
       });
     });
@@ -95,7 +106,12 @@ const VideoCall = ({ userId, otherUserId }) => {
   };
 
   return (
-    <Container>
+    <Container
+      background={"white"}
+      overflow={"scroll"}
+      border={"2px solid purple"}
+      borderRadius={20}
+    >
       <Box>
         <Text fontSize="2xl" align="center">
           Video Chat
@@ -120,7 +136,7 @@ const VideoCall = ({ userId, otherUserId }) => {
         <GridItem item xs={12} md={6}>
           <Box>
             <Text fontSize="xl" marginBottom={2}>
-              {otherUserId.name}
+              {otherUser.name}
             </Text>
             <video playsInline ref={userVideo} autoPlay />
           </Box>
@@ -138,7 +154,7 @@ const VideoCall = ({ userId, otherUserId }) => {
             Call
           </Button>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Box display={"flex"}>
           {call.isReceivedCall && !callAccepted && (
             <Box>
               <Text>{call.name} is calling:</Text>
@@ -162,7 +178,7 @@ const VideoCall = ({ userId, otherUserId }) => {
               Hang Up
             </Button>
           )}
-        </Grid>
+        </Box>
       </Grid>
     </Container>
   );

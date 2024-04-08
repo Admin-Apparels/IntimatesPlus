@@ -181,9 +181,14 @@ export function useConnectSocket(token) {
       query: { token, userId },
     });
 
-    newSocket.on("connect", () => {});
+    newSocket.on("connect", () => {
+      newSocket.emit("newConnection", user);
+      console.log("connected");
+    });
 
-    newSocket.on("disconnect", () => {});
+    newSocket.on("disconnect", () => {
+      console.log("Socket disconnected");
+    });
 
     setSocket(newSocket);
     socketInstance = newSocket;
