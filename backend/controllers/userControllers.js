@@ -57,7 +57,7 @@ const registerUsers = asyncHandler(async (req, res) => {
 const forgotEmail = async (req, res) => {
   const { email } = req.params;
 
-  console.log(email)
+  console.log(email);
 
   const userExists = await User.findOne({ email });
   if (userExists) {
@@ -95,7 +95,6 @@ This is system's generated code, please do not reply.`,
 };
 const searchUser = async (req, res) => {
   const { email } = req.params;
-  
 
   const userExists = await User.findOne({ email });
   if (!userExists) {
@@ -194,9 +193,20 @@ const getUserById = async (req, res) => {
 };
 
 const getUsers = async (req, res) => {
+  const gender = req.user.gender;
+  console.log(gender);
   try {
+    let matchGender;
+    if (gender === "female") {
+      matchGender = "male"; // Fetch male users if the authenticated user is female
+    } else if (gender === "male") {
+      matchGender = "female"; // Fetch female users if the authenticated user is male
+    } else {
+      return res.status(400).json({ error: "Invalid gender" }); // Handle invalid gender
+    }
+
     const allUsers = await User.aggregate([
-      { $match: { gender: "female", deleted: { $ne: true } } },
+      { $match: { gender: matchGender, deleted: { $ne: true } } },
       { $sample: { size: 3 } },
     ]);
     res.json(allUsers);
@@ -204,6 +214,7 @@ const getUsers = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 const block = asyncHandler(async (req, res) => {
   const { userId } = req.params;
   const user = req.user;

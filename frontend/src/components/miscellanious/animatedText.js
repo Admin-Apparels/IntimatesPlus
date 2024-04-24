@@ -50,6 +50,7 @@ const AnimatedTyping = () => {
           textColor={"red.500"}
           border={"none"}
           padding="5px"
+          background="transparent"
         />
       ) : (
         ""

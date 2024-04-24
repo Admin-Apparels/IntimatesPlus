@@ -17,14 +17,14 @@ import {
   ModalBody,
   ModalFooter,
   Divider,
+  Box,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/toast";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import axios from "axios";
 import { useState } from "react";
+import "../styles.css";
 
 import { useNavigate } from "react-router-dom";
-import GoogleLoginButton from "./Google";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -44,6 +44,15 @@ const Signup = () => {
   const [code, setCode] = useState("");
   const [inputCode, setInputCode] = useState("");
   const [disabled, setDisabled] = useState(false);
+  const [step, setStep] = useState(1);
+
+  const nextStep = () => {
+    setStep(step + 1);
+  };
+
+  const prevStep = () => {
+    setStep(step - 1);
+  };
 
   const generateAndVerify = async () => {
     setPicLoading(true);
@@ -179,11 +188,7 @@ const Signup = () => {
   const MIN_CHARACTERS = 20;
   const MAX_CHARACTERS = 200;
   const isFormValid = () => {
-    if (gender === "female") {
-      return value.length >= MIN_CHARACTERS;
-    } else {
-      return !!name && !!email && !!password && !!confirmpassword;
-    }
+    return value.length >= MIN_CHARACTERS;
   };
 
   return (
@@ -198,9 +203,10 @@ const Signup = () => {
             flexDirection={"column"}
             justifyContent="center"
           >
-              Please enter the code sent to: ~{email}~
-              <Text textColor={"red"} textAlign={"center"}>Do not close this page</Text>
-   
+            Please enter the code sent to: ~{email}~
+            <Text textColor={"red"} textAlign={"center"}>
+              Do not close this page
+            </Text>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
@@ -212,7 +218,7 @@ const Signup = () => {
             <Input
               fontSize={"medium"}
               placeholder={`i.e 126413`}
-              _placeholder={{color: "#fff0f5"}}
+              _placeholder={{ color: "#fff0f5" }}
               type="text"
               textAlign="center"
               textColor={inputCode !== code ? "red" : "green"}
@@ -235,155 +241,253 @@ const Signup = () => {
             </Button>
           </ModalBody>
           <ModalFooter display="flex">
-            <Text
-              textAlign={"center"}
-              justifyContent={"center"}
-            >
+            <Text textAlign={"center"} justifyContent={"center"}>
               Please enter the exact code received, refresh your inbox.
             </Text>
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <FormControl id="first-name" isRequired>
-        <FormLabel textColor={"white"}>Name</FormLabel>
-        <Input
-          placeholder="Enter Your Name"
-          _placeholder={{color: "#fff0f5"}}
-          textColor={"white"}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </FormControl>
-      <FormControl id="email" isRequired>
-        <FormLabel textColor={"white"}>Email Address</FormLabel>
-        <Input
-          type="email"
-          textColor={"white"}
-          placeholder="Enter Your Email Address"
-          _placeholder={{color: "#fff0f5"}}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        {email ? (
-          <FormLabel
-            fontSize={"2xs"}
-            p={0}
-            m={0}
-            color={"green.400"}
-            userSelect={"none"}
-            textColor={"white"}
-          >
-            Your email is for login only. No ads
-          </FormLabel>
-        ) : (
-          ""
-        )}
-      </FormControl>
-      <FormControl id="password" isRequired>
-        <FormLabel textColor={"white"}>Password</FormLabel>
-        <InputGroup size="md">
-          <Input
-            type={show ? "text" : "password"}
-            textColor={"white"}
-            placeholder="Enter Password"
-            _placeholder={{color: "#fff0f5"}}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
-              {show ? "Hide" : "Show"}
-            </Button>
-          </InputRightElement>
-        </InputGroup>
-      </FormControl>
-      <FormControl id="password" isRequired>
-        <FormLabel textColor={"white"}>Confirm Password</FormLabel>
-        <InputGroup size="md">
-          <Input
-            type={show ? "text" : "password"}
-            placeholder="Confirm password"
-            _placeholder={{color: "#fff0f5"}}
-            textColor={"white"}
-            onChange={(e) => setConfirmpassword(e.target.value)}
-          />
-          <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
-              {show ? "Hide" : "Show"}
-            </Button>
-          </InputRightElement>
-        </InputGroup>
-      </FormControl>
-      <FormControl id="gender" isRequired>
-        <FormLabel textColor={"white"}>Gender</FormLabel>
-        <RadioGroup onChange={setGender} value={gender} textColor={"white"} isRequired>
-          <Stack direction="row">
-            <Radio value="male">Male</Radio>
-            <Radio value="female">Female</Radio>
-          </Stack>
-        </RadioGroup>
-      </FormControl>
-      {gender === "female" && (
-        <FormControl id="description" textColor={"white"} isRequired>
-          <FormLabel>Description</FormLabel>
-          <Textarea
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="Hi there, I'm Nina from LA..."
-            _placeholder={{color: "#fff0f5"}}
-            size="sm"
-            minLength={MIN_CHARACTERS}
-            maxLength={MAX_CHARACTERS}
-          />
-          {value ? (
-          <FormLabel
-            fontSize={"2xs"}
-            p={0}
-            m={0}
-            color={"green.400"}
-            userSelect={"none"}
-            textColor={"white"}
-          >
-            Welcome! Please include a close location to enhance your matching experience. Happy matching! 🌐
-          </FormLabel>
-        ) : (
-          ""
-        )}
-          <Text
-            fontSize="sm"
-            textColor={"white"}
-            color={value.length >= MIN_CHARACTERS ? "green.500" : "red.500"}
-          >
-            {`${value.length}/${MIN_CHARACTERS}`}
-          </Text>
-        </FormControl>
-      )}
-      <FormControl id="pic">
-        <FormLabel textColor={"white"}>Upload your Picture(optional)</FormLabel>
-        <Input
-          type="file"
-          p={1.5}
-          textColor={"white"}
-          accept="image/*"
-          onChange={(e) => postDetails(e.target.files[0])}
-        />
-      </FormControl>
 
-      <Button
-        colorScheme="blue"
-        width="100%"
-        style={{ marginTop: 15 }}
-        onClick={() => generateAndVerify()}
-        isLoading={picLoading}
-        isDisabled={!isFormValid() || disabled}
+      <Box
+        className={`form-container step-${step}`}
+        display={"flex"}
+        flexDirection={"column"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        width={"100%"}
+        p={"6"}
       >
-        {gender === "female" && !isFormValid() ? (
-          <Text>Not Enough characters</Text>
-        ) : (
-          <Text> {disabled ? `Try Again after 30sec` : `Sign Up`} </Text>
+        {step === 1 && (
+          <FormControl
+            id="first-name"
+            style={{
+              animation: step === 1 ? "slideInRight 0.5s forwards" : "",
+            }}
+            isRequired
+          >
+            <FormLabel textColor={"white"}>Name</FormLabel>
+            <Input
+              placeholder="Enter Your Name"
+              _placeholder={{ color: "#fff0f5" }}
+              textColor={"white"}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </FormControl>
         )}
-      </Button>
-      <Text textColor={"white"}>Or</Text>
-      <GoogleOAuthProvider clientId="836402802539-eqr9obfujd1q8heagf9luptlmcid62ss.apps.googleusercontent.com">
-        <GoogleLoginButton />
-      </GoogleOAuthProvider>
+        {step === 2 && (
+          <Box
+            style={{
+              animation: step === 2 ? "slideInRight 0.5s forwards" : "",
+            }}
+          >
+            {" "}
+            <Text textColor="white" fontSize="lg" mb={4} textAlign={"center"}>
+              Chat Anonymously
+            </Text>{" "}
+            <Text textColor="gold" mb={4} textAlign={"center"}>
+              Remember, your email and password will be used for future login.
+              Dummy emails are prone to losing access to your account.
+            </Text>
+            <FormControl isRequired>
+              <FormLabel textColor={"white"}>
+                Email Address (Optional)
+              </FormLabel>
+              <Input
+                type="email"
+                textColor={"white"}
+                placeholder="Enter Your Email Address"
+                _placeholder={{ color: "#fff0f5" }}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {email ? (
+                <FormLabel
+                  fontSize={"2xs"}
+                  p={0}
+                  m={0}
+                  color={"green.400"}
+                  userSelect={"none"}
+                  textColor={"white"}
+                >
+                  Your email is for login only. No ads
+                </FormLabel>
+              ) : (
+                ""
+              )}
+            </FormControl>
+          </Box>
+        )}
+        {step === 3 && (
+          <>
+            <FormControl
+              id="password"
+              style={{
+                animation: step === 3 ? "slideInRight 0.5s forwards" : "",
+              }}
+              isRequired
+            >
+              <FormLabel textColor={"white"}>Password</FormLabel>
+              <InputGroup size="md">
+                <Input
+                  type={show ? "text" : "password"}
+                  textColor={"white"}
+                  placeholder="Enter Password"
+                  _placeholder={{ color: "#fff0f5" }}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <InputRightElement width="4.5rem">
+                  <Button h="1.75rem" size="sm" onClick={handleClick}>
+                    {show ? "Hide" : "Show"}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
+            <FormControl
+              id="password"
+              style={{
+                animation: step === 3 ? "slideInRight 0.5s forwards" : "",
+              }}
+              isRequired
+            >
+              <FormLabel textColor={"white"}>Confirm Password</FormLabel>
+              <InputGroup size="md">
+                <Input
+                  type={show ? "text" : "password"}
+                  placeholder="Confirm password"
+                  _placeholder={{ color: "#fff0f5" }}
+                  textColor={"white"}
+                  onChange={(e) => setConfirmpassword(e.target.value)}
+                />
+                <InputRightElement width="4.5rem">
+                  <Button h="1.75rem" size="sm" onClick={handleClick}>
+                    {show ? "Hide" : "Show"}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
+          </>
+        )}
+
+        {step === 4 && (
+          <FormControl
+            id="gender"
+            style={{
+              animation: step === 4 ? "slideInRight 0.5s forwards" : "",
+            }}
+            isRequired
+          >
+            <FormLabel textColor={"white"}>Gender</FormLabel>
+            <RadioGroup
+              onChange={setGender}
+              value={gender}
+              textColor={"white"}
+              isRequired
+            >
+              <Stack direction="row">
+                <Radio value="male">Male</Radio>
+                <Radio value="female">Female</Radio>
+              </Stack>
+            </RadioGroup>
+          </FormControl>
+        )}
+        {step === 5 && (
+          <FormControl
+            id="description"
+            style={{
+              animation: step === 5 ? "slideInRight 0.5s forwards" : "",
+            }}
+            textColor={"white"}
+            isRequired
+          >
+            <FormLabel>Description</FormLabel>
+            <Textarea
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="Hi there, I'm ... from LA..."
+              _placeholder={{ color: "#fff0f5" }}
+              size="sm"
+              minLength={MIN_CHARACTERS}
+              maxLength={MAX_CHARACTERS}
+            />
+            {value ? (
+              <FormLabel
+                fontSize={"2xs"}
+                p={0}
+                m={0}
+                color={"green.400"}
+                userSelect={"none"}
+                textColor={"white"}
+              >
+                Welcome! Please include a close location to enhance your
+                matching experience. Happy matching! 🌐
+              </FormLabel>
+            ) : (
+              ""
+            )}
+            <Text
+              fontSize="sm"
+              textColor={"white"}
+              textAlign={"center"}
+              color={value.length >= MIN_CHARACTERS ? "green.500" : "red.500"}
+              background={"white"}
+              borderRadius={20}
+            >
+              {`${value.length}/${MIN_CHARACTERS}`}
+            </Text>
+          </FormControl>
+        )}
+
+        {step === 6 && (
+          <FormControl
+            style={{
+              animation: step === 6 ? "slideInRight 0.5s forwards" : "",
+            }}
+            id="pic"
+          >
+            <FormLabel textColor={"white"}>
+              Upload your Picture(*Public)
+            </FormLabel>
+            <Input
+              type="file"
+              p={1.5}
+              textColor={"white"}
+              accept="image/*"
+              onChange={(e) => postDetails(e.target.files[0])}
+            />
+          </FormControl>
+        )}
+
+        {step === 6 && (
+          <Button
+            colorScheme="blue"
+            width="100%"
+            style={{ marginTop: 15 }}
+            onClick={() => generateAndVerify()}
+            isLoading={picLoading}
+            isDisabled={!isFormValid() || disabled}
+          >
+            {!isFormValid() ? (
+              <Text>Not Enough characters</Text>
+            ) : (
+              <Text> {disabled ? `Try Again after 30sec` : `Sign Up`} </Text>
+            )}
+          </Button>
+        )}
+      </Box>
+      <Box
+        display={"flex"}
+        justifyContent={"space-evenly"}
+        alignItems={"center"}
+        width={"100%"}
+        p={"6"}
+      >
+        {" "}
+        {step > 1 && <Button onClick={prevStep}>Back</Button>}
+        {step < 6 && (
+          <Button onClick={nextStep} isDisabled={step === 5 && !isFormValid()}>
+            Next
+          </Button>
+        )}
+      </Box>
     </VStack>
   );
 };

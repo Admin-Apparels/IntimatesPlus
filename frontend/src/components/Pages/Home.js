@@ -34,27 +34,40 @@ function Homepage() {
   };
 
   const WelcomeComponent = ({ onAgreeClick }) => {
-  return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      bg="black"
-      w="100%"
-      m="40px 0 15px 0"
-      textColor={"background"}
-      borderRadius={3}
-      p={1}
-      border={'1px solid #d142f5'}
-      backgroundImage={"https://res.cloudinary.com/dvc7i8g1a/image/upload/v1706888156/horny-tonight_adgy02.gif"}
-    ><Text>🔒#PrivacyFirst</Text>
-     <Text userSelect={"none"}>💋Dive in effortlessly! 💌Your email is our secret, no marketing. <br/>🤫 Keep identities hush-hush; avoid rumors. <br/>🌡️ Play safe, protect against STDs in your encounters.<br/>💑 Respect desires; our members are real, not porn actors. Ready for genuine connections? Let's get started...</Text>
-      <Button m={4} onClick={onAgreeClick} border={'1px solid #d142f5'} background={"black"} textColor={"white"}>
-        I Agree
-      </Button>
-    </Box>
-  );
-};
+    return (
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        bg="black"
+        w="100%"
+        m="40px 0 15px 0"
+        textColor={"background"}
+        borderRadius={3}
+        p={1}
+        background="transparent"
+      >
+        <Text>🔒#PrivacyFirst</Text>
+        <Text userSelect={"none"}>
+          💋 Dive in effortlessly! 💬 Chat anonymously. <br />
+          🤫 Keep identities private <br />
+          🌡️ Play safe, protect against STDs in your encounters.
+          <br />
+          💑 Respect desires; our members are real, not porn actors. Ready for
+          genuine connections? Let's get started...
+        </Text>
+        <Button
+          m={4}
+          onClick={onAgreeClick}
+          border={"1px solid #d142f5"}
+          background={"black"}
+          textColor={"white"}
+        >
+          I Agree
+        </Button>
+      </Box>
+    );
+  };
 
   return (
     <ErrorBoundary fallback={<p>Something went wrong</p>}>
@@ -68,6 +81,7 @@ function Homepage() {
           m="40px 0 15px 0"
           borderRadius="lg"
           borderWidth="1px"
+          background="blackAlpha.400"
         >
           <AnimatedTyping />
 
@@ -77,25 +91,40 @@ function Homepage() {
             userSelect={"none"}
           />
         </Box>
-        <Box bg="black" w="100%" p={4} borderRadius="lg" borderWidth="1px">
+        <Box
+          background="blackAlpha.400"
+          width="100%"
+          p={4}
+          borderRadius="lg"
+          borderWidth="1px"
+        >
           {showWelcome ? (
-        <WelcomeComponent onAgreeClick={handleAgreeClick} />
-      ) : (
-        <Tabs isFitted variant="soft-rounded" backgroundImage={"https://res.cloudinary.com/dvc7i8g1a/image/upload/v1707305979/coupless_brk1gk.jpg"}  backgroundPosition="center" borderRadius={3} defaultIndex={1}>
-          <TabList mb="1em">
-            <Tab color={"lightblue"}>Login</Tab>
-            <Tab color={"lightblue"}>Sign Up</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              <Login />
-            </TabPanel>
-            <TabPanel>
-              <Signup />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      )}
+            <WelcomeComponent onAgreeClick={handleAgreeClick} />
+          ) : (
+            <Tabs
+              isFitted
+              variant="soft-rounded"
+              backgroundImage={
+                "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1707305979/coupless_brk1gk.jpg"
+              }
+              backgroundPosition="center"
+              borderRadius={3}
+              defaultIndex={1}
+            >
+              <TabList mb="1em" p={"3"}>
+                <Tab color={"lightblue"}>Login</Tab>
+                <Tab color={"lightblue"}>Sign Up</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <Login />
+                </TabPanel>
+                <TabPanel>
+                  <Signup />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          )}
         </Box>{" "}
         <Box
           display="flex"
@@ -129,10 +158,14 @@ function Homepage() {
                 userSelect={"none"}
                 fontSize={"small"}
               >
-               This is a realm where connections evolve beyond fleeting moments. Once a mutual spark is ignited, both accounts shall transcend to new heights. Deactivation becomes a symphony of shared passion, a crescendo of genuine connection. 🌟 #fuckmateboo #RealConnections 
+                This is a realm where connections evolve beyond fleeting
+                moments. Once a mutual spark is ignited, both accounts shall
+                transcend to new heights. Deactivation becomes a symphony of
+                shared passion, a crescendo of genuine connection. 🌟
+                #fuckmateboo #RealConnections
               </Text>
               <Text
-                display="flex" 
+                display="flex"
                 justifyContent={"space-around"}
                 width={"100%"}
                 p={0}
@@ -185,10 +218,11 @@ function Homepage() {
                 userSelect={"none"}
                 fontFamily={"mono"}
                 fontSize={"small"}
-              >🌟 Welcome to fuckmate.boo, where connection transcends self-pleasure! 🌟
-                Discover meaningful connections on our premier dating platform.
-                We bring together individuals seeking companionship, romance,
-                and genuine connections.
+              >
+                🌟 Welcome to fuckmate.boo, where connection transcends
+                self-pleasure! 🌟 Discover meaningful connections on our premier
+                dating platform. We bring together individuals seeking
+                companionship, romance, and genuine connections.
               </Text>
               <Text color="blue.100" display={"flex"} fontSize={"small"}>
                 {" "}
@@ -196,7 +230,7 @@ function Homepage() {
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701515284/icons8-18-plus-48_jf2fci.png"
                   height={6}
                 />
-                {`Copyright © ${new Date().getFullYear()}`}
+                {`Copyright © 2023-${new Date().getFullYear()}`}
               </Text>
             </Box>
 
@@ -215,13 +249,17 @@ function Homepage() {
                   height={6}
                 />
               </Link>
-              <Link href="#" m={1}>
+              <Link href="#" m={1} target="blank">
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699869638/icons8-instagram-48_wfs0ek.png"
                   height={7}
                 />
               </Link>
-              <Link href="https://web.facebook.com/profile.php?id=61554735039262" m={1}>
+              <Link
+                href="https://web.facebook.com/profile.php?id=61554735039262"
+                m={1}
+                target="blank"
+              >
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699869920/icons8-facebook-48_vcxsai.png"
                   height={7}
