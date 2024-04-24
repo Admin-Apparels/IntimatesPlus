@@ -201,3 +201,39 @@ export function useConnectSocket(token) {
 
   return socket;
 }
+export function connectWebSocket(url, onMessageCallback) {
+  const ws = new WebSocket(url);
+
+  ws.addEventListener("open", () => {
+    console.log("WebSocket connection established.");
+  });
+
+  ws.addEventListener("message", (event) => {
+    console.log("Received message:", event.data);
+    if (onMessageCallback) {
+      onMessageCallback(event.data);
+    }
+  });
+
+  ws.addEventListener("error", (error) => {
+    console.error("WebSocket error:", error);
+  });
+
+  ws.addEventListener("close", () => {
+    console.log("WebSocket connection closed.");
+  });
+
+  function sendMessage(message) {
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(message);
+      console.log("Message sent:", message);
+    } else {
+      console.error("WebSocket connection is not open.");
+    }
+  }
+
+  return {
+    ws,
+    sendMessage,
+  };
+}

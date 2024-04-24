@@ -1,30 +1,32 @@
-import React, { useEffect, useState} from "react";
-import { Box, Image, Text, Tooltip } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { Box, Tooltip } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
+import { FaCircle } from "react-icons/fa";
 
 const LoveIcon = () => {
   const { onlineUsersCount } = ChatState() || {};
 
-  const [randomNum, setRandomNum] = useState(generateRandomNumber);
+  const [randomNum, setRandomNum] = useState(
+    generateRandomNumber(onlineUsersCount)
+  );
 
-  function generateRandomNumber() {
-    return Math.floor(Math.random() * (900 - 100 + 1)) + 100;
+  function generateRandomNumber(onlineUsersCount) {
+    const maxRandom = Math.max(0, 1000 - onlineUsersCount); // Maximum random number is between 0 and 1000
+    return Math.floor(Math.random() * (maxRandom + 1)); // Generate a random number between 0 and maxRandom
   }
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-     
-      const change = Math.floor(Math.random() * 11);
-
-     
-      const sign = Math.random() < 0.5 ? 1 : -1;
-
-      setRandomNum((prevNum) => prevNum + sign * change);
+      setRandomNum((prevNum) => {
+        const change = Math.floor(Math.random() * 21);
+        const sign = Math.random() < 0.5 ? -1 : 1;
+        const newNum = prevNum + sign * change;
+        return Math.max(100, newNum);
+      });
     }, 2000);
 
-
     return () => clearInterval(intervalId);
-  }, []); 
+  }, []);
 
   function formatOnlineUsersCount(onlineUsersCount) {
     if (onlineUsersCount < 1000) {
@@ -44,23 +46,26 @@ const LoveIcon = () => {
       p={0}
       m={0}
     >
-      <Image alt="" src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1702563265/icons8-community-50_oyasvg.png" height={5}
-      top={7}/>
-        
       <Tooltip
         label="Users Online"
         color={"green"}
         backgroundColor={"transparent"}
-        
       >
-      <Text display={"flex"} flexDir={"column"} m={-1} fontSize={"x-small"} fontFamily={"cursive"}>{formatOnlineUsersCount(onlineUsersCount.length + randomNum)}</Text>
-        
-     
+        <Box
+          display={"flex"}
+          alignItems={"center"}
+          justifyContent={"center"}
+          m={-1}
+          fontSize={"x-small"}
+          fontFamily={"cursive"}
+        >
+          {" "}
+          <FaCircle color="green" size={10} />
+          {formatOnlineUsersCount(onlineUsersCount.length + randomNum)}
+        </Box>
       </Tooltip>
     </Box>
   );
 };
-
-
 
 export default LoveIcon;

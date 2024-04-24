@@ -9,45 +9,66 @@ let userId;
 let subscription;
 
 async function generateAccessToken() {
-  const { CLIENT_ID, APP_SECRET } = process.env;
-  const auth = Buffer.from(CLIENT_ID + ":" + APP_SECRET).toString("base64");
-  const response = await fetch(`${base}/v1/oauth2/token`, {
-    method: "post",
-    body: "grant_type=client_credentials",
-    headers: {
-      Authorization: `Basic ${auth}`,
-    },
-  });
-  const jsonData = await handleResponse(response);
-  return jsonData.access_token;
+  const { PAYPAL_CLIENT_ID, PAYPAL_APP_SECRET } = process.env;
+  const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_APP_SECRET}`).toString(
+    "base64"
+  );
+  const base = "https://api-m.paypal.com";
+  try {
+    const response = await fetch(`${base}/v1/oauth2/token`, {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${auth}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: "grant_type=client_credentials",
+    });
+    if (!response.ok) {
+      throw new Error("Failed to generate access token");
+    }
+    const jsonData = await response.json();
+    return jsonData.access_token;
+  } catch (error) {
+    console.error("Error generating access token:", error);
+    throw error;
+  }
 }
+
 const createOrder = async (req, res) => {
   const { amount } = req.body;
-  const base = "https://api-m.paypal.com";
-
-  const accessToken = await generateAccessToken();
-  const url = `${base.sandbox}/v2/checkout/orders`;
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({
-      intent: "CAPTURE",
-      purchase_units: [
-        {
-          amount: {
-            currency_code: "USD",
-            value: amount.toFixed(2),
+  try {
+    const accessToken = await generateAccessToken();
+    const base = "https://api-m.paypal.com";
+    const url = `${base}/v2/checkout/orders`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        intent: "CAPTURE",
+        purchase_units: [
+          {
+            amount: {
+              currency_code: "USD",
+              value: amount.toFixed(2),
+            },
           },
-        },
-      ],
-    }),
-  });
-  const data = await response.json();
-  res.json(data);
+        ],
+      }),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to create order");
+    }
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error("Error creating order:", error);
+    res.status(500).json({ error: "Failed to create order" });
+  }
 };
+
 const updateUser = async (req, res) => {
   const userId = req.params.userId;
   const userAcc = req.query.accountType;
@@ -74,7 +95,7 @@ const updateUser = async (req, res) => {
       console.log(error);
     }
     return;
-  }else if(type === "femaleSub"){
+  } else if (type === "femaleSub") {
     subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
     try {
       const updatedUser = await User.findByIdAndUpdate(
@@ -89,7 +110,6 @@ const updateUser = async (req, res) => {
       console.log(error);
     }
     return;
-
   } else if (userAcc === "Bronze") {
     Acc = "Bronze";
   } else if (userAcc === "Platnum") {
@@ -142,8 +162,7 @@ const makePaymentMpesa = async (req, res) => {
     Amount = 898;
   } else if (subscription === "Gold") {
     Amount = 3000;
-  }
-  else if(subscription === "premium"){
+  } else if (subscription === "premium") {
     Amount = 500;
   } else {
     Amount = 300;
@@ -205,11 +224,14 @@ const CallBackURL = async (req, res) => {
   const { Body } = req.body;
 
   const io = getIO();
- 
+
   if (!userId && !subscription) {
     return res.status(401);
   }
-  if (!Body.stkCallback.CallbackMetadata || Body.stkCallback.CallbackMetadata === undefined) {
+  if (
+    !Body.stkCallback.CallbackMetadata ||
+    Body.stkCallback.CallbackMetadata === undefined
+  ) {
     const nothing = "payment cancelled or insufficient amount";
     io.emit("noPayment", nothing);
     return res.status(201).json({ message: "Invalid callback data" });
@@ -240,23 +262,22 @@ const CallBackURL = async (req, res) => {
       console.log(error);
     }
     return;
-  }
-  else if (subscription === "premium"){
-  subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
-   try {
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      {
-        subscription: subscriptionExpiry,
-      },
-      { new: true }
-    ).select("subscription");
+  } else if (subscription === "premium") {
+    subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+          subscription: subscriptionExpiry,
+        },
+        { new: true }
+      ).select("subscription");
 
-    io.emit("premium", updatedUser);
-  } catch (error) {
-    console.log(error, "Error updating user");
-  }
-  return;
+      io.emit("premium", updatedUser);
+    } catch (error) {
+      console.log(error, "Error updating user");
+    }
+    return;
   } else {
     Acc = "Gold";
     subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;

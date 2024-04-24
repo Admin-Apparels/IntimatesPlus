@@ -1,12 +1,7 @@
 const socketIO = require("socket.io");
 const jwt = require("jsonwebtoken");
 const User = require("../backend/models/userModel");
-const { getUserIdFromToken } = require("./middleware/authMiddleware");
-const {
-  setUserSocket,
-  getUserSocket,
-  createRoomId,
-} = require("./config/socketUtils");
+const { setUserSocket, getUserSocket } = require("./config/socketUtils");
 let io;
 
 const initializeSocketIO = (server) => {
@@ -41,14 +36,13 @@ const initializeSocketIO = (server) => {
     }
   });
 
-  io.on("connection", (socket) => {
+  io.on("connection", async (socket) => {
     console.log("Connected to socket.io");
-    const { userId } = socket.handshake.query;
 
+    const { userId } = socket.handshake.query;
     setUserSocket(userId, socket.id);
 
     socket.on("setup", (userData) => {
-      console.log("conncted to socket and setup");
       const userId = userData._id;
       socket.join(userId);
       socket.emit("connected");
@@ -61,83 +55,55 @@ const initializeSocketIO = (server) => {
       }
     });
 
-    socket.on("join room", (roomId) => {
-      socket.join(roomId);
-      console.log("Room created");
-      const otherUsers = io.sockets.adapter.rooms.get(roomId);
-      if (otherUsers.size > 1) {
-        socket
-          .to(roomId)
-          .emit("other user", { otherUserId: socket.id, roomId });
+    socket.on("init", async (data) => {
+      const { id } = data;
+      if (id) {
+        socket.emit("init", { id });
+      } else {
+        socket.emit("error", { message: "Invalid user ID" });
       }
     });
 
-    socket.on("signal", ({ to, from, signal, room }) => {
-      io.to(to).emit("signal", { signal, callerID: from });
-    });
-    // socket.on("initiate call", ({ callerId, recipientId }) => {
-    //   console.log("We initiated the call successfully", recipientId, callerId);
-    //   const recipientStatus = userStatuses.get(recipientId) || "available";
-    //   if (recipientStatus === "busy") {
-    //     console.log("This user is busy", recipientStatus);
-    //     // If recipient is busy, emit the event only if it hasn't been sent before
-    //     if (!userStatuses.get(recipientId + "_busy")) {
-    //       userStatuses.set(recipientId + "_busy", true); // Mark that busy notification has been sent
-    //       socket.emit("user busy", recipientId);
-    //     }
-    //   } else {
-    //     console.log("This user is not busy", recipientStatus);
-    //     userStatuses.set(recipientId, "busy"); // Mark recipient as busy
-    //     userStatuses.set(callerId, "busy"); // Mark caller as busy
-    //     const roomId = createRoomId(callerId, recipientId); // Create a unique room ID
-
-    //     const recipientSocketId = getUserSocket(recipientId);
-    //     console.log("This user is not busy", roomId, recipientSocketId);
-    //     if (recipientSocketId) {
-    //       socket.to(recipientSocketId).emit("call initiated", roomId); // Emit for recipient
-    //     }
-    //     socket.emit("call initiated", roomId);
-    //   }
-    // });
-
-    socket.on("calluser", async ({ userToCall, signalData, from, name }) => {
-      console.log("Emitting call to user:", userToCall);
-      socket.emit("call initiated");
-      const userTosend = getUserSocket(userToCall);
-      console.log(userTosend);
-
-      // Emit the event directly to the specific socket
-      await socket
-        .to(`${userTosend}`)
-        .emit("callusering", { signal: signalData, from, name });
+    socket.on("request", (data) => {
+      const receiverId = data.to;
+      const receiverSocketId = getUserSocket(receiverId); // Use getUserSocket to get the socket ID of the receiver
+      const receiver = io.sockets.connected[receiverSocketId];
+      if (receiver && socket.userData) {
+        // Check if socket.userData exists
+        receiver.emit("request", { from: socket.userData._id });
+      }
     });
 
-    socket.on("answercall", (data) => {
-      console.log("Call accepted!", data.to);
-      socket.to(data.to).emit("callaccepted", data.signal);
+    socket.on("call", (data) => {
+      const receiverId = data.to;
+      const receiverSocketId = getUserSocket(receiverId); // Use getUserSocket to get the socket ID of the receiver
+      const receiver = io.sockets.connected[receiverSocketId];
+      if (receiver) {
+        receiver.emit("call", { ...data, from: socket.userData._id });
+      } else {
+        socket.emit("failed");
+      }
     });
 
-    socket.on("endCall", (roomId) => {
-      io.to(roomId).emit("call ended");
-
-      // Get the list of sockets in the room
-      const roomSockets = io.sockets.adapter.rooms.get(roomId);
-
-      if (roomSockets && roomSockets.size > 0) {
-        // Iterate over the sockets in the room and make them leave
-        roomSockets.forEach((socketId) => {
-          io.sockets.sockets[socketId].leave(roomId);
-        });
+    socket.on("call", (data) => {
+      const receiverId = data.to;
+      const receiverSocketId = getUserSocket(receiverId);
+      const receiver = io.sockets.connected[receiverSocketId];
+      if (receiver && socket.userData) {
+        receiver.emit("call", { ...data, from: socket.userData._id });
+      } else {
+        socket.emit("failed");
       }
     });
 
     socket.on("disconnect", () => {
+      const userId = socket.userData?._id;
+      console.log(userId, "disconnected");
       if (socket.userData) {
         io.emit("onlineUsers", Array.from(onlineUsers));
         userStatuses.set(socket.userData?._id, "available");
       }
     });
-    userStatuses.delete(socket.userData?._id);
   });
 
   return io;

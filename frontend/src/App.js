@@ -1,4 +1,3 @@
-// import { Button, ButtonGroup } from "@chakra-ui/react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Home from "./components/Pages/Home";
@@ -7,7 +6,7 @@ import Chats from "./components/Pages/ChatsPage";
 import Paycheck from "./components/Pages/Paycheck";
 import NotFound from "./components/Pages/NotFound";
 import forgotPassword from "./components/Pages/ForgotPassword";
-import VideoCall from "./components/Pages/vedioCall";
+import VideoCall from "./components/videoCall";
 
 function App() {
   return (
@@ -19,6 +18,7 @@ function App() {
         <Route path="/paycheck" Component={Paycheck} />
         <Route path="/accountrecovery" Component={forgotPassword} />
         <Route path="/videocalls/:receiver" Component={VideoCall} />
+        <Route path="/video-call" Component={VideoCall} />
         <Route path="*" Component={NotFound} />
       </Routes>
     </div>

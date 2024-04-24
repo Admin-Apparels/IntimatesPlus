@@ -48,7 +48,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
-  const [otherUser, setOtherUser] = useState(undefined);
   const navigate = useNavigate();
 
   const toast = useToast();
@@ -80,7 +79,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   const startCall = async () => {
     const otherUser = await getSenderFull(user, selectedChat.users);
-    console.log(otherUser);
     navigate(
       `/videocalls/${JSON.stringify({
         _id: otherUser._id,

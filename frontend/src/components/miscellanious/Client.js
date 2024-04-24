@@ -205,6 +205,7 @@ const ClientModal = ({ children }) => {
     }
   };
 
+  console.log(user);
   return (
     <>
       {children ? (
@@ -246,12 +247,12 @@ const ClientModal = ({ children }) => {
             alignItems="center"
             justifyContent="space-between"
             position="relative"
-             p={0}
+            p={0}
           >
             <Image
-             borderRadius={isFocused ? "50%" : "5%"}
-             boxSize={isFocused ? "20rem" : "10rem"}
-             height={"50vh"}
+              borderRadius={isFocused ? "50%" : "5%"}
+              boxSize={isFocused ? "20rem" : "10rem"}
+              height={"50vh"}
               width={"auto"}
               src={user.pic}
               alt={user.name}
@@ -266,7 +267,15 @@ const ClientModal = ({ children }) => {
               display={isFocused ? "none" : "flex"}
               textAlign={"center"}
             >
-              Email: {user.email}
+              Email: {user?.email}
+            </Text>
+            <Text
+              fontSize="small"
+              display={isFocused ? "none" : "flex"}
+              textAlign={"center"}
+              p={2}
+            >
+              {user?.value}
             </Text>
           </ModalBody>
           <ModalFooter
@@ -277,7 +286,7 @@ const ClientModal = ({ children }) => {
             p={0}
           >
             {" "}
-            <FormControl id="pic" marginBottom={15} p={0} m={0}>
+            <FormControl id="pic" marginBottom={15} p={2} m={0}>
               <FormLabel>Change Picture</FormLabel>
               <Input
                 type="file"
@@ -289,7 +298,7 @@ const ClientModal = ({ children }) => {
             <Box
               display={"flex"}
               justifyContent={"space-between"}
-              p={0}
+              p={2}
               margin={0}
             >
               <Button

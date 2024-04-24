@@ -13,9 +13,10 @@ import {
   Image,
   useToast,
   Spinner,
+  Box,
 } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { handleCreateChat } from "../config/ChatLogics";
@@ -26,11 +27,11 @@ const MatchModal = () => {
   const [users, setUsers] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
+
   const navigate = useNavigate();
 
   const { setSelectedChat, user, chats, setUserId, setUser, setChats } =
-  ChatState();
+    ChatState();
   const toast = useToast();
 
   const accessChat = async (userId) => {
@@ -144,9 +145,6 @@ const MatchModal = () => {
     }
   };
 
-  const toggleFocus = () => {
-    setIsFocused((prevState) => !prevState);
-  };
   const nextPage = () => {
     if (currentIndex < users.length - 1) {
       setCurrentIndex((prev) => prev + 1);
@@ -156,6 +154,14 @@ const MatchModal = () => {
     }
   };
   const currentUser = users[currentIndex];
+  const OverlayOne = () => (
+    <ModalOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(10px) hue-rotate(90deg)"
+    />
+  );
+
+  const [overlay, setOverlay] = React.useState(<OverlayOne />);
 
   return (
     <>
@@ -172,15 +178,19 @@ const MatchModal = () => {
           borderRadius={20}
           padding={0}
           margin={0}
-          _hover={{backgroundColor: "transparent"}}
+          _hover={{ backgroundColor: "transparent" }}
           backgroundColor={"transparent"}
           icon={
-            <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1702454939/icons8-love-circled_q6q3t5.gif" height={7}/>
+            <Image
+              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1702454939/icons8-love-circled_q6q3t5.gif"
+              height={7}
+            />
           }
           onClick={() => {
             setLoading(true);
             onOpen();
             fetchFemaleUsers();
+            setOverlay(<OverlayOne />);
           }}
         />
       )}
@@ -188,84 +198,111 @@ const MatchModal = () => {
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
         {currentUser && (
           <>
-            <ModalOverlay />
-            <ModalContent width={"calc(90%)"}>
+            {" "}
+            <ModalCloseButton />
+            {overlay}
+            <ModalContent>
               <ModalHeader
                 fontSize="40px"
                 fontFamily="Work sans"
                 display="flex"
                 justifyContent="center"
-                bgGradient="linear(to-r, red.700, yellow.300)"
-                bgClip="text"
+                width={"100%"}
+                background={"blackAlpha.400"}
+                textColor={"whiteSmoke"}
                 userSelect={"none"}
                 p={0}
                 m={0}
+                position="absolute" // Position the header absolutely
+                top="0" // Align it to the top of the modal content
+                left="50%" // Center horizontally
+                transform="translateX(-50%)" // Move it left by half its width to center it horizontally
+                zIndex="1" // Ensure the header is above the image
               >
                 {currentUser.name}
               </ModalHeader>
               <ModalCloseButton />
               <ModalBody
+                position="relative" // Ensure the body is relatively positioned
                 display="flex"
                 flexDir="column"
                 alignItems="center"
                 justifyContent="space-between"
                 p={1}
-
               >
                 <Image
-                  borderRadius={isFocused ? "50%" : "5%"}
-                  boxSize={isFocused ? "20rem" : "10rem"}
                   src={currentUser.pic}
                   alt={currentUser.name}
-                  height={"50vh"}
-                  width={"auto"}
+                  height={"100%"}
+                  width={"100%"}
                   loading="eager"
                   cursor="pointer"
-                  onClick={toggleFocus}
                   transition="box-size 0.3s ease-in-out"
-                  userSelect={"none"}
-                />{" "}
-                <Text
-                  fontSize={{ base: "15px", md: "15px" }}
-                  fontFamily="Work sans"
-                  display={isFocused ? "none" : "flex"}
-                  textAlign={"center"}
-                  userSelect={"none"}
+                  boxShadow="dark-lg"
+                  rounded="md"
+                  bg="white"
+                  borderRadius={20}
+                  userSelect="none"
+                />
+
+                <ModalFooter
+                  display={"flex"}
+                  flexDir={"column"}
+                  position="absolute" // Position the footer absolutely
+                  bottom="0" // Align it to the bottom of the modal body
+                  left="50%" // Center horizontally
+                  transform="translateX(-50%)" // Move it left by half its width to center it horizontally
+                  justifyContent="space-between"
+                  background={"blackAlpha.400"}
+                  width="100%"
                 >
-                  {currentUser.value}
-                </Text>
-              </ModalBody>
-              <ModalFooter
-                display={isFocused ? "none" : "flex"}
-                justifyContent={"space-between"}
-              >
-                <Button
-                  onClick={() => {
-                    setUserId(currentUser._id);
-                    accessChat(currentUser._id);
-                  }}
-                  bgGradient="linear(to-r, teal.500, green.500)"
-                  _hover={{
-                    bgGradient: "linear(to-r, red.500, yellow.500)",
-                  }}
-                >
-                  Start Chat
-                </Button>
-                {loadingChat ? (
-                  <Spinner ml="auto" display="flex" />
-                ) : (
-                  <Button
-                    onClick={nextPage}
-                    bgGradient="linear(to-r, teal.500, green.500)"
-                    _hover={{
-                      bgGradient: "linear(to-r, red.500, yellow.500)",
-                    }}
+                  <Text
+                    width={"100%"}
+                    fontFamily="Work sans"
+                    textAlign="center"
+                    userSelect="none"
+                    textColor={"whitesmoke"}
+                    m={1}
                   >
-                    Pass
-                    <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1705591008/icons8-broken-heart-48_xlns32.png" height={5}/>
-                  </Button>
-                )}
-              </ModalFooter>
+                    {currentUser.value}
+                  </Text>
+                  <Box
+                    display={"flex"}
+                    justifyContent={"space-between"}
+                    width={"100%"}
+                  >
+                    <Button
+                      onClick={() => {
+                        setUserId(currentUser._id);
+                        accessChat(currentUser._id);
+                      }}
+                      bgGradient="linear(to-r, teal.500, green.500)"
+                      _hover={{
+                        bgGradient: "linear(to-r, red.500, yellow.500)",
+                      }}
+                    >
+                      Start Chat
+                    </Button>
+                    {loadingChat ? (
+                      <Spinner display="flex" />
+                    ) : (
+                      <Button
+                        onClick={nextPage}
+                        bgGradient="linear(to-r, teal.500, green.500)"
+                        _hover={{
+                          bgGradient: "linear(to-r, red.500, yellow.500)",
+                        }}
+                      >
+                        Pass
+                        <Image
+                          src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1705591008/icons8-broken-heart-48_xlns32.png"
+                          height={5}
+                        />
+                      </Button>
+                    )}
+                  </Box>
+                </ModalFooter>
+              </ModalBody>
             </ModalContent>
           </>
         )}

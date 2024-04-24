@@ -2,7 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
-import { Badge, Image, useBreakpointValue, IconButton } from "@chakra-ui/react";
+import { Badge, Image, useBreakpointValue } from "@chakra-ui/react";
 import {
   Menu,
   MenuButton,
@@ -146,20 +146,8 @@ function SideDrawer() {
             </Text>
           </Button>
         </Tooltip>
-        {user.gender === "male" ? (
-          <MatchModal />
-        ) : (
-          <IconButton
-          borderRadius={20}
-          padding={0}
-          margin={0}
-          _hover={{backgroundColor: "transparent"}}
-          backgroundColor={"transparent"}
-          icon={
-            <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1702454939/icons8-love-circled_q6q3t5.gif" height={7}/>
-          }
-        />
-        )}
+
+        <MatchModal />
 
         <LoveIcon />
 
@@ -241,39 +229,56 @@ function SideDrawer() {
             </Box>
             {search !== "" ? (
               chats.length > 0 ? (
-                chats
-                  .filter((chat) =>
-                    chat.users.some(
-                      (participant) =>
-                        participant._id !== user._id &&
-                        participant.name
-                          .toLowerCase()
-                          .includes(search.toLowerCase())
-                    )
+                // Check if any chats match the search criteria
+                chats.some((chat) =>
+                  chat.users.some(
+                    (participant) =>
+                      participant._id !== user._id &&
+                      participant.name
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
                   )
-                  .map((chat) => {
-                    const otherParticipant = chat.users.find(
-                      (participant) => participant._id !== user._id
-                    );
+                ) ? (
+                  // Render filtered chats
+                  chats
+                    .filter((chat) =>
+                      chat.users.some(
+                        (participant) =>
+                          participant._id !== user._id &&
+                          participant.name
+                            .toLowerCase()
+                            .includes(search.toLowerCase())
+                      )
+                    )
+                    .map((chat) => {
+                      const otherParticipant = chat.users.find(
+                        (participant) => participant._id !== user._id
+                      );
 
-                    return (
-                      <UserListItem
-                        key={otherParticipant._id}
-                        user={otherParticipant}
-                        handleFunction={() =>
-                          accessChat(otherParticipant._id, user)
-                        }
-                      />
-                    );
-                  })
+                      return (
+                        <UserListItem
+                          key={otherParticipant._id}
+                          user={otherParticipant}
+                          handleFunction={() =>
+                            accessChat(otherParticipant._id, user)
+                          }
+                        />
+                      );
+                    })
+                ) : (
+                  // Render "No chats were found" message
+                  <Text userSelect="none" textColor="red">
+                    No chats were found.
+                  </Text>
+                )
               ) : (
-                <Text userSelect={"none"}>No chats were found.</Text>
+                // Render a message indicating to start typing to search for chats
+                <Text userSelect="none">
+                  Start typing to search for chats...
+                </Text>
               )
-            ) : (
-              <Text userSelect={"none"}>
-                Start typing to search for chats...
-              </Text>
-            )}
+            ) : null}
+
             {loadingChat && <Spinner ml="auto" display="flex" />}
           </DrawerBody>
         </DrawerContent>
