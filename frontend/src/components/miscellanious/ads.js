@@ -15,31 +15,38 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
-import { useConnectSocket, handleApprove, makePaymentMpesa } from "../config/ChatLogics";
+import {
+  useConnectSocket,
+  handleApprove,
+  makePaymentMpesa,
+} from "../config/ChatLogics";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
-
 
 const Ads = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [disable, setDisable] = useState(false);
-  const { ads, setAds, user, setUser} = ChatState();
+  const { ads, setAds, user, setUser } = ChatState();
   const [countdown, setCountdown] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
-   const colorModeValue = useColorModeValue("green.50", "green.900");
+  const colorModeValue = useColorModeValue("green.50", "green.900");
 
   const [count, setCount] = useState(10);
   const [watchedAd, setWatchedAd] = useState(true);
-  
+  const OverlayOne = () => (
+    <ModalOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(10px) hue-rotate(90deg)"
+    />
+  );
+  const overlay = React.useState(<OverlayOne />);
 
   const [clicked, setClicked] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
 
-
- const socket = useConnectSocket(user.token);
-
+  const socket = useConnectSocket(user.token);
 
   useEffect(() => {
     if (ads || (user.isNewUser === undefined && !ads)) {
@@ -72,7 +79,7 @@ const Ads = () => {
     setDisable((prev) => !prev);
   };
   useEffect(() => {
-    if(!socket) return;
+    if (!socket) return;
     socket.on("noMoreAds", async (updatedUser) => {
       const userData = await {
         ...user,
@@ -88,8 +95,8 @@ const Ads = () => {
         position: "bottom",
       });
     });
-     socket.on("noPayment", (nothing) => {
-     toast({
+    socket.on("noPayment", (nothing) => {
+      toast({
         title: nothing,
         description: "Subscription unsuccessful",
         status: "info",
@@ -115,7 +122,6 @@ const Ads = () => {
       socket.disconnect();
     };
   }, [user, setUser, toast, socket]);
- 
 
   useEffect(() => {
     if (count > 0 && watchedAd === false) {
@@ -148,15 +154,22 @@ const Ads = () => {
   return (
     <>
       <Modal size="lg" isOpen={isOpen} isCentered closeOnOverlayClick={false}>
-        <ModalOverlay />
-        <ModalContent width={"calc(100% - 20px)"}  p={1}>
+        {overlay}
+
+        <ModalContent width={"calc(100% - 20px)"} p={1}>
           <ModalHeader
             fontSize="40px"
             fontFamily="Work sans"
             display="flex"
             justifyContent="center"
           >
-            <Text display={"flex"} color={"blue.400"} userSelect={"none"} p={0} m={0}>
+            <Text
+              display={"flex"}
+              color={"blue.400"}
+              userSelect={"none"}
+              p={0}
+              m={0}
+            >
               <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1698738202/icons8-info_kvegkg.gif" />
               ad break
             </Text>
@@ -244,17 +257,17 @@ const Ads = () => {
                 </>
               ) : (
                 <>
-           <Text
-            fontSize={"sm"}
-            fontWeight={500}
-            bg={colorModeValue}
-            p={2}
-            px={3}
-            color={"green.500"}
-            rounded={"full"}
-          >
-            *37% off
-          </Text>
+                  <Text
+                    fontSize={"sm"}
+                    fontWeight={500}
+                    bg={colorModeValue}
+                    p={2}
+                    px={3}
+                    color={"green.500"}
+                    rounded={"full"}
+                  >
+                    *37% off
+                  </Text>
                   <Input
                     fontSize={"sm"}
                     color={"green.400"}

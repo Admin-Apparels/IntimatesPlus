@@ -28,7 +28,7 @@ import {
   getSenderId,
   useConnectSocket,
 } from "./config/ChatLogics";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import ProfileModal from "../components/miscellanious/ProfileModal";
@@ -49,6 +49,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [isOnline, setIsOnline] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
   const navigate = useNavigate();
+  const OverlayOne = () => (
+    <ModalOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(10px) hue-rotate(90deg)"
+    />
+  );
+  const overlay = React.useState(<OverlayOne />);
 
   const toast = useToast();
 
@@ -103,10 +110,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const quotes = [
     "-Be vigilant: Recognize and protect yourself from scammers and fake profiles.- Report: If you encounter suspicious accounts, please report them to our team at admin@fuckmate.boo.",
     "-Respect Others: Treat all users with kindness, respect, and consideration. - No Harassment: Harassment, hate speech, or any form of abuse will not be tolerated. - Privacy: Protect your personal information and respect the privacy of others.",
-    "-No Prostitution: Admin strictly prohibits any form of prostitution or solicitation. Such activities will result in immediate account suspension. - Adult Content: We do not encourage or link to adult content sites.",
-    "-This platform is your escape from the shadows of porn addiction and solo sessions. It's crafted to guide you into a world where connections spark passion. Our mission? To ignite flames of genuine, satisfying relationships, fostering a playground for human social interactions that go beyond the ordinary. Welcome to fuckmate.boo – where arousal meets meaningful connections. 🔥💑 #RealConnections",
+    "-No Prostitution: FMB strictly prohibits any form of prostitution or solicitation. Such activities will result in immediate account suspension. - Adult Content: We do not encourage or link to adult content sites.",
+    "-This platform is an escape from the shadows of porn addiction, solo sessions and isolation. It's crafted to guide you into a world where connections spark passion. Our mission? To ignite flames of genuine, satisfying relationships, fostering a playground for human social interactions that go beyond the ordinary. Welcome to fuckmate.boo – where arousal meets meaningful connections. 🔥💑 #RealConnections",
     "Data Protection and Non-Sale: We are committed to protecting your data and will not sell your personal information to third parties or advertisers.   Matchmaking: In the future, you may be asked to provide location and other data. This data will be used solely for the purpose of finding you a suitable match within the app.   Privacy of User Identities: We respect your privacy, and we will keep the identities of other users confidential in relation to this app. Your identity will also be kept private in a similar manner.",
-    "By using fuckmate.boo, you agree to abide by these safety guidelines and terms of use. Violation of these terms may result in account suspension or termination. Thank you for being part of Admin. If you have any questions or concerns, please contact our team at admin@fuckmate.boo. Your safety and well-being are important to us.",
+    "By using FMB, you agree to abide by these safety guidelines and terms of use. Violation of these terms may result in account suspension or termination. Thank you for being part of FMB. If you have any questions or concerns, please contact our team at admin@fuckmate.boo. Your safety and well-being are important to us.",
   ];
 
   const fetchMessages = useCallback(async () => {
@@ -396,8 +403,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   return (
     <>
       {user.isNewUser && (
-        <Modal size="lg" isOpen={onOpen} isCentered closeOnOverlayClick={false}>
-          <ModalOverlay />
+        <Modal
+          size="lg"
+          isOpen={() => {
+            onOpen();
+          }}
+          isCentered
+          closeOnOverlayClick={false}
+        >
+          {overlay}
           <ModalContent width={"calc(100% - 20px)"}>
             <ModalHeader
               fontSize="100%"
@@ -431,6 +445,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 className="quote-current"
                 fontSize={"sm"}
                 userSelect={"none"}
+                textAlign={"center"}
+                width={"100%"}
               >
                 {quotes[quoteIndex]}
               </Text>
@@ -637,26 +653,19 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          position="relative"
           h="100%"
         >
           <Text
+            bgGradient="linear(to-l, #7928CA, #FF0080)"
+            bgClip="text"
+            fontWeight="extrabold"
             fontSize="3xl"
             pb={3}
             fontFamily="Work sans"
             userSelect="none"
-            zIndex={1} // Ensure the text is above the image
           >
             Click on a user to start chatting
           </Text>
-          <Image
-            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1702457056/icons8-love_srfnyx.gif"
-            display="flex"
-            position="absolute"
-            justifyContent="center"
-            alignItems="center"
-            zIndex={0} // Set a lower z-index to place the image behind the text
-          />
         </Box>
       )}
     </>

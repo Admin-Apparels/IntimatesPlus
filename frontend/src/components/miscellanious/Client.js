@@ -15,11 +15,11 @@ import {
   useToast,
   Input,
   FormControl,
-  FormLabel,
   Box,
+  Divider,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 
@@ -33,10 +33,22 @@ const ClientModal = ({ children }) => {
   const [verified, setVerified] = useState("");
   const toast = useToast();
   const navigate = useNavigate();
+  const [code, setCode] = useState("111111");
+  const [disabled, setDisabled] = useState(false);
+  const [inputCode, setInputCode] = useState("");
+  const [email, setEmail] = useState(user?.email);
+  const OverlayOne = () => (
+    <ModalOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(10px) hue-rotate(90deg)"
+    />
+  );
+  const overlay = React.useState(<OverlayOne />);
 
   const toggleFocus = () => {
     setIsFocused((prevState) => !prevState);
   };
+  const confirmHandler = () => {};
   const submitHandler = async () => {
     setPicLoading(true);
     if (pic === undefined) {
@@ -149,11 +161,7 @@ const ClientModal = ({ children }) => {
       ) {
         const publicId = user.pic.split("/").pop().split(".")[0];
         try {
-          const { data } = await axios.delete(
-            `/api/user/delete-image/${publicId}`,
-            config
-          );
-          console.log(data);
+          await axios.delete(`/api/user/delete-image/${publicId}`, config);
         } catch (error) {
           toast({
             title: "Error",
@@ -204,8 +212,36 @@ const ClientModal = ({ children }) => {
       );
     }
   };
+  const generateAndVerify = async () => {
+    setPicLoading(true);
 
-  console.log(user);
+    try {
+      const { data } = await axios.get(`/api/user/${email}`);
+      setCode(data);
+      onOpen();
+      setPicLoading(false);
+      setDisabled(true);
+      setTimeout(() => {
+        setDisabled(false);
+      }, 30000);
+    } catch (error) {
+      toast({
+        title: "Check Your Email!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setDisabled(true);
+      setTimeout(() => {
+        setDisabled(false);
+      }, 30000);
+      onClose();
+      setPicLoading(false);
+    }
+  };
+
   return (
     <>
       {children ? (
@@ -227,18 +263,23 @@ const ClientModal = ({ children }) => {
         />
       )}
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay />
+        {overlay}
         <ModalContent width={"calc(100% - 20px)"} p={1}>
           <ModalHeader
             fontSize="40px"
             fontFamily="Work sans"
             display="flex"
+            flexDir={"column"}
             justifyContent="center"
+            alignItems={"center"}
             p={0}
             m={0}
           >
-            {user.name}
-            <Image src={verified} alt="" height={7} />
+            <>
+              {user.name}
+              <Image src={verified} alt="" height={7} />
+            </>
+            <Text fontSize={"small"}>{!user?.verified && "anonymous ⚠️"}</Text>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
@@ -269,6 +310,59 @@ const ClientModal = ({ children }) => {
             >
               Email: {user?.email}
             </Text>
+            <Divider p={2} />
+            {!user?.verified && (
+              <Box display={"flex"} width={"100%"} mb={4}>
+                <Input
+                  fontSize={"medium"}
+                  placeholder={"Email to confirm"}
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                />
+                <Button
+                  width={"40%"}
+                  onClick={() => {
+                    generateAndVerify();
+                  }}
+                  isDisabled={disabled}
+                  colorScheme="green"
+                  ml={1}
+                >
+                  {disabled ? `Sent...` : `Send Code`}{" "}
+                </Button>
+              </Box>
+            )}
+            {code && (
+              <Box display={"flex"} width={"100%"}>
+                {" "}
+                <Input
+                  fontSize={"medium"}
+                  placeholder={`Enter code`}
+                  type="text"
+                  textColor={inputCode !== code ? "red" : "green"}
+                  onChange={(e) => setInputCode(e.target.value)}
+                  value={inputCode}
+                  minLength={6}
+                  maxLength={6}
+                />
+                <Button
+                  width={"40%"}
+                  fontSize={"small"}
+                  display={"flex"}
+                  flexWrap={"wrap"}
+                  onClick={() => {
+                    confirmHandler();
+                  }}
+                  ml={1}
+                  isDisabled={code !== inputCode || disabled}
+                  colorScheme="green"
+                >
+                  {inputCode !== code ? "Refresh mailbox" : "Confirm"}
+                </Button>
+              </Box>
+            )}
+
             <Text
               fontSize="small"
               display={isFocused ? "none" : "flex"}
@@ -286,30 +380,33 @@ const ClientModal = ({ children }) => {
             p={0}
           >
             {" "}
-            <FormControl id="pic" marginBottom={15} p={2} m={0}>
-              <FormLabel>Change Picture</FormLabel>
+            <FormControl
+              id="pic"
+              marginBottom={15}
+              display={"flex"}
+              width={"100%"}
+            >
+              <Button
+                width={"50%"}
+                onClick={() => submitHandler()}
+                isLoading={picLoading}
+              >
+                Change Picture{" "}
+              </Button>
               <Input
                 type="file"
                 p={1.5}
+                ml={1}
                 accept="image/*"
                 onChange={(e) => postDetails(e.target.files[0])}
               />
             </FormControl>
             <Box
               display={"flex"}
-              justifyContent={"space-between"}
+              justifyContent={"space-evenly"}
               p={2}
               margin={0}
             >
-              <Button
-                colorScheme="green"
-                width="8rem"
-                onClick={() => submitHandler()}
-                isLoading={picLoading}
-              >
-                Edit Picture{" "}
-              </Button>
-
               <Button
                 backgroundColor={"red.400"}
                 onClick={() => {

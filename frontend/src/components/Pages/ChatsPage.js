@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/layout";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chatbox from "../Chatbox";
 import MyChats from "../MyChats";
 import SideDrawer from "../miscellanious/SideDrawer";
@@ -26,6 +26,13 @@ const Chatpage = () => {
   const { user, setUser, selectedChat } = ChatState();
   const [hasNewNotification, setHasNewNotification] = useState(true);
   const { onClose, isOpen, onOpen } = useDisclosure();
+  const OverlayOne = () => (
+    <ModalOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(10px) hue-rotate(90deg)"
+    />
+  );
+  const overlay = React.useState(<OverlayOne />);
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);
@@ -66,7 +73,7 @@ const Chatpage = () => {
             <Ads />
           )} */}
         <Modal size="lg" onClose={onClose} isOpen={isOpen} onOpen={onOpen}>
-          <ModalOverlay />
+          {overlay}
           <ModalContent
             display={"flex"}
             flexDir={"column"}

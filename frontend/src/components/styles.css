@@ -49,27 +49,6 @@
     /* Active dot color */
 }
 
-.first-name {
-    animation: slideInRight 0.5s forwards;
-}
-
-.email {
-    animation: slideInRight 0.5s forwards;
-}
-
-.step3 {
-    animation: slideInRight 0.5s forwards;
-}
-.step4 {
-    animation: slideInRight 0.5s forwards;
-}
-.step5 {
-    animation: slideInRight 0.5s forwards;
-}
-.step6 {
-    animation: slideInRight 0.5s forwards;
-}
-
 @keyframes slideInRight {
     from {
         transform: translateX(100%);
@@ -79,5 +58,14 @@
     to {
         transform: translateX(0);
         opacity: 1;
+    }
+}
+@keyframes slideInFromTop {
+    from {
+        transform: translateY(-100%);
+    }
+
+    to {
+        transform: translateY(0);
     }
 }

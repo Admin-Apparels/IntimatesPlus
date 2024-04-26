@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { ChatState } from "../Context/ChatProvider";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const ProfileModal = ({ userInfo }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -110,6 +110,13 @@ const ProfileModal = ({ userInfo }) => {
       );
     }
   };
+  const OverlayOne = () => (
+    <ModalOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(10px) hue-rotate(90deg)"
+    />
+  );
+  const overlay = React.useState(<OverlayOne />);
 
   return (
     <>
@@ -130,9 +137,8 @@ const ProfileModal = ({ userInfo }) => {
         }}
         isOpen={isOpen}
         isCentered
-        
       >
-        <ModalOverlay />
+        {overlay}
         <ModalContent width={"calc(90%)"}>
           <ModalHeader
             fontSize="40px"
@@ -146,16 +152,19 @@ const ProfileModal = ({ userInfo }) => {
             m={2}
           >
             {userInfo.name}
+
             {userInfo.email === ADMIN_EMAIL ? (
               <Image
                 src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701779357/icons8-sex-64_a1hki1.png"
                 height={10}
                 m={1}
-               
               />
             ) : (
               <Image src={verified} alt="" height={7} />
             )}
+            <Text fontSize={"small"} textColor={"red"}>
+              {!userInfo.verified ? "anonymous ⚠️" : "Verified"}
+            </Text>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
@@ -166,8 +175,8 @@ const ProfileModal = ({ userInfo }) => {
             position={"relative"}
           >
             <Image
-             borderRadius={isFocused ? "50%" : "5%"}
-             boxSize={isFocused ? "15rem" : "5rem"}
+              borderRadius={isFocused ? "50%" : "5%"}
+              boxSize={isFocused ? "15rem" : "5rem"}
               src={userInfo.pic}
               alt={userInfo.name}
               height={"40vh"}

@@ -8,15 +8,6 @@ import {
   Textarea,
   Stack,
   Text,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Divider,
   Box,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/toast";
@@ -31,7 +22,6 @@ const Signup = () => {
   const handleClick = () => setShow(!show);
   const toast = useToast();
   const navigate = useNavigate();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -41,69 +31,13 @@ const Signup = () => {
   const [picLoading, setPicLoading] = useState(false);
   const [value, setValue] = useState("");
   const [gender, setGender] = useState("");
-  const [code, setCode] = useState("");
-  const [inputCode, setInputCode] = useState("");
-  const [disabled, setDisabled] = useState(false);
+
   const [step, setStep] = useState(1);
 
   const nextStep = () => {
     setStep(step + 1);
   };
 
-  const prevStep = () => {
-    setStep(step - 1);
-  };
-
-  const generateAndVerify = async () => {
-    setPicLoading(true);
-    if (!name || !email || !password || !confirmpassword || !isFormValid()) {
-      toast({
-        title: "Please Fill all the Fields",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setPicLoading(false);
-      return;
-    }
-    if (password !== confirmpassword) {
-      toast({
-        title: "Passwords Do Not Match",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setPicLoading(false);
-      return;
-    }
-    try {
-      const { data } = await axios.get(`/api/user/${email}`);
-      setCode(data);
-      onOpen();
-      setPicLoading(false);
-      setDisabled(true);
-      setTimeout(() => {
-        setDisabled(false);
-      }, 30000);
-    } catch (error) {
-      toast({
-        title: "Check Your Email!",
-        description: error.response.data.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setDisabled(true);
-      setTimeout(() => {
-        setDisabled(false);
-      }, 30000);
-      onClose();
-      setPicLoading(false);
-    }
-  };
   const submitHandler = async () => {
     setPicLoading(true);
     try {
@@ -193,61 +127,6 @@ const Signup = () => {
 
   return (
     <VStack spacing="3px">
-      <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay />
-        <ModalContent padding={5}>
-          <ModalHeader
-            fontSize="medium"
-            fontFamily="Work sans"
-            display="flex"
-            flexDirection={"column"}
-            justifyContent="center"
-          >
-            Please enter the code sent to: ~{email}~
-            <Text textColor={"red"} textAlign={"center"}>
-              Do not close this page
-            </Text>
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Input
-              fontSize={"medium"}
-              placeholder={`i.e 126413`}
-              _placeholder={{ color: "#fff0f5" }}
-              type="text"
-              textAlign="center"
-              textColor={inputCode !== code ? "red" : "green"}
-              onChange={(e) => setInputCode(e.target.value)}
-              value={inputCode}
-              minLength={6}
-              maxLength={6}
-            />
-            <Divider p={2} />
-            <Button
-              width={"100%"}
-              onClick={() => {
-                submitHandler();
-                onClose();
-              }}
-              isDisabled={code !== inputCode}
-              colorScheme="green"
-            >
-              Done
-            </Button>
-          </ModalBody>
-          <ModalFooter display="flex">
-            <Text textAlign={"center"} justifyContent={"center"}>
-              Please enter the exact code received, refresh your inbox.
-            </Text>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
       <Box
         className={`form-container step-${step}`}
         display={"flex"}
@@ -255,24 +134,31 @@ const Signup = () => {
         alignItems={"center"}
         justifyContent={"center"}
         width={"100%"}
-        p={"6"}
+        p={"0"}
+        pt={0}
       >
         {step === 1 && (
-          <FormControl
-            id="first-name"
+          <Box
             style={{
-              animation: step === 1 ? "slideInRight 0.5s forwards" : "",
+              animation: step === 2 ? "slideInRight 0.5s forwards" : "",
             }}
-            isRequired
           >
-            <FormLabel textColor={"white"}>Name</FormLabel>
-            <Input
-              placeholder="Enter Your Name"
-              _placeholder={{ color: "#fff0f5" }}
-              textColor={"white"}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </FormControl>
+            <Text textColor="gold" mb={4} textAlign={"center"}>
+              "Welcome! Here's where we all connect. Meet your charming other
+              among thousands directed here from adult sites seeking lasting
+              connections. Let's increase the 25% of FWBs that turn into
+              long-term relationships together!"
+            </Text>
+            <FormControl id="first-name" isRequired>
+              <FormLabel textColor={"white"}>Name</FormLabel>
+              <Input
+                placeholder="Enter Your Name"
+                _placeholder={{ color: "#fff0f5" }}
+                textColor={"white"}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </FormControl>
+          </Box>
         )}
         {step === 2 && (
           <Box
@@ -285,8 +171,8 @@ const Signup = () => {
               Chat Anonymously
             </Text>{" "}
             <Text textColor="gold" mb={4} textAlign={"center"}>
-              Remember, your email and password will be used for future login.
-              Dummy emails are prone to losing access to your account.
+              "Remember, your email and password will be used for future login.
+              Dummy emails are prone to losing access to your account."
             </Text>
             <FormControl isRequired>
               <FormLabel textColor={"white"}>
@@ -307,6 +193,9 @@ const Signup = () => {
                   color={"green.400"}
                   userSelect={"none"}
                   textColor={"white"}
+                  style={{
+                    animation: "slideInFromTop 0.5s forwards",
+                  }}
                 >
                   Your email is for login only. No ads
                 </FormLabel>
@@ -317,14 +206,16 @@ const Signup = () => {
           </Box>
         )}
         {step === 3 && (
-          <>
-            <FormControl
-              id="password"
-              style={{
-                animation: step === 3 ? "slideInRight 0.5s forwards" : "",
-              }}
-              isRequired
-            >
+          <Box
+            style={{
+              animation: step === 2 ? "slideInRight 0.5s forwards" : "",
+            }}
+          >
+            <Text textColor="gold" mb={4} textAlign={"center"}>
+              "Secure your connection: Choose a strong password to protect your
+              account."
+            </Text>
+            <FormControl id="password" isRequired>
               <FormLabel textColor={"white"}>Password</FormLabel>
               <InputGroup size="md">
                 <Input
@@ -341,13 +232,7 @@ const Signup = () => {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
-            <FormControl
-              id="password"
-              style={{
-                animation: step === 3 ? "slideInRight 0.5s forwards" : "",
-              }}
-              isRequired
-            >
+            <FormControl id="password" isRequired>
               <FormLabel textColor={"white"}>Confirm Password</FormLabel>
               <InputGroup size="md">
                 <Input
@@ -364,96 +249,127 @@ const Signup = () => {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
-          </>
+            {password !== confirmpassword && (
+              <Text
+                fontSize={"small"}
+                textColor={"red"}
+                background={"whitesmoke"}
+                m={1}
+                p={"2"}
+                style={{
+                  animation: "slideInFromTop 0.5s forwards",
+                }}
+              >
+                Passwords Do Not Match!
+              </Text>
+            )}
+          </Box>
         )}
 
         {step === 4 && (
-          <FormControl
-            id="gender"
+          <Box
             style={{
-              animation: step === 4 ? "slideInRight 0.5s forwards" : "",
+              animation: "slideInFromTop 0.5s forwards",
             }}
-            isRequired
           >
-            <FormLabel textColor={"white"}>Gender</FormLabel>
-            <RadioGroup
-              onChange={setGender}
-              value={gender}
-              textColor={"white"}
-              isRequired
-            >
-              <Stack direction="row">
-                <Radio value="male">Male</Radio>
-                <Radio value="female">Female</Radio>
-              </Stack>
-            </RadioGroup>
-          </FormControl>
+            <Text textColor="gold" mb={4} textAlign={"center"}>
+              {" "}
+              "Select your gender: Choose the option that best represents you."
+            </Text>
+            <FormControl id="gender" isRequired>
+              <FormLabel textColor={"white"}>Gender</FormLabel>
+              <RadioGroup
+                onChange={setGender}
+                value={gender}
+                textColor={"white"}
+                isRequired
+              >
+                <Stack direction="row">
+                  <Radio value="male">Male</Radio>
+                  <Radio value="female">Female</Radio>
+                </Stack>
+              </RadioGroup>
+            </FormControl>
+          </Box>
         )}
         {step === 5 && (
-          <FormControl
-            id="description"
+          <Box
             style={{
-              animation: step === 5 ? "slideInRight 0.5s forwards" : "",
+              animation: step === 2 ? "slideInRight 0.5s forwards" : "",
             }}
-            textColor={"white"}
-            isRequired
           >
-            <FormLabel>Description</FormLabel>
-            <Textarea
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              placeholder="Hi there, I'm ... from LA..."
-              _placeholder={{ color: "#fff0f5" }}
-              size="sm"
-              minLength={MIN_CHARACTERS}
-              maxLength={MAX_CHARACTERS}
-            />
-            {value ? (
-              <FormLabel
-                fontSize={"2xs"}
-                p={0}
-                m={0}
-                color={"green.400"}
-                userSelect={"none"}
-                textColor={"white"}
-              >
-                Welcome! Please include a close location to enhance your
-                matching experience. Happy matching! 🌐
-              </FormLabel>
-            ) : (
-              ""
-            )}
-            <Text
-              fontSize="sm"
-              textColor={"white"}
-              textAlign={"center"}
-              color={value.length >= MIN_CHARACTERS ? "green.500" : "red.500"}
-              background={"white"}
-              borderRadius={20}
-            >
-              {`${value.length}/${MIN_CHARACTERS}`}
+            {" "}
+            <Text textColor="gold" mb={4} textAlign={"center"}>
+              "Write something that truly represents you and catches the eye of
+              your potential match."
             </Text>
-          </FormControl>
+            <FormControl id="description" Box textColor={"white"} isRequired>
+              <FormLabel>Description</FormLabel>
+              <Textarea
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                placeholder="Hi there, I'm ... from LA..."
+                _placeholder={{ color: "#fff0f5" }}
+                size="sm"
+                minLength={MIN_CHARACTERS}
+                maxLength={MAX_CHARACTERS}
+              />
+              {value ? (
+                <FormLabel
+                  fontSize={"2xs"}
+                  p={0}
+                  m={0}
+                  color={"green.400"}
+                  userSelect={"none"}
+                  textColor={"white"}
+                  style={{
+                    animation: "slideInFromTop 0.5s forwards",
+                  }}
+                >
+                  Welcome! Please include a close location to enhance your
+                  matching experience. Happy matching! 🌐
+                </FormLabel>
+              ) : (
+                ""
+              )}
+              <Text
+                fontSize="sm"
+                textColor={"white"}
+                justifyContent={"space-between"}
+                textAlign={"center"}
+                color={value.length >= MIN_CHARACTERS ? "green.500" : "red.500"}
+                background={"white"}
+                m={2}
+              >
+                {`${value.length}/${MIN_CHARACTERS}`}
+              </Text>
+            </FormControl>
+          </Box>
         )}
 
         {step === 6 && (
-          <FormControl
+          <Box
             style={{
               animation: step === 6 ? "slideInRight 0.5s forwards" : "",
             }}
-            id="pic"
           >
-            <FormLabel textColor={"white"}>
-              Upload your Picture(*Public)
-            </FormLabel>
-            <Input
-              type="file"
-              p={1.5}
-              textColor={"white"}
-              accept="image/*"
-              onChange={(e) => postDetails(e.target.files[0])}
-            />
-          </FormControl>
+            <Text textColor="gold" mb={4} textAlign={"center"}>
+              "Upload a clear and recent photo of yourself for better matching
+              results."
+            </Text>
+            <FormControl id="pic">
+              <FormLabel textColor={"white"}>
+                Upload your Picture(*Public)
+              </FormLabel>
+              <Input
+                type="file"
+                p={1.5}
+                textColor={"white"}
+                accept="image/*"
+                onChange={(e) => postDetails(e.target.files[0])}
+              />
+            </FormControl>
+          </Box>
         )}
 
         {step === 6 && (
@@ -461,15 +377,10 @@ const Signup = () => {
             colorScheme="blue"
             width="100%"
             style={{ marginTop: 15 }}
-            onClick={() => generateAndVerify()}
+            onClick={() => submitHandler()}
             isLoading={picLoading}
-            isDisabled={!isFormValid() || disabled}
           >
-            {!isFormValid() ? (
-              <Text>Not Enough characters</Text>
-            ) : (
-              <Text> {disabled ? `Try Again after 30sec` : `Sign Up`} </Text>
-            )}
+            Sign Up
           </Button>
         )}
       </Box>
@@ -480,10 +391,19 @@ const Signup = () => {
         width={"100%"}
         p={"6"}
       >
-        {" "}
-        {step > 1 && <Button onClick={prevStep}>Back</Button>}
         {step < 6 && (
-          <Button onClick={nextStep} isDisabled={step === 5 && !isFormValid()}>
+          <Button
+            onClick={nextStep}
+            isDisabled={
+              (step === 5 && !isFormValid()) ||
+              (step === 1 && !name) ||
+              (step === 2 && !email) ||
+              (step === 3 && !password) ||
+              password !== confirmpassword ||
+              (step === 4 && !gender) ||
+              (step === 5 && !value)
+            }
+          >
             Next
           </Button>
         )}

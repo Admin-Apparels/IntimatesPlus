@@ -154,14 +154,16 @@ const MatchModal = () => {
     }
   };
   const currentUser = users[currentIndex];
-  const OverlayOne = () => (
+  const OverlayTwo = () => (
     <ModalOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
+      bg="none"
+      backdropFilter="auto"
+      backdropInvert="80%"
+      backdropBlur="2px"
     />
   );
 
-  const [overlay, setOverlay] = React.useState(<OverlayOne />);
+  const overlay = React.useState(<OverlayTwo />);
 
   return (
     <>
@@ -190,7 +192,6 @@ const MatchModal = () => {
             setLoading(true);
             onOpen();
             fetchFemaleUsers();
-            setOverlay(<OverlayOne />);
           }}
         />
       )}
@@ -220,6 +221,10 @@ const MatchModal = () => {
                 zIndex="1" // Ensure the header is above the image
               >
                 {currentUser.name}
+
+                <Text fontSize={"small"} textColor={"red"}>
+                  {!currentUser.verified ? "anonymous ⚠️" : "Verified"}
+                </Text>
               </ModalHeader>
               <ModalCloseButton />
               <ModalBody
@@ -232,7 +237,7 @@ const MatchModal = () => {
               >
                 <Image
                   src={currentUser.pic}
-                  alt={currentUser.name}
+                  alt={""}
                   height={"100%"}
                   width={"100%"}
                   loading="eager"

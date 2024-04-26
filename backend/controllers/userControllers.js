@@ -46,6 +46,7 @@ const registerUsers = asyncHandler(async (req, res) => {
       subscription: user.subscription,
       adsSubscription: user.adsSubscription,
       day: user.day,
+      verified: user.verified,
     };
 
     res.status(201).json(responseData);
@@ -56,8 +57,6 @@ const registerUsers = asyncHandler(async (req, res) => {
 });
 const forgotEmail = async (req, res) => {
   const { email } = req.params;
-
-  console.log(email);
 
   const userExists = await User.findOne({ email });
   if (userExists) {
@@ -113,6 +112,7 @@ const searchUser = async (req, res) => {
       subscription: userExists.subscription,
       adsSubscription: userExists.adsSubscription,
       day: userExists.day,
+      verified: userExists.verified,
     };
     res.status(201).json(responseData);
   }
@@ -142,6 +142,7 @@ const recoverEmail = async (req, res) => {
         subscription: userData.subscription,
         adsSubscription: userData.adsSubscription,
         day: userData.day,
+        verified: userData.verified,
       };
       res.status(201).json(responseData);
     }
@@ -173,6 +174,7 @@ const authUser = asyncHandler(async (req, res) => {
       subscription: user.subscription,
       adsSubscription: user.adsSubscription,
       day: user.day,
+      verified: user.verified,
     });
   } else {
     res.status(401);
@@ -194,7 +196,7 @@ const getUserById = async (req, res) => {
 
 const getUsers = async (req, res) => {
   const gender = req.user.gender;
-  console.log(gender);
+
   try {
     let matchGender;
     if (gender === "female") {
