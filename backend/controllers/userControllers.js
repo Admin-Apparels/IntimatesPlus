@@ -247,21 +247,38 @@ const Unblock = asyncHandler(async (req, res) => {
   }
 });
 const updateUser = async (req, res) => {
-  const { pic } = req.body;
   const { userId } = req.params;
+  const { email, pic } = req.body;
 
   try {
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: userId },
-      { pic: pic },
-      { new: true }
-    ).select("pic");
+    let updatedUser;
+
+    if (email) {
+      // Update email if provided in the request body
+      updatedUser = await User.findOneAndUpdate(
+        { _id: userId },
+        { email: email, verified: true }, // Update verified to true along with email
+        { new: true }
+      ).select("verified email");
+    } else if (pic) {
+      // Update pic if provided in the request body
+      updatedUser = await User.findOneAndUpdate(
+        { _id: userId },
+        { pic: pic },
+        { new: true }
+      ).select("pic");
+    } else {
+      // Handle error if neither email nor pic is provided
+      return res.status(400).json({ error: "No fields provided for update" });
+    }
 
     res.json(updatedUser);
   } catch (error) {
-    throw new Error("Failed to update user pic");
+    console.error("Failed to update user:", error);
+    res.status(500).json({ error: "Failed to update user" });
   }
 };
+
 const deleteUser = async (req, res) => {
   const { userId } = req.params;
   console.log(userId);

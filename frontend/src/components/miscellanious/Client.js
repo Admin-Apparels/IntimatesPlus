@@ -28,6 +28,8 @@ const ClientModal = ({ children }) => {
   const [isFocused, setIsFocused] = useState(false);
   const { user, setUser } = ChatState() || {};
   const [picLoading, setPicLoading] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [pic, setPic] = useState(undefined);
   const [verified, setVerified] = useState("");
@@ -48,7 +50,43 @@ const ClientModal = ({ children }) => {
   const toggleFocus = () => {
     setIsFocused((prevState) => !prevState);
   };
-  const confirmHandler = () => {};
+  const confirmHandler = async () => {
+    setConfirm(true);
+    const userId = user._id;
+    if (!userId) {
+      setConfirm(false);
+      return;
+    }
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `/api/user/update/${userId}`,
+        { email },
+        config
+      );
+      setCode("");
+      setUser((prev) => ({
+        ...prev,
+        verified: data.verified,
+        email: data.email,
+      }));
+      setConfirm(false);
+    } catch (error) {
+      setConfirm(false);
+      toast({
+        title: "Error Occurred",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        position: "bottom",
+        isClosable: true,
+      });
+    }
+  };
   const submitHandler = async () => {
     setPicLoading(true);
     if (pic === undefined) {
@@ -59,6 +97,7 @@ const ClientModal = ({ children }) => {
         isClosable: true,
         position: "bottom",
       });
+      setPicLoading(false);
       return;
     }
     const userId = user._id;
@@ -73,7 +112,9 @@ const ClientModal = ({ children }) => {
         { pic },
         config
       );
+
       setUser((prev) => ({ ...prev, pic: data.pic }));
+      setPic("");
       setPicLoading(false);
     } catch (error) {
       toast({
@@ -213,13 +254,13 @@ const ClientModal = ({ children }) => {
     }
   };
   const generateAndVerify = async () => {
-    setPicLoading(true);
+    setLoading(true);
 
     try {
       const { data } = await axios.get(`/api/user/${email}`);
       setCode(data);
       onOpen();
-      setPicLoading(false);
+      setLoading(false);
       setDisabled(true);
       setTimeout(() => {
         setDisabled(false);
@@ -238,7 +279,7 @@ const ClientModal = ({ children }) => {
         setDisabled(false);
       }, 30000);
       onClose();
-      setPicLoading(false);
+      setLoading(false);
     }
   };
 
@@ -311,7 +352,7 @@ const ClientModal = ({ children }) => {
               Email: {user?.email}
             </Text>
             <Divider p={2} />
-            {!user?.verified && (
+            {!user?.verified && !code && (
               <Box display={"flex"} width={"100%"} mb={4}>
                 <Input
                   fontSize={"medium"}
@@ -326,6 +367,7 @@ const ClientModal = ({ children }) => {
                     generateAndVerify();
                   }}
                   isDisabled={disabled}
+                  isLoading={loading}
                   colorScheme="green"
                   ml={1}
                 >
@@ -333,9 +375,9 @@ const ClientModal = ({ children }) => {
                 </Button>
               </Box>
             )}
+            {code && <Text fontSize={"small"}>Code sent to ~{email}~</Text>}
             {code && (
               <Box display={"flex"} width={"100%"}>
-                {" "}
                 <Input
                   fontSize={"medium"}
                   placeholder={`Enter code`}
@@ -356,6 +398,7 @@ const ClientModal = ({ children }) => {
                   }}
                   ml={1}
                   isDisabled={code !== inputCode || disabled}
+                  isLoading={confirm}
                   colorScheme="green"
                 >
                   {inputCode !== code ? "Refresh mailbox" : "Confirm"}

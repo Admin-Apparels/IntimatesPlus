@@ -12,8 +12,12 @@ chatModel = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Message",
     },
-    paidMonthly: { type: Date },
-    oneChatOnly: { type: Boolean, default: false },
+    flagged: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,

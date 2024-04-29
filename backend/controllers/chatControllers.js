@@ -143,8 +143,42 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+const flagChats = async (req, res) => {
+  const chatId = req.params.chatId;
+  const userId = req.user._id;
+
+  try {
+    // Find the chat by ID and update its flagged array to include the user's ID
+    const updatedChat = await Chat.findByIdAndUpdate(
+      chatId,
+      { $addToSet: { flagged: userId } }, // Using $addToSet to ensure uniqueness
+      { new: true } // Return the updated chat
+    );
+
+    if (updatedChat) {
+      // If the chat is successfully updated, return the updated user's chats
+      const userChats = await Chat.find({
+        users: { $elemMatch: { $eq: req.user._id } },
+      })
+        .populate("users", "-password")
+        .populate("latestMessage")
+        .sort({ updatedAt: -1 })
+        .exec();
+
+      return res.json(userChats);
+    } else {
+      // If the chat is not found, return an error response
+      return res.status(404).json({ error: "Chat not found" });
+    }
+  } catch (error) {
+    // If an error occurs, log it and return an error response
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 module.exports = {
   accessChat,
   fetchChats,
+  flagChats,
 };

@@ -77,6 +77,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     setNotification,
     onlineUsersCount,
     setOnlineUsersCount,
+    setChats,
     setAds,
     isCallStarted,
     setIsCallStarted,
@@ -204,7 +205,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         if (blocked1 || blocked2) {
           toast({
             title: "Blocked!",
-            description: "Can't send Message",
             status: "error",
             duration: 5000,
             isClosable: true,
@@ -216,8 +216,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         if (unBlock1 || unblock2) {
           toast({
             title: "Unblock user to send Message",
-            description: "Failed to send the Message",
-            status: "error",
+            status: "warning",
             duration: 5000,
             isClosable: true,
             position: "bottom",
@@ -228,7 +227,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         if (deleted) {
           toast({
             title: "User Account Deleted.",
-            description: "User deleted their Account",
             status: "info",
             duration: 5000,
             isClosable: true,
@@ -236,6 +234,58 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           });
 
           return;
+        }
+
+        // Check if the message contains sensitive information
+        const isFlaggedMessage =
+          newMessage.includes("social media") ||
+          newMessage.includes("phone") ||
+          newMessage.includes("contact");
+
+        // If the message is flagged and the user's subscription status requires flagging, flag the chat
+        if (isFlaggedMessage) {
+          const currentDate = new Date().getTime();
+          if (
+            user.accountType === "Platnum" &&
+            parseInt(currentDate) < parseInt(user.day)
+          ) {
+            toast({
+              title: "You are all caught up!",
+              description: `Wait after ${(
+                (parseInt(user.day) - parseInt(currentDate)) /
+                3600000
+              ).toFixed(2)}hrs to send this message`,
+              status: "info",
+              isClosable: true,
+              duration: 5000,
+              position: "bottom",
+            });
+            return;
+          }
+
+          if (
+            user.accountType === "new" ||
+            parseInt(currentDate) < parseInt(user.subscription)
+          ) {
+            try {
+              const config = {
+                headers: {
+                  Authorization: `Bearer ${user.token}`,
+                },
+              };
+              const { data } = await axios.put(
+                `/api/chat/flag/${selectedChat._id}`,
+                config
+              );
+              setChats(data);
+              setSelectedChat("");
+              onOpen();
+            } catch (error) {
+              console.log(error);
+            }
+
+            return;
+          }
         }
 
         try {
