@@ -133,8 +133,8 @@ export default function Paycheck() {
       justifyContent={"space-evenly"}
       alignItems={"center"}
       width={"100%"}
+      overflow={"auto"}
       flexWrap={"wrap"}
-      height={"100vh"}
       padding={5}
     >
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
@@ -266,18 +266,6 @@ export default function Paycheck() {
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
               One chat a day for seven days
-            </ListItem>
-            <ListItem>
-              <ListIcon as={CheckIcon} color="green.400" />
-              New features
-            </ListItem>
-            <ListItem>
-              <ListIcon as={CheckIcon} color="green.400" />
-              Get notified on new women around you
-            </ListItem>
-            <ListItem>
-              <ListIcon as={CheckIcon} color="green.400" />
-              Limited
             </ListItem>
           </List>
 
@@ -411,12 +399,9 @@ export default function Paycheck() {
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
-              New features
+              Video and Voice Calls
             </ListItem>
-            <ListItem>
-              <ListIcon as={CheckIcon} color="green.400" />
-              Get notified on new women around you
-            </ListItem>
+
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
               Unlimited

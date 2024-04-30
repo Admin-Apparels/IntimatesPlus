@@ -36,6 +36,7 @@ import ScrollableChat from "./ScrollableChat";
 import { ChatState } from "./Context/ChatProvider";
 import animation from "../animations/typing.json";
 import { useNavigate } from "react-router-dom";
+import Notifier from "./miscellanious/Notifier";
 
 var selectedChatCompare;
 
@@ -48,6 +49,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
+  const [modal, setModal] = useState(true);
   const navigate = useNavigate();
   const OverlayOne = () => (
     <ModalOverlay
@@ -245,23 +247,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         // If the message is flagged and the user's subscription status requires flagging, flag the chat
         if (isFlaggedMessage) {
           const currentDate = new Date().getTime();
-          if (
-            user.accountType === "Platnum" &&
-            parseInt(currentDate) < parseInt(user.day)
-          ) {
-            toast({
-              title: "You are all caught up!",
-              description: `Wait after ${(
-                (parseInt(user.day) - parseInt(currentDate)) /
-                3600000
-              ).toFixed(2)}hrs to send this message`,
-              status: "info",
-              isClosable: true,
-              duration: 5000,
-              position: "bottom",
-            });
-            return;
-          }
 
           if (
             user.accountType === "new" ||
@@ -279,7 +264,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               );
               setChats(data);
               setSelectedChat("");
-              onOpen();
+              setModal(true);
             } catch (error) {
               console.log(error);
             }
@@ -554,6 +539,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           </ModalContent>
         </Modal>
       )}
+      {modal && <Notifier isOpen={modal} onClose={() => setModal(false)} />}
       {selectedChat ? (
         <>
           <Text
