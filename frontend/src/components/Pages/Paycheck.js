@@ -29,15 +29,13 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
   handleApprove,
-  handleCreateChat,
   makePaymentMpesa,
   useConnectSocket,
 } from "../config/ChatLogics";
 
 export default function Paycheck() {
   const toast = useToast();
-  const { user, setUser, userId, setChats, chats, setSelectedChat } =
-    ChatState();
+  const { user, setUser } = ChatState();
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [subscription, setSubscription] = useState("");
@@ -76,7 +74,6 @@ export default function Paycheck() {
   //   socket.on("noPayment", (nothing) => {
   //    toast({
   //       title: nothing,
-  //       description: "Subscription unsuccessful",
   //       status: "info",
   //       duration: 5000,
   //       position: "bottom",
@@ -92,16 +89,6 @@ export default function Paycheck() {
   //     };
   //     localStorage.setItem("userInfo", JSON.stringify(userData));
   //     await setUser(userData);
-  //     await handleCreateChat(
-  //       user.accountType,
-  //       userId,
-  //       toast,
-  //       user,
-  //       setChats,
-  //       setUser,
-  //       chats,
-  //       setSelectedChat
-  //     );
   //     navigate("/chats");
   //     toast({
   //       title: "Successfully subscribed",
@@ -130,12 +117,13 @@ export default function Paycheck() {
     <VStack
       display={"flex"}
       flexDir={{ base: "row", md: "column" }}
-      justifyContent={"space-evenly"}
+      justifyContent={"space-around"}
       alignItems={"center"}
       width={"100%"}
       overflow={"auto"}
       flexWrap={"wrap"}
       padding={5}
+      background={"whitesmoke"}
     >
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
         {overlay}
@@ -265,7 +253,11 @@ export default function Paycheck() {
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
-              One chat a day for seven days
+              Unflag all chats
+            </ListItem>
+            <ListItem>
+              <ListIcon as={CheckIcon} color="green.400" />
+              Share contacts
             </ListItem>
           </List>
 
@@ -293,21 +285,10 @@ export default function Paycheck() {
               onApprove={async (data, actions) => {
                 const amount = "Platnum";
                 await handleApprove(amount, amount, user, setUser);
-                await handleCreateChat(
-                  "Platnum",
-                  userId,
-                  toast,
-                  user,
-                  setChats,
-                  setUser,
-                  chats,
-                  setSelectedChat
-                );
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
                   toast({
                     title: "Success",
-                    description: "Subcription Successfull",
                     status: "info",
                     duration: 3000,
                     isClosable: true,
@@ -318,7 +299,6 @@ export default function Paycheck() {
               onCancel={() => {
                 toast({
                   title: "Cancelled",
-                  description: "Subscription Unsuccessfull",
                   status: "info",
                   isClosable: true,
                   position: "bottom",
@@ -393,15 +373,19 @@ export default function Paycheck() {
               <ListIcon as={CheckIcon} color="green.400" />
               No Ads
             </ListItem>
-            <ListItem>
-              <ListIcon as={CheckIcon} color="green.400" />
-              No limit to chats
-            </ListItem>
+
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
               Video and Voice Calls
             </ListItem>
-
+            <ListItem>
+              <ListIcon as={CheckIcon} color="green.400" />
+              Unflag all chats
+            </ListItem>
+            <ListItem>
+              <ListIcon as={CheckIcon} color="green.400" />
+              Share contacts
+            </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
               Unlimited
@@ -429,24 +413,13 @@ export default function Paycheck() {
                 });
               }}
               onApprove={async (data, actions) => {
-                console.log(data);
                 const amount = "Gold";
                 await handleApprove(amount, amount, user, setUser);
-                await handleCreateChat(
-                  "Gold",
-                  userId,
-                  toast,
-                  user,
-                  setChats,
-                  setUser,
-                  chats,
-                  setSelectedChat
-                );
+
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
                   toast({
                     title: "Success",
-                    description: data.subscriptionID,
                     status: "info",
                     duration: 3000,
                     isClosable: true,
@@ -457,7 +430,6 @@ export default function Paycheck() {
               onCancel={() => {
                 toast({
                   title: "Cancelled",
-                  description: "Subscription Unsuccessfull",
                   status: "info",
                   isClosable: true,
                   position: "bottom",
