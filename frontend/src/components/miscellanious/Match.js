@@ -17,7 +17,6 @@ import {
 } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { handleCreateChat } from "../config/ChatLogics";
 
@@ -28,8 +27,6 @@ const MatchModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
-
   const { setSelectedChat, user, chats, setUserId, setUser, setChats } =
     ChatState();
   const toast = useToast();
@@ -38,83 +35,39 @@ const MatchModal = () => {
     const existingChat = chats.find(
       (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
     );
-    const currentDate = new Date().getTime();
 
     if (existingChat) {
       setSelectedChat(existingChat);
       onClose();
       return;
     }
-    if (
-      user.accountType === "Platnum" &&
-      parseInt(currentDate) < parseInt(user.day)
-    ) {
-      let timeRemaining = (
-        (parseInt(user.day) - parseInt(currentDate)) /
-        3600000
-      ).toFixed(2);
-      toast({
-        title: "You are all caught up!",
-        description: `wait after ${timeRemaining}hrs`,
-        status: "info",
-        isClosable: true,
-        duration: 5000,
-        position: "bottom",
-      });
-      onClose();
-      return;
-    }
-    if (
-      (user.accountType === "new" && chats.length >= 2) ||
-      user.accountType === "Bronze"
-    ) {
-      navigate("/paycheck");
-      onClose();
-    } else {
-      if (
-        parseInt(currentDate) < parseInt(user.subscription) ||
-        user.accountType === "new"
-      ) {
-        try {
-          setLoadingChat(true);
-          await handleCreateChat(
-            user.accountType,
-            userId,
-            toast,
-            user,
-            setChats,
-            setUser,
-            chats,
-            setSelectedChat
-          );
 
-          setLoadingChat(false);
-          onClose();
-        } catch (error) {
-          setLoadingChat(false);
-          onClose();
-          toast({
-            title: "Error creating your chat, try again later",
-            description: error.message,
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-            position: "bottom-left",
-          });
-        }
-      } else {
-        toast({
-          title: "You are not subscribed",
-          description: `Subscription expired on ${new Date(
-            parseInt(user.subscription)
-          )}`,
-          status: "info",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom",
-        });
-        navigate("/paycheck");
-      }
+    try {
+      setLoadingChat(true);
+      await handleCreateChat(
+        user.accountType,
+        userId,
+        toast,
+        user,
+        setChats,
+        setUser,
+        chats,
+        setSelectedChat
+      );
+
+      setLoadingChat(false);
+      onClose();
+    } catch (error) {
+      setLoadingChat(false);
+      onClose();
+      toast({
+        title: "Error creating your chat, try again later",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
     }
   };
 
