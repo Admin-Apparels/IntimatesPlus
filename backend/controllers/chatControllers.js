@@ -151,12 +151,12 @@ const flagChats = async (req, res) => {
     // Find the chat by ID and update its flagged array to include the user's ID
     const updatedChat = await Chat.findByIdAndUpdate(
       chatId,
-      { $addToSet: { flagged: userId } }, // Using $addToSet to ensure uniqueness
-      { new: true } // Return the updated chat
+      { $addToSet: { flagged: userId } },
+      { new: true }
     );
 
     if (updatedChat) {
-      // If the chat is successfully updated, return the updated user's chats
+      // Fetch the user's chats after the update
       const userChats = await Chat.find({
         users: { $elemMatch: { $eq: req.user._id } },
       })
@@ -165,13 +165,20 @@ const flagChats = async (req, res) => {
         .sort({ updatedAt: -1 })
         .exec();
 
-      return res.json(userChats);
+      // Populate additional fields as needed
+      const populatedResults = await User.populate(userChats, {
+        path: "latestMessage.sender",
+        select: "name pic email isBlocked",
+      });
+
+      // Return the updated user chats with populated fields
+      return res.json(populatedResults);
     } else {
-      // If the chat is not found, return an error response
+      // If the chat is not found, return a 404 error
       return res.status(404).json({ error: "Chat not found" });
     }
   } catch (error) {
-    // If an error occurs, log it and return an error response
+    // If an error occurs, log it and return a 500 error
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
   }

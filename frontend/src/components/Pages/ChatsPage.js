@@ -67,11 +67,11 @@ const Chatpage = () => {
     <Box width="100%" backgroundColor={"Background"}>
       <ErrorBoundary fallback={<p>Something went wrong</p>} userSelect={"none"}>
         {user && <SideDrawer />}{" "}
-        {/* {user &&
-          user.accountType !== "Gold" &&
-          parseInt(new Date().getTime()) > parseInt(user.adsSubscription) && (
-            <Ads />
-          )} */}
+        {user &&
+          ((user.accountType === "Gold" &&
+            parseInt(new Date().getTime()) > parseInt(user.subscription)) ||
+            parseInt(new Date().getTime()) >
+              parseInt(user.adsSubscription)) && <Ads />}
         <Modal size="lg" onClose={onClose} isOpen={isOpen} onOpen={onOpen}>
           {overlay}
           <ModalContent
@@ -126,7 +126,7 @@ const Chatpage = () => {
                 height={3}
               />
               <Text fontSize={"smaller"} p={0} m={0}>
-                11k
+                15k
               </Text>
               For more stories and inspiration, follow us on Twitter:{" "}
               <Link
@@ -157,6 +157,7 @@ const Chatpage = () => {
               right="7%"
               borderRadius="50%"
               fontSize="large"
+              boxSize={"30px"}
               textColor="orange"
               p={6}
               _hover={{ backgroundColor: "red" }}
@@ -171,11 +172,11 @@ const Chatpage = () => {
                   bottom="80%"
                   right="80%"
                   transform="translate(50%, 0)"
-                  bg="red.500"
+                  background="red.500"
                   borderRadius="50%"
                   width="12px"
                   height="12px"
-                  p={2}
+                  p={1}
                 ></Box>
               )}
             </Button>

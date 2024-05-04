@@ -4,37 +4,19 @@ import axiosInstance from "./miscellanious/axios";
 
 import { useCallback, useEffect, useState } from "react";
 import ChatLoading from "./ChatLoading";
-// import { handleApprove, makePaymentMpesa  } from "./config/ChatLogics";
 import { ChatState } from "./Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 import { Image } from "@chakra-ui/react";
-// import { Image, useColorModeValue } from "@chakra-ui/react";
-// import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import {
-  // Modal,
-  // ModalOverlay,
-  // ModalContent,
-  // ModalHeader,
-  // ModalFooter,
-  // useDisclosure,
-  // ModalBody,
-  // ModalCloseButton,
-  // Button,
-  // Input,
-  
-} from "@chakra-ui/react";
+import Notifier from "./miscellanious/Notifier";
+import { FaFlag } from "react-icons/fa";
 
 const MyChat = (fetchAgain) => {
   const [loggedUser, setLoggedUser] = useState();
-  // const { isOpen, onOpen, onClose } = useDisclosure();
-  // const [clicked, setClicked] = useState(false);
-  // const [phoneNumber, setPhoneNumber] = useState("");
-  // const colorModeValue = useColorModeValue("green.50", "green.900");
+  const [modal, setModal] = useState(false);
   const {
     selectedChat,
     setSelectedChat,
     user,
-    // setUser,
     chats,
     setChats,
     notification,
@@ -128,41 +110,41 @@ const MyChat = (fetchAgain) => {
 
     fetchData();
   }, [fetchChats, loggedUser]);
-  
 
   const renderChatItems = () => {
     return chats.map((chat) => {
-  
+      const isFlagged = chat.flagged.includes(user._id);
+
       return (
         <Box
           key={chat._id}
           onClick={() => {
-          
+            if (isFlagged) {
+              setModal(true); // Show the modal
+            } else {
               setSelectedChat(chat);
               const otherNotifications = notification.filter(
                 (n) => n.chat._id !== chat._id
               );
               setNotification(otherNotifications);
-           
+            }
           }}
-          cursor="pointer"
-          bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
+          cursor={isFlagged ? "not-allowed" : "pointer"}
+          background={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
           color={selectedChat === chat ? "white" : "black"}
           px={3}
           py={2}
           borderRadius="lg"
-          position={"relative"}
+          position="relative"
         >
-          <Text display={"flex"} textAlign={"center"}>
+          <Text display="flex" textAlign="center">
             {chat.senderName}{" "}
-            {chat.chatName === "Admin" ? (
+            {chat.chatName === "Admin" && (
               <Image
                 src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699615402/icons8-verified-account-64_1_amfufo.png"
                 height={4}
                 m={1}
               />
-            ) : (
-              ""
             )}
           </Text>
           {chat.latestMessage && chat.latestMessage.sender && (
@@ -178,12 +160,21 @@ const MyChat = (fetchAgain) => {
                 : chat.latestMessage.content}
             </Text>
           )}
-       
+          {isFlagged && (
+            <FaFlag
+              style={{
+                color: "red",
+                position: "absolute",
+                bottom: 5,
+                right: 5,
+              }}
+            />
+          )}
         </Box>
       );
     });
   };
-  
+
   return (
     <Box
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
@@ -195,163 +186,8 @@ const MyChat = (fetchAgain) => {
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
-      >
-{/* // <Modal size="lg" onClose={() => { onClose();
-//   setClicked(false);
-// }} isOpen={isOpen} isCentered>
-       
-//           <>
-//             <ModalOverlay />
-//             <ModalContent width={"calc(90%)"} p={10}>
-//               <ModalHeader
-//                 fontSize="40px"
-//                 fontFamily="Work sans"
-//                 display="flex"
-//                 flexDir={"column"}
-//                 justifyContent="center"
-//                 alignItems={"center"}
-//                 bgGradient="linear(to-r, red.700, yellow.300)"
-//                 bgClip="text"
-//                 userSelect={"none"}
-//                 p={0}
-//                 m={0}
-//               >
-//                 Premium
-                
-//                  <Stack direction={"row"} align={"center"} justify={"center"}>
-//             <Text fontSize={"2xl"}>$</Text>
-//             <Text fontSize={"2xl"} fontWeight={800}>
-//               3.99
-//             </Text>
-//             <Text color={"gray.500"} fontSize={"2xl"}>/month</Text>
-//           </Stack>
-//                 <Text fontSize={"small"}>-Open all chats -Get instant Admin replies -Boost following</Text>
-//               </ModalHeader>
-//               <ModalCloseButton />
-//               <ModalBody
-//                 display="flex"
-//                 flexDir="column"
-//                 alignItems="center"
-//                 justifyContent="space-between"
-//               >
-//                 {!clicked ? (
-//                 <>
-//                   <PayPalScriptProvider
-//                     options={{
-//                       clientId:
-//                         "ASgI4T_UWqJJpTSaNkqcXbQ9H8ub0f_DAMR8SJByA19N4HtPK0XRgTv4xJjj4Mpx_KxenyLzBDapnJ82",
-//                     }}
-//                   >
-//                     <PayPalButtons
-//                       createOrder={(data, actions) => {
-//                         const amount = 3.0;
-
-//                         return actions.order.create({
-//                           purchase_units: [
-//                             {
-//                               amount: {
-//                                 currency_code: "USD",
-//                                 value: amount.toFixed(2),
-//                               },
-//                             },
-//                           ],
-//                         });
-//                       }}
-//                       onApprove={async (data, actions) => {
-//                         const amount = "Bronze";
-//                         const ads = "femaleSub";
-//                         await handleApprove(amount, ads, user, setUser);
-//                         return actions.order.capture().then(function (details) {
-                         
-//                         });
-//                       }}
-//                       onCancel={() => {
-//                         toast({
-//                           title: "Cancelled",
-//                           description: "Subscription Unsuccessfull",
-//                           status: "info",
-//                           isClosable: true,
-//                           position: "bottom",
-//                         });
-//                       }}
-//                     />
-//                   </PayPalScriptProvider>
-//                   <Button
-//                     display={"flex"}
-//                     justifyContent={"center"}
-//                     alignItems={"center"}
-//                     width={"12.5rem"}
-//                     borderRadius={2}
-//                     backgroundColor={"green.400"}
-//                     color={"white"}
-//                     onClick={() => {
-//                       setClicked(true);
-//                     }}
-//                   >
-//                     <Image
-//                       height={5}
-//                       width={"auto"}
-//                       src={
-//                         "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1694007922/mpesa_ppfs6p.png"
-//                       }
-//                       loading="lazy"
-//                       alt={""}
-//                     />{" "}
-//                     Pay via Mpesa
-//                   </Button>{" "}
-//                 </>
-//               ) : (
-//                 <> <Text
-//             fontSize={"sm"}
-//             fontWeight={500}
-//             bg={colorModeValue}
-//             p={2}
-//             px={3}
-//             color={"green.500"}
-//             rounded={"full"}
-//           >
-//             *20% off
-//           </Text>
-//                   <Input
-//                     fontSize={"sm"}
-//                     color={"green.400"}
-//                     fontWeight={"bold"}
-//                     placeholder="i.e 0710334455..."
-//                     type="text"
-//                     onChange={(e) => setPhoneNumber(e.target.value)}
-//                     value={phoneNumber}
-//                     textAlign={"center"}
-//                     minLength={10}
-//                     maxLength={10}
-//                   />
-//                   <Button
-//                     width={"100%"}
-//                     onClick={() => {
-//                       makePaymentMpesa("premium", phoneNumber, user, toast);
-//                       onClose();
-//                       toast({
-//                         title: "Wait as message is sent",
-//                         status: "loading",
-//                         isClosable: true,
-//                         position: "bottom",
-//                         duration: 5000,
-//                       });
-//                     }}
-//                     isDisabled={phoneNumber.length !== parseInt(10)}
-//                     colorScheme="green"
-//                   >
-//                     Proceed
-//                   </Button>
-//                 </>
-//               )}
-              
-//               </ModalBody>
-//               <ModalFooter
-//               >
-//               </ModalFooter>
-//             </ModalContent>
-//           </>
-//       </Modal> */}
+    >
+      {modal && <Notifier isOpen={modal} onClose={() => setModal(false)} />}
       <Box
         display="flex"
         p={2}
@@ -377,7 +213,11 @@ const MyChat = (fetchAgain) => {
           p={2}
         >
           {chats !== undefined ? chats.length : 0}
-          <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1703952426/icons8-chat-100_x8ue9d.png" height={6} mt={-1} />
+          <Image
+            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1703952426/icons8-chat-100_x8ue9d.png"
+            height={6}
+            mt={-1}
+          />
         </Text>
       </Box>
       <Box

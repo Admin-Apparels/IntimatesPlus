@@ -35,7 +35,7 @@ const ClientModal = ({ children }) => {
   const [verified, setVerified] = useState("");
   const toast = useToast();
   const navigate = useNavigate();
-  const [code, setCode] = useState("111111");
+  const [code, setCode] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [inputCode, setInputCode] = useState("");
   const [email, setEmail] = useState(user?.email);

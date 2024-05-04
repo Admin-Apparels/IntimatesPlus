@@ -160,7 +160,9 @@ const MatchModal = () => {
                 fontSize="40px"
                 fontFamily="Work sans"
                 display="flex"
+                flexDir={"column"}
                 justifyContent="center"
+                alignItems={"center"}
                 width={"100%"}
                 background={"blackAlpha.400"}
                 textColor={"whiteSmoke"}
@@ -171,7 +173,8 @@ const MatchModal = () => {
                 top="0" // Align it to the top of the modal content
                 left="50%" // Center horizontally
                 transform="translateX(-50%)" // Move it left by half its width to center it horizontally
-                zIndex="1" // Ensure the header is above the image
+                zIndex="1"
+                // Ensure the header is above the image
               >
                 {currentUser.name}
 

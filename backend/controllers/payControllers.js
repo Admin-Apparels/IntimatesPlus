@@ -2,6 +2,7 @@ const { default: axios } = require("axios");
 const User = require("../models/userModel");
 const dotenv = require("dotenv");
 const { getIO } = require("../socket");
+const Chat = require("../models/chatModel");
 
 dotenv.config({ path: "./secrets.env" });
 
@@ -129,6 +130,18 @@ const updateUser = async (req, res) => {
     { new: true }
   ).select("accountType subscription day");
 
+  // Unflag all the flagged chats for the user and populate them
+  const Chats = await Chat.updateMany(
+    { flagged: userId }, // Find chats where the user is flagged
+    { $pull: { flagged: userId } } // Remove the user's ID from the flagged array
+  ).populate({
+    path: "users latestMessage", // Populate the users and latestMessage fields
+    populate: { path: "sender", select: "name" }, // Populate the sender field of latestMessage
+  });
+
+  // Emit the updated user data and populated chats to the client
+  io.emit("userUpdated", updatedUser, Chats);
+
   res.json(updatedUser);
 };
 const makePaymentMpesa = async (req, res) => {
@@ -159,9 +172,9 @@ const makePaymentMpesa = async (req, res) => {
   if (subscription === "Bronze") {
     Amount = 200;
   } else if (subscription === "Platnum") {
-    Amount = 898;
+    Amount = 550;
   } else if (subscription === "Gold") {
-    Amount = 3000;
+    Amount = 1800;
   } else if (subscription === "premium") {
     Amount = 500;
   } else {
@@ -292,8 +305,17 @@ const CallBackURL = async (req, res) => {
       },
       { new: true }
     ).select("accountType subscription day");
+    // Unflag all the flagged chats for the user and populate them
+    const Chats = await Chat.updateMany(
+      { flagged: userId }, // Find chats where the user is flagged
+      { $pull: { flagged: userId } } // Remove the user's ID from the flagged array
+    ).populate({
+      path: "users latestMessage", // Populate the users and latestMessage fields
+      populate: { path: "sender", select: "name" }, // Populate the sender field of latestMessage
+    });
 
-    io.emit("userUpdated", updatedUser);
+    // Emit the updated user data and populated chats to the client
+    io.emit("userUpdated", updatedUser, Chats);
   } catch (error) {
     console.log(error, "Error updating user");
   }

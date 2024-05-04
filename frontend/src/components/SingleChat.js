@@ -49,7 +49,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
-  const [modal, setModal] = useState(true);
+  const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const OverlayOne = () => (
     <ModalOverlay
@@ -255,14 +255,32 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             try {
               const config = {
                 headers: {
+                  "Content-type": "application/json",
                   Authorization: `Bearer ${user.token}`,
                 },
               };
               const { data } = await axios.put(
                 `/api/chat/flag/${selectedChat._id}`,
+                {},
                 config
               );
-              setChats(data);
+              const chatsWithSenderNames = await Promise.all(
+                data.map(async (chat) => {
+                  const resolvedUsers = await Promise.all(chat.users);
+
+                  const senderName =
+                    resolvedUsers.length === 2
+                      ? resolvedUsers[0]._id === user._id
+                        ? resolvedUsers[1].name
+                        : resolvedUsers[0].name
+                      : resolvedUsers[0].name;
+
+                  return { ...chat, senderName };
+                })
+              );
+
+              setChats(chatsWithSenderNames);
+
               setSelectedChat("");
               setModal(true);
             } catch (error) {

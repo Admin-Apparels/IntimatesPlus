@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Modal,
   ModalOverlay,
@@ -8,9 +9,12 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  Text,
 } from "@chakra-ui/react";
 
 const Notifier = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
+
   const OverlayOne = () => (
     <ModalOverlay
       bg="blackAlpha.300"
@@ -22,14 +26,39 @@ const Notifier = ({ isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       {overlay}
       <ModalContent>
-        <ModalHeader>Modal Title</ModalHeader>
+        <ModalHeader
+          background={"red.500"}
+          textColor={"white"}
+          textAlign={"center"}
+        >
+          Chat Flagged
+        </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>Body</ModalBody>
-        <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={onClose}>
-            Close
+        <ModalBody>
+          <Text textAlign="center" mb={4}>
+            Since you are not subscribed, your chats will remain open with the
+            other user but you will not be able to open them.
+          </Text>
+          <Text textAlign="center" mb={4}>
+            To subscribe and enjoy a seamless experience, click the button
+            below.
+          </Text>
+        </ModalBody>
+        <ModalFooter
+          display={"flex"}
+          flexDir={"column"}
+          justifyContent="center"
+        >
+          <Button
+            colorScheme="blue"
+            mr={3}
+            onClick={() => {
+              onClose();
+              navigate("/paycheck");
+            }}
+          >
+            Subscribe
           </Button>
-          <Button variant="ghost">Secondary Action</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

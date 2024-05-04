@@ -22,7 +22,7 @@ import React, { useState } from "react";
 
 const ProfileModal = ({ userInfo }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [verified, setVerified] = useState("");
+
   const [isFocused, setIsFocused] = useState(false);
   const { user, setUser, selectedChat } = ChatState();
   const [showReportLinks, setShowReportLinks] = useState(false);
@@ -95,21 +95,7 @@ const ProfileModal = ({ userInfo }) => {
       : selectedChat.users[1]._id;
   const deleted =
     selectedChat.users[0].deleted || selectedChat.users[1].deleted;
-  const setVerifieding = () => {
-    if (userInfo.accountType === "Bronze") {
-      setVerified(
-        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699185606/icons8-gold-medal-80_ceco9h.png"
-      );
-    } else if (userInfo.accountType === "Platnum") {
-      setVerified(
-        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699185606/icons8-silver-medal-80_kplixh.png"
-      );
-    } else if (userInfo.accountType === "Gold") {
-      setVerified(
-        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699185606/icons8-bronze-medal-80_xvl7po.png"
-      );
-    }
-  };
+
   const OverlayOne = () => (
     <ModalOverlay
       bg="blackAlpha.300"
@@ -125,7 +111,6 @@ const ProfileModal = ({ userInfo }) => {
         icon={<ViewIcon />}
         onClick={() => {
           onOpen();
-          setVerifieding();
         }}
       />
 
@@ -144,25 +129,30 @@ const ProfileModal = ({ userInfo }) => {
             fontSize="40px"
             fontFamily="Work sans"
             display="flex"
+            flexDirection={"column"}
+            alignItems={"center"}
             justifyContent="center"
             bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
             bgClip="text"
             userSelect={"none"}
-            p={0}
-            m={2}
           >
-            {userInfo.name}
+            <Box
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent="center"
+              width={"100%"}
+            >
+              {userInfo.name}
+              {userInfo.email === ADMIN_EMAIL && (
+                <Image
+                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701779357/icons8-sex-64_a1hki1.png"
+                  height={10}
+                  m={1}
+                />
+              )}
+            </Box>
 
-            {userInfo.email === ADMIN_EMAIL ? (
-              <Image
-                src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701779357/icons8-sex-64_a1hki1.png"
-                height={10}
-                m={1}
-              />
-            ) : (
-              <Image src={verified} alt="" height={7} />
-            )}
-            <Text fontSize={"small"} textColor={"red"}>
+            <Text textAlign={"center"} fontSize={"small"} textColor={"red"}>
               {!userInfo.verified ? "anonymous ⚠️" : "Verified"}
             </Text>
           </ModalHeader>

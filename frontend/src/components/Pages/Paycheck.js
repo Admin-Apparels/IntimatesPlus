@@ -35,7 +35,7 @@ import {
 
 export default function Paycheck() {
   const toast = useToast();
-  const { user, setUser } = ChatState();
+  const { user, setUser, setChats } = ChatState();
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [subscription, setSubscription] = useState("");
@@ -48,7 +48,7 @@ export default function Paycheck() {
   );
   const overlay = React.useState(<OverlayOne />);
 
-  // const socket = useConnectSocket(user.token);
+  const socket = useConnectSocket(user.token);
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -69,50 +69,65 @@ export default function Paycheck() {
     }
   }, [navigate, user]);
 
-  // useEffect(() => {
-  //   if(!socket) return;
-  //   socket.on("noPayment", (nothing) => {
-  //    toast({
-  //       title: nothing,
-  //       status: "info",
-  //       duration: 5000,
-  //       position: "bottom",
-  //     });
-  //     navigate("/chats");
-  //   });
-  //   socket.on("userUpdated", async (updatedUser) => {
-  //     const userData = await {
-  //       ...user,
-  //       accountType: updatedUser.accountType,
-  //       subscription: updatedUser.subscription,
-  //       day: updatedUser.day,
-  //     };
-  //     localStorage.setItem("userInfo", JSON.stringify(userData));
-  //     await setUser(userData);
-  //     navigate("/chats");
-  //     toast({
-  //       title: "Successfully subscribed",
-  //       description: `${user.accountType} subscriber`,
-  //       status: "info",
-  //       duration: 5000,
-  //       position: "bottom",
-  //     });
-  //   });
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("noPayment", (nothing) => {
+      toast({
+        title: nothing,
+        status: "info",
+        duration: 5000,
+        position: "bottom",
+      });
+      navigate("/chats");
+    });
+    socket.on("userUpdated", async (updatedUser, Chats) => {
+      // Populate sender names for each chat
+      const chatsWithSenderNames = await Promise.all(
+        Chats.map(async (chat) => {
+          const resolvedUsers = await Promise.all(chat.users);
 
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, [
-  //   user,
-  //   setUser,
-  //   navigate,
-  //   userId,
-  //   chats,
-  //   setChats,
-  //   setSelectedChat,
-  //   toast,
-  //   socket
-  // ]);
+          const senderName =
+            resolvedUsers.length === 2
+              ? resolvedUsers[0]._id === user?._id
+                ? resolvedUsers[1].name
+                : resolvedUsers[0].name
+              : resolvedUsers[0].name;
+
+          return { ...chat, senderName };
+        })
+      );
+
+      // Set the chats with sender names in the state
+      setChats(chatsWithSenderNames);
+
+      // Update local storage with the user's updated data
+      const userData = await {
+        ...user,
+        accountType: updatedUser.accountType,
+        subscription: updatedUser.subscription,
+        day: updatedUser.day,
+      };
+      localStorage.setItem("userInfo", JSON.stringify(userData));
+
+      // Update the user state
+      await setUser(userData);
+
+      // Navigate to the chats page
+      navigate("/chats");
+
+      // Show a success toast
+      toast({
+        title: "Successfully subscribed",
+        description: `${user?.accountType} subscriber`,
+        status: "info",
+        duration: 5000,
+        position: "bottom",
+      });
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, [user, setUser, navigate, toast, socket, setChats]);
   return (
     <VStack
       display={"flex"}
@@ -239,7 +254,7 @@ export default function Paycheck() {
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"3xl"}>$</Text>
             <Text fontSize={"6xl"} fontWeight={800}>
-              5.99
+              4.99
             </Text>
             <Text color={"gray.500"}>/week</Text>
           </Stack>
@@ -269,7 +284,7 @@ export default function Paycheck() {
           >
             <PayPalButtons
               createOrder={(data, actions) => {
-                const amount = 5.99;
+                const amount = 4.99;
 
                 return actions.order.create({
                   purchase_units: [
@@ -373,11 +388,6 @@ export default function Paycheck() {
               <ListIcon as={CheckIcon} color="green.400" />
               No Ads
             </ListItem>
-
-            <ListItem>
-              <ListIcon as={CheckIcon} color="green.400" />
-              Video and Voice Calls
-            </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
               Unflag all chats
@@ -385,6 +395,10 @@ export default function Paycheck() {
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
               Share contacts
+            </ListItem>
+            <ListItem>
+              <ListIcon as={CheckIcon} color="green.400" />
+              Video and Voice Calls
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
