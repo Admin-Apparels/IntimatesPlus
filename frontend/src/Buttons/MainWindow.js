@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from "react";
+// import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Input, Box, Heading } from "@chakra-ui/react";
 import { faPhone, faVideo } from "@fortawesome/free-solid-svg-icons";
 import ActionButton from "./ActionButton";
-import { socket } from "../Communication";
+// import { socket } from "../Communication";
 import { useParams } from "react-router-dom";
 import { ChatState } from "../components/Context/ChatProvider";
 
-function useClientID() {
-  const [clientID, setClientID] = useState("");
+// function useClientID() {
+//   const [clientID, setClientID] = useState("");
 
-  useEffect(() => {
-    socket.on("init", ({ id }) => {
-      document.title = `${id} - VideoCall`;
-      setClientID(id);
-    });
-  }, []);
+//   useEffect(() => {
+//     socket.on("init", ({ id }) => {
+//       document.title = `${id} - VideoCall`;
+//       setClientID(id);
+//     });
+//   }, []);
 
-  return clientID;
-}
+//   return clientID;
+// }
 
 function MainWindow({ startCall }) {
-  const clientID = useClientID();
+  // const clientID = useClientID();
   const { user } = ChatState();
   const { receiver } = useParams();
 

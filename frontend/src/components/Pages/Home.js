@@ -158,11 +158,10 @@ function Homepage() {
                 userSelect={"none"}
                 fontSize={"small"}
               >
-                This is a realm where connections evolve beyond fleeting
+                Fuckmate is a realm where connections evolve beyond fleeting
                 moments. Once a mutual spark is ignited, both accounts shall
                 transcend to new heights. Deactivation becomes a symphony of
-                shared passion, a crescendo of genuine connection. 🌟
-                #fuckmateboo #RealConnections
+                shared passion, a crescendo of genuine connection.
               </Text>
               <Text
                 display="flex"
@@ -219,10 +218,11 @@ function Homepage() {
                 fontFamily={"mono"}
                 fontSize={"small"}
               >
-                🌟 Welcome to fuckmate.boo, where connection transcends
-                self-pleasure! 🌟 Discover meaningful connections on our premier
-                dating platform. We bring together individuals seeking
-                companionship, romance, and genuine connections.
+                🌟 Welcome, meet your fuckmate, friend-with-benefit or
+                friend-with-me, where connection transcends self-pleasure! 🌟
+                Discover meaningful connections on our premier dating platform.
+                We bring together individuals seeking companionship, romance,
+                and genuine connections.
               </Text>
               <Text color="blue.100" display={"flex"} fontSize={"small"}>
                 {" "}

@@ -2,15 +2,21 @@ import { Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 const AnimatedTyping = () => {
-  const [textToType] = useState("fuckmate.boo");
+  const [textToType] = useState([
+    "fuckmate.boo",
+    "friends-with-benefits",
+    "friend-with-me",
+  ]); // Update to an array of words
   const [displayedText, setDisplayedText] = useState("");
   const [textLength, setTextLength] = useState(0);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0); // Track the index of the current word
 
   useEffect(() => {
     let index = 0;
 
     const typingIntervalId = setInterval(() => {
-      const nextChar = textToType[index];
+      const currentWord = textToType[currentWordIndex];
+      const nextChar = currentWord[index];
       index += 1;
 
       if (nextChar !== undefined) {
@@ -28,13 +34,17 @@ const AnimatedTyping = () => {
             setDisplayedText(""); // Clear the text
             setTextLength(0);
             index = 0; // Reset index for the next cycle
+
+            // Select a random word index for the next word
+            const randomIndex = Math.floor(Math.random() * textToType.length);
+            setCurrentWordIndex(randomIndex);
           }, 3000);
         }, 100);
       }
     }, 100);
 
     return () => clearInterval(typingIntervalId);
-  }, [textToType]);
+  }, [textToType, currentWordIndex]);
 
   return (
     <>
@@ -47,7 +57,7 @@ const AnimatedTyping = () => {
           fontSize="3xl"
           fontWeight="bold"
           userSelect="none"
-          textColor={"red.500"}
+          textColor={"red.100"}
           border={"none"}
           padding="5px"
           background="transparent"
