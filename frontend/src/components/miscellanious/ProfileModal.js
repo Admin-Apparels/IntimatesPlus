@@ -19,6 +19,8 @@ import {
 import axios from "axios";
 import { ChatState } from "../Context/ChatProvider";
 import React, { useState } from "react";
+import { MdVerified, MdOutlineVerified } from "react-icons/md";
+import { VscUnverified } from "react-icons/vsc";
 
 const ProfileModal = ({ userInfo }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -129,32 +131,22 @@ const ProfileModal = ({ userInfo }) => {
             fontSize="40px"
             fontFamily="Work sans"
             display="flex"
-            flexDirection={"column"}
             alignItems={"center"}
             justifyContent="center"
-            bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
-            bgClip="text"
             userSelect={"none"}
           >
-            <Box
-              display={"flex"}
-              alignItems={"center"}
-              justifyContent="center"
-              width={"100%"}
+            <Text
+              bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
+              bgClip="text"
+              userSelect={"none"}
+              px={"4"}
             >
               {userInfo.name}
-              {userInfo.email === ADMIN_EMAIL && (
-                <Image
-                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701779357/icons8-sex-64_a1hki1.png"
-                  height={10}
-                  m={1}
-                />
-              )}
-            </Box>
-
-            <Text textAlign={"center"} fontSize={"small"} textColor={"red"}>
-              {!userInfo.verified ? "anonymous ⚠️" : "Verified"}
             </Text>
+
+            {userInfo.email === ADMIN_EMAIL && <MdVerified />}
+
+            {userInfo.verified ? <MdOutlineVerified /> : <VscUnverified />}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody

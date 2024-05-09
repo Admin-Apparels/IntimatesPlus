@@ -32,6 +32,7 @@ import UserListItem from "../userAvatar/UserListItem";
 import { ChatState } from "../Context/ChatProvider";
 import MatchModal from "./Match";
 import LoveIcon from "./loveIcon";
+import Notifier from "./Notifier";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -48,6 +49,7 @@ function SideDrawer() {
 
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modal, setModal] = useState(false);
   const history = useNavigate();
 
   const logoutHandler = () => {
@@ -119,7 +121,7 @@ function SideDrawer() {
           visibility={textVisibility}
         >
           <Image
-            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1702459043/icons8-fm-96_wl6d1g.png"
+            src="http://res.cloudinary.com/dvc7i8g1a/image/upload/v1700507229/y0gbu3tusutzzz6gavtf.png"
             height={9}
           />
           fuckmate.boo
@@ -150,6 +152,7 @@ function SideDrawer() {
         <MatchModal />
 
         <LoveIcon />
+        {modal && <Notifier isOpen={modal} onClose={() => setModal(false)} />}
 
         <div>
           <Menu>
@@ -176,12 +179,17 @@ function SideDrawer() {
                 <MenuItem
                   key={notif._id}
                   onClick={() => {
-                    setSelectedChat(notif.chat);
-                    setNotification(notification.filter((n) => n !== notif));
-                    const otherNotifications = notification.filter(
-                      (n) => n.chat._id !== notif.chat._id
-                    );
-                    setNotification(otherNotifications);
+                    const isFlagged = notif.chat.flagged.includes(user?._id);
+                    if (isFlagged) {
+                      setModal(true); // Show the modal
+                    } else {
+                      setSelectedChat(notif.chat);
+                      setNotification(notification.filter((n) => n !== notif));
+                      const otherNotifications = notification.filter(
+                        (n) => n.chat._id !== notif.chat._id
+                      );
+                      setNotification(otherNotifications);
+                    }
                   }}
                 >
                   {`New Message from ${getSenderName(user, notif.chat.users)}`}

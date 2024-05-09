@@ -16,7 +16,6 @@ import {
   FormControl,
   Checkbox,
   Link,
-  Image,
 } from "@chakra-ui/react";
 import "../components/styles.css";
 import PageIndicator from "./miscellanious/PageIndicator";
@@ -28,6 +27,7 @@ import {
   getSenderId,
   useConnectSocket,
 } from "./config/ChatLogics";
+import { CiVideoOn } from "react-icons/ci";
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
@@ -37,6 +37,8 @@ import { ChatState } from "./Context/ChatProvider";
 import animation from "../animations/typing.json";
 import { useNavigate } from "react-router-dom";
 import Notifier from "./miscellanious/Notifier";
+import { HiStatusOffline, HiStatusOnline } from "react-icons/hi";
+import { TbPhoneCalling } from "react-icons/tb";
 
 var selectedChatCompare;
 
@@ -240,9 +242,45 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
         // Check if the message contains sensitive information
         const isFlaggedMessage =
-          newMessage.includes("social media") ||
+          newMessage.includes("social") ||
+          newMessage.includes("reach") ||
           newMessage.includes("phone") ||
-          newMessage.includes("contact");
+          newMessage.includes("meet") ||
+          newMessage.includes("contact") ||
+          newMessage.includes("email") ||
+          newMessage.includes("give") ||
+          newMessage.includes("handle") ||
+          newMessage.includes("number") ||
+          newMessage.includes("mobile") ||
+          newMessage.includes("cellphone") ||
+          newMessage.includes("details") ||
+          newMessage.includes("whatsapp") ||
+          newMessage.includes("telegram") ||
+          newMessage.includes("signal") ||
+          newMessage.includes("instagram") ||
+          newMessage.includes("ig") ||
+          newMessage.includes("facebook") ||
+          newMessage.includes("fb") ||
+          newMessage.includes("linkedin") ||
+          newMessage.includes("li") ||
+          newMessage.includes("twitter") ||
+          newMessage.includes("tw") ||
+          newMessage.includes("x") ||
+          newMessage.includes("snapchat") ||
+          newMessage.includes("snap") ||
+          newMessage.includes("sc") ||
+          newMessage.includes("skype") ||
+          newMessage.includes("sk") ||
+          newMessage.includes("discord") ||
+          newMessage.includes("dc") ||
+          newMessage.includes("your") ||
+          newMessage.includes("account") ||
+          newMessage.includes("call") ||
+          newMessage.includes("chat") ||
+          newMessage.includes("on") ||
+          newMessage.includes("share") ||
+          /\b\d{8,10}\b/.test(newMessage) ||
+          newMessage.includes("no:");
 
         // If the message is flagged and the user's subscription status requires flagging, flag the chat
         if (isFlaggedMessage) {
@@ -593,17 +631,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               justifyContent={"space-between"}
               alignItems={"center"}
             >
-              {isOnline ? (
-                <Image
-                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1705510176/icons8-online-48_vitzy6.png"
-                  height={5}
-                />
-              ) : (
-                <Image
-                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1705510176/icons8-offline-50_uvljtp.png"
-                  height={5}
-                />
-              )}{" "}
+              {isOnline ? <HiStatusOnline /> : <HiStatusOffline />}{" "}
               {!isCallStarted ? (
                 <IconButton
                   borderRadius={20}
@@ -612,22 +640,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   _hover={{ backgroundColor: "transparent" }}
                   backgroundColor={"transparent"}
                   isDisabled={!isOnline}
-                  icon={
-                    <Image
-                      src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1704001228/icons8-video-call-48_qzxzxs.png"
-                      m={3}
-                      height={7}
-                    />
-                  }
+                  icon={<CiVideoOn style={{ fontSize: "2rem" }} />}
                   onClick={() => {
                     startCall();
                   }}
                 />
               ) : (
-                <Image
-                  src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1704000962/icons8-ongoing-call-24_erbgdy.png"
-                  m={3}
-                />
+                <TbPhoneCalling />
               )}
               <ProfileModal
                 userInfo={getSenderFull(user, selectedChat.users)}

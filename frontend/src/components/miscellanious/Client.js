@@ -22,6 +22,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
+import { MdOutlineVerified } from "react-icons/md";
+import { VscUnverified } from "react-icons/vsc";
 
 const ClientModal = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -32,13 +34,13 @@ const ClientModal = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [pic, setPic] = useState(undefined);
-  const [verified, setVerified] = useState("");
   const toast = useToast();
   const navigate = useNavigate();
   const [code, setCode] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [inputCode, setInputCode] = useState("");
   const [email, setEmail] = useState(user?.email);
+
   const OverlayOne = () => (
     <ModalOverlay
       bg="blackAlpha.300"
@@ -238,21 +240,7 @@ const ClientModal = ({ children }) => {
       });
     }
   };
-  const setVerifieding = () => {
-    if (user.accountType === "Bronze") {
-      setVerified(
-        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699185606/icons8-gold-medal-80_ceco9h.png"
-      );
-    } else if (user.accountType === "Platnum") {
-      setVerified(
-        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699185606/icons8-silver-medal-80_kplixh.png"
-      );
-    } else if (user.accountType === "Gold") {
-      setVerified(
-        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699185606/icons8-bronze-medal-80_xvl7po.png"
-      );
-    }
-  };
+
   const generateAndVerify = async () => {
     setLoading(true);
 
@@ -289,7 +277,6 @@ const ClientModal = ({ children }) => {
         <span
           onClick={() => {
             onOpen();
-            setVerifieding();
           }}
         >
           {children}
@@ -310,17 +297,19 @@ const ClientModal = ({ children }) => {
             fontSize="40px"
             fontFamily="Work sans"
             display="flex"
-            flexDir={"column"}
             justifyContent="center"
             alignItems={"center"}
-            p={0}
-            m={0}
           >
-            <>
+            <Text
+              bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
+              bgClip="text"
+              userSelect={"none"}
+              px={"4"}
+            >
               {user.name}
-              <Image src={verified} alt="" height={7} />
-            </>
-            <Text fontSize={"small"}>{!user?.verified && "anonymous ⚠️"}</Text>
+            </Text>
+
+            {user.verified ? <MdOutlineVerified /> : <VscUnverified />}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody

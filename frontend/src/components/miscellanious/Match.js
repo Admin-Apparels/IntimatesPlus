@@ -19,6 +19,8 @@ import { ChatState } from "../Context/ChatProvider";
 import React, { useState } from "react";
 import axios from "axios";
 import { handleCreateChat } from "../config/ChatLogics";
+import { MdOutlineVerified } from "react-icons/md";
+import { VscUnverified } from "react-icons/vsc";
 
 const MatchModal = () => {
   const [loadingChat, setLoadingChat] = useState(false);
@@ -149,18 +151,25 @@ const MatchModal = () => {
         />
       )}
 
-      <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
+      <Modal
+        size="lg"
+        onClose={() => {
+          onClose();
+          setLoading(false);
+        }}
+        isOpen={isOpen}
+        isCentered
+      >
         {currentUser && (
           <>
             {" "}
-            <ModalCloseButton />
             {overlay}
-            <ModalContent>
+            <ModalContent position="relative">
+              <ModalCloseButton zIndex="1" color={"white"} />
               <ModalHeader
                 fontSize="40px"
                 fontFamily="Work sans"
                 display="flex"
-                flexDir={"column"}
                 justifyContent="center"
                 alignItems={"center"}
                 width={"100%"}
@@ -178,9 +187,13 @@ const MatchModal = () => {
               >
                 {currentUser.name}
 
-                <Text fontSize={"small"} textColor={"red"}>
-                  {!currentUser.verified ? "anonymous ⚠️" : "Verified"}
-                </Text>
+                {currentUser.verified ? (
+                  <MdOutlineVerified
+                    style={{ paddingLeft: "6", color: "black" }}
+                  />
+                ) : (
+                  <VscUnverified style={{ paddingLeft: "6", color: "black" }} />
+                )}
               </ModalHeader>
               <ModalCloseButton />
               <ModalBody

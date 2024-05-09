@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Image } from "@chakra-ui/react";
 import Notifier from "./miscellanious/Notifier";
 import { FaFlag } from "react-icons/fa";
+import { MdVerified } from "react-icons/md";
 
 const MyChat = (fetchAgain) => {
   const [loggedUser, setLoggedUser] = useState();
@@ -138,14 +139,7 @@ const MyChat = (fetchAgain) => {
           position="relative"
         >
           <Text display="flex" textAlign="center">
-            {chat.senderName}{" "}
-            {chat.chatName === "Admin" && (
-              <Image
-                src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699615402/icons8-verified-account-64_1_amfufo.png"
-                height={4}
-                m={1}
-              />
-            )}
+            {chat.senderName} {chat.chatName === "Admin" && <MdVerified />}
           </Text>
           {chat.latestMessage && chat.latestMessage.sender && (
             <Text fontSize="xs">
