@@ -180,8 +180,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         });
       } else {
         toast({
-          title: "Error Occured!",
-          description: "Failed to Load the Messages",
+          title: "Failed to Load Messages!",
           status: "error",
           duration: 5000,
           isClosable: true,

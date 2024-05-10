@@ -86,9 +86,10 @@ function Homepage() {
           <AnimatedTyping />
 
           <Image
-            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701779357/icons8-sex-64_a1hki1.png"
-            height={10}
+            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1715350528/Black_Logo_1_s8etxi.png"
+            height={12}
             userSelect={"none"}
+            borderRadius={5}
           />
         </Box>
         <Box

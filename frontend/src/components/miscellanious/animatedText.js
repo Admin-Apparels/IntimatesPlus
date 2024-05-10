@@ -2,11 +2,7 @@ import { Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 const AnimatedTyping = () => {
-  const [textToType] = useState([
-    "fuckmate.boo",
-    "friends-with-benefits",
-    "friend-with-me",
-  ]); // Update to an array of words
+  const [textToType] = useState(["fuckmate.boo", "Friends-With-Benefits"]); // Update to an array of words
   const [displayedText, setDisplayedText] = useState("");
   const [textLength, setTextLength] = useState(0);
   const [currentWordIndex, setCurrentWordIndex] = useState(0); // Track the index of the current word
@@ -38,7 +34,7 @@ const AnimatedTyping = () => {
             // Select a random word index for the next word
             const randomIndex = Math.floor(Math.random() * textToType.length);
             setCurrentWordIndex(randomIndex);
-          }, 3000);
+          }, 5000);
         }, 100);
       }
     }, 100);

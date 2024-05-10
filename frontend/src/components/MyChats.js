@@ -61,7 +61,6 @@ const MyChat = (fetchAgain) => {
           if (error.response && error.response.status === 401) {
             toast({
               title: "Your session has expired",
-              description: "Logging out in less than 8 seconds",
               duration: 8000,
               status: "loading",
               position: "bottom",
@@ -75,7 +74,6 @@ const MyChat = (fetchAgain) => {
           if (error.response && error.response.status === 429) {
             toast({
               title: "Too many request",
-              description: "Try again after some time",
               status: "error",
               duration: 5000,
               isClosable: true,
@@ -86,7 +84,6 @@ const MyChat = (fetchAgain) => {
     } catch (error) {
       toast({
         title: "Error occured trying to retrieve Chats",
-        description: "Try again after some time",
         status: "error",
         duration: 5000,
         isClosable: true,

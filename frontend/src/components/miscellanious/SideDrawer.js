@@ -2,7 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
-import { Badge, Image, useBreakpointValue } from "@chakra-ui/react";
+import { Badge, Image } from "@chakra-ui/react";
 import {
   Menu,
   MenuButton,
@@ -16,12 +16,13 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
+  DrawerCloseButton,
 } from "@chakra-ui/modal";
 import { Tooltip } from "@chakra-ui/tooltip";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { Avatar } from "@chakra-ui/avatar";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/toast";
 import { Spinner } from "@chakra-ui/spinner";
@@ -56,12 +57,19 @@ function SideDrawer() {
     localStorage.removeItem("userInfo");
     history("/");
   };
-  const displayValue = useBreakpointValue({ base: "none", md: "flex" });
+  // const displayValue = useBreakpointValue({ base: "none", md: "flex" });
 
-  const textVisibility = useBreakpointValue({
-    base: "hidden",
-    md: "visible",
-  });
+  // const textVisibility = useBreakpointValue({
+  //   base: "hidden",
+  //   md: "visible",
+  // });
+  const OverlayOne = () => (
+    <DrawerOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(10px) hue-rotate(90deg)"
+    />
+  );
+  const overlay = React.useState(<OverlayOne />);
 
   const accessChat = async (userId, user) => {
     const existingChat = chats.find(
@@ -110,22 +118,11 @@ function SideDrawer() {
         w="100%"
         p="5px 10px 5px 10px"
       >
-        <Text
-          display={displayValue}
-          justifyContent={"center"}
-          alignItems={"space-between"}
-          fontSize="2xl"
-          fontWeight={"bold"}
-          userSelect={"none"}
-          textColor={"green.500"}
-          visibility={textVisibility}
-        >
-          <Image
-            src="http://res.cloudinary.com/dvc7i8g1a/image/upload/v1700507229/y0gbu3tusutzzz6gavtf.png"
-            height={9}
-          />
-          fuckmate.boo
-        </Text>
+        <Image
+          src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1715350528/Black_Logo_1_s8etxi.png"
+          height={12}
+        />
+
         <Tooltip
           label="Search Users to chat"
           placement="bottom-end"
@@ -173,7 +170,7 @@ function SideDrawer() {
                 </Badge>
               )}
             </MenuButton>
-            <MenuList pl={2}>
+            <MenuList pl={{ base: 0, md: 2 }}>
               {!notification.length && "No New Messages"}
               {notification.map((notif) => (
                 <MenuItem
@@ -203,6 +200,7 @@ function SideDrawer() {
               bg="white"
               _hover={{ backgroundColor: "green.100" }}
               rightIcon={<ChevronDownIcon />}
+              p={0}
             >
               <Avatar
                 size="sm"
@@ -223,7 +221,8 @@ function SideDrawer() {
       </Box>
 
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
-        <DrawerOverlay />
+        <DrawerCloseButton />
+        {overlay}
         <DrawerContent>
           <DrawerHeader borderBottomWidth="1px">Search Chat</DrawerHeader>
           <DrawerBody>
