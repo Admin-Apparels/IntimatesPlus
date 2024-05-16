@@ -254,9 +254,8 @@ const CallBackURL = async (req, res) => {
   }
   const currentDate = new Date();
   var subscriptionExpiry = new Date().getTime();
-  if (subscription === "Bronze") {
-    Acc = "Bronze";
-  } else if (subscription === "Platnum") {
+
+  if (subscription === "Platnum") {
     Acc = "Platnum";
     subscriptionExpiry = currentDate.getTime() + 7 * 24 * 60 * 60 * 1000;
   } else if (subscription === "Ads") {
@@ -273,22 +272,6 @@ const CallBackURL = async (req, res) => {
       res.json(updatedUser);
     } catch (error) {
       console.log(error);
-    }
-    return;
-  } else if (subscription === "premium") {
-    subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
-    try {
-      const updatedUser = await User.findByIdAndUpdate(
-        userId,
-        {
-          subscription: subscriptionExpiry,
-        },
-        { new: true }
-      ).select("subscription");
-
-      io.emit("premium", updatedUser);
-    } catch (error) {
-      console.log(error, "Error updating user");
     }
     return;
   } else {

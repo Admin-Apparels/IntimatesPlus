@@ -246,6 +246,21 @@ const Unblock = asyncHandler(async (req, res) => {
     res.status(500).json({ error: "Unable to Unblock" });
   }
 });
+const getMail = async (req, res) => {
+  const email = req.params.email;
+
+  try {
+    const userExists = await User.findOne({ email });
+
+    if (userExists) {
+      res.json(Boolean(true));
+    } else {
+      res.json(Boolean(false));
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Trouble establishing uniqueness" });
+  }
+};
 const updateUser = async (req, res) => {
   const { userId } = req.params;
   const { email, pic } = req.body;
@@ -415,4 +430,5 @@ module.exports = {
   deleteUser,
   deleteImage,
   getAdsInfo,
+  getMail,
 };

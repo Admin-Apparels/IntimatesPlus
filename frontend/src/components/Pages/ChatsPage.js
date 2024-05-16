@@ -67,11 +67,11 @@ const Chatpage = () => {
     <Box width="100%" backgroundColor={"Background"}>
       <ErrorBoundary fallback={<p>Something went wrong</p>} userSelect={"none"}>
         {user && <SideDrawer />}{" "}
-        {/* {user &&
+        {user &&
           ((user.accountType === "Gold" &&
             parseInt(new Date().getTime()) > parseInt(user.subscription)) ||
             parseInt(new Date().getTime()) >
-              parseInt(user.adsSubscription)) && <Ads />} */}
+              parseInt(user.adsSubscription)) && <Ads />}
         <Modal size="lg" onClose={onClose} isOpen={isOpen} onOpen={onOpen}>
           {overlay}
           <ModalContent

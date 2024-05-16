@@ -32,10 +32,41 @@ const Signup = () => {
   const [value, setValue] = useState("");
   const [gender, setGender] = useState("");
 
+  const [loading, setLoading] = useState("");
+
   const [step, setStep] = useState(1);
 
   const nextStep = () => {
     setStep(step + 1);
+  };
+  const CheckEmail = async () => {
+    console.log(email);
+    setLoading(true);
+    try {
+      const { data } = await axios.get(`/api/user/uniqueness/${email}`, {});
+
+      if (data === true) {
+        setEmail("");
+        setLoading(false);
+        toast({
+          title: "Chose a different email, user already exists",
+          status: "warning",
+        });
+      } else if (data === false) {
+        setLoading(false);
+        nextStep();
+      }
+    } catch (error) {
+      toast({
+        title: "Error Occurred!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+    }
   };
 
   const submitHandler = async () => {
@@ -123,6 +154,13 @@ const Signup = () => {
   const MAX_CHARACTERS = 200;
   const isFormValid = () => {
     return value.length >= MIN_CHARACTERS;
+  };
+  const handleNextClick = () => {
+    if (step === 2) {
+      CheckEmail();
+    } else {
+      nextStep();
+    }
   };
 
   return (
@@ -393,7 +431,7 @@ const Signup = () => {
       >
         {step < 6 && (
           <Button
-            onClick={nextStep}
+            onClick={() => handleNextClick()}
             isDisabled={
               (step === 5 && !isFormValid()) ||
               (step === 1 && !name) ||
@@ -403,6 +441,7 @@ const Signup = () => {
               (step === 4 && !gender) ||
               (step === 5 && !value)
             }
+            isLoading={loading}
           >
             Next
           </Button>

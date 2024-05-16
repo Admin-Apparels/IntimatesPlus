@@ -423,7 +423,7 @@ const ClientModal = ({ children }) => {
                 onClick={() => submitHandler()}
                 isLoading={picLoading}
               >
-                Change Picture{" "}
+                Change Pic{" "}
               </Button>
               <Input
                 type="file"

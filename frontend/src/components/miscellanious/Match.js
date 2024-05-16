@@ -165,7 +165,7 @@ const MatchModal = () => {
             {" "}
             {overlay}
             <ModalContent position="relative">
-              <ModalCloseButton zIndex="1" color={"white"} />
+              <ModalCloseButton zIndex="2" color={"white"} />
               <ModalHeader
                 fontSize="40px"
                 fontFamily="Work sans"

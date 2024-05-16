@@ -128,7 +128,7 @@ const ProfileModal = ({ userInfo }) => {
         {overlay}
         <ModalContent width={"calc(90%)"}>
           <ModalHeader
-            fontSize="40px"
+            fontSize="30px"
             fontFamily="Work sans"
             display="flex"
             alignItems={"center"}
@@ -139,7 +139,8 @@ const ProfileModal = ({ userInfo }) => {
               bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
               bgClip="text"
               userSelect={"none"}
-              px={"4"}
+              fontSize={{ base: "20px", md: "30px" }}
+              px={"1"}
             >
               {userInfo.name}
             </Text>

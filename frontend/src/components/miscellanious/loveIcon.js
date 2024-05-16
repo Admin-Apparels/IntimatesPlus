@@ -6,12 +6,16 @@ import { FaCircle } from "react-icons/fa";
 const LoveIcon = () => {
   const { onlineUsersCount } = ChatState() || {};
 
-  const [randomNum, setRandomNum] = useState(
-    generateRandomNumber(onlineUsersCount)
-  );
+  const [randomNum, setRandomNum] = useState(0);
 
-  function generateRandomNumber(onlineUsersCount) {
-    const maxRandom = Math.max(0, 1000 - onlineUsersCount); // Maximum random number is between 0 and 1000
+  useEffect(() => {
+    if (Array.isArray(onlineUsersCount)) {
+      setRandomNum(generateRandomNumber(onlineUsersCount.length));
+    }
+  }, [onlineUsersCount]);
+
+  function generateRandomNumber(onlineUsersCountLength) {
+    const maxRandom = Math.max(0, 1000 - onlineUsersCountLength); // Maximum random number is between 0 and 1000
     return Math.floor(Math.random() * (maxRandom + 1)); // Generate a random number between 0 and maxRandom
   }
 
@@ -28,15 +32,20 @@ const LoveIcon = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  function formatOnlineUsersCount(onlineUsersCount) {
-    if (onlineUsersCount < 1000) {
-      return onlineUsersCount.toString();
-    } else if (onlineUsersCount < 10000) {
-      return `${(onlineUsersCount / 1000).toFixed(1)}k`;
+  function formatOnlineUsersCount(count) {
+    if (count < 1000) {
+      return count.toString();
+    } else if (count < 10000) {
+      return `${(count / 1000).toFixed(1)}k`;
     } else {
-      return `${(onlineUsersCount / 1000).toFixed(1)}k`;
+      return `${(count / 1000).toFixed(1)}k`;
     }
   }
+
+  const displayedCount = onlineUsersCount
+    ? onlineUsersCount.length + randomNum
+    : randomNum;
+
   return (
     <Box
       display="flex"
@@ -61,7 +70,7 @@ const LoveIcon = () => {
         >
           {" "}
           <FaCircle color="green" size={10} />
-          {formatOnlineUsersCount(onlineUsersCount.length + randomNum)}
+          {formatOnlineUsersCount(displayedCount)}
         </Box>
       </Tooltip>
     </Box>

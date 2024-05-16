@@ -120,7 +120,7 @@ function SideDrawer() {
       >
         <Image
           src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1715350528/Black_Logo_1_s8etxi.png"
-          height={12}
+          height={{ base: 6, md: 10 }}
         />
 
         <Tooltip

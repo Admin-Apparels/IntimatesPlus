@@ -249,6 +249,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           newMessage.includes("email") ||
           newMessage.includes("give") ||
           newMessage.includes("handle") ||
+          newMessage.includes("show up") ||
           newMessage.includes("number") ||
           newMessage.includes("mobile") ||
           newMessage.includes("cellphone") ||
@@ -285,10 +286,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         if (isFlaggedMessage) {
           const currentDate = new Date().getTime();
 
-          if (
-            user.accountType === "new" ||
-            parseInt(currentDate) < parseInt(user.subscription)
-          ) {
+          if (currentDate > parseInt(user.subscription)) {
             try {
               const config = {
                 headers: {

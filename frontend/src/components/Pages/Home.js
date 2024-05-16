@@ -5,6 +5,8 @@ import {
   Flex,
   Image,
   Link,
+  LinkBox,
+  LinkOverlay,
   Tab,
   TabList,
   TabPanel,
@@ -18,6 +20,7 @@ import Login from "../Authentication/Login";
 import Signup from "../Authentication/Signup";
 import ErrorBoundary from "./ErrorBoundary";
 import AnimatedTyping from "../miscellanious/animatedText";
+import { SiCoffeescript } from "react-icons/si";
 
 function Homepage() {
   const navigate = useNavigate();
@@ -72,6 +75,27 @@ function Homepage() {
   return (
     <ErrorBoundary fallback={<p>Something went wrong</p>}>
       <Container maxW="xl" centerContent>
+        <LinkBox
+          as="article"
+          maxW="sm"
+          p="3"
+          borderWidth="1px"
+          rounded="md"
+          position="fixed"
+          top="2%"
+          right="2%"
+          textColor={"white"}
+          background={"#FFA500"}
+        >
+          <SiCoffeescript style={{ color: "white", fontSize: "3rem" }} />
+          <LinkOverlay
+            userSelect={"none"}
+            href="https://www.paypal.com/donate/?hosted_button_id=2L8HHGURQTED2"
+            target="blank"
+          >
+            Donate
+          </LinkOverlay>
+        </LinkBox>
         <Box
           display="flex"
           justifyContent="center"
@@ -86,7 +110,7 @@ function Homepage() {
           <AnimatedTyping />
 
           <Image
-            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1715350528/Black_Logo_1_s8etxi.png"
+            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701779357/icons8-sex-64_a1hki1.png"
             height={12}
             userSelect={"none"}
             borderRadius={5}
@@ -113,8 +137,12 @@ function Homepage() {
               defaultIndex={1}
             >
               <TabList mb="1em" p={"3"}>
-                <Tab color={"lightblue"}>Login</Tab>
-                <Tab color={"lightblue"}>Sign Up</Tab>
+                <Tab color={"lightblue"} background={"blackAlpha.600"} mx={"2"}>
+                  Login
+                </Tab>
+                <Tab color={"lightblue"} background={"blackAlpha.600"}>
+                  Sign Up
+                </Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>

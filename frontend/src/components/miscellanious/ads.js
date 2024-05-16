@@ -53,7 +53,7 @@ const Ads = () => {
       const openModalTimeout = setTimeout(() => {
         setCountdown(15);
         onOpen();
-      }, 300000);
+      }, 600000);
 
       const countdownInterval = setInterval(() => {
         if (countdown > 0) {
