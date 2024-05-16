@@ -14,17 +14,26 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Login from "../Authentication/Login";
 import Signup from "../Authentication/Signup";
 import ErrorBoundary from "./ErrorBoundary";
 import AnimatedTyping from "../miscellanious/animatedText";
 import { SiCoffeescript } from "react-icons/si";
+import Particles from "react-tsparticles";
+import { loadSlim } from "tsparticles-slim";
 
 function Homepage() {
   const navigate = useNavigate();
   const [showWelcome, setShowWelcome] = useState(true);
+  const particlesInit = useCallback(async (engine) => {
+    await loadSlim(engine);
+  }, []);
+
+  const particlesLoaded = useCallback(async (container) => {
+    console.log(container);
+  }, []);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userInfo"));
@@ -75,6 +84,81 @@ function Homepage() {
   return (
     <ErrorBoundary fallback={<p>Something went wrong</p>}>
       <Container maxW="xl" centerContent>
+        <Particles
+          id="tsparticles"
+          init={particlesInit}
+          loaded={particlesLoaded}
+          style={{ zIndex: 0 }}
+          options={{
+            background: {
+              color: {
+                value: "transparent",
+              },
+            },
+            fpsLimit: 120,
+            interactivity: {
+              events: {
+                onClick: {
+                  enable: true,
+                  mode: "push",
+                },
+                onHover: {
+                  enable: true,
+                  mode: "repulse",
+                },
+                resize: true,
+              },
+              modes: {
+                push: {
+                  quantity: 4,
+                },
+                repulse: {
+                  distance: 200,
+                  duration: 0.4,
+                },
+              },
+            },
+            particles: {
+              color: {
+                value: "#ffffff",
+              },
+              links: {
+                color: "#ffffff",
+                distance: 150,
+                enable: true,
+                opacity: 0.5,
+                width: 1,
+              },
+              move: {
+                direction: "none",
+                enable: true,
+                outModes: {
+                  default: "bounce",
+                },
+                random: false,
+                speed: 2,
+                straight: false,
+              },
+              number: {
+                density: {
+                  enable: true,
+                  area: 800,
+                },
+                value: 15,
+              },
+              opacity: {
+                value: 0.5,
+              },
+              shape: {
+                type: "circle",
+              },
+              size: {
+                value: { min: 1, max: 5 },
+              },
+            },
+            detectRetina: true,
+          }}
+        />
         <LinkBox
           as="article"
           maxW="sm"
