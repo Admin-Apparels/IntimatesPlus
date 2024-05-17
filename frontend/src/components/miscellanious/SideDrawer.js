@@ -119,7 +119,7 @@ function SideDrawer() {
         p="5px 10px 5px 10px"
       >
         <Image
-          src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1715350528/Black_Logo_1_s8etxi.png"
+          src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1715954572/fuckmate.boo.png"
           height={{ base: 6, md: 10 }}
         />
 
