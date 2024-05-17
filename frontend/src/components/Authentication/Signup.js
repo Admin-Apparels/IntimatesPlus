@@ -40,7 +40,6 @@ const Signup = () => {
     setStep(step + 1);
   };
   const CheckEmail = async () => {
-    console.log(email);
     setLoading(true);
     try {
       const { data } = await axios.get(`/api/user/uniqueness/${email}`, {});
@@ -181,11 +180,11 @@ const Signup = () => {
               animation: step === 2 ? "slideInRight 0.5s forwards" : "",
             }}
           >
-            <Text textColor="gold" mb={4} textAlign={"center"}>
-              "Welcome! Here's where we all connect. Meet your charming other
+            <Text textColor="yellow" mb={4} textAlign={"center"}>
+              Welcome! Here's where we all connect. Meet your charming other
               among thousands directed here from adult sites seeking lasting
               connections. Let's increase the 25% of FWBs that turn into
-              long-term relationships together!"
+              long-term relationships together!
             </Text>
             <FormControl id="first-name" isRequired>
               <FormLabel textColor={"white"}>Name</FormLabel>
@@ -205,12 +204,18 @@ const Signup = () => {
             }}
           >
             {" "}
-            <Text textColor="white" fontSize="lg" mb={4} textAlign={"center"}>
+            <Text
+              textColor="white"
+              fontSize="lg"
+              fontWeight={"bold"}
+              mb={4}
+              textAlign={"center"}
+            >
               Chat Anonymously
             </Text>{" "}
-            <Text textColor="gold" mb={4} textAlign={"center"}>
-              "Remember, your email and password will be used for future login.
-              Dummy emails are prone to losing access to your account."
+            <Text textColor="yellow" mb={4} textAlign={"center"}>
+              Remember, your email and password will be used for future login.
+              Dummy emails are prone to losing access to your account.
             </Text>
             <FormControl isRequired>
               <FormLabel textColor={"white"}>
@@ -249,9 +254,9 @@ const Signup = () => {
               animation: step === 2 ? "slideInRight 0.5s forwards" : "",
             }}
           >
-            <Text textColor="gold" mb={4} textAlign={"center"}>
-              "Secure your connection: Choose a strong password to protect your
-              account."
+            <Text textColor="yellow" mb={4} textAlign={"center"}>
+              Secure your connection: Choose a strong password to protect your
+              account.
             </Text>
             <FormControl id="password" isRequired>
               <FormLabel textColor={"white"}>Password</FormLabel>
@@ -310,9 +315,9 @@ const Signup = () => {
               animation: "slideInFromTop 0.5s forwards",
             }}
           >
-            <Text textColor="gold" mb={4} textAlign={"center"}>
+            <Text textColor="yellow" mb={4} textAlign={"center"}>
               {" "}
-              "Select your gender: Choose the option that best represents you."
+              Select your gender: Choose the option that best represents you.
             </Text>
             <FormControl id="gender" isRequired>
               <FormLabel textColor={"white"}>Gender</FormLabel>
@@ -337,9 +342,9 @@ const Signup = () => {
             }}
           >
             {" "}
-            <Text textColor="gold" mb={4} textAlign={"center"}>
-              "Write something that truly represents you and catches the eye of
-              your potential match."
+            <Text textColor="yellow" mb={4} textAlign={"center"}>
+              Write something that truly represents you and catches the eye of
+              your potential match.
             </Text>
             <FormControl id="description" Box textColor={"white"} isRequired>
               <FormLabel>Description</FormLabel>
@@ -391,9 +396,9 @@ const Signup = () => {
               animation: step === 6 ? "slideInRight 0.5s forwards" : "",
             }}
           >
-            <Text textColor="gold" mb={4} textAlign={"center"}>
-              "Upload a clear and recent photo of yourself for better matching
-              results."
+            <Text textColor="yellow" mb={4} textAlign={"center"}>
+              Upload a clear and recent photo of yourself for better matching
+              results.
             </Text>
             <FormControl id="pic">
               <FormLabel textColor={"white"}>

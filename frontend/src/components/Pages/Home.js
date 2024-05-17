@@ -31,9 +31,7 @@ function Homepage() {
     await loadSlim(engine);
   }, []);
 
-  const particlesLoaded = useCallback(async (container) => {
-    console.log(container);
-  }, []);
+  const particlesLoaded = useCallback(async (container) => {}, []);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userInfo"));
