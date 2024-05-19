@@ -232,6 +232,13 @@ const MatchModal = () => {
                   background={"blackAlpha.400"}
                   width="100%"
                 >
+                  <Button
+                    m={0.5}
+                    bgGradient="linear(to-r, gray.300, yellow.400, pink.200)"
+                    borderRadius={20}
+                  >
+                    {currentUser.looking}
+                  </Button>
                   <Text
                     width={"100%"}
                     fontFamily="Work sans"

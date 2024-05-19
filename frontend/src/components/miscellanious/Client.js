@@ -270,7 +270,6 @@ const ClientModal = ({ children }) => {
       setLoading(false);
     }
   };
-
   return (
     <>
       {children ? (
@@ -394,7 +393,14 @@ const ClientModal = ({ children }) => {
                 </Button>
               </Box>
             )}
-
+            <Button
+              m={0.5}
+              bgGradient="linear(to-r, gray.300, yellow.400, pink.200)"
+              borderRadius={20}
+              isDisabled
+            >
+              {user?.looking}
+            </Button>
             <Text
               fontSize="small"
               display={isFocused ? "none" : "flex"}

@@ -241,46 +241,49 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
         // Check if the message contains sensitive information
         const isFlaggedMessage =
-          newMessage.includes("social") ||
-          newMessage.includes("reach") ||
-          newMessage.includes("phone") ||
-          newMessage.includes("meet") ||
-          newMessage.includes("contact") ||
-          newMessage.includes("email") ||
-          newMessage.includes("give") ||
-          newMessage.includes("handle") ||
-          newMessage.includes("show up") ||
-          newMessage.includes("number") ||
-          newMessage.includes("mobile") ||
-          newMessage.includes("cellphone") ||
-          newMessage.includes("details") ||
-          newMessage.includes("whatsapp") ||
-          newMessage.includes("telegram") ||
-          newMessage.includes("signal") ||
-          newMessage.includes("instagram") ||
-          newMessage.includes("ig") ||
-          newMessage.includes("facebook") ||
-          newMessage.includes("fb") ||
-          newMessage.includes("linkedin") ||
-          newMessage.includes("li") ||
-          newMessage.includes("twitter") ||
-          newMessage.includes("tw") ||
-          newMessage.includes("x") ||
-          newMessage.includes("snapchat") ||
-          newMessage.includes("snap") ||
-          newMessage.includes("sc") ||
-          newMessage.includes("skype") ||
-          newMessage.includes("sk") ||
-          newMessage.includes("discord") ||
-          newMessage.includes("dc") ||
-          newMessage.includes("your") ||
-          newMessage.includes("account") ||
-          newMessage.includes("call") ||
-          newMessage.includes("chat") ||
-          newMessage.includes("on") ||
-          newMessage.includes("share") ||
+          /\bsocial\b/.test(newMessage) ||
+          /\breach\b/.test(newMessage) ||
+          /\bphone\b/.test(newMessage) ||
+          /\bmeet\b/.test(newMessage) ||
+          /\bcontact\b/.test(newMessage) ||
+          /\bemail\b/.test(newMessage) ||
+          /\bgive\b/.test(newMessage) ||
+          /\bhandle\b/.test(newMessage) ||
+          /\bshow up\b/.test(newMessage) ||
+          /\bnumber\b/.test(newMessage) ||
+          /\bmobile\b/.test(newMessage) ||
+          /\bcellphone\b/.test(newMessage) ||
+          /\bdetails\b/.test(newMessage) ||
+          /\bwhatsapp\b/.test(newMessage) ||
+          /\btelegram\b/.test(newMessage) ||
+          /\bsignal\b/.test(newMessage) ||
+          /\binstagram\b/.test(newMessage) ||
+          /\big\b/.test(newMessage) ||
+          /\bfacebook\b/.test(newMessage) ||
+          /\bfb\b/.test(newMessage) ||
+          /\blinkedin\b/.test(newMessage) ||
+          /\bli\b/.test(newMessage) ||
+          /\btwitter\b/.test(newMessage) ||
+          /\btw\b/.test(newMessage) ||
+          /\bx\b/.test(newMessage) ||
+          /\bsnapchat\b/.test(newMessage) ||
+          /\bsnap\b/.test(newMessage) ||
+          /\blink\b/.test(newMessage) ||
+          /\bsc\b/.test(newMessage) ||
+          /\bskype\b/.test(newMessage) ||
+          /\bsk\b/.test(newMessage) ||
+          /\bdiscord\b/.test(newMessage) ||
+          /\bdc\b/.test(newMessage) ||
+          /\byour\b/.test(newMessage) ||
+          /\baccount\b/.test(newMessage) ||
+          /\bcall\b/.test(newMessage) ||
+          /\bchat\b/.test(newMessage) ||
+          /\bwapi\b/.test(newMessage) ||
+          /\btumeet\b/.test(newMessage) ||
+          /\bon\b/.test(newMessage) ||
+          /\bshare\b/.test(newMessage) ||
           /\b\d{8,10}\b/.test(newMessage) ||
-          newMessage.includes("no:");
+          /\bno:\b/.test(newMessage);
 
         // If the message is flagged and the user's subscription status requires flagging, flag the chat
         if (isFlaggedMessage) {

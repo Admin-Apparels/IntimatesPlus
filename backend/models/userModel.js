@@ -9,6 +9,7 @@ const userSchema = mongoose.Schema(
     password: { type: String, required: true },
     gender: { type: String, required: true },
     value: { type: String },
+    looking: { type: String },
     pic: {
       type: String,
 

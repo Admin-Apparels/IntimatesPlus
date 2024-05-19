@@ -15,7 +15,7 @@ const privateEmailPass = process.env.privateEmailPass;
 const privateEmail = "admin@fuckmate.boo";
 
 const registerUsers = asyncHandler(async (req, res) => {
-  const { name, email, password, gender, pic, value } = req.body;
+  const { name, email, password, gender, pic, value, looking } = req.body;
 
   if (!email || !name || !password || !gender) {
     res.status(400);
@@ -28,7 +28,7 @@ const registerUsers = asyncHandler(async (req, res) => {
     throw new Error("User already exists, login");
   }
 
-  const userData = { name, email, password, gender, pic, value };
+  const userData = { name, email, password, gender, pic, value, looking };
 
   const user = await User.create(userData);
 
@@ -44,6 +44,7 @@ const registerUsers = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
       accountType: user.accountType,
       subscription: user.subscription,
+      looking: user.looking,
       adsSubscription: user.adsSubscription,
       day: user.day,
       verified: user.verified,
@@ -110,6 +111,7 @@ const searchUser = async (req, res) => {
       token: generateToken(userExists._id),
       accountType: userExists.accountType,
       subscription: userExists.subscription,
+      looking: userExists.looking,
       adsSubscription: userExists.adsSubscription,
       day: userExists.day,
       verified: userExists.verified,
@@ -141,6 +143,7 @@ const recoverEmail = async (req, res) => {
         accountType: userData.accountType,
         subscription: userData.subscription,
         adsSubscription: userData.adsSubscription,
+        looking: userData.looking,
         day: userData.day,
         verified: userData.verified,
       };
@@ -173,6 +176,7 @@ const authUser = asyncHandler(async (req, res) => {
       accountType: user.accountType,
       subscription: user.subscription,
       adsSubscription: user.adsSubscription,
+      looking: user.looking,
       day: user.day,
       verified: user.verified,
     });

@@ -29,6 +29,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [pic, setPic] = useState(undefined);
   const [picLoading, setPicLoading] = useState(false);
+  const [looking, setLooking] = useState("");
   const [value, setValue] = useState("");
   const [gender, setGender] = useState("");
 
@@ -84,6 +85,7 @@ const Signup = () => {
           email,
           password,
           gender,
+          looking,
           value,
           pic,
         },
@@ -161,6 +163,26 @@ const Signup = () => {
       nextStep();
     }
   };
+
+  const options = [
+    "👫 Fuckmate💦",
+    "❤️ Friends-with-benefits",
+    "💼 Sponsor",
+    "😄 Fun friends",
+    "👴 Sugar daddy",
+    "👩 Sugar mammy",
+    "💖 Genuine connection",
+  ];
+
+  const gradients = [
+    "linear(to-r, gray.300, yellow.400, pink.200)",
+    "linear(to-r, red.200, yellow.500, blue.300)",
+    "linear(to-r, teal.300, green.400, blue.200)",
+    "linear(to-r, purple.300, blue.400, green.200)",
+    "linear(to-r, orange.300, red.400, yellow.200)",
+    "linear(to-r, pink.300, purple.400, blue.200)",
+    "linear(to-r, yellow.300, green.400, teal.200)",
+  ];
 
   return (
     <VStack spacing="3px">
@@ -340,14 +362,32 @@ const Signup = () => {
             style={{
               animation: step === 2 ? "slideInRight 0.5s forwards" : "",
             }}
+            m={0}
+            p={0}
           >
-            {" "}
             <Text textColor="yellow" mb={4} textAlign={"center"}>
-              Write something that truly represents you and catches the eye of
-              your potential match.
+              What are you looking for?
             </Text>
+            <Box textAlign="center">
+              {options.map((option, index) => (
+                <Button
+                  key={option}
+                  m={0.5}
+                  bgGradient={gradients[index]}
+                  onClick={() => setLooking(option)}
+                  borderRadius={20}
+                  style={{
+                    filter:
+                      looking && looking !== option ? "blur(4px)" : "none",
+                    transition: "filter 0.3s ease",
+                  }}
+                >
+                  {option}
+                </Button>
+              ))}
+            </Box>{" "}
             <FormControl id="description" Box textColor={"white"} isRequired>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Add a description</FormLabel>
               <Textarea
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
@@ -444,7 +484,7 @@ const Signup = () => {
               (step === 3 && !password) ||
               password !== confirmpassword ||
               (step === 4 && !gender) ||
-              (step === 5 && !value)
+              (step === 5 && (!value || !looking))
             }
             isLoading={loading}
           >
