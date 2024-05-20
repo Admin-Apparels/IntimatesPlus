@@ -51,6 +51,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
+  const [sending, setSending] = useState(false);
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const OverlayOne = () => (
@@ -193,6 +194,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const sendMessage = async (event) => {
     if ((event && event.key === "Enter") || !event) {
       if (newMessage && selectedChat) {
+        setSending(true);
         socket.emit("stop typing", selectedChat._id);
 
         const unBlock1 = user.isBlocked.includes(selectedChat.users[1]._id);
@@ -213,6 +215,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             isClosable: true,
             position: "bottom",
           });
+          setSending(false);
 
           return;
         }
@@ -224,6 +227,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             isClosable: true,
             position: "bottom",
           });
+          setSending(false);
 
           return;
         }
@@ -235,58 +239,87 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             isClosable: true,
             position: "bottom",
           });
-
+          setSending(false);
           return;
         }
 
         // Check if the message contains sensitive information
-        const isFlaggedMessage =
-          /\bsocial\b/.test(newMessage) ||
-          /\breach\b/.test(newMessage) ||
-          /\bphone\b/.test(newMessage) ||
-          /\bmeet\b/.test(newMessage) ||
-          /\bcontact\b/.test(newMessage) ||
-          /\bemail\b/.test(newMessage) ||
-          /\bgive\b/.test(newMessage) ||
-          /\bhandle\b/.test(newMessage) ||
-          /\bshow up\b/.test(newMessage) ||
-          /\bnumber\b/.test(newMessage) ||
-          /\bmobile\b/.test(newMessage) ||
-          /\bcellphone\b/.test(newMessage) ||
-          /\bdetails\b/.test(newMessage) ||
-          /\bwhatsapp\b/.test(newMessage) ||
-          /\btelegram\b/.test(newMessage) ||
-          /\bsignal\b/.test(newMessage) ||
-          /\binstagram\b/.test(newMessage) ||
-          /\big\b/.test(newMessage) ||
-          /\bfacebook\b/.test(newMessage) ||
-          /\bfb\b/.test(newMessage) ||
-          /\blinkedin\b/.test(newMessage) ||
-          /\bli\b/.test(newMessage) ||
-          /\btwitter\b/.test(newMessage) ||
-          /\btw\b/.test(newMessage) ||
-          /\bx\b/.test(newMessage) ||
-          /\bsnapchat\b/.test(newMessage) ||
-          /\bsnap\b/.test(newMessage) ||
-          /\blink\b/.test(newMessage) ||
-          /\bsc\b/.test(newMessage) ||
-          /\bskype\b/.test(newMessage) ||
-          /\bsk\b/.test(newMessage) ||
-          /\bdiscord\b/.test(newMessage) ||
-          /\bdc\b/.test(newMessage) ||
-          /\byour\b/.test(newMessage) ||
-          /\baccount\b/.test(newMessage) ||
-          /\bcall\b/.test(newMessage) ||
-          /\bchat\b/.test(newMessage) ||
-          /\bwapi\b/.test(newMessage) ||
-          /\btumeet\b/.test(newMessage) ||
-          /\bon\b/.test(newMessage) ||
-          /\bshare\b/.test(newMessage) ||
-          /\b\d{8,10}\b/.test(newMessage) ||
-          /\bno:\b/.test(newMessage);
+        const flaggedKeywords = [
+          "social",
+          "nipee",
+          "nipe",
+          "nikupigie",
+          "reach",
+          "phone",
+          "meet",
+          "contact",
+          "email",
+          "give",
+          "handle",
+          "show up",
+          "number",
+          "mobile",
+          "cellphone",
+          "details",
+          "whatsapp",
+          "telegram",
+          "signal",
+          "instagram",
+          "ig",
+          "facebook",
+          "fb",
+          "linkedin",
+          "li",
+          "twitter",
+          "tw",
+          "x",
+          "snapchat",
+          "snap",
+          "link",
+          "sc",
+          "skype",
+          "sk",
+          "discord",
+          "dc",
+          "date",
+          "your",
+          "account",
+          "call",
+          "chat",
+          "wapi",
+          "tumeet",
+          "tuchat",
+          "watsapp",
+          "whatsup",
+          "on",
+          "share",
+          "no:",
+        ];
+
+        const daysOfWeek = [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday",
+        ];
+
+        const patterns = [
+          ...flaggedKeywords.map(
+            (keyword) => new RegExp(`\\b${keyword}\\b`, "i")
+          ), // 'i' flag makes it case-insensitive
+          ...daysOfWeek.map((day) => new RegExp(`\\b${day}\\b`, "i")),
+          /\b\d{8,10}\b/,
+        ];
+
+        const isFlaggedMessage = patterns.some((pattern) =>
+          pattern.test(newMessage)
+        );
 
         // If the message is flagged and the user's subscription status requires flagging, flag the chat
-        if (isFlaggedMessage) {
+        if (isFlaggedMessage && selectedChat.chatName !== "Admin") {
           const currentDate = new Date().getTime();
 
           if (currentDate > parseInt(user.subscription)) {
@@ -324,7 +357,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             } catch (error) {
               console.log(error);
             }
-
+            setSending(false);
             return;
           }
         }
@@ -350,7 +383,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
           socket.emit("new message", data);
           setMessages((prevMessages) => [...prevMessages, data]);
+          setSending(false);
         } catch (error) {
+          setSending(false);
           toast({
             title: "Failed to send the Message",
             description: "Please try again after some time",
@@ -713,6 +748,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   ml={2}
                   display={{ base: "block", md: "none" }} // Show only on mobile devices
                   onClick={() => sendMessage()}
+                  isLoading={sending}
                 >
                   Send
                 </Button>

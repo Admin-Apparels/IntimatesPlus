@@ -127,7 +127,6 @@ const MyChat = (fetchAgain) => {
               setNotification(otherNotifications);
             }
           }}
-          cursor={isFlagged ? "not-allowed" : "pointer"}
           background={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
           color={selectedChat === chat ? "white" : "black"}
           px={3}
