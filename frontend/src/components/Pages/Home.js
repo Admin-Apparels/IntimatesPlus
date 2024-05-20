@@ -321,7 +321,7 @@ function Homepage() {
                 textColor={"red.500"}
                 textAlign={"center"}
               >
-                fuckmate.boo
+                Fuckmate Boo
               </Text>
               <Text
                 textAlign={"center"}
@@ -329,11 +329,11 @@ function Homepage() {
                 fontFamily={"mono"}
                 fontSize={"small"}
               >
-                🌟 Welcome, meet your fuckmate, friend-with-benefit or
-                friend-with-me here, where connection transcends self-pleasure!
-                🌟 Discover meaningful connections on our premier dating
-                platform. We bring together individuals seeking companionship,
-                romance, and genuine connections.
+                🌟 Welcome, meet your Fuckmate Boo, Friend-With-Benefit,
+                Sponser, Suggar Daddy or Sugar Mammy here, where connection
+                transcends self-pleasure! 🌟 Discover meaningful connections on
+                our premier dating platform. We bring together individuals
+                seeking companionship, romance, and genuine connections.
               </Text>
               <Text color="blue.100" display={"flex"} fontSize={"small"}>
                 {" "}
