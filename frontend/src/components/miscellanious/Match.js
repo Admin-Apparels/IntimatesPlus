@@ -140,7 +140,7 @@ const MatchModal = () => {
           icon={
             <Image
               src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1702454939/icons8-love-circled_q6q3t5.gif"
-              height={7}
+              height={12}
             />
           }
           onClick={() => {

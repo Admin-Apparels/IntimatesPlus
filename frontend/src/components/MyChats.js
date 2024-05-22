@@ -176,12 +176,13 @@ const MyChat = (fetchAgain) => {
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
+      minH={"100vh"}
     >
       {modal && <Notifier isOpen={modal} onClose={() => setModal(false)} />}
       <Box
         display="flex"
         p={2}
-        w="100%"
+        width="100%"
         justifyContent="space-between"
         alignItems="center"
       >

@@ -64,7 +64,7 @@ const Chatpage = () => {
   };
 
   return (
-    <Box width="100%" backgroundColor={"Background"}>
+    <Box width="100%" minH={"100vh"}>
       <ErrorBoundary fallback={<p>Something went wrong</p>} userSelect={"none"}>
         {user && <SideDrawer />}{" "}
         {user &&
@@ -140,9 +140,9 @@ const Chatpage = () => {
         </Modal>
         <Box
           display="flex"
-          justifyContent="space-between"
-          w="100%"
-          h="91.5vh"
+          justifyContent="space-evenly"
+          width="100%"
+          minH={"100vh"}
           p="0.2rem"
         >
           {" "}

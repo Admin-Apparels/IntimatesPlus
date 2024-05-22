@@ -247,6 +247,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         const flaggedKeywords = [
           "social",
           "nipee",
+          "time",
           "nipe",
           "nikupigie",
           "reach",
@@ -256,7 +257,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           "email",
           "give",
           "handle",
-          "show up",
+          "show",
           "number",
           "mobile",
           "cellphone",
@@ -277,6 +278,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           "snap",
           "link",
           "sc",
+          "send",
+          "when",
           "skype",
           "sk",
           "discord",
@@ -694,8 +697,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             justifyContent="space-between"
             p={3}
             bg="#E8E8E8"
-            w="100%"
-            h="100%"
+            width="100%"
+            height="100%"
             borderRadius="lg"
             overflowY="auto"
           >

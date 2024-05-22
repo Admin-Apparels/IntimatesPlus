@@ -81,7 +81,7 @@ function Homepage() {
 
   return (
     <ErrorBoundary fallback={<p>Something went wrong</p>}>
-      <Container maxW="xl" centerContent>
+      <Container maxW="xl" centerContent minH={"100vh"}>
         <Particles
           id="tsparticles"
           init={particlesInit}

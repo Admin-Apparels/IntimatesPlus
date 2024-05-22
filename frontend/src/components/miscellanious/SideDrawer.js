@@ -116,7 +116,7 @@ function SideDrawer() {
         alignItems="center"
         bg="white"
         w="100%"
-        p="5px 10px 5px 10px"
+        p="5px 10px 10px 10px"
       >
         <Image
           src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1715954572/fuckmate.boo.png"
@@ -221,10 +221,10 @@ function SideDrawer() {
       </Box>
 
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
-        <DrawerCloseButton />
         {overlay}
         <DrawerContent>
           <DrawerHeader borderBottomWidth="1px">Search Chat</DrawerHeader>
+          <DrawerCloseButton />
           <DrawerBody>
             <Box display="flex" pb={2}>
               <Input
