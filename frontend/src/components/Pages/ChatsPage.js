@@ -18,6 +18,8 @@ import {
   ModalFooter,
   ModalBody,
   useDisclosure,
+  LinkBox,
+  LinkOverlay,
 } from "@chakra-ui/react";
 
 const Chatpage = () => {
@@ -97,6 +99,26 @@ const Chatpage = () => {
                 Share your story today!
               </Text>
               💬 Dec 23, 2023
+              <LinkBox
+                as="article"
+                maxW="sm"
+                p="3"
+                borderWidth="1px"
+                rounded="md"
+                position="fixed"
+                top="2%"
+                right="2%"
+                textColor={"white"}
+                background={"#FFA500"}
+              >
+                <LinkOverlay
+                  userSelect={"none"}
+                  href="https://www.paypal.com/donate/?hosted_button_id=2L8HHGURQTED2"
+                  target="blank"
+                >
+                  Donate
+                </LinkOverlay>
+              </LinkBox>
             </ModalHeader>
             <ModalBody
               display={"flex"}
