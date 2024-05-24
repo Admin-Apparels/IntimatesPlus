@@ -205,9 +205,8 @@ const Ads = () => {
                         });
                       }}
                       onApprove={async (data, actions) => {
-                        const amount = "Bronze";
-                        const ads = "Ads";
-                        await handleApprove(amount, ads, user, setUser);
+                        const type = "Ads";
+                        await handleApprove(type, user, setUser);
                         return actions.order.capture().then(function (details) {
                           navigate("/chats");
                           toast({

@@ -166,7 +166,7 @@ export default function Paycheck() {
                 color={"green.500"}
                 rounded={"full"}
               >
-                *33% off
+                *23% off
               </Text>
             </Box>
 
@@ -249,12 +249,12 @@ export default function Paycheck() {
             color={"green.500"}
             rounded={"full"}
           >
-            Platinum
+            Premium
           </Text>
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"3xl"}>$</Text>
             <Text fontSize={"6xl"} fontWeight={800}>
-              4.99
+              2.99
             </Text>
             <Text color={"gray.500"}>/week</Text>
           </Stack>
@@ -284,7 +284,7 @@ export default function Paycheck() {
           >
             <PayPalButtons
               createOrder={(data, actions) => {
-                const amount = 4.99;
+                const amount = 2.99;
 
                 return actions.order.create({
                   purchase_units: [
@@ -298,8 +298,8 @@ export default function Paycheck() {
                 });
               }}
               onApprove={async (data, actions) => {
-                const amount = "Platnum";
-                await handleApprove(amount, amount, user, setUser);
+                const type = "Platnum";
+                await handleApprove(type, user, setUser);
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");
                   toast({
@@ -371,12 +371,12 @@ export default function Paycheck() {
             color={"green.500"}
             rounded={"full"}
           >
-            Gold (*best)
+            Premium+ (*best)
           </Text>
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"3xl"}>$</Text>
             <Text fontSize={"6xl"} fontWeight={800}>
-              20
+              10
             </Text>
             <Text color={"gray.500"}>/month</Text>
           </Stack>
@@ -414,7 +414,7 @@ export default function Paycheck() {
           >
             <PayPalButtons
               createOrder={(data, actions) => {
-                const amount = 20.0;
+                const amount = 10.0;
                 return actions.order.create({
                   purchase_units: [
                     {
@@ -427,8 +427,8 @@ export default function Paycheck() {
                 });
               }}
               onApprove={async (data, actions) => {
-                const amount = "Gold";
-                await handleApprove(amount, amount, user, setUser);
+                const type = "Gold";
+                await handleApprove(type, user, setUser);
 
                 return actions.order.capture().then(function (details) {
                   navigate("/chats");

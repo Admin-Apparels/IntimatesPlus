@@ -3,11 +3,17 @@ const User = require("../models/userModel");
 const dotenv = require("dotenv");
 const { getIO } = require("../socket");
 const Chat = require("../models/chatModel");
+const redis = require("redis");
 
 dotenv.config({ path: "./secrets.env" });
 
-let userId;
-let subscription;
+const client = redis.createClient();
+client.on("error", (err) => console.error("Redis error:", err));
+client.on("connect", () => console.log("Connected to Redis"));
+
+const generateUniqueTransactionId = () => {
+  return `txn_${Date.now()}`;
+};
 
 async function generateAccessToken() {
   const { PAYPAL_CLIENT_ID, PAYPAL_APP_SECRET } = process.env;
@@ -72,8 +78,7 @@ const createOrder = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const userId = req.params.userId;
-  const userAcc = req.query.accountType;
-  const type = req.params.type;
+  const userAcc = req.params.type;
   const io = getIO();
 
   var Acc;
@@ -81,7 +86,7 @@ const updateUser = async (req, res) => {
   var currentDate = new Date();
   var subscriptionExpiry = new Date().getTime();
 
-  if (type === "Ads") {
+  if (userAcc === "Ads") {
     subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
     try {
       const updatedUser = await User.findByIdAndUpdate(
@@ -96,27 +101,10 @@ const updateUser = async (req, res) => {
       console.log(error);
     }
     return;
-  } else if (type === "femaleSub") {
-    subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
-    try {
-      const updatedUser = await User.findByIdAndUpdate(
-        userId,
-        {
-          subscription: subscriptionExpiry,
-        },
-        { new: true }
-      ).select("subscription");
-      io.emit("premium", updatedUser);
-    } catch (error) {
-      console.log(error);
-    }
-    return;
-  } else if (userAcc === "Bronze") {
-    Acc = "Bronze";
   } else if (userAcc === "Platnum") {
     Acc = "Platnum";
     subscriptionExpiry = currentDate.getTime() + 7 * 24 * 60 * 60 * 1000;
-  } else {
+  } else if (userAcc === "Gold") {
     Acc = "Gold";
     subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
   }
@@ -144,12 +132,21 @@ const updateUser = async (req, res) => {
 
   res.json(updatedUser);
 };
-const makePaymentMpesa = async (req, res) => {
-  userId = req.params.userId;
-  subscription = req.body.subscription;
-  const phoneNumber = req.body.phoneNumber;
 
+const makePaymentMpesa = async (req, res) => {
+  const userId = req.params.userId;
+  const subscription = req.body.subscription;
+  const phoneNumber = req.body.phoneNumber;
   const phone = parseInt(phoneNumber.slice(1));
+  const transactionId = generateUniqueTransactionId();
+
+  // Store userId and subscription in Redis
+  client.set(
+    transactionId,
+    JSON.stringify({ userId, subscription }),
+    "EX",
+    300
+  );
 
   const current_time = new Date();
   const year = current_time.getFullYear();
@@ -167,19 +164,13 @@ const makePaymentMpesa = async (req, res) => {
     "base64"
   );
 
-  var Amount;
-
-  if (subscription === "Bronze") {
-    Amount = 200;
-  } else if (subscription === "Platnum") {
-    Amount = 550;
-  } else if (subscription === "Gold") {
-    Amount = 1800;
-  } else if (subscription === "premium") {
-    Amount = 500;
-  } else {
+  let Amount = 300;
+  if (subscription === "Platnum") {
     Amount = 300;
+  } else if (subscription === "Gold") {
+    Amount = 1000;
   }
+
   const generateToken = async () => {
     const secret = process.env.CUSTOMER_SECRET;
     const key = process.env.CUSTOMER_KEY;
@@ -187,16 +178,9 @@ const makePaymentMpesa = async (req, res) => {
     try {
       const response = await axios.get(
         "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Basic ${auth}`,
-          },
-        }
+        { headers: { Authorization: `Basic ${auth}` } }
       );
-      const token = await response.data.access_token;
-
-      return token;
+      return response.data.access_token;
     } catch (error) {
       console.log("Token Error generated", error);
     }
@@ -204,21 +188,20 @@ const makePaymentMpesa = async (req, res) => {
 
   try {
     const token = await generateToken();
-
     const { data } = await axios.post(
       "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
       {
-        BusinessShortCode: "6549717",
-        Password: `${password}`,
-        Timestamp: `${timestamp}`,
+        BusinessShortCode: Shortcode,
+        Password: password,
+        Timestamp: timestamp,
         TransactionType: "CustomerBuyGoodsOnline",
         Amount: Amount,
         PartyA: `254${phone}`,
         PartyB: "8863150",
         PhoneNumber: `254${phone}`,
-        CallBackURL: `https://fuckmate.boo/api/paycheck/callback`,
+        CallBackURL: `https://your-callback-url/callback?transactionId=${transactionId}`,
         AccountReference: "Admin",
-        TransactionDesc: "Subcription",
+        TransactionDesc: "Subscription",
       },
       {
         headers: {
@@ -235,73 +218,87 @@ const makePaymentMpesa = async (req, res) => {
 
 const CallBackURL = async (req, res) => {
   const { Body } = req.body;
+  const transactionId = req.query.transactionId;
 
-  const io = getIO();
+  if (!transactionId) {
+    return res.status(400).send("Transaction ID is missing");
+  }
 
-  if (!userId && !subscription) {
-    return res.status(401);
-  }
-  if (
-    !Body.stkCallback.CallbackMetadata ||
-    Body.stkCallback.CallbackMetadata === undefined
-  ) {
-    const nothing = "payment cancelled or insufficient amount";
-    io.emit("noPayment", nothing);
-    return res.status(201).json({ message: "Invalid callback data" });
-  }
-  if (Body.stkCallback.ResultDesc) {
-    res.status(201);
-  }
-  const currentDate = new Date();
-  var subscriptionExpiry = new Date().getTime();
+  client.get(transactionId, async (err, data) => {
+    if (err || !data) {
+      return res.status(401).send("Unauthorized or userId not found");
+    }
 
-  if (subscription === "Platnum") {
-    Acc = "Platnum";
-    subscriptionExpiry = currentDate.getTime() + 7 * 24 * 60 * 60 * 1000;
-  } else if (subscription === "Ads") {
-    subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
+    const { userId, subscription } = JSON.parse(data);
+    const io = getIO();
+
+    const socketId = getUserSocket(userId);
+
+    if (!socketId) {
+      return res.status(404).send("Socket ID not found for the user");
+    }
+
+    if (
+      !Body.stkCallback.CallbackMetadata ||
+      Body.stkCallback.CallbackMetadata === undefined
+    ) {
+      const nothing = "payment cancelled or insufficient amount";
+      io.to(socketId).emit("noPayment", nothing);
+      return res.status(201).json({ message: "Invalid callback data" });
+    }
+
+    if (Body.stkCallback.ResultDesc) {
+      res.status(201);
+    }
+
+    const currentDate = new Date();
+    let subscriptionExpiry = currentDate.getTime();
+
+    if (subscription === "Platnum") {
+      subscriptionExpiry = currentDate.getTime() + 7 * 24 * 60 * 60 * 1000;
+    } else if (subscription === "Ads") {
+      subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
+      try {
+        const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          { adsSubscription: subscriptionExpiry },
+          { new: true }
+        ).select("adsSubscription");
+        io.to(socketId).emit("noMoreAds", updatedUser);
+        return;
+      } catch (error) {
+        console.log(error);
+        return res.status(500).send("Error updating user");
+      }
+    } else {
+      subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
+    }
+
     try {
       const updatedUser = await User.findByIdAndUpdate(
         userId,
         {
-          adsSubscription: subscriptionExpiry,
+          accountType: subscription === "Platnum" ? "Platnum" : "Gold",
+          subscription: subscriptionExpiry,
+          day: currentDate.getTime() + 24 * 60 * 60 * 1000,
         },
         { new: true }
-      ).select("adsSubscription");
-      io.emit("noMoreAds", updatedUser);
-      res.json(updatedUser);
-    } catch (error) {
-      console.log(error);
-    }
-    return;
-  } else {
-    Acc = "Gold";
-    subscriptionExpiry = currentDate.getTime() + 30 * 24 * 60 * 60 * 1000;
-  }
-  try {
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      {
-        accountType: Acc,
-        subscription: subscriptionExpiry,
-        day: new Date().getTime() + 24 * 60 * 60 * 1000,
-      },
-      { new: true }
-    ).select("accountType subscription day");
-    // Unflag all the flagged chats for the user and populate them
-    const Chats = await Chat.updateMany(
-      { flagged: userId }, // Find chats where the user is flagged
-      { $pull: { flagged: userId } } // Remove the user's ID from the flagged array
-    ).populate({
-      path: "users latestMessage", // Populate the users and latestMessage fields
-      populate: { path: "sender", select: "name" }, // Populate the sender field of latestMessage
-    });
+      ).select("accountType subscription day");
 
-    // Emit the updated user data and populated chats to the client
-    io.emit("userUpdated", updatedUser, Chats);
-  } catch (error) {
-    console.log(error, "Error updating user");
-  }
+      const Chats = await Chat.updateMany(
+        { flagged: userId },
+        { $pull: { flagged: userId } }
+      ).populate({
+        path: "users latestMessage",
+        populate: { path: "sender", select: "name" },
+      });
+
+      io.to(socketId).emit("userUpdated", updatedUser, Chats);
+    } catch (error) {
+      console.log(error, "Error updating user");
+      res.status(500).send("Error updating user");
+    }
+  });
 };
 
 module.exports = {

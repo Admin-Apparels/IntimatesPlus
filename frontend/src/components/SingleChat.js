@@ -47,8 +47,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const { onOpen, onClose } = useDisclosure();
+
+  const [istyping, setIstyping] = useState(false);
   const [typing, setTyping] = useState(false);
-  const [istyping, setIsTyping] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [sending, setSending] = useState(false);
@@ -405,8 +406,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   useEffect(() => {
     if (!socket) return;
     socket.emit("setup", user);
-    socket.on("typing", () => setIsTyping(true));
-    socket.on("stop typing", () => setIsTyping(false));
+    socket.on("typing", () => setIstyping(true)); // Set istyping state to true when other user starts typing
+    socket.on("stop typing", () => setIstyping(false)); // Set istyping state to false when other user stops typing
     socket.on("newUserRegistered", (userData) => {
       toast({
         title: "New User Registered",
@@ -422,6 +423,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     });
 
     return () => {
+      socket.off("New User Registered");
+      socket.off("typing"); // Clean up socket listeners
+      socket.off("stop typing");
       socket.disconnect();
     };
   }, [user, toast, setOnlineUsersCount, socket]);
@@ -490,10 +494,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
+    const senderId = getSenderId(user, selectedChat.users);
 
     if (!typing) {
-      setTyping(true);
-      socket.emit("typing", selectedChat._id);
+      setTyping(true); // Set istyping state to true when the user starts typing
+      socket.emit("typing", senderId); // Notify the other user about typing
     }
 
     let lastTypingTime = new Date().getTime();
@@ -504,11 +509,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       var timeDiff = timeNow - lastTypingTime;
 
       if (timeDiff >= timerLength && typing) {
-        socket.emit("stop typing", selectedChat._id);
-        setTyping(false);
+        setTyping(false); // Set istyping state to false after 3000ms if user is still typing
+        socket.emit("stop typing", senderId); // Notify the other user about stopping typing
       }
     }, timerLength);
   };
+
   const handleDotClick = (index) => {
     setQuoteIndex(index);
   };
@@ -669,7 +675,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               justifyContent={"space-between"}
               alignItems={"center"}
             >
-              {isOnline ? <HiStatusOnline /> : <HiStatusOffline />}{" "}
+              {isOnline ? (
+                <HiStatusOnline style={{ color: "green" }} />
+              ) : (
+                <HiStatusOffline />
+              )}{" "}
               {!isCallStarted ? (
                 <IconButton
                   borderRadius={20}

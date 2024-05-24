@@ -1,7 +1,11 @@
 const socketIO = require("socket.io");
 const jwt = require("jsonwebtoken");
 const User = require("../backend/models/userModel");
-const { setUserSocket, getUserSocket } = require("./config/socketUtils");
+const {
+  setUserSocket,
+  getUserSocket,
+  userSockets,
+} = require("./config/socketUtils");
 let io;
 
 const initializeSocketIO = (server) => {
@@ -40,19 +44,55 @@ const initializeSocketIO = (server) => {
     console.log("Connected to socket.io");
 
     const { userId } = socket.handshake.query;
+
     setUserSocket(userId, socket.id);
 
     socket.on("setup", (userData) => {
-      const userId = userData._id;
-      socket.join(userId);
+      socket.join(userData._id);
       socket.emit("connected");
-      socket.userData = userData;
-      onlineUsers.add(userId);
+
+      onlineUsers.add(userData._id);
       io.emit("onlineUsers", Array.from(onlineUsers));
 
       if (userData.isNewUser) {
         io.emit("newUserRegistered", userData);
       }
+    });
+
+    socket.on("typing", (senderId) => {
+      const receiverSocketId = getUserSocket(senderId); // Get the socket ID of the receiver
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("typing"); // Emit typing event to the receiver
+      }
+    });
+
+    socket.on("stop typing", (senderId) => {
+      const receiverSocketId = getUserSocket(senderId); // Get the socket ID of the receiver
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("stop typing"); // Emit stop typing event to the receiver
+      }
+    });
+
+    socket.on("new message", (newMessageRecieved) => {
+      var chat = newMessageRecieved.chat;
+
+      if (!chat.users) return console.log("chat.users not defined");
+
+      chat.users.forEach((user) => {
+        if (user._id == newMessageRecieved.sender._id) return;
+
+        socket.in(user._id).emit("message received", newMessageRecieved);
+      });
+    });
+
+    socket.on("disconnect", () => {
+      if (userSockets.has(userId) && userSockets.get(userId) === socket.id) {
+        userSockets.delete(userId);
+      }
+
+      onlineUsers.delete(userId);
+      io.emit("onlineUsers", Array.from(onlineUsers));
+      socket.leave(userId);
     });
 
     socket.on("init", async (data) => {
@@ -93,15 +133,6 @@ const initializeSocketIO = (server) => {
         receiver.emit("call", { ...data, from: socket.userData._id });
       } else {
         socket.emit("failed");
-      }
-    });
-
-    socket.on("disconnect", () => {
-      const userId = socket.userData?._id;
-      console.log(userId, "disconnected");
-      if (socket.userData) {
-        io.emit("onlineUsers", Array.from(onlineUsers));
-        userStatuses.set(socket.userData?._id, "available");
       }
     });
   });
