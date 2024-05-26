@@ -21,6 +21,7 @@ import axios from "axios";
 import { handleCreateChat } from "../config/ChatLogics";
 import { MdOutlineVerified } from "react-icons/md";
 import { VscUnverified } from "react-icons/vsc";
+import { HiStatusOnline } from "react-icons/hi";
 
 const MatchModal = () => {
   const [loadingChat, setLoadingChat] = useState(false);
@@ -29,8 +30,15 @@ const MatchModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState(false);
 
-  const { setSelectedChat, user, chats, setUserId, setUser, setChats } =
-    ChatState();
+  const {
+    setSelectedChat,
+    user,
+    chats,
+    setUserId,
+    setUser,
+    setChats,
+    onlineUsersCount,
+  } = ChatState();
   const toast = useToast();
 
   const accessChat = async (userId) => {
@@ -109,6 +117,7 @@ const MatchModal = () => {
     }
   };
   const currentUser = users[currentIndex];
+  console.log(currentUser, onlineUsersCount);
   const OverlayTwo = () => (
     <ModalOverlay
       bg="none"
@@ -232,6 +241,20 @@ const MatchModal = () => {
                   background={"blackAlpha.400"}
                   width="100%"
                 >
+                  {onlineUsersCount.includes(currentUser._id) && (
+                    <Text
+                      display={"flex"}
+                      textAlign={"center"}
+                      background={"blackAlpha.100"}
+                      textColor={"white"}
+                    >
+                      <HiStatusOnline
+                        style={{ color: "red", fontSize: "1.5rem" }}
+                      />
+                      Online
+                    </Text>
+                  )}
+
                   <Button
                     m={0.5}
                     bgGradient="linear(to-r, gray.300, yellow.400, pink.200)"

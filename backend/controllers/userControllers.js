@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const nodemailer = require("nodemailer");
+const Fuse = require("fuse.js");
 
 const generateToken = require("../config/generateToken");
 const dotenv = require("dotenv");
@@ -9,6 +10,7 @@ const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const axios = require("axios");
 const { DOMParser } = require("xmldom");
+const { onlineUsersMatch, extractLocations } = require("../config/socketUtils");
 
 dotenv.config({ path: "./secrets.env" });
 const privateEmailPass = process.env.privateEmailPass;
@@ -200,23 +202,56 @@ const getUserById = async (req, res) => {
 
 const getUsers = async (req, res) => {
   const gender = req.user.gender;
+  const description = req.user.value;
 
   try {
     let matchGender;
     if (gender === "female") {
-      matchGender = "male"; // Fetch male users if the authenticated user is female
+      matchGender = "male";
     } else if (gender === "male") {
-      matchGender = "female"; // Fetch female users if the authenticated user is male
+      matchGender = "female";
     } else {
-      return res.status(400).json({ error: "Invalid gender" }); // Handle invalid gender
+      return res.status(400).json({ error: "Invalid gender" });
     }
 
-    const allUsers = await User.aggregate([
-      { $match: { gender: matchGender, deleted: { $ne: true } } },
-      { $sample: { size: 3 } },
-    ]);
-    res.json(allUsers);
+    const userLocations = extractLocations(description);
+
+    const options = {
+      includeScore: true,
+      keys: ["description"],
+      threshold: 0.4,
+    };
+    const onlineUsersArray = Array.from(onlineUsersMatch);
+
+    const onlineUsersByGender = onlineUsersArray.filter(
+      (user) => user.gender === matchGender
+    );
+
+    const fuse = new Fuse(onlineUsersByGender, options);
+
+    const result = fuse.search(description);
+
+    let matchingOnlineUsers = result.map((res) => res.item);
+
+    matchingOnlineUsers = matchingOnlineUsers.filter((user) => {
+      const userDescription = user.description;
+      const userDescLocations = extractLocations(userDescription);
+      return userLocations.some((loc) => userDescLocations.includes(loc));
+    });
+
+    const sampleSize = 6;
+
+    if (matchingOnlineUsers.length < sampleSize) {
+      const additionalUsers = await User.aggregate([
+        { $match: { gender: matchGender, deleted: { $ne: true } } },
+        { $sample: { size: sampleSize - matchingOnlineUsers.length } },
+      ]);
+      matchingOnlineUsers.push(...additionalUsers);
+    }
+
+    res.json(matchingOnlineUsers);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -236,6 +271,7 @@ const block = asyncHandler(async (req, res) => {
     res.status(500).json({ error: "Failed to Block!" });
   }
 });
+
 const Unblock = asyncHandler(async (req, res) => {
   const { userId } = req.params;
   const user = req.user;
@@ -250,6 +286,7 @@ const Unblock = asyncHandler(async (req, res) => {
     res.status(500).json({ error: "Unable to Unblock" });
   }
 });
+
 const getMail = async (req, res) => {
   const email = req.params.email;
 

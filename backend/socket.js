@@ -5,6 +5,7 @@ const {
   setUserSocket,
   getUserSocket,
   userSockets,
+  onlineUsersMatch,
 } = require("./config/socketUtils");
 let io;
 
@@ -16,7 +17,6 @@ const initializeSocketIO = (server) => {
     },
   });
   const onlineUsers = new Set();
-  const userStatuses = new Map();
 
   io.use(async (socket, next) => {
     try {
@@ -54,6 +54,8 @@ const initializeSocketIO = (server) => {
       onlineUsers.add(userData._id);
       io.emit("onlineUsers", Array.from(onlineUsers));
 
+      onlineUsersMatch.add(userData);
+
       if (userData.isNewUser) {
         io.emit("newUserRegistered", userData);
       }
@@ -86,6 +88,12 @@ const initializeSocketIO = (server) => {
     });
 
     socket.on("disconnect", () => {
+      onlineUsersMatch.forEach((user) => {
+        if (socket.userData && user._id === socket.userData._id) {
+          onlineUsersMatch.delete(user);
+        }
+      });
+
       if (userSockets.has(userId) && userSockets.get(userId) === socket.id) {
         userSockets.delete(userId);
       }

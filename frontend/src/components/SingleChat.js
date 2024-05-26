@@ -419,11 +419,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       });
     });
     socket.on("onlineUsers", (count) => {
+      console.log(count);
       setOnlineUsersCount(count);
     });
 
     return () => {
       socket.off("New User Registered");
+      socket.off("onlineUsers");
       socket.off("typing"); // Clean up socket listeners
       socket.off("stop typing");
       socket.disconnect();
