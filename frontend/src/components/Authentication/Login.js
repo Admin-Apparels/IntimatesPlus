@@ -85,12 +85,8 @@ const Login = () => {
     setSearching(true);
     setDisable(true);
     try {
-      const { data } = await axios.get(
-        `/api/user/account/${forgotEmail}`
-      );
-      console.log(data);
+      const { data } = await axios.get(`/api/user/account/${forgotEmail}`);
       if (data !== false) {
-        console.log(data);
         navigate("/accountrecovery");
         setVerify(data.verificationCode);
         setRecoverEmail(data.email);
@@ -108,7 +104,7 @@ const Login = () => {
         setDisable(false);
       }, 30000);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setSearching(false);
       setTimeout(() => {
         setDisable(false);
@@ -133,7 +129,7 @@ const Login = () => {
           type="email"
           textColor={"white"}
           placeholder="Enter Your Email Address"
-          _placeholder={{color: "#fff0f5"}}
+          _placeholder={{ color: "#fff0f5" }}
           onChange={(e) => setEmail(e.target.value)}
         />
       </FormControl>
@@ -146,7 +142,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             type={show ? "text" : "password"}
             placeholder="Enter password"
-            _placeholder={{color: "#fff0f5"}}
+            _placeholder={{ color: "#fff0f5" }}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -168,14 +164,20 @@ const Login = () => {
         <GoogleLoginButton />
       </GoogleOAuthProvider>
       <Link
-      textColor={"white"}
+        textColor={"white"}
         onClick={() => {
           onOpen();
         }}
       >
         Forgot password?
       </Link>
-      <Modal size="sm" onClose={onClose} isOpen={isOpen} fontSize={"sm"} isCentered>
+      <Modal
+        size="sm"
+        onClose={onClose}
+        isOpen={isOpen}
+        fontSize={"sm"}
+        isCentered
+      >
         <ModalOverlay />
         <ModalContent padding={1}>
           <ModalHeader
@@ -184,7 +186,7 @@ const Login = () => {
             textAlign={"center"}
             justifyContent={"center"}
           >
-              Enter your Email below
+            Enter your Email below
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
@@ -213,7 +215,7 @@ const Login = () => {
             </Button>
           </ModalBody>
           <ModalFooter display="flex" textAlign={"start"} p={1}>
-              {forgotEmail && `A code will be sent to the above email`}
+            {forgotEmail && `A code will be sent to the above email`}
             {searching && <Spinner />}
           </ModalFooter>
         </ModalContent>

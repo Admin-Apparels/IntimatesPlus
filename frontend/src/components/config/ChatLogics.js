@@ -124,14 +124,12 @@ export async function handleApprove(type, user, setUser) {
   }
 }
 export async function handleCreateChat(
-  url,
   userId,
-  toast,
   user,
   setChats,
-  setUser,
   chats,
-  setSelectedChat
+  setSelectedChat,
+  toast
 ) {
   try {
     const config = {
@@ -141,17 +139,14 @@ export async function handleCreateChat(
       },
     };
 
-    const { data } = await axios.post(`/api/chat/${url}`, { userId }, config);
-    if (data.day) {
-      const userData = { ...user, day: data.day };
-      localStorage.setItem("userInfo", JSON.stringify(userData));
-      setUser(userData);
-    } else {
-      console.log("setting chats");
-      setChats([data, ...chats]);
-      setSelectedChat(data);
-    }
+    const { data } = await axios.post(`/api/chat`, { userId }, config);
+
+    if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+
+    setChats([data, ...chats]);
+    setSelectedChat(data);
   } catch (error) {
+    console.log(error);
     toast({
       title: "Error fetching the chat",
       description: error.message,

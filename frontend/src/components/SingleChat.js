@@ -419,7 +419,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       });
     });
     socket.on("onlineUsers", (count) => {
-      console.log(count);
       setOnlineUsersCount(count);
     });
 

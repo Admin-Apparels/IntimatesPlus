@@ -4,28 +4,10 @@ const Chat = require("../models/chatModel");
 const User = require("../models/userModel");
 
 const accessChat = async (req, res) => {
-  const { accounttype } = req.params;
   const { userId } = req.body;
   const loggedId = req.user._id;
 
-  if (accounttype && accounttype === "Platnum") {
-    try {
-      const time = new Date().getTime() + 24 * 60 * 60 * 1000;
-      const timeOfChat = await User.findByIdAndUpdate(
-        loggedId,
-        {
-          day: time,
-        },
-        { new: true }
-      ).select("day");
-      res.json(timeOfChat);
-    } catch (error) {
-      res.json({ error: "Internal Server Error" });
-    }
-  }
-
   if (!userId) {
-    console.log("UserId param not sent with request");
     return res.sendStatus(400);
   }
 
@@ -48,7 +30,6 @@ const accessChat = async (req, res) => {
   } else {
     var chatData = {
       chatName: "sender",
-
       users: [loggedId, userId],
     };
 

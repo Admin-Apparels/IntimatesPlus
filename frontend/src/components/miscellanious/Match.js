@@ -33,10 +33,9 @@ const MatchModal = () => {
   const {
     setSelectedChat,
     user,
+    setChats,
     chats,
     setUserId,
-    setUser,
-    setChats,
     onlineUsersCount,
   } = ChatState();
   const toast = useToast();
@@ -55,20 +54,19 @@ const MatchModal = () => {
     try {
       setLoadingChat(true);
       await handleCreateChat(
-        user.accountType,
         userId,
-        toast,
         user,
         setChats,
-        setUser,
         chats,
-        setSelectedChat
+        setSelectedChat,
+        toast
       );
 
       setLoadingChat(false);
       onClose();
     } catch (error) {
       setLoadingChat(false);
+      console.log(error);
       onClose();
       toast({
         title: "Error creating your chat, try again later",
@@ -117,7 +115,6 @@ const MatchModal = () => {
     }
   };
   const currentUser = users[currentIndex];
-  console.log(currentUser, onlineUsersCount);
   const OverlayTwo = () => (
     <ModalOverlay
       bg="none"

@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
+const Chat = require("../models/chatModel");
 const nodemailer = require("nodemailer");
 const Fuse = require("fuse.js");
 
@@ -391,39 +392,54 @@ const deleteImage = async (req, res) => {
   }
 };
 const authorizeUser = async (req, res) => {
-  const { userEmail } = req.params;
+  const { email } = req.query;
 
-  const verificationCode = Math.floor(
-    100000 + Math.random() * 900000
-  ).toString();
+  try {
+    // Check if the email already exists in the User schema
+    const existingUser = await User.findOne({ email });
 
-  const transporter = nodemailer.createTransport({
-    host: "mail.privateemail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: privateEmail,
-      pass: privateEmailPass,
-    },
-  });
-  const mailOptions = {
-    from: privateEmail,
-    to: userEmail,
-    subject: "Verify Your Email",
-    text: `Your verification code is:  ${verificationCode}
-    
-This is system's generated code, please do not reply.`,
-  };
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      res.status(400).json({ message: "Email Sending Failed" });
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      res.status(200).json(verificationCode);
+    if (existingUser) {
+      return res.status(400).json({ message: "Email is already in use" });
     }
-  });
+
+    const verificationCode = Math.floor(
+      100000 + Math.random() * 900000
+    ).toString();
+
+    const transporter = nodemailer.createTransport({
+      host: "mail.privateemail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: privateEmail,
+        pass: privateEmailPass,
+      },
+    });
+
+    const mailOptions = {
+      from: privateEmail,
+      to: email,
+      subject: "Verify Your Email",
+      text: `Your verification code is: ${verificationCode}
+      
+This is a system-generated code, please do not reply.`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error, "Sending email failed terribly!");
+        return res.status(400).json({ message: "Email Sending Failed" });
+      } else {
+        console.log("Email sent: " + info.response);
+        return res.status(200).json({ verificationCode });
+      }
+    });
+  } catch (error) {
+    console.error("Error authorizing user:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
 };
+
 const getAdsInfo = async (req, res) => {
   const acceptLanguage = req.headers["accept-language"] || "en-US";
   const referrer = req.headers.referer || "unknown";
@@ -456,6 +472,79 @@ const getAdsInfo = async (req, res) => {
   }
 };
 
+const allUsers = asyncHandler(async (req, res) => {
+  try {
+    console.log("Search query:", req.query.search);
+    const keyword = req.query.search
+      ? {
+          $or: [
+            { name: { $regex: req.query.search, $options: "i" } },
+            { email: { $regex: req.query.search, $options: "i" } },
+          ],
+        }
+      : {};
+
+    const currentUserId = req.user._id;
+
+    // Fetch the current user's gender
+    const currentUserGender = req.user.gender;
+
+    // Define the gender filter based on the current user's gender
+    const genderFilter =
+      currentUserGender === "male"
+        ? { gender: "female" } // Fetch female users if the current user is male
+        : currentUserGender === "female"
+        ? { gender: "male" } // Fetch male users if the current user is female
+        : {}; // No gender filter if the current user's gender is invalid
+
+    // Fetch all users matching the search query and gender filter
+    let users = await User.find({
+      ...keyword,
+      ...genderFilter,
+      _id: { $ne: currentUserId },
+    }).select("-password");
+
+    // Fetch the current user's chats
+    const currentUserChats = await Chat.find({ users: currentUserId }).select(
+      "users"
+    );
+
+    // Create a list of user IDs from the current user's chats, excluding the current user's ID
+    const currentChatUserIds = currentUserChats
+      .flatMap((chat) => chat.users.map((user) => user.toString()))
+      .filter((userId) => userId !== currentUserId.toString());
+
+    const onlineUsersArray = Array.from(onlineUsersMatch);
+
+    // Filter out users who are already in the current user's chats
+    const newUsers = users.filter(
+      (user) => !currentChatUserIds.includes(user._id.toString())
+    );
+
+    // Separate the new users into online and offline users
+    const onlineNewUsers = newUsers.filter((user) =>
+      onlineUsersArray.some(
+        (onlineUser) => onlineUser._id.toString() === user._id.toString()
+      )
+    );
+
+    const offlineNewUsers = newUsers.filter(
+      (user) =>
+        !onlineUsersArray.some(
+          (onlineUser) => onlineUser._id.toString() === user._id.toString()
+        )
+    );
+
+    // Combine the results: online new users first, then offline new users
+    const sortedNewUsers = [...onlineNewUsers, ...offlineNewUsers];
+
+    res.send(sortedNewUsers);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 module.exports = {
   authorizeUser,
   registerUsers,
@@ -472,4 +561,5 @@ module.exports = {
   deleteImage,
   getAdsInfo,
   getMail,
+  allUsers,
 };

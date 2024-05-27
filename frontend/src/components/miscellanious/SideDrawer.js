@@ -2,7 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
-import { Badge, Image } from "@chakra-ui/react";
+import { Badge, Image, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 import {
   Menu,
   MenuButton,
@@ -22,13 +22,13 @@ import { Tooltip } from "@chakra-ui/tooltip";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { Avatar } from "@chakra-ui/avatar";
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/toast";
 import { Spinner } from "@chakra-ui/spinner";
 import ClientModal from "../miscellanious/Client";
 
-import { getSenderName } from "../config/ChatLogics";
+import { getSenderName, handleCreateChat } from "../config/ChatLogics";
 import UserListItem from "../userAvatar/UserListItem";
 import { ChatState } from "../Context/ChatProvider";
 import MatchModal from "./Match";
@@ -38,14 +38,16 @@ import Notifier from "./Notifier";
 function SideDrawer() {
   const [search, setSearch] = useState("");
   const [loadingChat, setLoadingChat] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
 
   const {
     setSelectedChat,
     user,
+    setChats,
     notification,
     setNotification,
     chats,
-    setChats,
   } = ChatState() || {};
 
   const toast = useToast();
@@ -57,12 +59,7 @@ function SideDrawer() {
     localStorage.removeItem("userInfo");
     history("/");
   };
-  // const displayValue = useBreakpointValue({ base: "none", md: "flex" });
 
-  // const textVisibility = useBreakpointValue({
-  //   base: "hidden",
-  //   md: "visible",
-  // });
   const OverlayOne = () => (
     <DrawerOverlay
       bg="blackAlpha.300"
@@ -71,7 +68,7 @@ function SideDrawer() {
   );
   const overlay = React.useState(<OverlayOne />);
 
-  const accessChat = async (userId, user) => {
+  const accessChat = async (userId) => {
     const existingChat = chats.find(
       (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
     );
@@ -81,24 +78,25 @@ function SideDrawer() {
       onClose();
       return;
     }
+
     try {
       setLoadingChat(true);
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      const { data } = await axios.post(`/api/chat`, { userId, user }, config);
+      await handleCreateChat(
+        userId,
+        user,
+        setChats,
+        chats,
+        setSelectedChat,
+        toast
+      );
 
-      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
-
-      setSelectedChat(data);
       setLoadingChat(false);
       onClose();
     } catch (error) {
+      setLoadingChat(false);
+      onClose();
       toast({
-        title: "Error fetching the chat",
+        title: "Error creating your chat, try again later",
         description: error.message,
         status: "error",
         duration: 5000,
@@ -107,6 +105,35 @@ function SideDrawer() {
       });
     }
   };
+
+  const fetchUsers = useCallback(
+    async (searchTerm) => {
+      setLoading(true);
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${user.token}`, // Adjust this based on your auth implementation
+          },
+        };
+        const { data } = await axios.get(
+          `/api/user/allUsers?search=${searchTerm}`,
+          config
+        );
+        setSearchResults(data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.error("Failed to fetch users", error);
+      }
+    },
+    [user.token]
+  );
+
+  useEffect(() => {
+    if (search !== "") {
+      fetchUsers(search);
+    }
+  }, [search, fetchUsers]);
 
   return (
     <>
@@ -226,67 +253,100 @@ function SideDrawer() {
           <DrawerHeader borderBottomWidth="1px">Search Chat</DrawerHeader>
           <DrawerCloseButton />
           <DrawerBody>
+            {loadingChat && <Spinner ml="auto" display="flex" />}
             <Box display="flex" pb={2}>
               <Input
-                placeholder="Search by name "
+                placeholder="Search by name"
                 mr={2}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </Box>
             {search !== "" ? (
-              chats.length > 0 ? (
-                // Check if any chats match the search criteria
-                chats.some((chat) =>
-                  chat.users.some(
-                    (participant) =>
-                      participant._id !== user._id &&
-                      participant.name
-                        .toLowerCase()
-                        .includes(search.toLowerCase())
-                  )
-                ) ? (
-                  // Render filtered chats
-                  chats
-                    .filter((chat) =>
-                      chat.users.some(
-                        (participant) =>
-                          participant._id !== user._id &&
-                          participant.name
-                            .toLowerCase()
-                            .includes(search.toLowerCase())
-                      )
+              <>
+                {chats.length > 0 ? (
+                  // Check if any chats match the search criteria
+                  chats.some((chat) =>
+                    chat.users.some(
+                      (participant) =>
+                        participant._id !== user._id &&
+                        participant.name
+                          .toLowerCase()
+                          .includes(search.toLowerCase())
                     )
-                    .map((chat) => {
-                      const otherParticipant = chat.users.find(
-                        (participant) => participant._id !== user._id
-                      );
+                  ) ? (
+                    // Render filtered chats
+                    chats
+                      .filter((chat) =>
+                        chat.users.some(
+                          (participant) =>
+                            participant._id !== user._id &&
+                            participant.name
+                              .toLowerCase()
+                              .includes(search.toLowerCase())
+                        )
+                      )
+                      .map((chat) => {
+                        const otherParticipant = chat.users.find(
+                          (participant) => participant._id !== user._id
+                        );
 
-                      return (
-                        <UserListItem
-                          key={otherParticipant._id}
-                          user={otherParticipant}
-                          handleFunction={() =>
-                            accessChat(otherParticipant._id, user)
-                          }
-                        />
-                      );
-                    })
+                        return (
+                          <UserListItem
+                            key={otherParticipant._id}
+                            user={otherParticipant}
+                            handleFunction={() =>
+                              accessChat(otherParticipant._id)
+                            }
+                          />
+                        );
+                      })
+                  ) : (
+                    <Text userSelect="none" textColor="red">
+                      No chats were found.
+                    </Text>
+                  )
                 ) : (
-                  // Render "No chats were found" message
-                  <Text userSelect="none" textColor="red">
-                    No chats were found.
+                  <Text userSelect="none">
+                    Start typing to search for chats...
                   </Text>
-                )
-              ) : (
-                // Render a message indicating to start typing to search for chats
-                <Text userSelect="none">
-                  Start typing to search for chats...
-                </Text>
-              )
+                )}
+                <Box>
+                  <Text
+                    textAlign={"center"}
+                    bgGradient="linear(to-l, #7928CA, #FF0080)"
+                    bgClip="text"
+                    fontWeight="extrabold"
+                  >
+                    Get to know more
+                  </Text>
+                  {loading && (
+                    <Box padding="6" boxShadow="lg" bg="white" width={"100%"}>
+                      <SkeletonCircle size="10" />
+                      <SkeletonText
+                        mt="4"
+                        noOfLines={4}
+                        spacing="4"
+                        skeletonHeight="2"
+                      />
+                    </Box>
+                  )}
+                  {searchResults.length > 0 ? (
+                    searchResults.map((search) => (
+                      <UserListItem
+                        key={search._id}
+                        user={search}
+                        handleFunction={() => accessChat(search._id)}
+                      />
+                    ))
+                  ) : (
+                    <Text userSelect="none" textColor="red">
+                      No new users found.
+                    </Text>
+                  )}
+                </Box>
+              </>
             ) : null}
-
-            {loadingChat && <Spinner ml="auto" display="flex" />}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

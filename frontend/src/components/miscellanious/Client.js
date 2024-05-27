@@ -245,9 +245,8 @@ const ClientModal = ({ children }) => {
     setLoading(true);
 
     try {
-      const { data } = await axios.get(`/api/user/${email}`);
-      setCode(data);
-      onOpen();
+      const { data } = await axios.get(`/api/user?email=${email}`);
+      setCode(data.verificationCode);
       setLoading(false);
       setDisabled(true);
       setTimeout(() => {
@@ -266,10 +265,10 @@ const ClientModal = ({ children }) => {
       setTimeout(() => {
         setDisabled(false);
       }, 30000);
-      onClose();
       setLoading(false);
     }
   };
+
   return (
     <>
       {children ? (
@@ -385,7 +384,7 @@ const ClientModal = ({ children }) => {
                     confirmHandler();
                   }}
                   ml={1}
-                  isDisabled={code !== inputCode || disabled}
+                  isDisabled={code !== inputCode}
                   isLoading={confirm}
                   colorScheme="green"
                 >
@@ -458,6 +457,7 @@ const ClientModal = ({ children }) => {
                     deleteAccount();
                   }
                 }}
+                isDisabled
                 isLoading={deleteLoading}
               >
                 Delete Account

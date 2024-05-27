@@ -16,6 +16,7 @@ const {
   recoverEmail,
   getAdsInfo,
   getMail,
+  allUsers,
 } = require("../controllers/userControllers");
 const { protect } = require("../middleware/authMiddleware");
 const { limiter } = require("../middleware/limiter");
@@ -27,7 +28,7 @@ router.get("/searchuser/:email", limiter, searchUser);
 router.get("/account/:email", limiter, forgotEmail);
 router.post("/emailrecovery/:email", limiter, recoverEmail);
 router.route("/login").post(limiter, authUser);
-router.get("/:userEmail", limiter, authorizeUser);
+router.get("/", limiter, authorizeUser);
 
 router.get("/female/users", protect, limiter, getUsers);
 router.route("/uniqueness/:email").get(limiter, getMail);
@@ -38,4 +39,5 @@ router.put("/update/:userId", protect, limiter, updateUser);
 router.delete("/deleteuser/:userId", protect, limiter, deleteUser);
 router.delete("/delete-image/:publicId", protect, limiter, deleteImage);
 router.get("/getadsninfo/advertisement", protect, limiter, getAdsInfo);
+router.route("/allUsers").get(protect, limiter, allUsers);
 module.exports = router;
