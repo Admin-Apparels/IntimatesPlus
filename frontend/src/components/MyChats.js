@@ -215,7 +215,7 @@ const MyChat = (fetchAgain) => {
         display="flex"
         flexDir="column"
         p={3}
-        bg="#F8F8F8"
+        bg="blackAlpha.400"
         w="100%"
         h="100%"
         borderRadius="lg"

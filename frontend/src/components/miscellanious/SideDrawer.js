@@ -146,7 +146,7 @@ function SideDrawer() {
         p="5px 10px 10px 10px"
       >
         <Image
-          src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1715954572/fuckmate.boo.png"
+          src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701779357/icons8-sex-64_a1hki1.png"
           height={{ base: 6, md: 10 }}
         />
 

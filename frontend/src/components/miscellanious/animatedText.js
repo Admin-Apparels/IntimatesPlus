@@ -2,7 +2,7 @@ import { Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 const AnimatedTyping = () => {
-  const [textToType] = useState("fuckmate.boo"); // Update to an array of words
+  const [textToType] = useState("IntiMates"); // Update to an array of words
   const [displayedText, setDisplayedText] = useState("");
   const [textLength, setTextLength] = useState(0);
 
@@ -29,7 +29,7 @@ const AnimatedTyping = () => {
             setTextLength(0);
             index = 0; // Reset index for the next cycle
           }, 3000);
-        }, 100);
+        }, 1000);
       }
     }, 100);
 
@@ -45,9 +45,9 @@ const AnimatedTyping = () => {
           display="flex"
           textAlign="center"
           fontSize="3xl"
-          fontWeight="bold"
           userSelect="none"
-          textColor={"red.100"}
+          fontWeight={"bold"}
+          textColor={"white"}
           border={"none"}
           padding="5px"
           background="transparent"

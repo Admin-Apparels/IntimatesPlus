@@ -106,21 +106,21 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
   };
   const heading = [
-    "Scammers and Fake Profiles:",
+    "Scammers and Unverified Profiles:",
     "Maintaining a Safe Environment:",
     "Prohibited Content:",
-    "Purpose of fuckmate.boo",
+    "IntiMates Impact:",
     "Privacy and Data Usage Agreement:",
     "",
   ];
 
   const quotes = [
-    "-Be vigilant: Recognize and protect yourself from scammers and fake profiles.- Report: If you encounter suspicious accounts, please report them to our team at admin@fuckmate.boo.",
+    "-Be vigilant: Recognize and protect yourself from scammers and unverified profiles.- Report: If you encounter suspicious accounts, please report them to our team at admin@fuckmate.boo.",
     "-Respect Others: Treat all users with kindness, respect, and consideration. - No Harassment: Harassment, hate speech, or any form of abuse will not be tolerated. - Privacy: Protect your personal information and respect the privacy of others.",
-    "-No Prostitution: FMB strictly prohibits any form of prostitution or solicitation. Such activities will result in immediate account suspension. - Adult Content: We do not encourage or link to adult content sites.",
-    "-This platform is an escape from the shadows of porn addiction, solo sessions and isolation. It's crafted to guide you into a world where connections spark passion. Our mission? To ignite flames of genuine, satisfying relationships, fostering a playground for human social interactions that go beyond the ordinary. Welcome to fuckmate.boo – where arousal meets meaningful connections. 🔥💑 #RealConnections",
+    "-No Prostitution: IntiMates strictly prohibits any form of prostitution or solicitation. Such activities will result in immediate account suspension. - Adult Content: We do not encourage or link to adult content sites.",
+    "IntiMates addresses the growing issue of social isolation and the detrimental effects of excessive consumption of adult content. Our platform offers a safe, supportive space where users can connect with like-minded individuals, fostering meaningful relationships that go beyond superficial interactions. By promoting genuine connections, IntiMates helps reduce feelings of loneliness, depression, and anxiety, ultimately improving users' mental health and overall well-being",
     "Data Protection and Non-Sale: We are committed to protecting your data and will not sell your personal information to third parties or advertisers.   Matchmaking: In the future, you may be asked to provide location and other data. This data will be used solely for the purpose of finding you a suitable match within the app.   Privacy of User Identities: We respect your privacy, and we will keep the identities of other users confidential in relation to this app. Your identity will also be kept private in a similar manner.",
-    "By using FMB, you agree to abide by these safety guidelines and terms of use. Violation of these terms may result in account suspension or termination. Thank you for being part of FMB. If you have any questions or concerns, please contact our team at admin@fuckmate.boo. Your safety and well-being are important to us.",
+    "By using IntiMates, you agree to abide by these safety guidelines and terms of use. Violation of these terms may result in account suspension or termination. Thank you for being part of IntiMates. If you have any questions or concerns, please contact our team at admin@fuckmate.boo. Your safety and well-being are important to us.",
   ];
 
   const fetchMessages = useCallback(async () => {
@@ -663,8 +663,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               p={0}
               m={0}
               textAlign={"center"}
-              bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
-              bgClip="text"
+              textColor={"white"}
               userSelect={"none"}
               fontFamily={"cursive"}
             >
@@ -707,7 +706,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             flexDir="column"
             justifyContent="space-between"
             p={3}
-            bg="#E8E8E8"
+            bg="blackAlpha.800"
             width="100%"
             height="100%"
             borderRadius="lg"

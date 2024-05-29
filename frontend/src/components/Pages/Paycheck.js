@@ -272,7 +272,7 @@ export default function Paycheck() {
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
-              Share contacts
+              Chat without flags
             </ListItem>
           </List>
 
@@ -394,7 +394,7 @@ export default function Paycheck() {
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
-              Share contacts
+              Chat without flags
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
@@ -402,7 +402,7 @@ export default function Paycheck() {
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
-              Unlimited
+              Access to new features
             </ListItem>
           </List>
 
