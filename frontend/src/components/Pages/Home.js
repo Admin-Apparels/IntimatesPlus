@@ -60,11 +60,9 @@ function Homepage() {
         <Text>🔒#PrivacyFirst</Text>
         <Text userSelect={"none"}>
           💋 Dive in effortlessly! 💬 Chat anonymously. <br />
-          🤫 Keep identities private <br />
-          🌡️ Play safe, protect against STDs in your encounters.
-          <br />
-          💑 Respect desires; our members are real, not porn actors. Ready for
-          genuine connections? Let's get started...
+          💘 Keep identities private <br />
+          💑 Respect desires; our members are real. Ready for genuine
+          connections? Let's get started...
         </Text>
         <Button
           m={4}
@@ -173,7 +171,7 @@ function Homepage() {
           <LinkOverlay
             userSelect={"none"}
             href="https://www.paypal.com/donate/?hosted_button_id=2L8HHGURQTED2"
-            target="blank"
+            isExternal
           >
             Donate
           </LinkOverlay>
@@ -354,13 +352,13 @@ function Homepage() {
               p={0}
               m={0}
             >
-              <Link href="https://twitter.com/fuckmateboo" m={0} target="blank">
+              <Link href="https://twitter.com/fuckmateboo" m={0} isExternal>
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701357033/icons8-twitter-50_3_vz8pfu.png"
                   height={6}
                 />
               </Link>
-              <Link href="#" m={1} target="blank">
+              <Link href="#" m={1} isExternal>
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699869638/icons8-instagram-48_wfs0ek.png"
                   height={7}
@@ -369,14 +367,14 @@ function Homepage() {
               <Link
                 href="https://web.facebook.com/profile.php?id=61554735039262"
                 m={1}
-                target="blank"
+                isExternal
               >
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699869920/icons8-facebook-48_vcxsai.png"
                   height={7}
                 />
               </Link>
-              <Link href="https://www.fuckmate.boo" m={1} target="blank">
+              <Link href="https://www.fuckmate.boo" m={1} isExternal>
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1700415178/APP_LOGO_2_pforwh.png"
                   height={5}

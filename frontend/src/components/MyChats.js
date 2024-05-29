@@ -176,7 +176,7 @@ const MyChat = (fetchAgain) => {
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
-      minH={"100vh"}
+      height={"100%"}
     >
       {modal && <Notifier isOpen={modal} onClose={() => setModal(false)} />}
       <Box

@@ -66,7 +66,7 @@ const Chatpage = () => {
   };
 
   return (
-    <Box width="100%" minH={"100vh"}>
+    <Box width="100%" height={"100%"}>
       <ErrorBoundary fallback={<p>Something went wrong</p>} userSelect={"none"}>
         {user && <SideDrawer />}{" "}
         {user &&
@@ -152,8 +152,9 @@ const Chatpage = () => {
               </Text>
               For more stories and inspiration, follow us on Twitter:{" "}
               <Link
-                href="https://twitter.com/fuckmateboo"
+                href="https://x.com/fuckmateboo/status/1795454149800128527"
                 textColor={"blue.200"}
+                isExternal
               >
                 @fuckmateboo
               </Link>
@@ -164,7 +165,7 @@ const Chatpage = () => {
           display="flex"
           justifyContent="space-evenly"
           width="100%"
-          minH={"100vh"}
+          height={"100%"}
           p="0.2rem"
         >
           {" "}
