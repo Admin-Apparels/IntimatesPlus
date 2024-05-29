@@ -150,13 +150,15 @@ const Chatpage = () => {
               <Text fontSize={"smaller"} p={0} m={0}>
                 15k
               </Text>
-              For more stories and inspiration, follow us on Twitter:{" "}
+              For more stories and inspiration, follow us on
               <Link
                 href="https://x.com/fuckmateboo/status/1795454149800128527"
                 textColor={"blue.200"}
+                fontSize={"larger"}
+                fontWeight={"bold"}
                 isExternal
               >
-                @fuckmateboo
+                X
               </Link>
             </ModalFooter>
           </ModalContent>

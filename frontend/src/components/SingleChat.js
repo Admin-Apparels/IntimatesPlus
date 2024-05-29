@@ -778,8 +778,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           h="100%"
         >
           <Text
-            bgGradient="linear(to-l, #7928CA, #FF0080)"
-            bgClip="text"
+            textColor={"white"}
             fontWeight="extrabold"
             fontSize="3xl"
             pb={3}

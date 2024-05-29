@@ -10,6 +10,7 @@ import { Image } from "@chakra-ui/react";
 import Notifier from "./miscellanious/Notifier";
 import { FaFlag } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
+import { PiChatsCircleThin } from "react-icons/pi";
 
 const MyChat = (fetchAgain) => {
   const [loggedUser, setLoggedUser] = useState();
@@ -189,8 +190,7 @@ const MyChat = (fetchAgain) => {
         <Text
           fontFamily="cursive"
           fontWeight={"medium"}
-          bgGradient="linear(to-r, black, grey)"
-          bgClip="text"
+          textColor={"white"}
           userSelect={"none"}
         >
           My Chats:{" "}
@@ -201,14 +201,11 @@ const MyChat = (fetchAgain) => {
           justifyContent={"space-between"}
           userSelect={"none"}
           fontSize={"small"}
+          textColor={"white"}
           p={2}
         >
           {chats !== undefined ? chats.length : 0}
-          <Image
-            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1703952426/icons8-chat-100_x8ue9d.png"
-            height={6}
-            mt={-1}
-          />
+          <PiChatsCircleThin style={{ fontSize: "1.5rem" }} />
         </Text>
       </Box>
       <Box
@@ -236,7 +233,9 @@ const MyChat = (fetchAgain) => {
             userSelect={"none"}
           >
             <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701516427/icons8-not-found-48_sfynmt.png" />
-            <Text>You have no chats available, create one above</Text>
+            <Text textColor={"white"}>
+              You have no chats available, create one above
+            </Text>
           </Box>
         )}
 
