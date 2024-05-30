@@ -46,11 +46,12 @@ const AnimatedTyping = () => {
           textAlign="center"
           fontSize="3xl"
           userSelect="none"
-          fontWeight={"bold"}
-          textColor={"white"}
-          border={"none"}
+          fontWeight="bold"
+          textColor="red"
+          border="none"
           padding="5px"
           background="transparent"
+          textShadow="1px 1px 2px orange"
         />
       ) : (
         ""

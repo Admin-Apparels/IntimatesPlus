@@ -5,8 +5,6 @@ import {
   Flex,
   Image,
   Link,
-  LinkBox,
-  LinkOverlay,
   Tab,
   TabList,
   TabPanel,
@@ -20,7 +18,6 @@ import Login from "../Authentication/Login";
 import Signup from "../Authentication/Signup";
 import ErrorBoundary from "./ErrorBoundary";
 import AnimatedTyping from "../miscellanious/animatedText";
-import { SiCoffeescript } from "react-icons/si";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
 
@@ -51,18 +48,30 @@ function Homepage() {
         alignItems="center"
         bg="black"
         w="100%"
-        m="40px 0 15px 0"
+        m="20px 0 15px 0"
         textColor={"background"}
         borderRadius={3}
-        p={1}
+        p={"3"}
         background="transparent"
       >
-        <Text>🔒#PrivacyFirst</Text>
+        {" "}
+        <Image
+          src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717067451/IMG-20240530-WA0001_1_kluate.jpg"
+          userSelect={"none"}
+          boxSize={"200px"}
+          border={"5px solid red"}
+          borderRadius={"full"}
+        />
+        <Text>Privacy First 🔒</Text>
         <Text userSelect={"none"}>
-          💋 Dive in effortlessly! 💬 Chat anonymously. <br />
-          💘 Keep identities private <br />
-          💑 Respect desires; our members are real. Ready for genuine
-          connections? Let's get started...
+          Dive in effortlessly! Chat anonymously. Keep identities private.
+          Please confirm that you are an{" "}
+          <span
+            style={{ color: "red", paddingRight: ".3rem", fontWeight: "bold" }}
+          >
+            adult
+          </span>
+          to proceed...
         </Text>
         <Button
           m={4}
@@ -79,7 +88,7 @@ function Homepage() {
 
   return (
     <ErrorBoundary fallback={<p>Something went wrong</p>}>
-      <Container maxW="xl" centerContent minH={"100vh"}>
+      <Container maxW="xl" centerContent minH={"xl"}>
         <Particles
           id="tsparticles"
           init={particlesInit}
@@ -155,27 +164,6 @@ function Homepage() {
             detectRetina: true,
           }}
         />
-        <LinkBox
-          as="article"
-          maxW="sm"
-          p="3"
-          borderWidth="1px"
-          rounded="md"
-          position="fixed"
-          top="2%"
-          right="2%"
-          textColor={"white"}
-          background={"#FFA500"}
-        >
-          <SiCoffeescript style={{ color: "white", fontSize: "3rem" }} />
-          <LinkOverlay
-            userSelect={"none"}
-            href="https://www.paypal.com/donate/?hosted_button_id=2L8HHGURQTED2"
-            isExternal
-          >
-            Donate
-          </LinkOverlay>
-        </LinkBox>
         <Box
           display="flex"
           justifyContent="center"
@@ -187,6 +175,13 @@ function Homepage() {
           borderWidth="1px"
           background="blackAlpha.400"
         >
+          <Image
+            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717058118/icons8-messages_vvzafy.gif"
+            height={6}
+            mt={3}
+            userSelect={"none"}
+            borderRadius={5}
+          />
           <AnimatedTyping />
 
           <Image
@@ -197,9 +192,9 @@ function Homepage() {
           />
         </Box>
         <Box
-          background="blackAlpha.400"
+          background="blackAlpha.800"
           width="100%"
-          p={4}
+          p={"1"}
           borderRadius="lg"
           borderWidth="1px"
         >
@@ -209,19 +204,16 @@ function Homepage() {
             <Tabs
               isFitted
               variant="soft-rounded"
-              backgroundImage={
-                "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1707305979/coupless_brk1gk.jpg"
-              }
               backgroundPosition="center"
               borderRadius={3}
               defaultIndex={1}
             >
-              <TabList mb="1em" p={"3"}>
+              <TabList p={"3"} pb={0}>
                 <Tab color={"lightblue"} background={"blackAlpha.600"} mx={"2"}>
                   Login
                 </Tab>
                 <Tab color={"lightblue"} background={"blackAlpha.600"}>
-                  Sign Up
+                  Let's Go
                 </Tab>
               </TabList>
               <TabPanels>
@@ -267,7 +259,7 @@ function Homepage() {
                 userSelect={"none"}
                 fontSize={"small"}
               >
-                Fuckmate boo is a realm where connections evolve beyond fleeting
+                IntiMates is a realm where connections evolve beyond fleeting
                 moments. Once a mutual spark is ignited, both accounts shall
                 transcend to new heights. Deactivation becomes a symphony of
                 shared passion, a crescendo of genuine connection.
@@ -319,7 +311,7 @@ function Homepage() {
                 textColor={"red.500"}
                 textAlign={"center"}
               >
-                Fuckmate Boo
+                IntiMates
               </Text>
               <Text
                 textAlign={"center"}
@@ -327,11 +319,11 @@ function Homepage() {
                 fontFamily={"mono"}
                 fontSize={"small"}
               >
-                🌟 Welcome, meet your Fuckmate Boo, Friend-With-Benefit,
-                Sponser, Suggar Daddy or Sugar Mammy here, where connection
-                transcends self-pleasure! 🌟 Discover meaningful connections on
-                our premier dating platform. We bring together individuals
-                seeking companionship, romance, and genuine connections.
+                Welcome, meet your Intimate, Friend-With-Benefit, Sponser,
+                Suggar Daddy or Sugar Mammy here, where connection transcends
+                self-pleasure! Discover meaningful connections on our premier
+                dating platform. We bring together individuals seeking
+                companionship, romance, and genuine connections.
               </Text>
               <Text color="blue.100" display={"flex"} fontSize={"small"}>
                 {" "}

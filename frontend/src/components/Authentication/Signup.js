@@ -9,6 +9,7 @@ import {
   Stack,
   Text,
   Box,
+  Image,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
@@ -165,23 +166,23 @@ const Signup = () => {
   };
 
   const options = [
-    "👫 Fuckmate💦",
+    "👫 Fun buddy",
     "❤️ Friends-with-benefits",
     "💼 Sponsor",
-    "😄 Fun friends",
+    "😄 Fun friend",
     "👴 Sugar daddy",
     "👩 Sugar mammy",
     "💖 Genuine connection",
   ];
 
   const gradients = [
-    "linear(to-r, gray.300, yellow.400, pink.200)",
-    "linear(to-r, red.200, yellow.500, blue.300)",
+    "linear(to-r, gray.300, white.400, pink.200)",
+    "linear(to-r, red.200, white.500, blue.300)",
     "linear(to-r, teal.300, green.400, blue.200)",
     "linear(to-r, purple.300, blue.400, green.200)",
-    "linear(to-r, orange.300, red.400, yellow.200)",
+    "linear(to-r, orange.300, red.400, white.200)",
     "linear(to-r, pink.300, purple.400, blue.200)",
-    "linear(to-r, yellow.300, green.400, teal.200)",
+    "linear(to-r, white.300, green.400, teal.200)",
   ];
 
   return (
@@ -193,20 +194,44 @@ const Signup = () => {
         alignItems={"center"}
         justifyContent={"center"}
         width={"100%"}
-        p={"0"}
         pt={0}
       >
         {step === 1 && (
           <Box
+            display={"flex"}
+            flexDir={"column"}
+            justifyContent={"center"}
+            alignItems={"center"}
             style={{
-              animation: step === 2 ? "slideInRight 0.5s forwards" : "",
+              animation: "slideInRight 0.5s forwards",
             }}
           >
-            <Text textColor="yellow" mb={4} textAlign={"center"}>
-              Welcome! Here's where we all connect. Meet your charming other
-              among thousands directed here from adult sites seeking lasting
-              connections. Let's increase the 25% of FWBs that turn into
-              long-term relationships together!
+            <Image
+              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717072577/shorts2.jpg"
+              userSelect={"none"}
+              boxSize={"200px"}
+              border={"5px solid red"}
+              borderRadius={"full"}
+            />
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              textColor="white"
+              fontSize="lg"
+              fontWeight={"bold"}
+              mb={4}
+            >
+              <>Welcome to</>{" "}
+              <Text fontWeight={"extrabold"} textColor={"red"} pl={"2"}>
+                IntiMates
+              </Text>
+              !
+            </Box>{" "}
+            <Text textColor="white" mb={4}>
+              Meet your charming other among thousands seeking lasting
+              connections. Did you know 25% of FWBs turn into long-term
+              relationships? Grow with us!
             </Text>
             <FormControl id="first-name" isRequired>
               <FormLabel textColor={"white"}>Name</FormLabel>
@@ -221,13 +246,24 @@ const Signup = () => {
         )}
         {step === 2 && (
           <Box
+            display={"flex"}
+            flexDir={"column"}
+            justifyContent={"center"}
+            alignItems={"center"}
             style={{
-              animation: step === 2 ? "slideInRight 0.5s forwards" : "",
+              animation: "slideInRight 0.5s forwards",
             }}
           >
-            {" "}
+            <Image
+              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717072577/shorts1.jpg"
+              userSelect={"none"}
+              boxSize={"200px"}
+              border={"5px solid red"}
+              borderRadius={"full"}
+            />
             <Text
-              textColor="white"
+              bgGradient="linear(to-l, #7928CA, #FF0080)"
+              bgClip="text"
               fontSize="lg"
               fontWeight={"bold"}
               mb={4}
@@ -235,7 +271,7 @@ const Signup = () => {
             >
               Chat Anonymously
             </Text>{" "}
-            <Text textColor="yellow" mb={4} textAlign={"center"}>
+            <Text textColor="white" mb={4} textAlign={"center"}>
               Remember, your email and password will be used for future login.
               Dummy emails are prone to losing access to your account.
             </Text>
@@ -272,11 +308,22 @@ const Signup = () => {
         )}
         {step === 3 && (
           <Box
+            display={"flex"}
+            flexDir={"column"}
+            justifyContent={"center"}
+            alignItems={"center"}
             style={{
-              animation: step === 2 ? "slideInRight 0.5s forwards" : "",
+              animation: "slideInRight 0.5s forwards",
             }}
           >
-            <Text textColor="yellow" mb={4} textAlign={"center"}>
+            <Image
+              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717072575/shorts3.jpg"
+              userSelect={"none"}
+              boxSize={"200px"}
+              border={"5px solid red"}
+              borderRadius={"full"}
+            />
+            <Text textColor="white" mb={4} textAlign={"center"}>
               Secure your connection: Choose a strong password to protect your
               account.
             </Text>
@@ -333,11 +380,22 @@ const Signup = () => {
 
         {step === 4 && (
           <Box
+            display={"flex"}
+            flexDir={"column"}
+            justifyContent={"center"}
+            alignItems={"center"}
             style={{
-              animation: "slideInFromTop 0.5s forwards",
+              animation: "slideInRight 0.5s forwards",
             }}
           >
-            <Text textColor="yellow" mb={4} textAlign={"center"}>
+            <Image
+              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717072573/shorts5.jpg"
+              userSelect={"none"}
+              boxSize={"200px"}
+              border={"5px solid red"}
+              borderRadius={"full"}
+            />
+            <Text textColor="white" mb={4} textAlign={"center"}>
               {" "}
               Select your gender: Choose the option that best represents you.
             </Text>
@@ -360,12 +418,21 @@ const Signup = () => {
         {step === 5 && (
           <Box
             style={{
-              animation: step === 2 ? "slideInRight 0.5s forwards" : "",
+              animation: "slideInRight 0.5s forwards",
             }}
-            m={0}
-            p={0}
+            display={"flex"}
+            flexDir={"column"}
+            justifyContent={"center"}
+            alignItems={"center"}
           >
-            <Text textColor="yellow" mb={4} textAlign={"center"}>
+            <Image
+              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717072573/shorts4.jpg"
+              userSelect={"none"}
+              boxSize={"200px"}
+              border={"5px solid red"}
+              borderRadius={"full"}
+            />
+            <Text textColor="white" mb={4} textAlign={"center"}>
               What are you looking for?
             </Text>
             <Box textAlign="center">
@@ -387,7 +454,7 @@ const Signup = () => {
               ))}
             </Box>{" "}
             <FormControl id="description" Box textColor={"white"} isRequired>
-              <FormLabel>Add a description</FormLabel>
+              <FormLabel>Add a short description</FormLabel>
               <Textarea
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
@@ -432,17 +499,28 @@ const Signup = () => {
 
         {step === 6 && (
           <Box
+            display={"flex"}
+            flexDir={"column"}
+            justifyContent={"center"}
+            alignItems={"center"}
             style={{
-              animation: step === 6 ? "slideInRight 0.5s forwards" : "",
+              animation: "slideInRight 0.5s forwards",
             }}
           >
-            <Text textColor="yellow" mb={4} textAlign={"center"}>
+            <Image
+              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717072570/shorts6.jpg"
+              userSelect={"none"}
+              boxSize={"200px"}
+              border={"5px solid red"}
+              borderRadius={"full"}
+            />
+            <Text textColor="white" mb={4} textAlign={"center"}>
               Upload a clear and recent photo of yourself for better matching
               results.
             </Text>
             <FormControl id="pic">
               <FormLabel textColor={"white"}>
-                Upload your Picture(*Public)
+                Upload your Picture(*Public & Optional)
               </FormLabel>
               <Input
                 type="file"
