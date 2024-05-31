@@ -7,8 +7,23 @@ import Paycheck from "./components/Pages/Paycheck";
 import NotFound from "./components/Pages/NotFound";
 import forgotPassword from "./components/Pages/ForgotPassword";
 import VideoCall from "./components/videoCall";
+import React, { useState, useEffect } from "react";
+import Loading from "./components/userAvatar/loading";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); // Simulate a loading delay of 2 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <div className="App">
       <Routes>
