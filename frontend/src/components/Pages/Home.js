@@ -104,7 +104,7 @@ function Homepage() {
             interactivity: {
               events: {
                 onClick: {
-                  enable: true,
+                  enable: false,
                   mode: "push",
                 },
                 onHover: {
@@ -173,7 +173,7 @@ function Homepage() {
           m="40px 0 15px 0"
           borderRadius="lg"
           borderWidth="1px"
-          background="blackAlpha.400"
+          background="blackAlpha.800"
         >
           <Image
             src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717058118/icons8-messages_vvzafy.gif"
@@ -230,7 +230,7 @@ function Homepage() {
         <Box
           display="flex"
           width="100vw"
-          background="blackAlpha.600"
+          background="blackAlpha.800"
           color={"white"}
           marginTop={2}
           p={2}
