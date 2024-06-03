@@ -344,7 +344,7 @@ function Homepage() {
               p={0}
               m={0}
             >
-              <Link href="https://twitter.com/fuckmateboo" m={0} isExternal>
+              <Link href="https://twitter.com/IntiMates_Plus" m={0} isExternal>
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701357033/icons8-twitter-50_3_vz8pfu.png"
                   height={6}

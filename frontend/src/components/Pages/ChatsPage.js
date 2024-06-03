@@ -152,7 +152,7 @@ const Chatpage = () => {
               </Text>
               For more stories and inspiration, follow us on
               <Link
-                href="https://x.com/fuckmateboo/status/1795454149800128527"
+                href="https://twitter.com/IntiMates_Plus"
                 textColor={"blue.200"}
                 fontSize={"larger"}
                 fontWeight={"bold"}
