@@ -17,6 +17,7 @@ import { useState } from "react";
 import "../styles.css";
 
 import { useNavigate } from "react-router-dom";
+import PageIndicator from "../miscellanious/PageIndicator";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -166,23 +167,44 @@ const Signup = () => {
   };
 
   const options = [
-    "👫 Fun buddy",
-    "❤️ Friends-with-benefits",
-    "💼 Sponsor",
-    "😄 Fun friend",
-    "👴 Sugar daddy",
-    "👩 Sugar mammy",
-    "💖 Genuine connection",
+    "👫 Fun Buddy",
+    "❤️ Friends-with-Benefits",
+    "💼 Seeking Support",
+    "😄 Activity Partner",
+    "👴 Sugar Daddy",
+    "👩 Sugar Mommy",
+    "💖 Genuine Connection",
   ];
 
+  const getOptionDescription = (option) => {
+    switch (option) {
+      case "👫 Fun Buddy":
+        return "Enjoy exciting times and build a fun connection.";
+      case "❤️ Friends-with-Benefits":
+        return "Start with playful interactions and see where it goes.";
+      case "💼 Seeking Support":
+        return "Find someone to support and cherish you.";
+      case "😄 Activity Partner":
+        return "Join in on adventures and shared interests.";
+      case "👴 Sugar Daddy":
+        return "Connect with someone who appreciates and supports you.";
+      case "👩 Sugar Mommy":
+        return "Build a relationship with someone who can offer guidance.";
+      case "💖 Genuine Connection":
+        return "Create a deep and meaningful relationship after fun times.";
+      default:
+        return "";
+    }
+  };
+
   const gradients = [
-    "linear(to-r, gray.300, white.400, pink.200)",
-    "linear(to-r, red.200, white.500, blue.300)",
-    "linear(to-r, teal.300, green.400, blue.200)",
-    "linear(to-r, purple.300, blue.400, green.200)",
-    "linear(to-r, orange.300, red.400, white.200)",
+    "linear(to-l, #792800, #FF0000, white)",
+    "linear(to-r, white, green.400, teal.200)",
+    "linear(to-r, teal.300, blue.400, green.200)",
+    "linear(to-r, purple.300, blue.400, teal.200)",
+    "linear(to-r, orange.300, red.400, white)",
     "linear(to-r, pink.300, purple.400, blue.200)",
-    "linear(to-r, white.300, green.400, teal.200)",
+    "linear(to-r, white, green.400, teal.200)",
   ];
 
   return (
@@ -224,14 +246,13 @@ const Signup = () => {
             >
               <>Welcome to</>{" "}
               <Text fontWeight={"extrabold"} textColor={"red"} pl={"2"}>
-                IntiMates
+                IntiMates+
               </Text>
               !
             </Box>{" "}
-            <Text textColor="white" mb={4}>
-              Meet your charming other among thousands seeking lasting
-              connections. Did you know 25% of FWBs turn into long-term
-              relationships? Grow with us!
+            <Text textColor="white" mb={4} textAlign={"center"}>
+              Ready for fun and deeper connections? Find real intimacy and
+              lasting relationships with IntiMates+.
             </Text>
             <FormControl id="first-name" isRequired>
               <FormLabel textColor={"white"}>Name</FormLabel>
@@ -432,27 +453,51 @@ const Signup = () => {
               border={"5px solid red"}
               borderRadius={"full"}
             />
-            <Text textColor="white" mb={4} textAlign={"center"}>
-              What are you looking for?
+
+            <Text
+              textColor="white"
+              mb={4}
+              textAlign={"center"}
+              fontSize={"larger"}
+              fontWeight={"bold"}
+            >
+              How would you like to start building your connection?
             </Text>
-            <Box textAlign="center">
+
+            <Box textAlign="center" mb={4}>
               {options.map((option, index) => (
-                <Button
-                  key={option}
-                  m={0.5}
-                  bgGradient={gradients[index]}
-                  onClick={() => setLooking(option)}
-                  borderRadius={20}
-                  style={{
-                    filter:
-                      looking && looking !== option ? "blur(4px)" : "none",
-                    transition: "filter 0.3s ease",
-                  }}
-                >
-                  {option}
-                </Button>
+                <>
+                  {" "}
+                  <Button
+                    key={option}
+                    m={0.5}
+                    bgGradient={gradients[index]}
+                    onClick={() => setLooking(option)}
+                    borderRadius={20}
+                    mt={2}
+                    style={{
+                      filter:
+                        looking && looking !== option ? "blur(4px)" : "none",
+                      transition: "filter 0.3s ease",
+                    }}
+                  >
+                    {option}
+                  </Button>
+                  <Text
+                    bgGradient={gradients[index]}
+                    bgClip={"text"}
+                    style={{
+                      filter:
+                        looking && looking !== option ? "blur(4px)" : "none",
+                      transition: "filter 0.3s ease",
+                    }}
+                  >
+                    {getOptionDescription(option)}
+                  </Text>
+                </>
               ))}
-            </Box>{" "}
+            </Box>
+
             <FormControl id="description" Box textColor={"white"} isRequired>
               <FormLabel>Add a short description</FormLabel>
               <Textarea
@@ -541,7 +586,7 @@ const Signup = () => {
             onClick={() => submitHandler()}
             isLoading={picLoading}
           >
-            Sign Up
+            Join Now!
           </Button>
         )}
       </Box>
@@ -570,6 +615,12 @@ const Signup = () => {
           </Button>
         )}
       </Box>
+      <PageIndicator
+        totalPages={6}
+        currentPage={step - 1}
+        handleDotClick={handleNextClick}
+        setStep={true}
+      />
     </VStack>
   );
 };

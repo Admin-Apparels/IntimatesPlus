@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles.css";
 
-function PageIndicator({ totalPages, currentPage, handleDotClick }) {
+function PageIndicator({ totalPages, currentPage, handleDotClick, setStep }) {
   const dots = [];
 
   for (let i = 0; i < totalPages; i++) {
@@ -9,7 +9,11 @@ function PageIndicator({ totalPages, currentPage, handleDotClick }) {
       <span
         key={i}
         className={i === currentPage ? "dot active" : "dot"}
-        onClick={() => handleDotClick(i)}
+        onClick={() => {
+          if (!setStep) {
+            handleDotClick(i);
+          }
+        }}
       ></span>
     );
   }

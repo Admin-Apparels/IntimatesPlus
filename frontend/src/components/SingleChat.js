@@ -597,6 +597,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 totalPages={quotes.length}
                 currentPage={quoteIndex}
                 handleDotClick={handleDotClick}
+                setStep={false}
               />
               {quoteIndex === 5 ? (
                 <Checkbox

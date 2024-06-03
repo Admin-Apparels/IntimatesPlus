@@ -259,10 +259,10 @@ function Homepage() {
                 userSelect={"none"}
                 fontSize={"small"}
               >
-                IntiMates is a realm where connections evolve beyond fleeting
-                moments. Once a mutual spark is ignited, both accounts shall
-                transcend to new heights. Deactivation becomes a symphony of
-                shared passion, a crescendo of genuine connection.
+                IntiMates+ is where intimacy meets your perfect match. When a
+                mutual spark ignites, both accounts transcend to new heights.
+                Find someone who shares your passions and desires, turning
+                fleeting moments into lasting connections.
               </Text>
               <Text
                 display="flex"
@@ -311,7 +311,7 @@ function Homepage() {
                 textColor={"red.500"}
                 textAlign={"center"}
               >
-                IntiMates
+                IntiMates+
               </Text>
               <Text
                 textAlign={"center"}
@@ -319,11 +319,11 @@ function Homepage() {
                 fontFamily={"mono"}
                 fontSize={"small"}
               >
-                Welcome, meet your Intimate, Friend-With-Benefit, Sponser,
-                Suggar Daddy or Sugar Mammy here, where connection transcends
-                self-pleasure! Discover meaningful connections on our premier
-                dating platform. We bring together individuals seeking
-                companionship, romance, and genuine connections.
+                Welcome! We all connect here. Say goodbye to fleeting comfort
+                and discover meaningful connections. Meet your Intimate,
+                Friend-With-Benefits, Sponsor, Sugar Daddy, or Sugar Mommy. Join
+                our premier dating platform where companionship, romance, and
+                genuine connections await.
               </Text>
               <Text color="blue.100" display={"flex"} fontSize={"small"}>
                 {" "}

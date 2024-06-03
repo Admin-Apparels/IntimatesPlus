@@ -2,7 +2,7 @@ import { Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 const AnimatedTyping = () => {
-  const [textToType] = useState("IntiMates"); // Update to an array of words
+  const [textToType] = useState("IntiMates+"); // Update to an array of words
   const [displayedText, setDisplayedText] = useState("");
   const [textLength, setTextLength] = useState(0);
 
