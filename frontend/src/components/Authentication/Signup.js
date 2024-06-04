@@ -171,8 +171,6 @@ const Signup = () => {
     "❤️ Friends-with-Benefits",
     "💼 Seeking Support",
     "😄 Activity Partner",
-    "👴 Sugar Daddy",
-    "👩 Sugar Mommy",
     "💖 Genuine Connection",
   ];
 
@@ -186,10 +184,6 @@ const Signup = () => {
         return "Find someone to support and cherish you.";
       case "😄 Activity Partner":
         return "Join in on adventures and shared interests.";
-      case "👴 Sugar Daddy":
-        return "Connect with someone who appreciates and supports you.";
-      case "👩 Sugar Mommy":
-        return "Build a relationship with someone who can offer guidance.";
       case "💖 Genuine Connection":
         return "Create a deep and meaningful relationship after fun times.";
       default:
@@ -198,13 +192,11 @@ const Signup = () => {
   };
 
   const gradients = [
-    "linear(to-l, #792800, #FF0000, white)",
     "linear(to-r, white, green.400, teal.200)",
     "linear(to-r, teal.300, blue.400, green.200)",
     "linear(to-r, purple.300, blue.400, teal.200)",
     "linear(to-r, orange.300, red.400, white)",
     "linear(to-r, pink.300, purple.400, blue.200)",
-    "linear(to-r, white, green.400, teal.200)",
   ];
 
   return (

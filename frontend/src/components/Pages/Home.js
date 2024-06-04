@@ -259,10 +259,10 @@ function Homepage() {
                 userSelect={"none"}
                 fontSize={"small"}
               >
-                IntiMates+ is where intimacy meets your perfect match. When a
-                mutual spark ignites, both accounts transcend to new heights.
-                Find someone who shares your passions and desires, turning
-                fleeting moments into lasting connections.
+                IntiMates+ helps reduce feelings of loneliness, depression, and
+                anxiety, ultimately improving users' mental health and overall
+                well-being. Find someone who shares your passions and desires,
+                turning fleeting moments into lasting connections.
               </Text>
               <Text
                 display="flex"
@@ -321,9 +321,9 @@ function Homepage() {
               >
                 Welcome! We all connect here. Say goodbye to fleeting comfort
                 and discover meaningful connections. Meet your Intimate,
-                Friend-With-Benefits, Sponsor, Sugar Daddy, or Sugar Mommy. Join
-                our premier dating platform where companionship, romance, and
-                genuine connections await.
+                Friend-With-Benefits, Sponsor, ect. Join our premier dating
+                platform where companionship, romance, and genuine connections
+                await.
               </Text>
               <Text color="blue.100" display={"flex"} fontSize={"small"}>
                 {" "}
