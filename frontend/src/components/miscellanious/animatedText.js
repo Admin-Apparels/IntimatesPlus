@@ -1,63 +1,36 @@
-import { Input } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import React from "react";
+import Typewriter from "typewriter-effect";
+import styled from "styled-components";
 
-const AnimatedTyping = () => {
-  const [textToType] = useState("IntiMates+"); // Update to an array of words
-  const [displayedText, setDisplayedText] = useState("");
-  const [textLength, setTextLength] = useState(0);
+const ColoredTypewriter = styled.div`
+  .Typewriter__wrapper {
+    fontSize: 20px;
+    color: #ff69b4; /* Change this to your desired color */
+  }
+  .Typewriter__cursor {
+    color: #fff; /* Change this to your desired color */
+  }
+`;
 
-  useEffect(() => {
-    let index = 0;
-
-    const typingIntervalId = setInterval(() => {
-      const nextChar = textToType[index];
-      index += 1;
-
-      if (nextChar !== undefined) {
-        setDisplayedText((prevText) => prevText + nextChar);
-        setTextLength((prevLength) => prevLength + 1);
-      } else {
-        setTimeout(() => {
-          const clearIntervalId = setInterval(() => {
-            setDisplayedText((prevText) => prevText.slice(0, -1));
-            setTextLength((prevLength) => Math.max(prevLength - 1, 0));
-          }, 100);
-
-          setTimeout(() => {
-            clearInterval(clearIntervalId);
-            setDisplayedText(""); // Clear the text
-            setTextLength(0);
-            index = 0; // Reset index for the next cycle
-          }, 3000);
-        }, 1000);
-      }
-    }, 100);
-
-    return () => clearInterval(typingIntervalId);
-  }, [textToType]);
-
+function Type() {
   return (
-    <>
-      {displayedText.length > 1 ? (
-        <Input
-          value={displayedText}
-          width={`${textLength}ch`}
-          display="flex"
-          textAlign="center"
-          fontSize="3xl"
-          userSelect="none"
-          fontWeight="bold"
-          textColor="red"
-          border="none"
-          padding="5px"
-          background="transparent"
-          textShadow="1px 1px 2px orange"
-        />
-      ) : (
-        ""
-      )}
-    </>
+    <ColoredTypewriter>
+      <Typewriter
+        options={{
+          strings: [
+            "IntiMates+ 💑",
+            "From Fleeting to Lasting 🌟",
+            "Intimacy & Connection ❤️",
+            "Top Adult Connection 🔥",
+            
+          ],
+          autoStart: true,
+          loop: true,
+          deleteSpeed: 50,
+        }}
+      />
+    </ColoredTypewriter>
   );
-};
+}
 
-export default AnimatedTyping;
+export default Type;

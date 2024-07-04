@@ -17,9 +17,10 @@ import { useNavigate } from "react-router-dom";
 import Login from "../Authentication/Login";
 import Signup from "../Authentication/Signup";
 import ErrorBoundary from "./ErrorBoundary";
-import AnimatedTyping from "../miscellanious/animatedText";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
+import { MdNoAdultContent } from "react-icons/md";
+import Type from "../miscellanious/animatedText";
 
 function Homepage() {
   const navigate = useNavigate();
@@ -53,7 +54,12 @@ function Homepage() {
         borderRadius={3}
         p={"3"}
         background="transparent"
+        position={"relative"}
       >
+      <Text position={"absolute"} width={"100%"} top={-10} left={0} transform="rotate(-25deg)" style={{ display: 'flex', alignItems: 'start', justifyContent: "start" }}>
+            <MdNoAdultContent style={{ color: 'red', fontSize: "2rem", marginRight: '8px' }} />
+            The only Adult Escape!
+        </Text>
         {" "}
         <Image
           src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717067451/IMG-20240530-WA0001_1_kluate.jpg"
@@ -167,7 +173,8 @@ function Homepage() {
         <Box
           display="flex"
           justifyContent="center"
-          p={1}
+          alignItems={"center"}
+          p={'4'}
           bg="black"
           w="100%"
           m="40px 0 15px 0"
@@ -175,21 +182,7 @@ function Homepage() {
           borderWidth="1px"
           background="blackAlpha.800"
         >
-          <Image
-            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717058118/icons8-messages_vvzafy.gif"
-            height={6}
-            mt={3}
-            userSelect={"none"}
-            borderRadius={5}
-          />
-          <AnimatedTyping />
-
-          <Image
-            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701779357/icons8-sex-64_a1hki1.png"
-            height={12}
-            userSelect={"none"}
-            borderRadius={5}
-          />
+          <Type/>
         </Box>
         <Box
           background="blackAlpha.800"
@@ -258,11 +251,9 @@ function Homepage() {
                 textAlign="center"
                 userSelect={"none"}
                 fontSize={"small"}
+                p={"4"}
               >
-                IntiMates+ helps reduce feelings of loneliness, depression, and
-                anxiety, ultimately improving users' mental health and overall
-                well-being. Find someone who shares your passions and desires,
-                turning fleeting moments into lasting connections.
+               <strong style={{color: "#F44336"}}>IntiMates+</strong> is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. By reducing isolation, depression, and anxiety, IntiMates+ aims to improve users' mental health and overall well-being. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.
               </Text>
               <Text
                 display="flex"
@@ -303,20 +294,10 @@ function Homepage() {
               m={0}
             >
               <Text
-                fontSize={{ base: "medium", md: "bold" }}
-                width={"100%"}
-                p={0}
-                m={0}
-                userSelect={"none"}
-                textColor={"red.500"}
-                textAlign={"center"}
-              >
-                IntiMates+
-              </Text>
-              <Text
                 textAlign={"center"}
                 userSelect={"none"}
                 fontFamily={"mono"}
+                p={"3"}
                 fontSize={"small"}
               >
                 Welcome! We all connect here. Say goodbye to fleeting comfort

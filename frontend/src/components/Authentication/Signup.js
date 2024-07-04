@@ -17,7 +17,10 @@ import { useState } from "react";
 import "../styles.css";
 
 import { useNavigate } from "react-router-dom";
+import { GiClover, GiLoveInjection } from "react-icons/gi";
 import PageIndicator from "../miscellanious/PageIndicator";
+import { PiGenderIntersexBold } from "react-icons/pi";
+import { FcPicture } from "react-icons/fc";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -169,7 +172,6 @@ const Signup = () => {
   const options = [
     "👫 Fun Buddy",
     "❤️ Friends-with-Benefits",
-    "💼 Seeking Support",
     "😄 Activity Partner",
     "💖 Genuine Connection",
   ];
@@ -180,8 +182,6 @@ const Signup = () => {
         return "Enjoy exciting times and build a fun connection.";
       case "❤️ Friends-with-Benefits":
         return "Start with playful interactions and see where it goes.";
-      case "💼 Seeking Support":
-        return "Find someone to support and cherish you.";
       case "😄 Activity Partner":
         return "Join in on adventures and shared interests.";
       case "💖 Genuine Connection":
@@ -220,13 +220,7 @@ const Signup = () => {
               animation: "slideInRight 0.5s forwards",
             }}
           >
-            <Image
-              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717072577/shorts2.jpg"
-              userSelect={"none"}
-              boxSize={"200px"}
-              border={"5px solid red"}
-              borderRadius={"full"}
-            />
+            <GiClover style={{fontSize:"200px", color: "#F44336"}} />
             <Box
               display={"flex"}
               justifyContent={"center"}
@@ -329,13 +323,8 @@ const Signup = () => {
               animation: "slideInRight 0.5s forwards",
             }}
           >
-            <Image
-              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717072575/shorts3.jpg"
-              userSelect={"none"}
-              boxSize={"200px"}
-              border={"5px solid red"}
-              borderRadius={"full"}
-            />
+             <GiLoveInjection  style={{fontSize:"200px", color: "#F44336"}}/>
+
             <Text textColor="white" mb={4} textAlign={"center"}>
               Secure your connection: Choose a strong password to protect your
               account.
@@ -401,13 +390,7 @@ const Signup = () => {
               animation: "slideInRight 0.5s forwards",
             }}
           >
-            <Image
-              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717072573/shorts5.jpg"
-              userSelect={"none"}
-              boxSize={"200px"}
-              border={"5px solid red"}
-              borderRadius={"full"}
-            />
+            <PiGenderIntersexBold style={{fontSize:"200px", color: "#F44336"}}/>
             <Text textColor="white" mb={4} textAlign={"center"}>
               {" "}
               Select your gender: Choose the option that best represents you.
@@ -544,13 +527,8 @@ const Signup = () => {
               animation: "slideInRight 0.5s forwards",
             }}
           >
-            <Image
-              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717072570/shorts6.jpg"
-              userSelect={"none"}
-              boxSize={"200px"}
-              border={"5px solid red"}
-              borderRadius={"full"}
-            />
+           
+            <FcPicture style={{fontSize:"200px"}}/>
             <Text textColor="white" mb={4} textAlign={"center"}>
               Upload a clear and recent photo of yourself for better matching
               results.

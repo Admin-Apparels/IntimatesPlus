@@ -19,9 +19,6 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import GoogleLoginButton from "./Google";
 import { ChatState } from "../Context/ChatProvider";
 
 const Login = () => {
@@ -160,9 +157,6 @@ const Login = () => {
       >
         Login
       </Button>
-      <GoogleOAuthProvider clientId="836402802539-eqr9obfujd1q8heagf9luptlmcid62ss.apps.googleusercontent.com">
-        <GoogleLoginButton />
-      </GoogleOAuthProvider>
       <Link
         textColor={"white"}
         onClick={() => {
