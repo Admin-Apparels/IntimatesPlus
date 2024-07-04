@@ -30,9 +30,10 @@ const Loading = () => {
       height="100vh"
       backgroundColor="gray.50"
       px={4}
+      width={"100%"}
     >
       <Text mb={4} fontSize="lg" color="gray.700">
-        Loading, please wait...
+        Loading to <strong style={{color: "#F44336"}}>IntiMates+</strong>, please wait...
       </Text>
       <Progress width="80%" value={progress} size="lg" colorScheme="blue" />
       <Text mt={2} fontSize="md" color="gray.600">
