@@ -34,13 +34,6 @@ const Ads = () => {
 
   const [count, setCount] = useState(10);
   const [watchedAd, setWatchedAd] = useState(true);
-  const OverlayOne = () => (
-    <ModalOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
-    />
-  );
-  const overlay = React.useState(<OverlayOne />);
 
   const [clicked, setClicked] = useState(false);
   const toast = useToast();
@@ -153,9 +146,11 @@ const Ads = () => {
 
   return (
     <>
-      <Modal size="lg" isOpen={isOpen} isCentered closeOnOverlayClick={false}>
-        {overlay}
-
+    <Modal size="lg" isOpen={isOpen} isCentered closeOnOverlayClick={false}>
+      <ModalOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(10px) hue-rotate(90deg)"
+      />
         <ModalContent width={"calc(100% - 20px)"} p={1}>
           <ModalHeader
             fontSize="40px"

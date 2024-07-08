@@ -28,13 +28,6 @@ const Chatpage = () => {
   const { user, setUser, selectedChat } = ChatState();
   const [hasNewNotification, setHasNewNotification] = useState(true);
   const { onClose, isOpen, onOpen } = useDisclosure();
-  const OverlayOne = () => (
-    <ModalOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
-    />
-  );
-  const overlay = React.useState(<OverlayOne />);
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);
@@ -75,7 +68,10 @@ const Chatpage = () => {
             parseInt(new Date().getTime()) >
               parseInt(user.adsSubscription)) && <Ads />}
         <Modal size="lg" onClose={onClose} isOpen={isOpen} onOpen={onOpen}>
-          {overlay}
+        <ModalOverlay
+          bg="blackAlpha.300"
+          backdropFilter="blur(10px) hue-rotate(90deg)"
+          />
           <ModalContent
             display={"flex"}
             flexDir={"column"}

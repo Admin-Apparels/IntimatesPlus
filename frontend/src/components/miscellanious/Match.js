@@ -115,16 +115,6 @@ const MatchModal = () => {
     }
   };
   const currentUser = users[currentIndex];
-  const OverlayTwo = () => (
-    <ModalOverlay
-      bg="none"
-      backdropFilter="auto"
-      backdropInvert="80%"
-      backdropBlur="2px"
-    />
-  );
-
-  const overlay = React.useState(<OverlayTwo />);
 
   return (
     <>
@@ -168,8 +158,12 @@ const MatchModal = () => {
       >
         {currentUser && (
           <>
-            {" "}
-            {overlay}
+            <ModalOverlay
+             bg="none"
+             backdropFilter="auto"
+             backdropInvert="80%"
+             backdropBlur="2px"
+             />
             <ModalContent position="relative">
               <ModalCloseButton zIndex="2" color={"white"} />
               <ModalHeader

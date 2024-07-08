@@ -15,16 +15,13 @@ import {
 const Notifier = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
-  const OverlayOne = () => (
-    <ModalOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
-    />
-  );
-  const overlay = React.useState(<OverlayOne />);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      {overlay}
+      <ModalOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(10px) hue-rotate(90deg)"
+      />
       <ModalContent>
         <ModalHeader
           background={"red.500"}

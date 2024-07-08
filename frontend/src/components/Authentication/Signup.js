@@ -21,6 +21,7 @@ import { GiClover, GiLoveInjection } from "react-icons/gi";
 import PageIndicator from "../miscellanious/PageIndicator";
 import { PiGenderIntersexBold } from "react-icons/pi";
 import { FcPicture } from "react-icons/fc";
+import { MdNoAdultContent } from "react-icons/md";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -209,7 +210,12 @@ const Signup = () => {
         justifyContent={"center"}
         width={"100%"}
         pt={0}
+        position={"relative"}
       >
+        <Text position={"absolute"} fontSize={"small"} width={"100%"} top={'-16%'} left={0} transform="rotate(-25deg)" style={{ alignItems: 'start', justifyContent: "start" }} textColor={"whitesmoke"}>
+            <MdNoAdultContent style={{ color: 'red', fontSize: "2rem", marginRight: '8px' }} />
+            The only Adult Escape!
+        </Text>
         {step === 1 && (
           <Box
             display={"flex"}
@@ -238,7 +244,7 @@ const Signup = () => {
             </Box>{" "}
             <Text textColor="white" mb={4} textAlign={"center"}>
               Ready for fun and deeper connections? Find real intimacy and
-              lasting relationships with IntiMates+.
+              lasting relationships with <strong style={{color: "pink"}}>IntiMates+.</strong>
             </Text>
             <FormControl id="first-name" isRequired>
               <FormLabel textColor={"white"}>Name</FormLabel>

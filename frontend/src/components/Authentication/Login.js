@@ -158,7 +158,7 @@ const Login = () => {
         Login
       </Button>
       <Link
-        textColor={"white"}
+        textColor={"whitesmoke"}
         onClick={() => {
           onOpen();
         }}

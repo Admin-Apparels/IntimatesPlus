@@ -61,31 +61,50 @@ const registerUsers = asyncHandler(async (req, res) => {
 });
 const forgotEmail = async (req, res) => {
   const { email } = req.params;
+  let userInfo = await User.findOne({ email });
 
-  const userExists = await User.findOne({ email });
-  if (userExists) {
+  if (userInfo) {
     const verificationCode = Math.floor(
       100000 + Math.random() * 900000
     ).toString();
 
     let transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "mail.privateemail.com",
+      port: 465, // or 587 if using STARTTLS
+      secure: true, // if using SSL/TLS
       auth: {
-        user: privateEmail,
-        pass: privateEmailPass,
+        user: privateEmail, // your email address
+        pass: privateEmailPass, // your email password
       },
     });
+
     const mailOptions = {
       from: privateEmail,
       to: email,
       subject: "Recover Your Email",
-      text: `Your recovery code is:  ${verificationCode}
-    
-This is system's generated code, please do not reply.`,
+      html: `
+        <div style="background-color: #f2f2f2; padding: 20px; font-family: Arial, sans-serif;">
+          <h2 style="color: #333; "> Recover Your Email</h2>
+          <p>Hello,</p>
+          <p>You have requested to recover your email associated with our service.</p>
+          <p>Your recovery code is: <strong style="fontSize: larger; padding: 5px;">${verificationCode}</strong></p>
+          <p>If you did not request this change, please contact support immediately.</p>
+           <p><strong style="color: #F44336;">IntiMates+</strong> is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. By reducing isolation, depression, and anxiety, IntiMates+ aims to improve users' mental health and overall well-being. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.</p>
+          <p>Stay connected and follow us on social media:</p>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 10px;"><a href="https://twitter.com/IntiMates_Plus" target="_blank" style="color: #007bff; text-decoration: none;">X</a></li>
+            <li style="margin-bottom: 10px;"><a href="https://web.facebook.com/profile.php?id=61554735039262" target="_blank" style="color: #007bff; text-decoration: none;">Facebook</a></li>
+          </ul>
+          <p>IntiMates+, the only Adult Escape!</p>
+          <p>Thank you for being a part of our community.</p> 
+        </div>
+      `,
     };
+
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         res.status(400).json({ message: "Email Sending Failed" });
+        console.log(error);
       } else {
         console.log("Email sent: " + info.response);
         res.status(200).json({ verificationCode, email });
@@ -93,9 +112,10 @@ This is system's generated code, please do not reply.`,
     });
   } else {
     res.json(false);
-    throw new Error("Email not Found in the database");
+    throw new Error({ message: "Email not Found in the database" });
   }
 };
+
 const searchUser = async (req, res) => {
   const { email } = req.params;
 
@@ -391,54 +411,58 @@ const deleteImage = async (req, res) => {
       .json({ error: "An error occurred while deleting the image" });
   }
 };
+
 const authorizeUser = async (req, res) => {
-  const { email } = req.query;
+  const { userEmail } = req.params;
 
-  try {
-    // Check if the email already exists in the User schema
-    const existingUser = await User.findOne({ email });
+  const verificationCode = Math.floor(
+    100000 + Math.random() * 900000
+  ).toString();
 
-    if (existingUser) {
-      return res.status(400).json({ message: "Email is already in use" });
+  const transporter = nodemailer.createTransport({
+    host: "mail.privateemail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: privateEmail,
+      pass: privateEmailPass,
+    },
+  });
+
+  const mailOptions = {
+    from: privateEmail,
+    to: userEmail,
+    subject: "Verify Your Email",
+    html: `
+      <div style="background-color: #f2f2f2; padding: 20px; font-family: Arial, sans-serif;">
+        <h2 style="color: #333;"> Verify Your Email</h2>
+        <p>Hello,</p>
+        <p>You have requested to verify your email associated with our service.</p>
+        <p>Your recovery code is: <strong>${verificationCode}</strong></p>
+        <p>If you did not request this change, please contact support immediately.</p>
+        <p><strong style={{color: "#F44336"}}>IntiMates+</strong> is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. By reducing isolation, depression, and anxiety, IntiMates+ aims to improve users' mental health and overall well-being. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.</p>
+        <p>Stay connected and follow us on social media:</p>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin-bottom: 10px;"><a href="https://twitter.com/IntiMates_Plus" target="_blank" style="color: #007bff; text-decoration: none;">X</a></li>
+          <li style="margin-bottom: 10px;"><a href="https://web.facebook.com/profile.php?id=61554735039262" target="_blank" style="color: #007bff; text-decoration: none;">Facebook</a></li>
+        </ul>
+        <p>IntiMates+, the only Adult Escape!</p>
+        <p>Thank you for being a part of our community.</p> 
+      </div>
+    `,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      res.status(400).json({ message: "Email Sending Failed" });
+      console.log("This is the error", error);
+    } else {
+      console.log("Email sent: " + info.response);
+      res.status(200).json(verificationCode);
     }
-
-    const verificationCode = Math.floor(
-      100000 + Math.random() * 900000
-    ).toString();
-
-    const transporter = nodemailer.createTransport({
-      host: "mail.privateemail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: privateEmail,
-        pass: privateEmailPass,
-      },
-    });
-
-    const mailOptions = {
-      from: privateEmail,
-      to: email,
-      subject: "Verify Your Email",
-      text: `Your verification code is: ${verificationCode}
-      
-This is a system-generated code, please do not reply.`,
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error, "Sending email failed terribly!");
-        return res.status(400).json({ message: "Email Sending Failed" });
-      } else {
-        console.log("Email sent: " + info.response);
-        return res.status(200).json({ verificationCode });
-      }
-    });
-  } catch (error) {
-    console.error("Error authorizing user:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
-  }
+  });
 };
+
 
 const getAdsInfo = async (req, res) => {
   const acceptLanguage = req.headers["accept-language"] || "en-US";

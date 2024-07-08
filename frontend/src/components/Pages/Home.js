@@ -56,7 +56,7 @@ function Homepage() {
         background="transparent"
         position={"relative"}
       >
-      <Text position={"absolute"} width={"100%"} top={-10} left={0} transform="rotate(-25deg)" style={{ display: 'flex', alignItems: 'start', justifyContent: "start" }}>
+      <Text position={"absolute"} width={"100%"} top={'-15%'} left={0} transform="rotate(-25deg)" style={{ alignItems: 'start', justifyContent: "start" }}>
             <MdNoAdultContent style={{ color: 'red', fontSize: "2rem", marginRight: '8px' }} />
             The only Adult Escape!
         </Text>
@@ -155,7 +155,7 @@ function Homepage() {
                   enable: true,
                   area: 800,
                 },
-                value: 15,
+                value: 12,
               },
               opacity: {
                 value: 0.5,
