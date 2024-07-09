@@ -6,9 +6,8 @@ import { useCallback, useEffect, useState } from "react";
 import ChatLoading from "./ChatLoading";
 import { ChatState } from "./Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
-import { Image } from "@chakra-ui/react";
 import Notifier from "./miscellanious/Notifier";
-import { FaFlag } from "react-icons/fa";
+import { FaFireAlt, FaFlag } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
 import { PiChatsCircleThin } from "react-icons/pi";
 
@@ -23,6 +22,7 @@ const MyChat = (fetchAgain) => {
     setChats,
     notification,
     setNotification,
+    setTrend,
   } = ChatState();
 
   const toast = useToast();
@@ -97,6 +97,7 @@ const MyChat = (fetchAgain) => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setLoggedUser(userInfo);
   }, []);
+  
   useEffect(() => {
     const fetchData = async () => {
       if (loggedUser) {
@@ -219,26 +220,27 @@ const MyChat = (fetchAgain) => {
         overflowY="hidden"
         position={"relative"}
       >
-        {chats.length === 0 && (
+   
           <Box
             display={"flex"}
-            flexDirection={"column"}
             justifyContent={"center"}
             alignItems={"center"}
+            background={"blackAlpha.400"}
+            textColor={"white"}
+            borderRadius="lg"
             position={"absolute"}
             width={"96%"}
-            p={0}
-            m={0}
-            height={"76%"}
+            onClick={()=> {setTrend(true);}}
+            cursor={"pointer"}
+            p={'6'}
+            bottom={5}
             userSelect={"none"}
           >
-            <Image src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701516427/icons8-not-found-48_sfynmt.png" />
-            <Text textColor={"white"}>
-              You have no chats available, create one above
+            <FaFireAlt style={{color: "red"}}/>
+            <Text pl={"2"}>
+              What's trending
             </Text>
           </Box>
-        )}
-
         {chats && Array.isArray(chats) ? (
           <Stack overflowY="scroll">{renderChatItems()}</Stack>
         ) : (

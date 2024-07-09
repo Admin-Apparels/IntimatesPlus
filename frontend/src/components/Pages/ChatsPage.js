@@ -7,7 +7,8 @@ import ErrorBoundary from "./ErrorBoundary";
 import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 import Ads from "../miscellanious/ads";
-import { Button, Image } from "@chakra-ui/react";
+import Feed from "../miscellanious/feed";
+import { Button, Image, ModalCloseButton } from "@chakra-ui/react";
 import {
   Text,
   Link,
@@ -25,9 +26,10 @@ import {
 const Chatpage = () => {
   const navigate = useNavigate();
   const [fetchAgain, setFetchAgain] = useState(false);
-  const { user, setUser, selectedChat } = ChatState();
+  const { user, setUser, selectedChat, trend, setTrend } = ChatState();
   const [hasNewNotification, setHasNewNotification] = useState(true);
   const { onClose, isOpen, onOpen } = useDisclosure();
+
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);
@@ -48,15 +50,16 @@ const Chatpage = () => {
     };
   }, [navigate, setUser]);
 
-  const Story = `
-    Hi there, I'm Evelyn, 24 years old, and I work as an accountant. I handle all my bills, and after a deployment to a new location, I was looking to catch a good time. Frustrated with the usual online options, I recalled seeing an ad for this site on Facebook. After some Googling, here I am.
-    I've been DM'd by two charming guys, one local and another from a different state. Oh, and there's one from Kenya 😂. It's a fantastic platform where I not only find sexual relief but also encounter men with genuine intentions, invested in establishing both a physical and emotional connection.
-     It's a relief because, after spending almost an hour on Pornhub without satisfaction, I was quite frustrated. Wanted to share my story—thanks!" -anonymous`;
-
   const handleButtonClick = () => {
     onOpen();
     setHasNewNotification(false);
   };
+
+  useEffect(()=> {
+    if(trend){
+      onOpen();
+    }
+  }, [trend, onOpen]);
 
   return (
     <Box width="100%">
@@ -67,16 +70,15 @@ const Chatpage = () => {
             parseInt(new Date().getTime()) > parseInt(user.subscription)) ||
             parseInt(new Date().getTime()) >
               parseInt(user.adsSubscription)) && <Ads />}
-        <Modal size="lg" onClose={onClose} isOpen={isOpen} onOpen={onOpen}>
+        <Modal size="lg" onClose={() => {onClose(); setTrend(false)}} isOpen={isOpen} onOpen={onOpen}>
         <ModalOverlay
           bg="blackAlpha.300"
           backdropFilter="blur(10px) hue-rotate(90deg)"
           />
+          <ModalCloseButton/>
           <ModalContent
             display={"flex"}
             flexDir={"column"}
-            width={"calc(100% - 20px)"}
-            height={"75%"}
           >
             <ModalHeader
               fontSize="100%"
@@ -88,13 +90,9 @@ const Chatpage = () => {
               bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
               bgClip="text"
               userSelect={"none"}
-              zIndex={1}
+             
             >
-              Love Shared, Love Grows
-              <Text textAlign={"center"} fontSize={"small"}>
-                Share your story today!
-              </Text>
-              💬 Dec 23, 2023
+            
               <LinkBox
                 as="article"
                 maxW="sm"
@@ -115,18 +113,20 @@ const Chatpage = () => {
                   Donate
                 </LinkOverlay>
               </LinkBox>
+              <h1 style={{fontWeight: "bolder"}}>Push an engagement out there.</h1>
             </ModalHeader>
             <ModalBody
               display={"flex"}
               flexWrap={"wrap"}
-              textAlign={"center"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              width={"100%"}
               className="quote-container"
               overflowY={"auto"}
-              height={"calc(75% - 20px)"}
               top={"calc(100% - 50%)"}
               userSelect={"none"}
             >
-              {Story}
+              <Feed/>
             </ModalBody>
             <ModalFooter
               display={"flex"}

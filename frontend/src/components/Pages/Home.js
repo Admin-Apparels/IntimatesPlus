@@ -5,6 +5,8 @@ import {
   Flex,
   Image,
   Link,
+  LinkBox,
+  LinkOverlay,
   Tab,
   TabList,
   TabPanel,
@@ -306,6 +308,24 @@ function Homepage() {
                 platform where companionship, romance, and genuine connections
                 await.
               </Text>
+              <LinkBox
+                as="article"
+                maxW="sm"
+                p="1"
+                borderWidth="1px"
+                rounded="md"
+                width={"100%"}
+                background={"#FFA500"}
+                textAlign={"center"}
+              >
+                <LinkOverlay
+                  userSelect={"none"}
+                  href="https://www.paypal.com/donate/?hosted_button_id=2L8HHGURQTED2"
+                  target="blank"
+                >
+                  Donate
+                </LinkOverlay>
+              </LinkBox>
               <Text color="blue.100" display={"flex"} fontSize={"small"}>
                 {" "}
                 <Image

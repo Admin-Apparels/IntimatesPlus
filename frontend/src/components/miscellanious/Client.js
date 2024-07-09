@@ -41,14 +41,6 @@ const ClientModal = ({ children }) => {
   const [inputCode, setInputCode] = useState("");
   const [email, setEmail] = useState(user?.email);
 
-  const OverlayOne = () => (
-    <ModalOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
-    />
-  );
-  const overlay = React.useState(<OverlayOne />);
-
   const toggleFocus = () => {
     setIsFocused((prevState) => !prevState);
   };
@@ -289,7 +281,10 @@ const ClientModal = ({ children }) => {
         />
       )}
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
-        {overlay}
+      <ModalOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(10px) hue-rotate(90deg)"
+      />
         <ModalContent width={"calc(100% - 20px)"} p={1}>
           <ModalHeader
             fontSize="40px"

@@ -60,14 +60,6 @@ function SideDrawer() {
     history("/");
   };
 
-  const OverlayOne = () => (
-    <DrawerOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
-    />
-  );
-  const overlay = React.useState(<OverlayOne />);
-
   const accessChat = async (userId) => {
     const existingChat = chats.find(
       (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
@@ -199,9 +191,9 @@ function SideDrawer() {
             </MenuButton>
             <MenuList pl={{ base: 0, md: 2 }}>
               {!notification.length && "No New Messages"}
-              {notification.map((notif) => (
+              {notification.map((notif, index) => (
                 <MenuItem
-                  key={notif._id}
+                  key={index}
                   onClick={() => {
                     const isFlagged = notif.chat.flagged.includes(user?._id);
                     if (isFlagged) {
@@ -248,7 +240,10 @@ function SideDrawer() {
       </Box>
 
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
-        {overlay}
+      <DrawerOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(10px) hue-rotate(90deg)"
+     />
         <DrawerContent>
           <DrawerHeader borderBottomWidth="1px">Search Chat</DrawerHeader>
           <DrawerCloseButton />
@@ -277,7 +272,7 @@ function SideDrawer() {
                   ) ? (
                     // Render filtered chats
                     chats
-                      .filter((chat) =>
+                      .filter((chat, index) =>
                         chat.users.some(
                           (participant) =>
                             participant._id !== user._id &&
@@ -286,14 +281,14 @@ function SideDrawer() {
                               .includes(search.toLowerCase())
                         )
                       )
-                      .map((chat) => {
+                      .map((chat, index) => {
                         const otherParticipant = chat.users.find(
                           (participant) => participant._id !== user._id
                         );
 
                         return (
                           <UserListItem
-                            key={otherParticipant._id}
+                            key={index}
                             user={otherParticipant}
                             handleFunction={() =>
                               accessChat(otherParticipant._id)
@@ -346,7 +341,7 @@ function SideDrawer() {
                   )}
                 </Box>
               </>
-            ) : null}
+            ): null}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

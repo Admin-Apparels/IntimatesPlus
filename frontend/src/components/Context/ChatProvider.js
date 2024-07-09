@@ -6,6 +6,7 @@ const ChatProvider = ({ children }) => {
   const [verify, setVerify] = useState(undefined);
   const [selectedChat, setSelectedChat] = useState();
   const [user, setUser] = useState();
+  const [trend, setTrend] = useState(false);
   const [notification, setNotification] = useState([]);
   const [chats, setChats] = useState([]);
   const [onlineUsersCount, setOnlineUsersCount] = useState(0);
@@ -46,7 +47,9 @@ const ChatProvider = ({ children }) => {
         userId,
         setUserId,
         isCallStarted,
-        setIsCallStarted
+        setIsCallStarted,
+        trend,
+        setTrend,
       }}
     >
       {children}
