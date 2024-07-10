@@ -22,6 +22,7 @@ import {
   LinkBox,
   LinkOverlay,
 } from "@chakra-ui/react";
+import Poll from "../miscellanious/Poll";
 
 const Chatpage = () => {
   const navigate = useNavigate();
@@ -65,20 +66,20 @@ const Chatpage = () => {
     <Box width="100%">
       <ErrorBoundary fallback={<p>Something went wrong</p>} userSelect={"none"}>
         {user && <SideDrawer />}{" "}
-        {user &&
+        {/* {user &&
           ((user.accountType === "Gold" &&
             parseInt(new Date().getTime()) > parseInt(user.subscription)) ||
             parseInt(new Date().getTime()) >
-              parseInt(user.adsSubscription)) && <Ads />}
+              parseInt(user.adsSubscription)) && <Ads />} */}
         <Modal size="lg" onClose={() => {onClose(); setTrend(false)}} isOpen={isOpen} onOpen={onOpen}>
         <ModalOverlay
           bg="blackAlpha.300"
           backdropFilter="blur(10px) hue-rotate(90deg)"
           />
-          <ModalCloseButton/>
           <ModalContent
             display={"flex"}
-            flexDir={"column"}
+            flexDirection={"column"}
+            height={"100%"}
           >
             <ModalHeader
               fontSize="100%"
@@ -90,9 +91,7 @@ const Chatpage = () => {
               bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
               bgClip="text"
               userSelect={"none"}
-             
             >
-            
               <LinkBox
                 as="article"
                 maxW="sm"
@@ -114,6 +113,7 @@ const Chatpage = () => {
                 </LinkOverlay>
               </LinkBox>
               <h1 style={{fontWeight: "bolder"}}>Push an engagement out there.</h1>
+              <ModalCloseButton/>
             </ModalHeader>
             <ModalBody
               display={"flex"}
@@ -121,9 +121,7 @@ const Chatpage = () => {
               justifyContent={"center"}
               alignItems={"center"}
               width={"100%"}
-              className="quote-container"
               overflowY={"auto"}
-              top={"calc(100% - 50%)"}
               userSelect={"none"}
             >
               <Feed/>
@@ -172,35 +170,7 @@ const Chatpage = () => {
             <Chatbox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
           )}
           {!selectedChat && (
-            <Button
-              position="fixed"
-              bottom="7%"
-              right="7%"
-              borderRadius="50%"
-              fontSize="large"
-              boxSize={"30px"}
-              textColor="orange"
-              p={6}
-              _hover={{ backgroundColor: "red" }}
-              onClick={() => {
-                handleButtonClick();
-              }}
-            >
-              S
-              {hasNewNotification && (
-                <Box
-                  position="absolute"
-                  bottom="80%"
-                  right="80%"
-                  transform="translate(50%, 0)"
-                  background="red.500"
-                  borderRadius="50%"
-                  width="12px"
-                  height="12px"
-                  p={1}
-                ></Box>
-              )}
-            </Button>
+           <Poll/>
           )}
         </Box>
       </ErrorBoundary>

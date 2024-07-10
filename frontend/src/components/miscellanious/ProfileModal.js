@@ -98,14 +98,6 @@ const ProfileModal = ({ userInfo }) => {
   const deleted =
     selectedChat.users[0].deleted || selectedChat.users[1].deleted;
 
-  const OverlayOne = () => (
-    <ModalOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
-    />
-  );
-  const overlay = React.useState(<OverlayOne />);
-
   return (
     <>
       <IconButton
@@ -125,7 +117,10 @@ const ProfileModal = ({ userInfo }) => {
         isOpen={isOpen}
         isCentered
       >
-        {overlay}
+        <ModalOverlay
+         bg="blackAlpha.300"
+         backdropFilter="blur(10px) hue-rotate(90deg)"
+         />
         <ModalContent width={"calc(90%)"}>
           <ModalHeader
             fontSize="30px"

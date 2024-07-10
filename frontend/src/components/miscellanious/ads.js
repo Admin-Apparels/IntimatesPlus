@@ -13,6 +13,7 @@ import {
   Image,
   useToast,
   useColorModeValue,
+  Box,
 } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 import {
@@ -318,7 +319,7 @@ const Ads = () => {
               borderRight={"1px"}
               borderLeft={"1px"}
             >
-              <Text
+              <Box
                 display={"flex"}
                 flexDirection={"column"}
                 justifyContent={"center"}
@@ -334,7 +335,7 @@ const Ads = () => {
                 >
                   {message}
                 </Text>
-              </Text>
+              </Box>
             </Button>
 
             <Button

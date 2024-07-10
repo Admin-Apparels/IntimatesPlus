@@ -5,6 +5,7 @@ const userRoutes = require("./routes/userRouter");
 const chatRoutes = require("./routes/chatRouter");
 const messageRoutes = require("./routes/messageRouter");
 const payRoutes = require("./routes/payRouter");
+const voteRouter = require("./routes/voteRouter");
 const postsRoutes = require("./routes/postRouter");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const path = require("path");
@@ -31,6 +32,8 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/paycheck", payRoutes);
 app.use("/api/posts", postsRoutes)
+app.use("/api/poll", voteRouter);
+
 const __dirname1 = path.resolve();
 
 //Render folder structure

@@ -228,8 +228,11 @@ const MyChat = (fetchAgain) => {
             background={"blackAlpha.400"}
             textColor={"white"}
             borderRadius="lg"
-            position={"absolute"}
-            width={"96%"}
+            position={"sticky"}
+            top={-2}
+            zIndex={1}
+            width={"100%"}
+            mb={2}
             onClick={()=> {setTrend(true);}}
             cursor={"pointer"}
             p={'6'}

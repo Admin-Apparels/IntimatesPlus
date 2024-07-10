@@ -10,7 +10,7 @@ const bcrypt = require("bcryptjs");
 
 const crypto = require("crypto");
 const axios = require("axios");
-const { DOMParser } = require("xmldom");
+const { DOMParser } = require('@xmldom/xmldom');
 const { onlineUsersMatch, extractLocations } = require("../config/socketUtils");
 
 dotenv.config({ path: "./secrets.env" });
