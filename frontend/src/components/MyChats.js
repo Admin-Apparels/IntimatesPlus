@@ -10,6 +10,8 @@ import Notifier from "./miscellanious/Notifier";
 import { FaFireAlt, FaFlag } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
 import { PiChatsCircleThin } from "react-icons/pi";
+import { Avatar } from "@chakra-ui/react";
+import { getSenderName, getSenderPic } from "./config/ChatLogics";
 
 const MyChat = (fetchAgain) => {
   const [loggedUser, setLoggedUser] = useState();
@@ -112,6 +114,7 @@ const MyChat = (fetchAgain) => {
   }, [fetchChats, loggedUser]);
 
   const renderChatItems = () => {
+
     return chats.map((chat) => {
       const isFlagged = chat.flagged.includes(user._id);
 
@@ -135,11 +138,18 @@ const MyChat = (fetchAgain) => {
           py={2}
           borderRadius="lg"
           position="relative"
-        >
-          <Text display="flex" textAlign="center">
-            {chat.senderName} {chat.chatName === "Admin" && <MdVerified />}
-          </Text>
-          {chat.latestMessage && chat.latestMessage.sender && (
+          p={"4"}
+        > 
+        <Box display={"flex"}>
+          <Avatar
+           size="sm"
+          cursor="pointer"
+          name={getSenderName(user, chat.users)}
+          src={getSenderPic(user, chat.users)}
+         />
+         <Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"start"}>
+            <Text display="flex">{chat.senderName} {chat.chatName === "Admin" && <MdVerified />}</Text>
+         {chat.latestMessage && chat.latestMessage.sender && (
             <Text fontSize="xs">
               <b>
                 {chat.latestMessage.sender.name === user.name
@@ -148,10 +158,14 @@ const MyChat = (fetchAgain) => {
                 {":"}{" "}
               </b>
               {chat.latestMessage.content.length > 50
-                ? chat.latestMessage.content.substring(0, 51) + "..."
+                ? chat.latestMessage.content.substring(0, 20) + "..."
                 : chat.latestMessage.content}
             </Text>
           )}
+          </Box>
+         </Box>
+        
+          
           {isFlagged && (
             <FaFlag
               style={{
@@ -178,7 +192,7 @@ const MyChat = (fetchAgain) => {
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
-      height={{base: "100%", md: "97%"}}
+      
     >
       {modal && <Notifier isOpen={modal} onClose={() => setModal(false)} />}
       <Box
@@ -230,7 +244,6 @@ const MyChat = (fetchAgain) => {
             borderRadius="lg"
             position={"sticky"}
             top={-2}
-            zIndex={1}
             width={"100%"}
             mb={2}
             onClick={()=> {setTrend(true);}}

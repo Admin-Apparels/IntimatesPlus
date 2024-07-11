@@ -160,7 +160,7 @@ function SideDrawer() {
               px={4}
               userSelect={"none"}
             >
-              Search Chat
+              Search User
             </Text>
           </Button>
         </Tooltip>
@@ -245,7 +245,7 @@ function SideDrawer() {
       backdropFilter="blur(10px) hue-rotate(90deg)"
      />
         <DrawerContent>
-          <DrawerHeader borderBottomWidth="1px">Search Chat</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">Search User</DrawerHeader>
           <DrawerCloseButton />
           <DrawerBody>
             {loadingChat && <Spinner ml="auto" display="flex" />}

@@ -8,7 +8,7 @@ import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 import Ads from "../miscellanious/ads";
 import Feed from "../miscellanious/feed";
-import { Button, Image, ModalCloseButton } from "@chakra-ui/react";
+import {Image, ModalCloseButton } from "@chakra-ui/react";
 import {
   Text,
   Link,
@@ -23,12 +23,12 @@ import {
   LinkOverlay,
 } from "@chakra-ui/react";
 import Poll from "../miscellanious/Poll";
+import Footer from "../miscellanious/footer";
 
 const Chatpage = () => {
   const navigate = useNavigate();
   const [fetchAgain, setFetchAgain] = useState(false);
   const { user, setUser, selectedChat, trend, setTrend } = ChatState();
-  const [hasNewNotification, setHasNewNotification] = useState(true);
   const { onClose, isOpen, onOpen } = useDisclosure();
 
   useEffect(() => {
@@ -51,11 +51,6 @@ const Chatpage = () => {
     };
   }, [navigate, setUser]);
 
-  const handleButtonClick = () => {
-    onOpen();
-    setHasNewNotification(false);
-  };
-
   useEffect(()=> {
     if(trend){
       onOpen();
@@ -63,14 +58,14 @@ const Chatpage = () => {
   }, [trend, onOpen]);
 
   return (
-    <Box width="100%">
+    <Box width="100%" display={"flex"} flexDir={"column"} height={"100vh"} background={"whitesmoke"}>
       <ErrorBoundary fallback={<p>Something went wrong</p>} userSelect={"none"}>
         {user && <SideDrawer />}{" "}
-        {/* {user &&
+        {user &&
           ((user.accountType === "Gold" &&
             parseInt(new Date().getTime()) > parseInt(user.subscription)) ||
             parseInt(new Date().getTime()) >
-              parseInt(user.adsSubscription)) && <Ads />} */}
+              parseInt(user.adsSubscription)) && <Ads />}
         <Modal size="lg" onClose={() => {onClose(); setTrend(false)}} isOpen={isOpen} onOpen={onOpen}>
         <ModalOverlay
           bg="blackAlpha.300"
@@ -173,6 +168,7 @@ const Chatpage = () => {
            <Poll/>
           )}
         </Box>
+        {user && <Footer/>}
       </ErrorBoundary>
     </Box>
   );
