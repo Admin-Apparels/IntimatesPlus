@@ -178,7 +178,7 @@ const MyChat = (fetchAgain) => {
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
-      height={"100%"}
+      height={{base: "100%", md: "97%"}}
     >
       {modal && <Notifier isOpen={modal} onClose={() => setModal(false)} />}
       <Box
@@ -215,7 +215,7 @@ const MyChat = (fetchAgain) => {
         p={3}
         bg="blackAlpha.400"
         w="100%"
-        h="100%"
+        height={{base: "100%", md: "97%"}}
         borderRadius="lg"
         overflowY="hidden"
         position={"relative"}

@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Loading from "./components/userAvatar/loading";
 
@@ -12,8 +12,27 @@ const ForgotPassword = React.lazy(() => import("./components/Pages/ForgotPasswor
 const VideoCall = React.lazy(() => import("./components/videoCall"));
 
 function App() {
+  const [availableHeight, setAvailableHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+
+    const updateHeight = () => {
+      const height = window.innerHeight;
+      setAvailableHeight(height);
+    };
+
+    window.addEventListener('resize', updateHeight);
+
+    // Initial height calculation
+    updateHeight();
+
+    return () => {
+      window.removeEventListener('resize', updateHeight);
+    };
+  }, []);
+
   return (
-    <div className="App">
+    <div className="App" style={{ height: `${availableHeight}px`, }}>
       <Suspense fallback={<Loading />}>
         <Routes>
           <Route path="/" Component={Home} />

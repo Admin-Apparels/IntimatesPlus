@@ -55,13 +55,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [sending, setSending] = useState(false);
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
-  const OverlayOne = () => (
-    <ModalOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
-    />
-  );
-  const overlay = React.useState(<OverlayOne />);
 
   const toast = useToast();
 
@@ -547,7 +540,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           isCentered
           closeOnOverlayClick={false}
         >
-          {overlay}
+          <ModalOverlay
+           bg="blackAlpha.300"
+           backdropFilter="blur(10px) hue-rotate(90deg)"
+           />
           <ModalContent width={"calc(100% - 20px)"}>
             <ModalHeader
               fontSize="100%"
@@ -655,7 +651,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             alignItems="center"
           >
             <IconButton
-              display={{ base: "flex", md: "none" }}
+              display="flex"
               icon={<ArrowBackIcon />}
               onClick={() => setSelectedChat("")}
             />

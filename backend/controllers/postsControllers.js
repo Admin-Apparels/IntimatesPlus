@@ -12,12 +12,14 @@ const postComment = async (req, res) => {
     await post.save();
 
     // Populate the author and comments' author fields
-    await post.populate('author', 'name pic')
-              .populate('comments.author', 'name pic')
-              .execPopulate();
+    await post.populate([
+      { path: 'author', select: 'name pic' },
+      { path: 'comments.author', select: 'name pic' }
+    ]);
 
     res.status(200).json(post);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
@@ -25,21 +27,23 @@ const postComment = async (req, res) => {
 const createPost = async (req, res) => {
   const { content, author } = req.body;
   try {
-    const post = new Post({
+    let post = new Post({
       content,
       author,
       comments: []
     });
-    await post.save();
+    post = await post.save();
 
     // Populate the author field
-    await post.populate('author', 'name pic').execPopulate();
+    post = await post.populate('author', 'name pic');
 
     res.status(201).json(post);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
 
 const getPosts = async (req, res) => {
   try {
@@ -49,6 +53,7 @@ const getPosts = async (req, res) => {
       .sort({ createdAt: -1 });
     res.status(200).json(posts);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };

@@ -98,9 +98,9 @@ const Chatpage = () => {
                 p="3"
                 borderWidth="1px"
                 rounded="md"
-                position="fixed"
-                top="2%"
-                right="2%"
+                position="absolute"
+                top="-50%"
+                right="0"
                 textColor={"white"}
                 background={"#FFA500"}
               >
@@ -112,7 +112,7 @@ const Chatpage = () => {
                   Donate
                 </LinkOverlay>
               </LinkBox>
-              <h1 style={{fontWeight: "bolder"}}>Push an engagement out there.</h1>
+              <h1 style={{fontWeight: "bolder"}}>From Fleeting to Lasting Forum</h1>
               <ModalCloseButton/>
             </ModalHeader>
             <ModalBody

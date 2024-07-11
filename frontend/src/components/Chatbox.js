@@ -15,7 +15,7 @@ const Chatbox = ({ fetchAgain, setFetchAgain }) => {
       bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
       bgClip="border-box"
       width={{ base: "100%", md: "68%" }}
-      height={"100%"}
+      height={{base: "100%", md: "97%"}}
       borderRadius="lg"
       borderWidth="1px"
     >

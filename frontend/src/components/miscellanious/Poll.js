@@ -2,17 +2,17 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { CiCircleQuestion } from "react-icons/ci";
 import axios from 'axios';
 import {
-    Box, Text, Stack, Spinner,
+    Box, Text, Stack,
     Modal,
     ModalOverlay,
     ModalContent,
-    ModalHeader,
     ModalFooter,
     ModalBody,
     ModalCloseButton,
     Button,
     useDisclosure,
   } from '@chakra-ui/react'
+import ChatLoading from '../ChatLoading';
 
 export default function Poll() {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -20,14 +20,18 @@ export default function Poll() {
     const [selectedOption, setSelectedOption] = useState(null);
     const [votes, setVotes] = useState([]);
     const [totalVotes, setTotalVotes] = useState(0);
+    const [fetching, setFetching] = useState(false);
   
     const fetchPoll = useCallback(async () => {
+      setFetching(true);
       try {
         const response = await axios.get('/api/poll');
         setPoll(response.data);
         setVotes(response.data.options.map(option => option.votes));
         setTotalVotes(response.data.options.reduce((acc, option) => acc + option.votes, 0));
+        setFetching(false);
       } catch (error) {
+        setFetching(false);
         console.log(error);
       }
     }, []);
@@ -61,8 +65,6 @@ export default function Poll() {
       return ((votes[index] / totalVotes) * 100).toFixed(1);
     };
   
-    if (!poll) return <Text textAlign={"center"} p={"6"}>Loading poll...<Spinner size={"sm"}/></Text>;
-  
     return (
       <>
         <Button
@@ -82,18 +84,19 @@ export default function Poll() {
           bg="blackAlpha.300"
           backdropFilter="blur(10px) hue-rotate(90deg)"
           />
-          <ModalContent  backgroundColor="#934cce5e" textColor={"white"}>
+          <ModalContent>
             <ModalCloseButton />
             <ModalBody
-            p={4} width={"100%"} boxShadow="base"
-            borderColor="#934cce5e" borderRadius={20}>
+            p={4} width={"100%"}
+            borderColor="#934cce5e">
             <CiCircleQuestion fontSize={"50px"} />
             <Text textAlign={"center"} fontWeight={"extrabold"}>2024 POLL</Text>
-            <Text fontSize="large"  p={4} mb={'2'} textAlign="center">{poll.question}</Text>
+            {fetching ? <ChatLoading/> : <>
+             <Text fontSize="large"  p={4} mb={'2'} textAlign="center">{poll?.question}</Text>
             <Stack  display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}>
-        {poll.options.map((opt, index) => (
+        {poll?.options.map((opt, index) => (
           <Box
             display={"flex"}
             width={"100%"}
@@ -105,7 +108,7 @@ export default function Poll() {
             position="relative"
             bg="gray.300"
           >
-            <Text width={"100%"} textAlign={"start"} fontSize="lg" fontWeight="bold" textColor={"white"}>
+            <Text width={"100%"} textAlign={"start"} fontSize="sm" fontWeight="bold">
               {opt.option}
             </Text>
             {selectedOption !== null && (
@@ -113,6 +116,8 @@ export default function Poll() {
                 position="absolute"
                 top="0"
                 left="0"
+                p={0}
+                m={0}
                 height="100%"
                 width={`${calculatePercentage(index)}%`}
                 bg="blackAlpha.400"
@@ -120,13 +125,14 @@ export default function Poll() {
               />
             )}
             {selectedOption !== null && (
-              <Text width={"100%"} textAlign={"end"} fontSize="sm" m={0} p={0}>
+              <Text width={"10%"} textAlign={"end"} fontSize="sm" m={0} p={0}>
                 {calculatePercentage(index)}%
               </Text>
             )}
           </Box>
         ))}
       </Stack>
+      </>}
             </ModalBody>
             <ModalFooter>
             </ModalFooter>

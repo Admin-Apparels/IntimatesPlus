@@ -16,6 +16,7 @@ dotenv.config({ path: "./secrets.env" });
 connectDB();
 const app = express();
 
+app.set('trust proxy', 1);
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
