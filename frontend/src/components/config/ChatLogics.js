@@ -37,6 +37,15 @@ export const formatMessageTime = (timestamp) => {
   }
 };
 
+export const checkChatCount = (chats) => {
+  const last24Hours = Date.now() - 24 * 60 * 60 * 1000;
+  const recentChats = chats?.filter(
+    (chat) => new Date(chat.createdAt).getTime() >= last24Hours
+  );
+  return recentChats.length;
+};
+
+
 export const isSameSenderMargin = (messages, m, i, userId) => {
   if (
     i < messages.length - 1 &&

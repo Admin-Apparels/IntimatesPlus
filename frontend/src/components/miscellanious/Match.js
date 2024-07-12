@@ -18,7 +18,7 @@ import {
 import { ChatState } from "../Context/ChatProvider";
 import React, { useState } from "react";
 import axios from "axios";
-import { handleCreateChat } from "../config/ChatLogics";
+import { checkChatCount, handleCreateChat } from "../config/ChatLogics";
 import { MdOutlineVerified } from "react-icons/md";
 import { VscUnverified } from "react-icons/vsc";
 import { HiStatusOnline } from "react-icons/hi";
@@ -41,6 +41,10 @@ const MatchModal = () => {
   const toast = useToast();
 
   const accessChat = async (userId) => {
+    if(!user || chats || userId){
+      return;
+    };
+
     const existingChat = chats.find(
       (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
     );
@@ -48,6 +52,20 @@ const MatchModal = () => {
     if (existingChat) {
       setSelectedChat(existingChat);
       onClose();
+      return;
+    }
+    const chatCount = checkChatCount(chats);
+    const currentTime = Date.now();
+
+    if (user.subscription < currentTime && chatCount >= 1) {
+      toast({
+        title: "Maximum number of chats reached",
+        description: "You have reached the maximum number of chats for free users in the last 24 hours.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
       return;
     }
 

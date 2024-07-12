@@ -32,6 +32,7 @@ import {
   makePaymentMpesa,
   useConnectSocket,
 } from "../config/ChatLogics";
+import { MdNewReleases } from "react-icons/md";
 
 export default function Paycheck() {
   const toast = useToast();
@@ -254,7 +255,7 @@ export default function Paycheck() {
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"3xl"}>$</Text>
             <Text fontSize={"6xl"} fontWeight={800}>
-              2.99
+              5.99
             </Text>
             <Text color={"gray.500"}>/week</Text>
           </Stack>
@@ -269,6 +270,10 @@ export default function Paycheck() {
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
               Unflag all chats
+            </ListItem>
+            <ListItem>
+              <ListIcon as={CheckIcon} color="green.400" />
+              Unlimited chats
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
@@ -376,7 +381,7 @@ export default function Paycheck() {
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"3xl"}>$</Text>
             <Text fontSize={"6xl"} fontWeight={800}>
-              10
+              20
             </Text>
             <Text color={"gray.500"}>/month</Text>
           </Stack>
@@ -394,11 +399,15 @@ export default function Paycheck() {
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
-              Chat without flags
+              Unlimited chats
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />
-              Video and Voice Calls
+              Chat without flags
+            </ListItem>
+            <ListItem display={"flex"}>
+              <ListIcon as={CheckIcon} color="green.400" />
+              Video and Voice Calls <strong style={{paddingLeft: 3}}>new</strong><MdNewReleases style={{color: "green"}} />
             </ListItem>
             <ListItem>
               <ListIcon as={CheckIcon} color="green.400" />

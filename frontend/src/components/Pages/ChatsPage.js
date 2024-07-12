@@ -8,7 +8,7 @@ import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 import Ads from "../miscellanious/ads";
 import Feed from "../miscellanious/feed";
-import {Image, ModalCloseButton } from "@chakra-ui/react";
+import { Image, ModalCloseButton } from "@chakra-ui/react";
 import {
   Text,
   Link,
@@ -23,7 +23,8 @@ import {
   LinkOverlay,
 } from "@chakra-ui/react";
 import Poll from "../miscellanious/Poll";
-import Footer from "../miscellanious/footer";
+import  FooterAchieves from "../miscellanious/FooterAchieves";
+import { IoLibrary } from "react-icons/io5";
 
 const Chatpage = () => {
   const navigate = useNavigate();
@@ -58,14 +59,14 @@ const Chatpage = () => {
   }, [trend, onOpen]);
 
   return (
-    <Box width="100%" display={"flex"} flexDir={"column"} height={"100vh"} background={"whitesmoke"}>
+    <Box width="100%" display={"flex"} flexDir={"column"} overflow={"scroll"} background={"whitesmoke"}>
       <ErrorBoundary fallback={<p>Something went wrong</p>} userSelect={"none"}>
         {user && <SideDrawer />}{" "}
-        {user &&
+        {/* {user &&
           ((user.accountType === "Gold" &&
             parseInt(new Date().getTime()) > parseInt(user.subscription)) ||
             parseInt(new Date().getTime()) >
-              parseInt(user.adsSubscription)) && <Ads />}
+              parseInt(user.adsSubscription)) && <Ads />} */}
         <Modal size="lg" onClose={() => {onClose(); setTrend(false)}} isOpen={isOpen} onOpen={onOpen}>
         <ModalOverlay
           bg="blackAlpha.300"
@@ -102,7 +103,7 @@ const Chatpage = () => {
                 <LinkOverlay
                   userSelect={"none"}
                   href="https://www.paypal.com/donate/?hosted_button_id=2L8HHGURQTED2"
-                  target="blank"
+                  target="_blank" rel="noopener noreferrer"
                 >
                   Donate
                 </LinkOverlay>
@@ -168,7 +169,11 @@ const Chatpage = () => {
            <Poll/>
           )}
         </Box>
-        {user && <Footer/>}
+        {user && <Box width={"100%"}>
+         <Box display={"flex"} width={"100%"} justifyContent={"center"} alignItems={"center"}>
+          <IoLibrary style={{color: "red"}} /> <Text p={"3"} fontWeight={"bold"}>Achieves</Text></Box>
+         <FooterAchieves />
+          </Box>}
       </ErrorBoundary>
     </Box>
   );

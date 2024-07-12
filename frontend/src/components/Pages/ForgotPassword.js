@@ -78,13 +78,17 @@ export default function ForgotPassword() {
   return (
     <VStack
       display={"flex"}
+      flexDir={"column"}
       justifyContent={"center"}
       alignItems={"center"}
       width={"100%"}
+      background={"white"}
     >
+      <Text fontSize={"large"} fontWeight={"bold"} color="red"> IntiMates+</Text>
+      <Text>Recover your Email</Text>
       <Box
         padding={5}
-        backgroundColor={"Background"}
+        backgroundColor={"whitesmoke"}
         justifyContent={"space-between"}
       >
         {" "}
@@ -95,7 +99,7 @@ export default function ForgotPassword() {
           onChange={(e) => setVerifyPassword(e.target.value)}
           color={verify === verifyPassword ? "green" : "red.400"}
           value={verifyPassword}
-          placeholder="enter the exact code here"
+          placeholder="Enter the exact code here..."
           textAlign={"center"}
           maxLength={6}
         />

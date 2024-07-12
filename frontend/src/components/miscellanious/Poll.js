@@ -76,6 +76,7 @@ export default function Poll() {
               fontSize="large"
               boxSize={"30px"}
               textColor="orange"
+              bg={"beige"}
               p={6}
               _hover={{ backgroundColor: "red" }}>Poll</Button>
   

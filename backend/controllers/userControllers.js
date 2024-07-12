@@ -15,7 +15,7 @@ const { onlineUsersMatch, extractLocations } = require("../config/socketUtils");
 
 dotenv.config({ path: "./secrets.env" });
 const privateEmailPass = process.env.privateEmailPass;
-const privateEmail = "admin@fuckmate.boo";
+const privateEmail = "intimates_plus@fuckmate.boo";
 
 const registerUsers = asyncHandler(async (req, res) => {
   const { name, email, password, gender, pic, value, looking } = req.body;
@@ -61,12 +61,11 @@ const registerUsers = asyncHandler(async (req, res) => {
 });
 const forgotEmail = async (req, res) => {
   const { email } = req.params;
+
   let userInfo = await User.findOne({ email });
 
   if (userInfo) {
-    const verificationCode = Math.floor(
-      100000 + Math.random() * 900000
-    ).toString();
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
 
     let transporter = nodemailer.createTransport({
       host: "mail.privateemail.com",
@@ -78,21 +77,25 @@ const forgotEmail = async (req, res) => {
       },
     });
 
+    // URL to your company logo or static image
+    const companyLogoUrl = 'https://res.cloudinary.com/dvc7i8g1a/image/upload/v1720787425/Intimates_o.jpg'; // Replace with your actual logo URL
+
     const mailOptions = {
-      from: privateEmail,
+      from: `IntiMates+ <${privateEmail}>`,
       to: email,
       subject: "Recover Your Email",
       html: `
         <div style="background-color: #f2f2f2; padding: 20px; font-family: Arial, sans-serif;">
-          <h2 style="color: #333; "> Recover Your Email</h2>
+          <h2 style="color: #333;">Recover Your Email</h2>
+          <img src="${companyLogoUrl}" loading="eager" alt="Company Logo" style="width: 100%; margin-bottom: 20px;">
           <p>Hello,</p>
           <p>You have requested to recover your email associated with our service.</p>
-          <p>Your recovery code is: <strong style="fontSize: larger; padding: 5px;">${verificationCode}</strong></p>
+          <p>Your recovery code is: <strong style="color: #00FF00;">${verificationCode}</strong></p>
           <p>If you did not request this change, please contact support immediately.</p>
-           <p><strong style="color: #F44336;">IntiMates+</strong> is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. By reducing isolation, depression, and anxiety, IntiMates+ aims to improve users' mental health and overall well-being. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.</p>
+          <p>IntiMates+ is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. By reducing isolation, depression, and anxiety, IntiMates+ aims to improve users' mental health and overall well-being. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.</p>
           <p>Stay connected and follow us on social media:</p>
           <ul style="list-style: none; padding: 0;">
-            <li style="margin-bottom: 10px;"><a href="https://twitter.com/IntiMates_Plus" target="_blank" style="color: #007bff; text-decoration: none;">X</a></li>
+            <li style="margin-bottom: 10px;"><a href="https://twitter.com/IntiMates_Plus" target="_blank" style="color: #007bff; text-decoration: none;">Twitter</a></li>
             <li style="margin-bottom: 10px;"><a href="https://web.facebook.com/profile.php?id=61554735039262" target="_blank" style="color: #007bff; text-decoration: none;">Facebook</a></li>
           </ul>
           <p>IntiMates+, the only Adult Escape!</p>
@@ -413,7 +416,7 @@ const deleteImage = async (req, res) => {
 };
 
 const authorizeUser = async (req, res) => {
-  const { userEmail } = req.params;
+  const { email } = req.query;
 
   const verificationCode = Math.floor(
     100000 + Math.random() * 900000
@@ -429,16 +432,19 @@ const authorizeUser = async (req, res) => {
     },
   });
 
+  const companyLogoUrl = 'https://res.cloudinary.com/dvc7i8g1a/image/upload/v1720787425/Intimates_o.jpg';
+
   const mailOptions = {
     from: privateEmail,
-    to: userEmail,
+    to: email,
     subject: "Verify Your Email",
     html: `
       <div style="background-color: #f2f2f2; padding: 20px; font-family: Arial, sans-serif;">
         <h2 style="color: #333;"> Verify Your Email</h2>
+        <img src="${companyLogoUrl}" loading="eager" alt="Company Logo" style="width: 100%; margin-bottom: 20px;">
         <p>Hello,</p>
         <p>You have requested to verify your email associated with our service.</p>
-        <p>Your recovery code is: <strong>${verificationCode}</strong></p>
+        <p>Your recovery code is: <strong style="color: #00FF00;">${verificationCode}</strong></p>
         <p>If you did not request this change, please contact support immediately.</p>
         <p><strong style={{color: "#F44336"}}>IntiMates+</strong> is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. By reducing isolation, depression, and anxiety, IntiMates+ aims to improve users' mental health and overall well-being. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.</p>
         <p>Stay connected and follow us on social media:</p>

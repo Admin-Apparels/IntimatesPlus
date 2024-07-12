@@ -17,6 +17,7 @@ import {
   ModalFooter,
   Divider,
   Spinner,
+  Text
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { ChatState } from "../Context/ChatProvider";
@@ -190,7 +191,7 @@ const Login = () => {
             justifyContent="space-between"
           >
             <Input
-              placeholder={`example@mymail.com`}
+              placeholder={`Enter your email here...`}
               type="text"
               textAlign="center"
               onChange={(e) => setForgotEmail(e.target.value)}
@@ -205,11 +206,11 @@ const Login = () => {
               colorScheme="green"
               isDisabled={disable}
             >
-              {disable ? "Try again after 30sec" : "Search for my email"}
+              {disable ? "Sent, try again after 30sec." : "Search for my email"}
             </Button>
           </ModalBody>
-          <ModalFooter display="flex" textAlign={"start"} p={1}>
-            {forgotEmail && `A code will be sent to the above email`}
+          <ModalFooter  p={1}>
+            {forgotEmail && <Text p={"3"}>A code will be sent to the above email</Text>}
             {searching && <Spinner />}
           </ModalFooter>
         </ModalContent>
