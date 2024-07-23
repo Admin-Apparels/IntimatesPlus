@@ -268,7 +268,7 @@ const Signup = () => {
             }}
           >
             <Image
-              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717072577/shorts1.jpg"
+              src="#"
               userSelect={"none"}
               boxSize={"200px"}
               border={"5px solid red"}
@@ -428,7 +428,7 @@ const Signup = () => {
             alignItems={"center"}
           >
             <Image
-              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717072573/shorts4.jpg"
+              src="#"
               userSelect={"none"}
               boxSize={"200px"}
               border={"5px solid red"}

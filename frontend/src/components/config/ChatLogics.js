@@ -224,11 +224,9 @@ export function useConnectSocket(token) {
 
     newSocket.on("connect", () => {
       newSocket.emit("newConnection", user);
-      console.log("connected");
     });
 
     newSocket.on("disconnect", () => {
-      console.log("Socket disconnected");
     });
 
     setSocket(newSocket);

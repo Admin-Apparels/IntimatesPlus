@@ -72,11 +72,11 @@ export default function Poll() {
               position="fixed"
               bottom="7%"
               right="7%"
-              borderRadius="50%"
+              borderRadius="full"
               fontSize="large"
-              boxSize={"30px"}
-              textColor="orange"
-              bg={"beige"}
+              boxSize={"60px"}
+              textColor="white"
+              bg={"green"}
               p={6}
               _hover={{ backgroundColor: "red" }}>Poll</Button>
   

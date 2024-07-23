@@ -64,7 +64,7 @@ function Homepage() {
         </Text>
         {" "}
         <Image
-          src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1717067451/IMG-20240530-WA0001_1_kluate.jpg"
+          src="#"
           userSelect={"none"}
           boxSize={"200px"}
           border={"5px solid red"}
@@ -255,7 +255,7 @@ function Homepage() {
                 fontSize={"small"}
                 p={"4"}
               >
-               <strong style={{color: "#F44336"}}>IntiMates+</strong> is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. By reducing isolation, depression, and anxiety, IntiMates+ aims to improve users' mental health and overall well-being. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.
+               <strong style={{color: "#F44336"}}>IntiMates+</strong> is a hookup-free, adult content-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. By reducing isolation, depression, and anxiety, IntiMates+ aims to improve users' mental health and overall well-being. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.
               </Text>
               <Text
                 display="flex"

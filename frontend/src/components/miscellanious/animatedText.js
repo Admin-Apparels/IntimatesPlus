@@ -20,9 +20,6 @@ function Type() {
           strings: [
             "IntiMates+ 💑",
             "From Fleeting to Lasting 🌟",
-            "Intimacy & Connection ❤️",
-            "Top Adult Connection 🔥",
-            
           ],
           autoStart: true,
           loop: true,
