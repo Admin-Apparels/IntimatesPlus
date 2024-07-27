@@ -12,12 +12,10 @@
   overflow-y: scroll;
   background-size: cover;
   background-position: center;
-  background-color: gold;
+  background: "linear-gradient(135deg, #f5f7fa, #c3cfe2)";
 }
 
-
-/* 
-@media (max-width: 767px) {
+/* @media (max-width: 767px) {
   .App {
     background-image: url("https://res.cloudinary.com/dvc7i8g1a/image/upload/v1706889484/phone_hot7dh.jpg");
   }

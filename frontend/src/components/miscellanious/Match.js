@@ -41,7 +41,8 @@ const MatchModal = () => {
   const toast = useToast();
 
   const accessChat = async (userId) => {
-    if(!user || chats || userId){
+    if(!user || !chats || !userId){
+      console.log("something missing", user, chats, userId);
       return;
     };
 
@@ -57,7 +58,7 @@ const MatchModal = () => {
     const chatCount = checkChatCount(chats);
     const currentTime = Date.now();
 
-    if (user.subscription < currentTime && chatCount >= 1) {
+    if (user.subscription < currentTime && chatCount >= 2) {
       toast({
         title: "Maximum number of chats reached",
         description: "You have reached the maximum number of chats for free users in the last 24 hours.",

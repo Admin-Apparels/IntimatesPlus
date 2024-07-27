@@ -139,6 +139,7 @@ const MyChat = (fetchAgain) => {
           borderRadius="lg"
           position="relative"
           p={"4"}
+          cursor={"pointer"}
         > 
         <Box display={"flex"}>
           <Avatar

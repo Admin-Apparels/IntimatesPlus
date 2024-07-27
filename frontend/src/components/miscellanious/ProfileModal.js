@@ -144,7 +144,7 @@ const ProfileModal = ({ userInfo }) => {
 
             {userInfo.verified ? <MdOutlineVerified /> : <VscUnverified />}
           </ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton color={"white"}/>
           <ModalBody
             display="flex"
             flexDir="column"

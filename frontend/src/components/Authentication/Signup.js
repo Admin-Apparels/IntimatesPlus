@@ -193,10 +193,10 @@ const Signup = () => {
   };
 
   const gradients = [
-    "linear(to-r, white, green.400, teal.200)",
+    "linear(to-r, pink, green.400, teal.200)",
     "linear(to-r, teal.300, blue.400, green.200)",
     "linear(to-r, purple.300, blue.400, teal.200)",
-    "linear(to-r, orange.300, red.400, white)",
+    "linear(to-r, orange.300, red.400, pink)",
     "linear(to-r, pink.300, purple.400, blue.200)",
   ];
 
@@ -212,7 +212,7 @@ const Signup = () => {
         pt={0}
         position={"relative"}
       >
-        <Text position={"absolute"} fontSize={"small"} width={"100%"} top={'-16%'} left={0} transform="rotate(-25deg)" style={{ alignItems: 'start', justifyContent: "start" }} textColor={"whitesmoke"}>
+        <Text position={"absolute"} fontSize={"small"} width={"100%"} top={'-16%'} left={0} transform="rotate(-25deg)" style={{ alignItems: 'start', justifyContent: "start" }}>
             <MdNoAdultContent style={{ color: 'red', fontSize: "2rem", marginRight: '8px' }} />
             The only Adult Escape!
         </Text>
@@ -231,27 +231,24 @@ const Signup = () => {
               display={"flex"}
               justifyContent={"center"}
               alignItems={"center"}
-              textColor="white"
               fontSize="lg"
               fontWeight={"bold"}
               mb={4}
             >
               <>Welcome to</>{" "}
-              <Text fontWeight={"extrabold"} textColor={"red"} pl={"2"}>
-                IntiMates+
+              <Text fontWeight={"extrabold"} textColor={"red.200"} pl={"2"}>
+                Fuckmate Boo
               </Text>
               !
             </Box>{" "}
-            <Text textColor="white" mb={4} textAlign={"center"}>
+            <Text mb={4} textAlign={"center"}>
               Ready for fun and deeper connections? Find real intimacy and
-              lasting relationships with <strong style={{color: "pink"}}>IntiMates+.</strong>
+              lasting relationships with <strong style={{color: "pink"}}>Fuckmate Boo</strong>.
             </Text>
             <FormControl id="first-name" isRequired>
-              <FormLabel textColor={"white"}>Name</FormLabel>
+              <FormLabel>Name</FormLabel>
               <Input
                 placeholder="Enter Your Name"
-                _placeholder={{ color: "#fff0f5" }}
-                textColor={"white"}
                 onChange={(e) => setName(e.target.value)}
               />
             </FormControl>
@@ -263,14 +260,16 @@ const Signup = () => {
             flexDir={"column"}
             justifyContent={"center"}
             alignItems={"center"}
+            minH={"300px"}
             style={{
               animation: "slideInRight 0.5s forwards",
             }}
           >
             <Image
-              src="#"
+              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1722070627/cutted1_1_lrjkfq.jpg"
               userSelect={"none"}
-              boxSize={"200px"}
+              boxSize={"250px"}
+              height={"auto"}
               border={"5px solid red"}
               borderRadius={"full"}
             />
@@ -284,19 +283,17 @@ const Signup = () => {
             >
               Chat Anonymously
             </Text>{" "}
-            <Text textColor="white" mb={4} textAlign={"center"}>
+            <Text mb={4} textAlign={"center"}>
               Remember, your email and password will be used for future login.
               Dummy emails are prone to losing access to your account.
             </Text>
             <FormControl isRequired>
-              <FormLabel textColor={"white"}>
+              <FormLabel>
                 Email Address (Optional)
               </FormLabel>
               <Input
                 type="email"
-                textColor={"white"}
                 placeholder="Enter Your Email Address"
-                _placeholder={{ color: "#fff0f5" }}
                 onChange={(e) => setEmail(e.target.value)}
               />
               {email ? (
@@ -306,7 +303,6 @@ const Signup = () => {
                   m={0}
                   color={"green.400"}
                   userSelect={"none"}
-                  textColor={"white"}
                   style={{
                     animation: "slideInFromTop 0.5s forwards",
                   }}
@@ -331,18 +327,16 @@ const Signup = () => {
           >
              <GiLoveInjection  style={{fontSize:"200px", color: "#F44336"}}/>
 
-            <Text textColor="white" mb={4} textAlign={"center"}>
+            <Text mb={4} textAlign={"center"}>
               Secure your connection: Choose a strong password to protect your
               account.
             </Text>
             <FormControl id="password" isRequired>
-              <FormLabel textColor={"white"}>Password</FormLabel>
+              <FormLabel>Password</FormLabel>
               <InputGroup size="md">
                 <Input
                   type={show ? "text" : "password"}
-                  textColor={"white"}
                   placeholder="Enter Password"
-                  _placeholder={{ color: "#fff0f5" }}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <InputRightElement width="4.5rem">
@@ -353,13 +347,11 @@ const Signup = () => {
               </InputGroup>
             </FormControl>
             <FormControl id="password" isRequired>
-              <FormLabel textColor={"white"}>Confirm Password</FormLabel>
+              <FormLabel>Confirm Password</FormLabel>
               <InputGroup size="md">
                 <Input
                   type={show ? "text" : "password"}
                   placeholder="Confirm password"
-                  _placeholder={{ color: "#fff0f5" }}
-                  textColor={"white"}
                   onChange={(e) => setConfirmpassword(e.target.value)}
                 />
                 <InputRightElement width="4.5rem">
@@ -397,16 +389,15 @@ const Signup = () => {
             }}
           >
             <PiGenderIntersexBold style={{fontSize:"200px", color: "#F44336"}}/>
-            <Text textColor="white" mb={4} textAlign={"center"}>
+            <Text mb={4} textAlign={"center"}>
               {" "}
               Select your gender: Choose the option that best represents you.
             </Text>
             <FormControl id="gender" isRequired>
-              <FormLabel textColor={"white"}>Gender</FormLabel>
+              <FormLabel>Gender</FormLabel>
               <RadioGroup
                 onChange={setGender}
                 value={gender}
-                textColor={"white"}
                 isRequired
               >
                 <Stack direction="row">
@@ -425,10 +416,11 @@ const Signup = () => {
             display={"flex"}
             flexDir={"column"}
             justifyContent={"center"}
+            minH={"300px"}
             alignItems={"center"}
           >
             <Image
-              src="#"
+              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1722070626/cuttted2_htcot9.jpg"
               userSelect={"none"}
               boxSize={"200px"}
               border={"5px solid red"}
@@ -436,7 +428,7 @@ const Signup = () => {
             />
 
             <Text
-              textColor="white"
+            
               mb={4}
               textAlign={"center"}
               fontSize={"larger"}
@@ -479,13 +471,12 @@ const Signup = () => {
               ))}
             </Box>
 
-            <FormControl id="description" Box textColor={"white"} isRequired>
+            <FormControl id="description" Box isRequired>
               <FormLabel>Add a short description</FormLabel>
               <Textarea
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 placeholder="Hi there, I'm ... from LA..."
-                _placeholder={{ color: "#fff0f5" }}
                 size="sm"
                 minLength={MIN_CHARACTERS}
                 maxLength={MAX_CHARACTERS}
@@ -497,7 +488,7 @@ const Signup = () => {
                   m={0}
                   color={"green.400"}
                   userSelect={"none"}
-                  textColor={"white"}
+                
                   style={{
                     animation: "slideInFromTop 0.5s forwards",
                   }}
@@ -510,11 +501,10 @@ const Signup = () => {
               )}
               <Text
                 fontSize="sm"
-                textColor={"white"}
                 justifyContent={"space-between"}
                 textAlign={"center"}
                 color={value.length >= MIN_CHARACTERS ? "green.500" : "red.500"}
-                background={"white"}
+                background={"whitesmoke"}
                 m={2}
               >
                 {`${value.length}/${MIN_CHARACTERS}`}
@@ -535,18 +525,17 @@ const Signup = () => {
           >
            
             <FcPicture style={{fontSize:"200px"}}/>
-            <Text textColor="white" mb={4} textAlign={"center"}>
+            <Text mb={4} textAlign={"center"}>
               Upload a clear and recent photo of yourself for better matching
               results.
             </Text>
             <FormControl id="pic">
-              <FormLabel textColor={"white"}>
+              <FormLabel>
                 Upload your Picture(*Public & Optional)
               </FormLabel>
               <Input
                 type="file"
                 p={1.5}
-                textColor={"white"}
                 accept="image/*"
                 onChange={(e) => postDetails(e.target.files[0])}
               />

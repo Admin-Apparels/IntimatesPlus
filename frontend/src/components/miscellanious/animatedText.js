@@ -8,7 +8,7 @@ const ColoredTypewriter = styled.div`
     color: #ff69b4; /* Change this to your desired color */
   }
   .Typewriter__cursor {
-    color: #fff; /* Change this to your desired color */
+    color: #000; /* Change this to your desired color */
   }
 `;
 
@@ -18,8 +18,8 @@ function Type() {
       <Typewriter
         options={{
           strings: [
-            "IntiMates+ 💑",
-            "From Fleeting to Lasting 🌟",
+            "Fuckmate Boo💑",
+            "From Fleeting to Lasting🌟",
           ],
           autoStart: true,
           loop: true,

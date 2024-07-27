@@ -304,7 +304,7 @@ const ClientModal = ({ children }) => {
 
             {user.verified ? <MdOutlineVerified /> : <VscUnverified />}
           </ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton color={"white"}/>
           <ModalBody
             display="flex"
             flexDir="column"
@@ -408,8 +408,6 @@ const ClientModal = ({ children }) => {
             display={isFocused ? "none" : "block"}
             justifyContent={"space-between"}
             alignItems={"center"}
-            m={0}
-            p={0}
           >
             {" "}
             <FormControl

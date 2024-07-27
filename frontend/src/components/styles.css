@@ -10,18 +10,6 @@
             padding-inline: 2rem;
     
 }
-.quote-container {
-    display: flex;
-    justify-content: space-between;
-    font-size: medium;
-    align-items: center;
-    overflow: hidden;
-}
-.quote-current , .quote-next {
-    width: 50%;
-    transition: transform 0.5s ease, opacity 0.5s ease;
-    text-align: center;
-}
 
 .page-indicator {
     display: flex;
