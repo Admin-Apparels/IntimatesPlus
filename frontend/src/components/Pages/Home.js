@@ -68,7 +68,7 @@ function Homepage() {
         </Text>
         <Text>Privacy First 🔒</Text>
         <Text userSelect={"none"}>
-          Dive in effortlessly! Chat anonymously. Please confirm that you are an{" "}
+          Dive in effortlessly! Chat anonymously and openly. Please confirm that you are an{" "}
           <span
             style={{ color: "red", paddingRight: ".3rem", fontWeight: "bold" }}
           >
@@ -261,7 +261,7 @@ function Homepage() {
               <Link href="https://twitter.com/IntiMates_Plus" m={0} isExternal>
               <FaXTwitter/>
               </Link>
-              <Link href="#" m={1} isExternal>
+              <Link href="https://www.instagram.com/intimates_plus" m={1} isExternal>
               <FaInstagram />
               </Link>
               <Link
