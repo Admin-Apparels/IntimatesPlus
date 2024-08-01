@@ -62,11 +62,11 @@ const Chatpage = () => {
     <Box width="100%" display={"flex"} flexDir={"column"} overflow={"scroll"} background={"whitesmoke"}>
       <ErrorBoundary fallback={<p>Something went wrong</p>} userSelect={"none"}>
         {user && <SideDrawer />}{" "}
-        {/* {user &&
+        {user &&
           ((user.accountType === "Gold" &&
             parseInt(new Date().getTime()) > parseInt(user.subscription)) ||
             parseInt(new Date().getTime()) >
-              parseInt(user.adsSubscription)) && <Ads />} */}
+              parseInt(user.adsSubscription)) && <Ads />}
         <Modal size="lg" onClose={() => {onClose(); setTrend(false)}} isOpen={isOpen} onOpen={onOpen}>
         <ModalOverlay
           bg="blackAlpha.300"
