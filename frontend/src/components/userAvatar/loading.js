@@ -47,7 +47,7 @@ const Loading = () => {
       width="100%"
     >
       <Text mb={4} fontSize="2xl" fontWeight="bold" color="gray.700">
-        Loading to <span style={{ color: "#F44336" }}>IntiMates+</span>, please wait...
+        Loading to <span style={{ color: "#F44336" }}>Fuckmate Boo💑</span>, please wait...
       </Text>
       <Progress
         width="80%"

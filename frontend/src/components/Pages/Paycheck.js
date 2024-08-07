@@ -7,7 +7,6 @@ import {
   ListItem,
   ListIcon,
   useColorModeValue,
-  VStack,
   useToast,
   Button,
   Image,
@@ -21,6 +20,7 @@ import {
   Modal,
   useDisclosure,
   Divider,
+  IconButton,
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
 import { ChatState } from "../Context/ChatProvider";
@@ -33,6 +33,8 @@ import {
   useConnectSocket,
 } from "../config/ChatLogics";
 import { MdNewReleases } from "react-icons/md";
+import { FaBackward } from "react-icons/fa";
+import SideDrawer from "../miscellanious/SideDrawer";
 
 export default function Paycheck() {
   const toast = useToast();
@@ -41,13 +43,6 @@ export default function Paycheck() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [subscription, setSubscription] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const OverlayOne = () => (
-    <ModalOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
-    />
-  );
-  const overlay = React.useState(<OverlayOne />);
 
   const socket = useConnectSocket(user.token);
 
@@ -130,19 +125,26 @@ export default function Paycheck() {
     };
   }, [user, setUser, navigate, toast, socket, setChats]);
   return (
-    <VStack
+    <Box
       display={"flex"}
-      flexDir={{ base: "row", md: "column" }}
-      justifyContent={"space-around"}
+      flexDirection={"column"}
+      justifyContent={"center"}
       alignItems={"center"}
       width={"100%"}
-      overflow={"auto"}
-      flexWrap={"wrap"}
-      padding={5}
       background={"whitesmoke"}
     >
+      <SideDrawer/>
+      <Box p={"2"} pt={0} bg={useColorModeValue("gray.50", "gray.800")} display={"flex"} flexDirection={"column"} width={"100%"}>
+        <Text textAlign={"center"} >Paying to <strong>Admin Apparels</strong></Text>
+        <Text textAlign={"center"} fontSize={"small"}>Fuckmate Boo, From Fleeting to Lasting</Text>
+        <IconButton width={"90px"} bg={useColorModeValue("gray.50", "gray.800")} onClick={() => navigate('/chats')} icon={<FaBackward />}/>
+        <Divider colorScheme="green"/>
+        </Box>
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
-        {overlay}
+      <ModalOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(10px) hue-rotate(90deg)"
+      />
         <ModalContent padding={5} width={"calc(100% - 20px)"}>
           <ModalHeader
             fontSize="40px"
@@ -225,6 +227,16 @@ export default function Paycheck() {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <Box  
+      display={"flex"}
+      flexDir={{ base: "row", md: "column" }}
+      justifyContent={"space-around"}
+      alignItems={"center"}
+      width={"100%"}
+      overflow={"auto"}
+      flexWrap={"wrap"}
+      padding={5}
+      background={"whitesmoke"}>
 
       <Box
         maxW={"330px"}
@@ -232,7 +244,6 @@ export default function Paycheck() {
         bg={useColorModeValue("white", "gray.800")}
         boxShadow={"2xl"}
         rounded={"md"}
-        overflow={"hidden"}
         paddingBottom={5}
       >
         <Stack
@@ -358,7 +369,6 @@ export default function Paycheck() {
         bg={useColorModeValue("white", "gray.800")}
         boxShadow={"2xl"}
         rounded={"md"}
-        overflow={"hidden"}
         paddingBottom={5}
       >
         <Stack
@@ -484,7 +494,18 @@ export default function Paycheck() {
             Pay via Mpesa
           </Button>
         </Box>
+       </Box>
+       
       </Box>
-    </VStack>
+      <Text 
+              variant="body2"
+              textAlign="center"
+              userSelect={"none"}
+              fontSize={"xs"}
+
+              >
+               <strong style={{color: "#F44336"}}>Fuckmate Boo</strong> is an adult hookup-free platform.
+              </Text>
+    </Box>
   );
 }

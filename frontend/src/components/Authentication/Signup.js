@@ -212,7 +212,7 @@ const Signup = () => {
         pt={0}
         position={"relative"}
       >
-        <Text position={"absolute"} fontSize={"small"} width={"100%"} top={'-16%'} left={0} transform="rotate(-25deg)" style={{ alignItems: 'start', justifyContent: "start" }}>
+        <Text position={"absolute"} fontSize={"small"} width={"100%"} top={'-15%'} left={-4} transform="rotate(-25deg)" style={{ alignItems: 'start', justifyContent: "start" }}>
             <MdNoAdultContent style={{ color: 'red', fontSize: "2rem", marginRight: '8px' }} />
             The only Adult Escape!
         </Text>

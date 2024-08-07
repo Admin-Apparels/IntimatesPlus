@@ -158,6 +158,7 @@ const Ads = () => {
             fontFamily="Work sans"
             display="flex"
             justifyContent="center"
+            background={"white"}
           >
             <Text
               display={"flex"}

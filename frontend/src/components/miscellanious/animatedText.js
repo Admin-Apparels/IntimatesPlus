@@ -5,7 +5,7 @@ import styled from "styled-components";
 const ColoredTypewriter = styled.div`
   .Typewriter__wrapper {
     fontSize: 20px;
-    color: #ff69b4; /* Change this to your desired color */
+    color: #fff; /* Change this to your desired color */
   }
   .Typewriter__cursor {
     color: #000; /* Change this to your desired color */

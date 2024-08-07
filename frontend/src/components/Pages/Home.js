@@ -51,13 +51,14 @@ function Homepage() {
         minH={"300px"}
         position={"relative"}
       >
-      <Text position={"absolute"} width={"100%"} top={'-15%'} left={0} transform="rotate(-25deg)" style={{ alignItems: 'start', justifyContent: "start" }}>
+      <Text position={"absolute"} width={"100%"} fontSize={"small"} top={'-12%'} left={0} transform="rotate(-25deg)" style={{ alignItems: 'start', justifyContent: "start" }}>
             <MdNoAdultContent style={{ color: 'red', fontSize: "2rem", marginRight: '8px' }} />
             The only Adult Escape!
         </Text>
         {" "}
         <Image
           src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1722070627/cutted2_1_myprbg.jpg"
+          alt=""
           userSelect={"none"}
           boxSize={"200px"}
           border={"5px solid red"}
@@ -244,6 +245,7 @@ function Homepage() {
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701515284/icons8-18-plus-48_jf2fci.png"
                   height={6}
+                  alt=""
                 />
                 {`Copyright © 2023-${new Date().getFullYear()}`}
               </Text>
@@ -275,6 +277,7 @@ function Homepage() {
                 <Image
                   src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1700415178/APP_LOGO_2_pforwh.png"
                   height={5}
+                  alt=""
                   borderRadius={4}
                 />
               </Link>

@@ -258,7 +258,7 @@ const MyChat = (fetchAgain) => {
               What's trending
             </Text>
           </Box>
-        {chats && Array.isArray(chats) ? (
+        {chats && chats.length > 0 ? (
           <Stack overflowY="scroll">{renderChatItems()}</Stack>
         ) : (
           <ChatLoading />
