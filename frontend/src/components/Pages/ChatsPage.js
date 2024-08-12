@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/layout";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Chatbox from "../Chatbox";
 import MyChats from "../MyChats";
 import SideDrawer from "../miscellanious/SideDrawer";
@@ -28,7 +28,6 @@ import { IoLibrary } from "react-icons/io5";
 
 const Chatpage = () => {
   const navigate = useNavigate();
-  const [fetchAgain, setFetchAgain] = useState(false);
   const { user, setUser, selectedChat, trend, setTrend } = ChatState();
   const { onClose, isOpen, onOpen } = useDisclosure();
 
@@ -161,9 +160,9 @@ const Chatpage = () => {
           p="0.2rem"
         >
           {" "}
-          {user && <MyChats fetchAgain={fetchAgain} />}
+          {user && <MyChats />}
           {user && (
-            <Chatbox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+            <Chatbox />
           )}
           {!selectedChat && (
            <Poll/>

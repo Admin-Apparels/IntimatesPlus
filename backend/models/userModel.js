@@ -21,6 +21,7 @@ const userSchema = mongoose.Schema(
     accountType: { type: String, default: "new" },
     subscription: { type: String, default: () => new Date().getTime() },
     adsSubscription: { type: String, default: () => new Date().getTime() },
+    status: { type: Date, default: () => new Date() },
     day: { type: String, default: () => new Date().getTime() },
   },
   { versionKey: false },

@@ -13,7 +13,7 @@ import { PiChatsCircleThin } from "react-icons/pi";
 import { Avatar } from "@chakra-ui/react";
 import { getSenderName, getSenderPic } from "./config/ChatLogics";
 
-const MyChat = (fetchAgain) => {
+const MyChat = () => {
   const [loggedUser, setLoggedUser] = useState();
   const [modal, setModal] = useState(false);
   const {
@@ -148,7 +148,7 @@ const MyChat = (fetchAgain) => {
           name={getSenderName(user, chat.users)}
           src={getSenderPic(user, chat.users)}
          />
-         <Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"start"}>
+         <Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"start"} pl={"4"}>
             <Text display="flex">{chat.senderName} {chat.chatName === "Admin" && <MdVerified />}</Text>
          {chat.latestMessage && chat.latestMessage.sender && (
             <Text fontSize="xs">
@@ -159,7 +159,7 @@ const MyChat = (fetchAgain) => {
                 {":"}{" "}
               </b>
               {chat.latestMessage.content.length > 50
-                ? chat.latestMessage.content.substring(0, 20) + "..."
+                ? chat.latestMessage.content.substring(0, 30) + "..."
                 : chat.latestMessage.content}
             </Text>
           )}

@@ -3,7 +3,7 @@ import "./styles.css";
 import SingleChat from "./SingleChat";
 import { ChatState } from "./Context/ChatProvider";
 
-const Chatbox = ({ fetchAgain, setFetchAgain }) => {
+const Chatbox = () => {
   const { selectedChat } = ChatState();
 
   return (
@@ -19,7 +19,7 @@ const Chatbox = ({ fetchAgain, setFetchAgain }) => {
       borderWidth="1px"
       height={"80vh"}
     >
-      <SingleChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+      <SingleChat />
     </Box>
   );
 };

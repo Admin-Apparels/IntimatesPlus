@@ -45,7 +45,12 @@ const initializeSocketIO = (server) => {
 
     const { userId } = socket.handshake.query;
 
-    setUserSocket(userId, socket.id);
+    if (userId) {
+      // Update user status to online with the current timestamp
+      await User.findByIdAndUpdate(userId, { status: new Date()});
+  
+      setUserSocket(userId, socket.id); // Ensure this function is defined to manage socket ID
+    }
 
     socket.on("setup", (userData) => {
       socket.join(userData._id);

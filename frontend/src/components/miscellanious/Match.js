@@ -251,11 +251,10 @@ const MatchModal = () => {
                   background={"blackAlpha.400"}
                   width="100%"
                 >
-                  {onlineUsersCount.includes(currentUser._id) && (
+                  {onlineUsersCount.includes(currentUser._id) ? (
                     <Text
                       display={"flex"}
                       textAlign={"center"}
-                      background={"blackAlpha.100"}
                       textColor={"white"}
                     >
                       <HiStatusOnline
@@ -263,7 +262,7 @@ const MatchModal = () => {
                       />
                       Online
                     </Text>
-                  )}
+                  ) : `last seen ${currentUser.status}`}
 
                   <Button
                     m={0.5}

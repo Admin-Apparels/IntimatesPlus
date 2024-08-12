@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { ChatState } from "./Context/ChatProvider";
-import { Box, Button, Image, Text } from "@chakra-ui/react";
+import { Box, Button, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { formatMessageTime } from "./config/ChatLogics";
+import { TiTick } from "react-icons/ti";
+import { CgUnavailable } from "react-icons/cg";
 
 function Message({ m }) {
   const [showDeleteText, setShowDeleteText] = useState(false);
@@ -34,11 +36,7 @@ function Message({ m }) {
           textDecoration={"underline"}
           colorScheme="grey"
         >
-          <Image
-            src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699434297/icons8-unavailable-40_xh1ham.png"
-            height={7}
-            p={1}
-          />
+          <CgUnavailable />
           deleted
         </Text>
       ) : (
@@ -48,7 +46,7 @@ function Message({ m }) {
           position={"relative"}
           onClick={() => setShowDeleteText(true)}
           onMouseLeave={() => setShowDeleteText(false)}
-          fontSize={"small"}
+          fontSize={"medium"}
         >
           {showDeleteText && m.sender._id === user._id && (
             <Button
@@ -58,7 +56,6 @@ function Message({ m }) {
               }}
               position={"absolute"}
               left={-10}
-              p={3}
               top={-5}
               borderRadius={10}
             >
@@ -66,19 +63,14 @@ function Message({ m }) {
             </Button>
           )}
           {m.content}
-          <Text display={"flex"} textAlign="right" m={0} p={0} fontSize={"2xs"}>
-            {m.sender._id === user._id ? (
-              <Image
-                src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1699355257/icons8-sent-64_e9vrai.png"
-                height={5}
-                p={0}
-                loading="lazy"
-                m={0}
-              />
+          
+          <Text display={"flex"} textAlign="start" fontSize={"x-small"} width={"100%"} textColor={"teal"}>
+          {formatMessageTime(m.createdAt)}
+          {m.sender._id === user._id ? (
+              <TiTick />
             ) : (
               ""
             )}
-            {formatMessageTime(m.createdAt)}
           </Text>
         </Box>
       )}

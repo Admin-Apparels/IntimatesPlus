@@ -9,7 +9,7 @@ const ChatProvider = ({ children }) => {
   const [trend, setTrend] = useState(false);
   const [notification, setNotification] = useState([]);
   const [chats, setChats] = useState([]);
-  const [onlineUsersCount, setOnlineUsersCount] = useState(0);
+  const [onlineUsersCount, setOnlineUsersCount] = useState([]);
   const [userId, setUserId] = useState(undefined);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");

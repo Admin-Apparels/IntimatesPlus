@@ -21,11 +21,11 @@ import "../components/styles.css";
 import PageIndicator from "./miscellanious/PageIndicator";
 import Lottie from "react-lottie";
 import {
-  getSenderName,
   getSenderFull,
   getUserById,
   getSenderId,
   useConnectSocket,
+  formatMessageTime,
 } from "./config/ChatLogics";
 import { CiVideoOn } from "react-icons/ci";
 import React, { useCallback, useEffect, useState } from "react";
@@ -39,10 +39,11 @@ import { useNavigate } from "react-router-dom";
 import Notifier from "./miscellanious/Notifier";
 import { HiStatusOffline, HiStatusOnline } from "react-icons/hi";
 import { TbPhoneCalling } from "react-icons/tb";
+import { IoSend } from "react-icons/io5";
 
 var selectedChatCompare;
 
-const SingleChat = ({ fetchAgain, setFetchAgain }) => {
+const SingleChat = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -470,7 +471,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       ) {
         if (!notification.includes(newMessageReceived)) {
           setNotification([newMessageReceived, ...notification]);
-          setFetchAgain((prevValue) => !prevValue);
           showNotification("New Message", {
             body: `New message from ${newMessageReceived.sender.name}`,
             icon: `${newMessageReceived.sender.pic}`,
@@ -484,7 +484,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     return () => {
       socket.off("message received");
     };
-  }, [notification, setNotification, setFetchAgain, socket]);
+  }, [notification, setNotification, socket]);
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
@@ -528,6 +528,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     localStorage.setItem("userInfo", JSON.stringify(userData));
     setUser(userData);
   };
+
+  const senderFullInfo = getSenderFull(user, selectedChat?.users);
+  const senderStatusTime = senderFullInfo?.status ? new Date(senderFullInfo.status) : null;
+  const lastSeenTime = senderStatusTime ? formatMessageTime(senderStatusTime) : 'Unknown';
 
   return (
     <>
@@ -664,7 +668,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               fontFamily={"cursive"}
             >
               {" "}
-              {getSenderName(user, selectedChat.users)}
+              {senderFullInfo.name}
+              <Text   display={"flex"}
+                      textAlign={"center"}
+                      textColor={"white"}
+                      fontSize={"x-small"}
+                      
+                    >{onlineUsersCount?.includes(senderFullInfo?._id) ? (
+                      "Online"
+                  ) : `last seen: ${lastSeenTime}`}
+                  </Text>
             </Text>
             <Box
               display={"flex"}
@@ -753,16 +766,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     }
                   }}
                 />
-                <Button
-                  colorScheme="blue"
-                  size="sm"
-                  ml={2}
-                  display={{ base: "block", md: "none" }} // Show only on mobile devices
+                <IconButton 
+                  colorScheme="transparent"
+                  ml={2} isLoading={sending}
+                  icon={<IoSend fontSize={"2rem"} />}
                   onClick={() => sendMessage()}
-                  isLoading={sending}
-                >
-                  Send
-                </Button>
+                  />
               </Box>
             </FormControl>
           </Box>

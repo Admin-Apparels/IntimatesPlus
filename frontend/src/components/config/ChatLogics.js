@@ -6,9 +6,20 @@ import { ChatState } from "../Context/ChatProvider";
 let socketInstance;
 
 export const formatMessageTime = (timestamp) => {
-  const messageTime = new Date(timestamp);
-  const currentTime = new Date();
+  // Check if the timestamp is valid
+  if (!timestamp) {
+    return 'Invalid time';
+  }
 
+  // Convert the timestamp to a Date object
+  const messageTime = new Date(timestamp);
+  
+  // Check if the Date object is valid
+  if (isNaN(messageTime.getTime())) {
+    return 'Invalid time';
+  }
+
+  const currentTime = new Date();
   const timeDifference = currentTime - messageTime;
   const seconds = Math.floor(timeDifference / 1000);
   const minutes = Math.floor(seconds / 60);
@@ -16,24 +27,24 @@ export const formatMessageTime = (timestamp) => {
   const days = Math.floor(hours / 24);
 
   if (seconds < 60) {
-      return 'Just now';
+    return 'Just now';
   } else if (minutes < 60) {
-      return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+    return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
   } else if (hours < 24) {
-      return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+    return `${hours} hour${hours === 1 ? '' : 's'} ago`;
   } else if (days === 1) {
-      return 'Yesterday';
+    return 'Yesterday';
   } else if (days < 7) {
-      return `${days} day${days === 1 ? '' : 's'} ago`;
+    return `${days} day${days === 1 ? '' : 's'} ago`;
   } else {
-      const options = {
-          hour: 'numeric',
-          minute: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric',
-      };
-      return messageTime.toLocaleDateString('en-US', options);
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    };
+    return messageTime.toLocaleDateString('en-US', options);
   }
 };
 
@@ -97,6 +108,8 @@ export const getSenderId = (loggedUser, users) => {
 };
 
 export const getSenderFull = (loggedUser, user) => {
+  if(!user || !loggedUser)return;
+
   return user[0]._id === loggedUser._id ? user[1] : user[0];
 };
 export async function getUserById(userId, token) {
