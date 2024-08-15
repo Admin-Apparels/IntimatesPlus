@@ -130,12 +130,12 @@ const Ads = () => {
   const handleButtonClick = () => {
     if (watchedAd) {
       setWatchedAd(false);
-      setCount(10);
+      setCount(3);
       window.open("//abmismagiusom.com/4/6644159", "_blank");
     } else {
       if (count === 0) {
         setWatchedAd(true);
-        setCount(10);
+        setCount(3);
         setMessage("");
         onClose();
       } else {

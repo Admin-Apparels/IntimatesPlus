@@ -80,18 +80,39 @@ const initializeSocketIO = (server) => {
       }
     });
 
-    socket.on("new message", (newMessageRecieved) => {
-      var chat = newMessageRecieved.chat;
+    const adminChatId = "66be2e4cebc32a4dbdab96c6";
 
-      if (!chat.users) return console.log("chat.users not defined");
+socket.on("new message", async (newMessageReceived) => {
+  const chat = newMessageReceived.chat;
 
-      chat.users.forEach((user) => {
-        if (user._id == newMessageRecieved.sender._id) return;
+  if (!chat || !chat.users) {
+    return console.log("chat or chat.users not defined");
+  }
 
-        socket.in(user._id).emit("message received", newMessageRecieved);
+  // Check if the message is from the admin chat
+  if (chat._id.toString() === adminChatId) {
+    try {
+      // Fetch all users to broadcast the message
+      const users = await User.find({});
+      const userIds = users.map(user => user._id.toString());
+
+      userIds.forEach((userId) => {
+        if (userId !== newMessageReceived.sender._id.toString()) {
+          socket.in(userId).emit("message received", newMessageReceived);
+        }
       });
+    } catch (error) {
+      console.error("Error fetching users for admin chat broadcast:", error);
+    }
+  } else {
+    // Normal chat behavior: send the message to users in the chat
+    chat.users.forEach((user) => {
+      if (user._id.toString() !== newMessageReceived.sender._id.toString()) {
+        socket.in(user._id.toString()).emit("message received", newMessageReceived);
+      }
     });
-
+  }
+});
     socket.on("disconnect", () => {
       onlineUsersMatch.forEach((user) => {
         if (socket.userData && user._id === socket.userData._id) {

@@ -24,6 +24,7 @@ import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineVerified } from "react-icons/md";
 import { VscUnverified } from "react-icons/vsc";
+import { CiCircleInfo } from "react-icons/ci";
 
 const ClientModal = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -403,6 +404,11 @@ const ClientModal = ({ children }) => {
             >
               {user?.value}
             </Text>
+            {!user?.verified && <Text p='6' fontSize={"small"} width={"100%"} textAlign={"center"}>
+            <CiCircleInfo />
+            Once verified, you will receive more replies and gain increased trust from others. You'll also be able to access the
+            latest posts and will be preferred over unverified accounts.
+              </Text>}
           </ModalBody>
           <ModalFooter
             display={isFocused ? "none" : "block"}
@@ -450,7 +456,6 @@ const ClientModal = ({ children }) => {
                     deleteAccount();
                   }
                 }}
-                isDisabled
                 isLoading={deleteLoading}
               >
                 Delete Account

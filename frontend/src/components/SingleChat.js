@@ -373,8 +373,8 @@ const SingleChat = () => {
             "/api/message",
             {
               content: newMessage,
-              chatId: selectedChat,
-              user,
+              chat: selectedChat,
+              sender: user,
             },
             config
           );
@@ -668,7 +668,7 @@ const SingleChat = () => {
               fontFamily={"cursive"}
             >
               {" "}
-              {senderFullInfo.name}
+              {senderFullInfo?.name}
               <Text   display={"flex"}
                       textAlign={"center"}
                       textColor={"white"}

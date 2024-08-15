@@ -2,6 +2,7 @@ require("dotenv").config({ path: "../secrets.env" });
 const mongoose = require("mongoose"); 
 const pollModel = require("../models/pollModel");
 const User = require("../models/userModel");
+const Chat = require("../models/chatModel");
 
 const connectDB = async () => {
   const URL = process.env.MONGO_URI;
@@ -11,10 +12,7 @@ const connectDB = async () => {
 
     // Seed existing users with the `status` field if it doesn't exist
     await User.updateMany({ status: { $exists: false } }, { status: new Date() });
-    // await User.updateMany(
-    //   { status: { $exists: true } },
-    //   { $unset: { status: "" } }
-    // );
+    await User.updateMany({ verified: { $exists: false } }, { verified: false});
 
     // Call seedPoll function to seed the poll data if it doesn't already exist
     await seedPoll();

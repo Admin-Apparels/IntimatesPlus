@@ -41,25 +41,27 @@ const MyChat = () => {
         .get("/api/chat", config)
         .then(async (response) => {
           if (response.data.message) {
+            // Handle message case if needed
           } else {
-            const chatsWithSenderNames = await Promise.all(
-              response.data.map(async (chat) => {
-                const resolvedUsers = await Promise.all(chat.users);
-
-                const senderName =
-                  resolvedUsers.length === 2
-                    ? resolvedUsers[0]._id === loggedUser._id
-                      ? resolvedUsers[1].name
-                      : resolvedUsers[0].name
-                    : resolvedUsers[0].name;
-
-                return { ...chat, senderName };
-              })
-            );
-
+            // Assuming users are already resolved in the response
+            const chatsWithSenderNames = response.data.map((chat) => {
+              // Assuming users are already resolved
+              const resolvedUsers = chat.users;
+        
+              // Determine the sender's name based on the logged-in user
+              const senderName =
+                resolvedUsers.length === 2
+                  ? resolvedUsers[0]._id === loggedUser._id
+                    ? resolvedUsers[1].name
+                    : resolvedUsers[0].name
+                  : resolvedUsers[0].name;
+        
+              return { ...chat, senderName };
+            });
+        
             setChats(chatsWithSenderNames);
           }
-        })
+        })        
         .catch((error) => {
           if (error.response && error.response.status === 401) {
             toast({
@@ -153,9 +155,9 @@ const MyChat = () => {
          {chat.latestMessage && chat.latestMessage.sender && (
             <Text fontSize="xs">
               <b>
-                {chat.latestMessage.sender.name === user.name
+                {chat.latestMessage.sender?.name === user.name
                   ? "You"
-                  : chat.latestMessage.sender.name}
+                  : chat.latestMessage.sender?.name}
                 {":"}{" "}
               </b>
               {chat.latestMessage.content.length > 50
@@ -193,7 +195,7 @@ const MyChat = () => {
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
-      height={"80vh"}
+      height={"90vh"}
     >
       {modal && <Notifier isOpen={modal} onClose={() => setModal(false)} />}
       <Box

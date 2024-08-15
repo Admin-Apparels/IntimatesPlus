@@ -18,10 +18,11 @@ import {
 import { ChatState } from "../Context/ChatProvider";
 import React, { useState } from "react";
 import axios from "axios";
-import { checkChatCount, handleCreateChat } from "../config/ChatLogics";
+import { checkChatCount, formatMessageTime, handleCreateChat } from "../config/ChatLogics";
 import { MdOutlineVerified } from "react-icons/md";
 import { VscUnverified } from "react-icons/vsc";
 import { HiStatusOnline } from "react-icons/hi";
+import { FaHeart, FaHeartBroken } from "react-icons/fa";
 
 const MatchModal = () => {
   const [loadingChat, setLoadingChat] = useState(false);
@@ -29,6 +30,8 @@ const MatchModal = () => {
   const [users, setUsers] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const [click, setClick] = useState(false);
 
   const {
     setSelectedChat,
@@ -134,6 +137,7 @@ const MatchModal = () => {
     }
   };
   const currentUser = users[currentIndex];
+  const lastSeenTime = currentUser ? formatMessageTime(currentUser.status) : 'Unknown';
 
   return (
     <>
@@ -262,7 +266,9 @@ const MatchModal = () => {
                       />
                       Online
                     </Text>
-                  ) : `last seen ${currentUser.status}`}
+                  ) : <Box display={"flex"} justifyContent={"center"} alignItems={"center"} width={"100%"}>
+                  Last seen: &nbsp;<Text fontSize={"small"} textColor="green.100">{lastSeenTime}</Text>
+                </Box>}
 
                   <Button
                     m={0.5}
@@ -286,34 +292,56 @@ const MatchModal = () => {
                     justifyContent={"space-between"}
                     width={"100%"}
                   >
-                    <Button
-                      onClick={() => {
-                        setUserId(currentUser._id);
-                        accessChat(currentUser._id);
-                      }}
-                      bgGradient="linear(to-r, teal.500, green.500)"
-                      _hover={{
-                        bgGradient: "linear(to-r, red.500, yellow.500)",
-                      }}
-                    >
-                      Start Chat
-                    </Button>
+                     <IconButton
+      aria-label="Heart"
+      background="transparent"
+      _hover={{
+        background: "transparent",
+        transform: "scale(1.2)", // Increase size on hover
+        transition: "transform 0.2s", // Smooth transition
+      }}
+      _active={{
+        transform: "scale(1.5)", // Increase size on click
+        transition: "transform 0.2s", // Smooth transition
+      }}
+      icon={
+        <FaHeart
+          fontSize="3rem"
+          color={click ? "#FF2400" : "#FF2400"} // Change color if clicked
+        />
+      }
+      onClick={() => {
+        setUserId(currentUser._id);
+        accessChat(currentUser._id);
+        setClick(!clicked); // Toggle clicked state
+      }}
+    />
                     {loadingChat ? (
                       <Spinner display="flex" />
                     ) : (
-                      <Button
-                        onClick={nextPage}
-                        bgGradient="linear(to-r, teal.500, green.500)"
-                        _hover={{
-                          bgGradient: "linear(to-r, red.500, yellow.500)",
-                        }}
-                      >
-                        Pass
-                        <Image
-                          src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1705591008/icons8-broken-heart-48_xlns32.png"
-                          height={5}
+                      <IconButton
+                      aria-label="Heart Broken"
+                      background="transparent"
+                      _hover={{
+                        background: "transparent",
+                        transform: "scale(1.2)", // Increase size on hover
+                        transition: "transform 0.2s", // Smooth transition
+                      }}
+                      _active={{
+                        transform: "scale(1.5)", // Increase size on click
+                        transition: "transform 0.2s", // Smooth transition
+                      }}
+                      icon={
+                        <FaHeartBroken
+                          fontSize="3rem"
+                          color="#7C0A02" // Dark red color
                         />
-                      </Button>
+                      }
+                      onClick={() => {
+                        nextPage();
+                        setClicked(!clicked); // Toggle clicked state
+                      }}
+                    />
                     )}
                   </Box>
                 </ModalFooter>

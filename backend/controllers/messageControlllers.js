@@ -26,7 +26,8 @@ const deleteMessage = async (req, res) => {
 };
 
 const sendMessage = asyncHandler(async (req, res) => {
-  const { content, chatId } = req.body;
+  const { content, chat } = req.body;
+  const chatId = chat._id;
 
   if (!content || !chatId) {
     console.log("Invalid data passed into request");
@@ -48,7 +49,7 @@ const sendMessage = asyncHandler(async (req, res) => {
       select: "name pic email",
     });
 
-    await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
+    await Chat.findByIdAndUpdate(chatId, { latestMessage: message });
 
     res.json(message);
   } catch (error) {

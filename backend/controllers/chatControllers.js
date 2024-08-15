@@ -45,33 +45,71 @@ const accessChat = async (req, res) => {
     }
   }
 };
+
 const fetchChats = expressAsyncHandler(async (req, res) => {
-  const ADMIN_EMAIL = "admin@fuckmate.boo";
+  const ADMIN_EMAIL = "intimates_plus@fuckmate.boo";
   const ADMIN_CHAT_NAME = "Admin";
   const ADMIN_MESSAGE_CONTENT =
-    "👋 Welcome to IntiMates! Exciting news – our algorithm is hard at work, sorting potential matches based on your preferences and location. Share your success stories with us in the future and follow our Twitter Page @fuckmateboo for updates!";
-  let adminUser;
+    "👋 Welcome to IntiMates! Exciting news – our algorithm is hard at work, sorting potential matches based on your preferences and location. Share your success stories with us in the future and follow our Twitter Page @IntiMates_Plus for updates!";
+
   try {
+    // Check if the logged-in user is the admin
     if (req.user.email === ADMIN_EMAIL) {
-      adminUser = await User.findOneAndUpdate(
+      // Fetch or create the admin user
+      const adminUser = await User.findOneAndUpdate(
         { email: ADMIN_EMAIL },
         {},
         { upsert: true, new: true }
       );
 
-      const adminChat = await Chat.findOneAndUpdate(
-        {
-          chatName: ADMIN_CHAT_NAME,
-          users: { $elemMatch: { $eq: req.user._id } },
-        },
-        { $addToSet: { users: adminUser._id } },
-        { upsert: true, new: true }
-      ).populate("users", "-password");
+      // Fetch all users to include in the admin chat
+      const users = await User.find({});
+      const userIds = users.map(user => user._id);
 
-      return res.json(adminChat);
+      // Fetch or create the admin chat
+      let adminChat = await Chat.findOne({ chatName: ADMIN_CHAT_NAME });
+
+      if (!adminChat) {
+        adminChat = await Chat.create({
+          chatName: ADMIN_CHAT_NAME,
+          users: userIds,
+        });
+
+        // Create a default welcome message for the admin chat
+        const defaultMessageData = {
+          sender: adminUser._id,
+          content: ADMIN_MESSAGE_CONTENT,
+          chat: adminChat._id,
+        };
+
+        const defaultMessage = await Message.create(defaultMessageData);
+
+        // Update the admin chat with the latest message
+        adminChat.latestMessage = defaultMessage._id;
+        await adminChat.save();
+      }
+
+      // Populate the admin chat users and latest message
+      adminChat = await Chat.findById(adminChat._id)
+        .populate({
+          path: "users",
+          match: { _id: { $in: userIds } },
+          select: "-password",
+          options: { limit: 2 } // Limit to admin and one random user
+        })
+        .populate("latestMessage");
+
+      adminChat = await User.populate(adminChat, {
+        path: "latestMessage.sender",
+        select: "name pic email isBlocked",
+      });
+
+      // Return the admin chat directly for the admin user
+      return res.status(200).json([adminChat]);
     }
 
-    const userChats = await Chat.find({
+    // Fetch regular user chats
+    let userChats = await Chat.find({
       users: { $elemMatch: { $eq: req.user._id } },
     })
       .populate("users", "-password")
@@ -79,51 +117,18 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
       .sort({ updatedAt: -1 })
       .exec();
 
-    if (userChats.length === 0) {
-      adminUser = await User.findOne({ email: ADMIN_EMAIL });
-      const defaultChatData = {
-        chatName: ADMIN_CHAT_NAME,
-        users: [req.user._id, adminUser._id],
-      };
-
-      const defaultChat = await Chat.create(defaultChatData);
-
-      const defaultMessageData = {
-        sender: adminUser._id,
-        content: ADMIN_MESSAGE_CONTENT,
-        chat: defaultChat._id,
-      };
-
-      const defaultMessage = await Message.create(defaultMessageData);
-
-      const FullChat = await Chat.findByIdAndUpdate(
-        defaultChat._id,
-        { latestMessage: defaultMessage._id },
-        { new: true }
-      )
-        .populate("users", "-password")
-        .populate("latestMessage")
-        .exec();
-
-      const populatedResults = await User.populate(FullChat, {
-        path: "latestMessage.sender",
-        select: "name pic email isBlocked",
-      });
-
-      return res.json(populatedResults);
-    }
-
-    const results = await User.populate(userChats, {
+    userChats = await User.populate(userChats, {
       path: "latestMessage.sender",
       select: "name pic email isBlocked",
     });
 
-    res.status(200).json(results);
+    res.status(200).json(userChats);
   } catch (error) {
-    console.log("This is the Error", error);
+    console.log("Error occurred:", error);
     res.status(400).json({ error: error.message });
   }
 });
+
 
 const flagChats = async (req, res) => {
   const chatId = req.params.chatId;

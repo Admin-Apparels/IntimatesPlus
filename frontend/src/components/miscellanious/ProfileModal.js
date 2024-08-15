@@ -89,14 +89,14 @@ const ProfileModal = ({ userInfo }) => {
     }
   };
   const blocked =
-    user.isBlocked.includes(selectedChat.users[0]._id) ||
-    user.isBlocked.includes(selectedChat.users[1]._id);
+    user.isBlocked.includes(selectedChat.users[0]?._id) ||
+    user.isBlocked.includes(selectedChat.users[1]?._id);
   const userId =
     selectedChat.users[1]._id === user._id
-      ? selectedChat.users[0]._id
-      : selectedChat.users[1]._id;
+      ? selectedChat.users[0]?._id
+      : selectedChat.users[1]?._id;
   const deleted =
-    selectedChat.users[0].deleted || selectedChat.users[1].deleted;
+    selectedChat.users[0].deleted || selectedChat.users[1]?.deleted;
 
   return (
     <>
