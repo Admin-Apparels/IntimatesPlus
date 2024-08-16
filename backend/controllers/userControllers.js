@@ -110,7 +110,7 @@ const forgotEmail = async (req, res) => {
         console.log(error);
       } else {
         console.log("Email sent: " + info.response);
-        res.status(200).json({ verificationCode, email });
+        res.status(200).json(verificationCode);
       }
     });
   } else {
@@ -444,15 +444,15 @@ const authorizeUser = async (req, res) => {
         <img src="${companyLogoUrl}" loading="eager" alt="Company Logo" style="width: 100%; margin-bottom: 20px;">
         <p>Hello,</p>
         <p>You have requested to verify your email associated with our service.</p>
-        <p>Your recovery code is: <strong style="color: #00FF00;">${verificationCode}</strong></p>
+        <p>Your recovery code is: <strong style="color: #7e8fab;">${verificationCode}</strong></p>
         <p>If you did not request this change, please contact support immediately.</p>
-        <p><strong style={{color: "#F44336"}}>IntiMates+</strong> is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. By reducing isolation, depression, and anxiety, IntiMates+ aims to improve users' mental health and overall well-being. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.</p>
+        <p><strong style={{color: "#F44336"}}>Fuckmate Boo</strong> is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. By reducing isolation, depression, and anxiety, IntiMates+ aims to improve users' mental health and overall well-being. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.</p>
         <p>Stay connected and follow us on social media:</p>
         <ul style="list-style: none; padding: 0;">
           <li style="margin-bottom: 10px;"><a href="https://twitter.com/IntiMates_Plus" target="_blank" style="color: #007bff; text-decoration: none;">X</a></li>
           <li style="margin-bottom: 10px;"><a href="https://web.facebook.com/profile.php?id=61554735039262" target="_blank" style="color: #007bff; text-decoration: none;">Facebook</a></li>
         </ul>
-        <p>IntiMates+, the only Adult Escape!</p>
+        <p>Fuckmate Boo, the only Adult Escape!</p>
         <p>Thank you for being a part of our community.</p> 
       </div>
     `,

@@ -432,6 +432,26 @@ const SingleChat = () => {
   }, [selectedChat, fetchMessages, toast, user.token]);
 
   useEffect(() => {
+    if (Notification.permission !== "granted") {
+      toast({
+        title: "Allow message notifications to stay updated with new messages.",
+        status: "info",
+        duration: 5000,
+        isClosable: true,
+      });
+
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          console.log("Notification permission granted.");
+        } else {
+          console.log("Notification permission denied.");
+        }
+      });
+    }
+  }, [toast]);
+  
+
+  useEffect(() => {
     if (!socket) return;
     const showNotification = (title, options) => {
       if (Notification.permission === "granted") {
@@ -551,7 +571,7 @@ const SingleChat = () => {
           <ModalContent>
             <ModalHeader
               fontSize="100%"
-              fontFamily="Work sans"
+              fontFamily='Arial, sans-serif'
               display="flex"
               justifyContent="center"
               userSelect={"none"}
@@ -643,29 +663,27 @@ const SingleChat = () => {
       {modal && <Notifier isOpen={modal} onClose={() => setModal(false)} />}
       {selectedChat ? (
         <>
-          <Text
+          <Box
             fontSize={{ base: "28px", md: "30px" }}
             pb={3}
             px={2}
             w="100%"
-            fontFamily="Work sans"
+            fontFamily='Arial, sans-serif'
             display="flex"
             justifyContent={"space-between"}
             alignItems="center"
-          >
+           >
             <IconButton
               display="flex"
               icon={<ArrowBackIcon />}
               onClick={() => setSelectedChat("")}
             />
 
-            <Text
-              p={0}
-              m={0}
+            <Box
               textAlign={"center"}
               textColor={"white"}
               userSelect={"none"}
-              fontFamily={"cursive"}
+              fontFamily='Arial, sans-serif'
             >
               {" "}
               {senderFullInfo?.name}
@@ -678,7 +696,7 @@ const SingleChat = () => {
                       "Online"
                   ) : `last seen: ${lastSeenTime}`}
                   </Text>
-            </Text>
+            </Box>
             <Box
               display={"flex"}
               justifyContent={"space-between"}
@@ -709,7 +727,7 @@ const SingleChat = () => {
                 userInfo={getSenderFull(user, selectedChat.users)}
               />
             </Box>
-          </Text>
+          </Box>
           <Box
             display="flex"
             flexDir="column"
@@ -789,7 +807,7 @@ const SingleChat = () => {
             fontWeight="extrabold"
             fontSize="3xl"
             pb={3}
-            fontFamily="Work sans"
+            fontFamily='Arial, sans-serif'
             userSelect="none"
           >
             Click on a user to start chatting

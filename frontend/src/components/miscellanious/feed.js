@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { ChatState } from '../Context/ChatProvider';
-import { Avatar, Box, Text, Button, Input, IconButton, Textarea, useToast } from '@chakra-ui/react';
+import { Avatar, Box, Text, Button, IconButton, Textarea, useToast } from '@chakra-ui/react';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { FcComments } from "react-icons/fc";
 import ChatLoading from '../ChatLoading';
@@ -111,8 +111,8 @@ const Feed = () => {
               onChange={(e) => setContent(e.target.value)}
               placeholder="What's happening?"
               maxLength={500}
-              mb={4}
             />
+            <Text  mb={4} fontSize={"small"}>{content.length}/500</Text>
             <Button colorScheme="green" width={"100%"} onClick={handlePostSubmit} mb={4}>Post</Button>
           </Box>
 
@@ -182,15 +182,18 @@ const Post = ({ post, onCommentSubmit, isSinglePost, user }) => {
               </Box>
             ))}
           </Box>
-          <Box width={"100%"} position={"sticky"} zIndex={1} backgroundColor="whitesmoke"> <Input
+          <Box width={"100%"} position={"sticky"} zIndex={1} backgroundColor="whitesmoke"> <Textarea
             type="text"
             value={commentContent}
             onChange={(e) => setCommentContent(e.target.value)}
+            maxLength={1000}
+            minH={"4rem"}
             placeholder="Add a comment"
             mt={4}
             border={"1px solid purple"}
           />
-            <Button colorScheme='blue' width={"100%"} onClick={handleCommentSubmit} mt={2}>Post Comment</Button></Box>
+          <Text fontSize={"small"}>{commentContent.length}/250</Text>
+          <Button colorScheme='blue' width={"100%"} onClick={handleCommentSubmit} mt={2}>Post Comment</Button></Box>
         </>
       )}
     </Box>

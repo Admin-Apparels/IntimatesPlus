@@ -1,5 +1,6 @@
 const Post = require("../models/postModal");
 const User = require("../models/userModel");
+const nodemailer = require('nodemailer');
 const privateEmailPass = process.env.privateEmailPass;
 const privateEmail = "intimates_plus@fuckmate.boo";
 
@@ -29,7 +30,7 @@ const postComment = async (req, res) => {
 
 const createPost = async (req, res) => {
   const { content, author } = req.body;
-  const email = req.email;
+  const email = req.user.email;
   try {
     let post = new Post({
       content,
@@ -39,7 +40,8 @@ const createPost = async (req, res) => {
     post = await post.save();
 
     if (email === privateEmail) {
-      const users = await User.find({ email: { $ne: privateEmail } });
+      // Fetch users excluding the private email and only if they are verified
+      const users = await User.find({ email: { $ne: privateEmail }, verified: true });
       const userEmails = users.map(user => user.email);
 
       let transporter = nodemailer.createTransport({
@@ -58,7 +60,7 @@ const createPost = async (req, res) => {
       const trimmedContent = content.length > maxLength ? content.substring(0, maxLength) + '...' : content;
 
       const mailOptions = {
-        from: `IntiMates+ <${privateEmail}>`,
+        from: `Fuckmate Boo <${privateEmail}>`,
         bcc: userEmails,
         subject: "Trending Post",
         html: `
@@ -67,14 +69,15 @@ const createPost = async (req, res) => {
             <img src="${companyLogoUrl}" loading="eager" alt="Company Logo" style="width: 100%; margin-bottom: 20px;">
             <p>Hello,</p>
             <p>Be part of the trending topics out there and show your soulmate where you stand.</p>
-            <p>THE POST: <strong style="color: #00FF00;">${trimmedContent}</strong></p>
-            <p>IntiMates+ is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. By reducing isolation, depression, and anxiety, IntiMates+ aims to improve users' mental health and overall well-being. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.</p>
+            <p>THE POST: <strong style="color: #7e8fab;">${trimmedContent}</strong></p>
+            <li style="margin-bottom: 6px;"><a href="https://fuckmate.boo/chats" target="_blank" style="color: #007bff; text-decoration: none;">Engage Now</a></li>
+            <p>Fuckmate Boo is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. By reducing isolation, depression, and anxiety, IntiMates+ aims to improve users' mental health and overall well-being. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.</p>
             <p>Stay connected and follow us on social media:</p>
             <ul style="list-style: none; padding: 0;">
               <li style="margin-bottom: 10px;"><a href="https://twitter.com/IntiMates_Plus" target="_blank" style="color: #007bff; text-decoration: none;">Twitter</a></li>
               <li style="margin-bottom: 10px;"><a href="https://web.facebook.com/profile.php?id=61554735039262" target="_blank" style="color: #007bff; text-decoration: none;">Facebook</a></li>
             </ul>
-            <p>IntiMates+, The Ultimate Adult Escape!</p>
+            <p>Fuckmate Boo, The Ultimate Adult Escape!</p>
             <p>Thank you for being a part of our community.</p> 
           </div>
         `,

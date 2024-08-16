@@ -206,7 +206,7 @@ const MyChat = () => {
         alignItems="center"
       >
         <Text
-          fontFamily="cursive"
+          fontFamily='Arial, sans-serif'
           fontWeight={"medium"}
           textColor={"white"}
           userSelect={"none"}

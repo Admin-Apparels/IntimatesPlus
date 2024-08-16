@@ -70,6 +70,13 @@ const ClientModal = ({ children }) => {
         email: data.email,
       }));
       setConfirm(false);
+      toast({
+        title: "Verified!",
+        status: "success",
+        duration: 5000,
+        position: "bottom",
+        isClosable: true,
+      });
     } catch (error) {
       setConfirm(false);
       toast({
@@ -239,7 +246,7 @@ const ClientModal = ({ children }) => {
 
     try {
       const { data } = await axios.get(`/api/user?email=${email}`);
-      setCode(data.verificationCode);
+      setCode(data);
       setLoading(false);
       setDisabled(true);
       setTimeout(() => {
@@ -312,7 +319,7 @@ const ClientModal = ({ children }) => {
             alignItems="center"
             justifyContent="space-between"
             position="relative"
-            p={0}
+            p={'4'}
           >
             <Image
               borderRadius={isFocused ? "50%" : "5%"}
@@ -336,7 +343,7 @@ const ClientModal = ({ children }) => {
             </Text>
             <Divider p={2} />
             {!user?.verified && !code && (
-              <Box display={"flex"} width={"100%"} mb={4}>
+              <Box display={"flex"} width={"100%"} p={"4"}>
                 <Input
                   fontSize={"medium"}
                   placeholder={"Email to confirm"}
@@ -358,9 +365,9 @@ const ClientModal = ({ children }) => {
                 </Button>
               </Box>
             )}
-            {code && <Text fontSize={"small"}>Code sent to ~{email}~</Text>}
+            {code && <Text p={"4"} fontSize={"small"}>Code sent to ~{email}~</Text>}
             {code && (
-              <Box display={"flex"} width={"100%"}>
+              <Box display={"flex"} width={"100%"} p={"4"}>
                 <Input
                   fontSize={"medium"}
                   placeholder={`Enter code`}

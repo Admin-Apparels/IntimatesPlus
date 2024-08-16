@@ -90,7 +90,7 @@ function Homepage() {
 
   return (
     <ErrorBoundary fallback={<p>Something went wrong</p>}>
-      <Container maxW="xl" centerContent minH={"xl"}>
+      <Container maxW="xl" centerContent minH={"xl"} fontFamily='Arial, sans-serif'>
         <Box
           display="flex"
           justifyContent="center"

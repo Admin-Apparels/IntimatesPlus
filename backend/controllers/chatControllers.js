@@ -108,6 +108,15 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
       return res.status(200).json([adminChat]);
     }
 
+    // Ensure the user is included in the admin chat if it exists
+    const adminUser = await User.findOne({ email: ADMIN_EMAIL });
+    let adminChat = await Chat.findOne({ chatName: ADMIN_CHAT_NAME });
+
+    if (adminChat && !adminChat.users.some(user => user._id.equals(req.user._id))) {
+      adminChat.users.push(req.user._id);
+      await adminChat.save();
+    }
+
     // Fetch regular user chats
     let userChats = await Chat.find({
       users: { $elemMatch: { $eq: req.user._id } },
@@ -116,7 +125,7 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
       .populate("latestMessage")
       .sort({ updatedAt: -1 })
       .exec();
-
+  
     userChats = await User.populate(userChats, {
       path: "latestMessage.sender",
       select: "name pic email isBlocked",
