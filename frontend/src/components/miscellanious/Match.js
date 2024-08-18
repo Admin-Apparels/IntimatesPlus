@@ -117,14 +117,25 @@ const MatchModal = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      toast({
-        title: "Error fetching next Matches",
+      if (error.response && error.response.status === 429) {
+        toast({
+          title: "Too many request:",
+          description: "try again after sometime.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left",
+        });
+      }else{
+        toast({
+        title: "Error fetching next matches",
         description: error.message,
         status: "error",
         duration: 5000,
         isClosable: true,
         position: "bottom-left",
       });
+      }
     }
   };
 

@@ -152,7 +152,7 @@ function SideDrawer() {
           <Button
             variant="ghost"
             onClick={onOpen}
-            _hover={{ backgroundColor: "green.100" }}
+            _hover={{ backgroundColor: "transparent" }}
           >
             <i className="fas fa-search"></i>
             <Text
@@ -238,7 +238,6 @@ function SideDrawer() {
           </Menu>
         </div>
       </Box>
-
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
       <DrawerOverlay
       bg="blackAlpha.300"
@@ -246,7 +245,9 @@ function SideDrawer() {
      />
         <DrawerContent>
           <DrawerHeader borderBottomWidth="1px">Search User</DrawerHeader>
-          <DrawerCloseButton />
+          <DrawerCloseButton textColor={
+            'white'
+          } />
           <DrawerBody>
             {loadingChat && <Spinner ml="auto" display="flex" />}
             <Box display="flex" pb={2}>

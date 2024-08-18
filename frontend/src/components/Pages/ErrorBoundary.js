@@ -22,7 +22,7 @@ class ErrorBoundary extends React.Component {
           display={"flex"}
           justifyContent="center"
           alignItems="center"
-          backgroundColor={"white"}
+          backgroundColor={"whitesmoke"}
           width={"100%"}
           height={"100%"}
         >
@@ -34,7 +34,7 @@ class ErrorBoundary extends React.Component {
             alignItems={"center"}
           >
             {" "}
-            <Text fontSize={"2xl"}>Looks like there's an issue.</Text>
+            <Text fontSize={"2xl"}>Looks like something ain't right.</Text>
             <Link color="teal.500" href="/chats">
             Let's head back to the chat page...
             </Link>

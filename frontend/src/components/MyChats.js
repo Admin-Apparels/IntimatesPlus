@@ -78,7 +78,8 @@ const MyChat = () => {
           }
           if (error.response && error.response.status === 429) {
             toast({
-              title: "Too many request",
+              title: "Too many request:",
+              description: "please try again after sometime.",
               status: "error",
               duration: 5000,
               isClosable: true,

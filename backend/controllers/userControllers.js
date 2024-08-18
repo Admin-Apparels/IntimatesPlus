@@ -504,7 +504,6 @@ const getAdsInfo = async (req, res) => {
 
 const allUsers = asyncHandler(async (req, res) => {
   try {
-    console.log("Search query:", req.query.search);
     const keyword = req.query.search
       ? {
           $or: [

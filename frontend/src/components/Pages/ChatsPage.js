@@ -8,7 +8,7 @@ import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 import Ads from "../miscellanious/ads";
 import Feed from "../miscellanious/feed";
-import { Image, ModalCloseButton } from "@chakra-ui/react";
+import { ModalCloseButton } from "@chakra-ui/react";
 import {
   Text,
   Link,
@@ -25,6 +25,7 @@ import {
 import Poll from "../miscellanious/Poll";
 import  FooterAchieves from "../miscellanious/FooterAchieves";
 import { IoLibrary } from "react-icons/io5";
+import { TiEyeOutline } from "react-icons/ti";
 
 const Chatpage = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const Chatpage = () => {
 
   return (
     <Box width="100%" display={"flex"} flexDir={"column"} overflow={"scroll"} background={"whitesmoke"}>
-      <ErrorBoundary fallback={<p>Something went wrong</p>} userSelect={"none"}>
+      <ErrorBoundary fallback={<p>Something went wrong</p>}>
         {user && <SideDrawer />}{" "}
         {user &&
           ((user.accountType === "Gold" &&
@@ -87,15 +88,16 @@ const Chatpage = () => {
               bgClip="text"
               userSelect={"none"}
             >
+              <ModalCloseButton textColor={"black"}/>
               <LinkBox
                 as="article"
                 maxW="sm"
-                p="3"
+                p="2"
                 borderWidth="1px"
                 rounded="md"
                 position="absolute"
                 top="-50%"
-                right="0"
+                left="0"
                 textColor={"white"}
                 background={"#FFA500"}
               >
@@ -107,8 +109,7 @@ const Chatpage = () => {
                   Donate
                 </LinkOverlay>
               </LinkBox>
-              <h1 style={{fontWeight: "bolder"}}>From Fleeting to Lasting Forum</h1>
-              <ModalCloseButton/>
+              <h1 style={{fontWeight: "bolder"}}>From Fleeting to Lasting Open Space</h1>
             </ModalHeader>
             <ModalBody
               display={"flex"}
@@ -125,18 +126,13 @@ const Chatpage = () => {
               display={"flex"}
               flexDir={"column"}
               textAlign={"center"}
-              textColor={"Background"}
               fontSize={"small"}
-              backgroundColor={"grey"}
-              p={0}
-              m={1}
+              p={'4'}
               borderRadius={2}
             >
-              <Image
-                src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1706012485/icons8-eye_g5kvhn.gif"
-                height={3}
-              />
-              <Text fontSize={"smaller"} p={0} m={0}>
+              <TiEyeOutline />
+
+              <Text fontSize={"smaller"}>
                 15k
               </Text>
               For more stories and inspiration, follow us on

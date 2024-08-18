@@ -136,6 +136,7 @@ export default function Poll() {
       </>}
             </ModalBody>
             <ModalFooter>
+              <Text textAlign={'center'} width={"100%"} p={'4'}>Message us on the next poll, you'll be quoted.</Text>
             </ModalFooter>
           </ModalContent>
         </Modal>

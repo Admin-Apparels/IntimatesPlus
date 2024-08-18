@@ -335,7 +335,7 @@ const ClientModal = ({ children }) => {
 
             <Text
               fontSize={{ base: "20px", md: "22px" }}
-              fontFamily="cursive"
+              fontFamily='Arial, sans-serif'
               display={isFocused ? "none" : "flex"}
               textAlign={"center"}
             >
