@@ -14,7 +14,7 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Login from "../Authentication/Login";
 import Signup from "../Authentication/Signup";
@@ -51,11 +51,20 @@ function Homepage() {
         minH={"300px"}
         position={"relative"}
       >
-      <Text position={"absolute"} width={"100%"} fontSize={"small"} top={'-12%'} left={0} transform="rotate(-25deg)" style={{ alignItems: 'start', justifyContent: "start" }}>
-            <MdNoAdultContent style={{ color: 'red', fontSize: "2rem", marginRight: '8px' }} />
-            The only Adult Escape!
-        </Text>
-        {" "}
+        <Text
+          position={"absolute"}
+          width={"100%"}
+          fontSize={"x-small"}
+          top={"-12%"}
+          left={0}
+          transform="rotate(-25deg)"
+          style={{ alignItems: "start", justifyContent: "start" }}
+        >
+          <MdNoAdultContent
+            style={{ color: "red", fontSize: "2rem", marginRight: "8px" }}
+          />
+          The only Adult Escape!
+        </Text>{" "}
         <Image
           src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1722070627/cutted2_1_myprbg.jpg"
           alt=""
@@ -65,11 +74,12 @@ function Homepage() {
           borderRadius={"full"}
         />
         <Text textAlign={"center"} mb={6} fontWeight="bold" fontSize="lg">
-        "Why watch corn when we can get the real experience 🤷‍♀️" - Mike and Ana
+          "Why watch porn when we can get the real experience 🤷‍♀️" - Mike and Ana
         </Text>
         <Text>Privacy First 🔒</Text>
         <Text userSelect={"none"}>
-          Dive in effortlessly! Chat anonymously and openly. Please confirm that you are an{" "}
+          Dive in effortlessly! Chat anonymously and openly. Please confirm that
+          you are an{" "}
           <span
             style={{ color: "red", paddingRight: ".3rem", fontWeight: "bold" }}
           >
@@ -77,11 +87,7 @@ function Homepage() {
           </span>
           to proceed...
         </Text>
-        <Button
-          m={4}
-          onClick={onAgreeClick}
-          border={"1px solid #d142f5"}
-        >
+        <Button m={4} onClick={onAgreeClick} border={"1px solid #d142f5"}>
           I Agree
         </Button>
       </Box>
@@ -90,16 +96,21 @@ function Homepage() {
 
   return (
     <ErrorBoundary fallback={<p>Something went wrong</p>}>
-      <Container maxW="xl" centerContent minH={"xl"} fontFamily='Arial, sans-serif'>
+      <Container
+        maxW="xl"
+        centerContent
+        minH={"xl"}
+        fontFamily="Arial, sans-serif"
+      >
         <Box
           display="flex"
           justifyContent="center"
           alignItems={"center"}
-          p={'4'}
+          p={"4"}
           w="100%"
           m="15px 0 15px 0"
         >
-          <Type/>
+          <Type />
         </Box>
         <Box
           width="100%"
@@ -123,9 +134,7 @@ function Homepage() {
                 <Tab color={"lightblue"} mx={"2"}>
                   Login
                 </Tab>
-                <Tab color={"lightblue"}>
-                  Let's Go
-                </Tab>
+                <Tab color={"lightblue"}>Let's Go</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>
@@ -164,13 +173,16 @@ function Homepage() {
               marginBottom={{ base: 4, md: 0 }}
             >
               <Text
-                variant="body2"
                 textAlign="center"
                 userSelect={"none"}
                 fontSize={"small"}
                 p={"4"}
               >
-               <strong style={{color: "#F44336"}}>Fuckmate Boo</strong> is a hookup-free, adult content-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.
+                <strong style={{ color: "#F44336" }}>Fuckmate Boo</strong> is a
+                hookup-free, adult content-free platform designed to channel
+                sexual arousal from fleeting pleasures and self-comforts into
+                intimacy-driven, long-term relationships. Find someone who
+                shares your passions and desires.
               </Text>
               <Text
                 display="flex"
@@ -207,20 +219,17 @@ function Homepage() {
               justifyContent={"center"}
               alignItems={"center"}
               width={{ base: "100%", md: "30%" }}
-              p={0}
-              m={0}
             >
               <Text
                 textAlign={"center"}
                 userSelect={"none"}
-                fontFamily={"mono"}
                 p={"3"}
                 fontSize={"small"}
               >
                 Welcome! We all connect here. Say goodbye to fleeting comfort
-                and discover meaningful connections. Meet your intimate. Join our premier dating
-                platform where companionship, openness, romance, and genuine connections
-                await.
+                and discover meaningful connections. Meet your intimate. Join
+                our premier dating platform where companionship, openness,
+                romance, and genuine connections await.
               </Text>
               <LinkBox
                 as="article"
@@ -261,10 +270,14 @@ function Homepage() {
               m={0}
             >
               <Link href="https://twitter.com/IntiMates_Plus" m={0} isExternal>
-              <FaXTwitter/>
+                <FaXTwitter />
               </Link>
-              <Link href="https://www.instagram.com/intimates_plus" m={1} isExternal>
-              <FaInstagram />
+              <Link
+                href="https://www.instagram.com/intimates_plus"
+                m={1}
+                isExternal
+              >
+                <FaInstagram />
               </Link>
               <Link
                 href="https://web.facebook.com/profile.php?id=61554735039262"

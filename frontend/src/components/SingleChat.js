@@ -438,8 +438,9 @@ const SingleChat = () => {
           console.log("Notification permission granted.");
         } else {
           toast({
-            title: "Please allow message notifications to stay updated with new messages.",
-            status: "info",
+            title:
+              "Please allow message notifications to stay updated with new messages.",
+            status: "warning",
             duration: 5000,
             isClosable: true,
           });
@@ -447,7 +448,6 @@ const SingleChat = () => {
       });
     }
   }, [toast]);
-  
 
   useEffect(() => {
     if (!socket) return;
@@ -548,8 +548,12 @@ const SingleChat = () => {
   };
 
   const senderFullInfo = getSenderFull(user, selectedChat?.users);
-  const senderStatusTime = senderFullInfo?.status ? new Date(senderFullInfo.status) : null;
-  const lastSeenTime = senderStatusTime ? formatMessageTime(senderStatusTime) : 'Unknown';
+  const senderStatusTime = senderFullInfo?.status
+    ? new Date(senderFullInfo.status)
+    : null;
+  const lastSeenTime = senderStatusTime
+    ? formatMessageTime(senderStatusTime)
+    : "Unknown";
 
   return (
     <>
@@ -563,13 +567,13 @@ const SingleChat = () => {
           closeOnOverlayClick={false}
         >
           <ModalOverlay
-           bg="blackAlpha.300"
-           backdropFilter="blur(10px) hue-rotate(90deg)"
-           />
+            bg="blackAlpha.300"
+            backdropFilter="blur(10px) hue-rotate(90deg)"
+          />
           <ModalContent>
             <ModalHeader
               fontSize="100%"
-              fontFamily='Arial, sans-serif'
+              fontFamily="Arial, sans-serif"
               display="flex"
               justifyContent="center"
               userSelect={"none"}
@@ -630,8 +634,8 @@ const SingleChat = () => {
                   I'm 18+ and have agreed to{" "}
                   <Link
                     href="https://www.termsandconditionsgenerator.com/live.php?token=iuJtB9N5PKNTX5iM90p7B8cd8h6vCCdJ"
-                    textColor={"blue"}
                     target="blank"
+                    textDecoration={"underline"}
                   >
                     Terms of Use
                   </Link>{" "}
@@ -666,11 +670,11 @@ const SingleChat = () => {
             pb={3}
             px={2}
             w="100%"
-            fontFamily='Arial, sans-serif'
+            fontFamily="Arial, sans-serif"
             display="flex"
             justifyContent={"space-between"}
             alignItems="center"
-           >
+          >
             <IconButton
               display="flex"
               icon={<ArrowBackIcon />}
@@ -681,19 +685,20 @@ const SingleChat = () => {
               textAlign={"center"}
               textColor={"white"}
               userSelect={"none"}
-              fontFamily='Arial, sans-serif'
+              fontFamily="Arial, sans-serif"
             >
               {" "}
               {senderFullInfo?.name}
-              <Text   display={"flex"}
-                      textAlign={"center"}
-                      textColor={"white"}
-                      fontSize={"x-small"}
-                      
-                    >{onlineUsersCount?.includes(senderFullInfo?._id) ? (
-                      "Online"
-                  ) : `last seen: ${lastSeenTime}`}
-                  </Text>
+              <Text
+                display={"flex"}
+                textAlign={"center"}
+                textColor={"white"}
+                fontSize={"x-small"}
+              >
+                {onlineUsersCount?.includes(senderFullInfo?._id)
+                  ? "Online"
+                  : `last seen: ${lastSeenTime}`}
+              </Text>
             </Box>
             <Box
               display={"flex"}
@@ -782,12 +787,13 @@ const SingleChat = () => {
                     }
                   }}
                 />
-                <IconButton 
+                <IconButton
                   colorScheme="transparent"
-                  ml={2} isLoading={sending}
+                  ml={2}
+                  isLoading={sending}
                   icon={<IoSend fontSize={"2rem"} />}
                   onClick={() => sendMessage()}
-                  />
+                />
               </Box>
             </FormControl>
           </Box>
@@ -805,7 +811,7 @@ const SingleChat = () => {
             fontWeight="extrabold"
             fontSize="3xl"
             pb={3}
-            fontFamily='Arial, sans-serif'
+            fontFamily="Arial, sans-serif"
             userSelect="none"
           >
             Click on a user to start chatting

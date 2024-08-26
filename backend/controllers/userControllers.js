@@ -10,7 +10,7 @@ const bcrypt = require("bcryptjs");
 
 const crypto = require("crypto");
 const axios = require("axios");
-const { DOMParser } = require('@xmldom/xmldom');
+const { DOMParser } = require("@xmldom/xmldom");
 const { onlineUsersMatch, extractLocations } = require("../config/socketUtils");
 
 dotenv.config({ path: "./secrets.env" });
@@ -65,7 +65,9 @@ const forgotEmail = async (req, res) => {
   let userInfo = await User.findOne({ email });
 
   if (userInfo) {
-    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const verificationCode = Math.floor(
+      100000 + Math.random() * 900000
+    ).toString();
 
     let transporter = nodemailer.createTransport({
       host: "mail.privateemail.com",
@@ -78,7 +80,8 @@ const forgotEmail = async (req, res) => {
     });
 
     // URL to your company logo or static image
-    const companyLogoUrl = 'https://res.cloudinary.com/dvc7i8g1a/image/upload/v1720787425/Intimates_o.jpg'; // Replace with your actual logo URL
+    const companyLogoUrl =
+      "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1720787425/Intimates_o.jpg"; // Replace with your actual logo URL
 
     const mailOptions = {
       from: `IntiMates+ <${privateEmail}>`,
@@ -432,7 +435,8 @@ const authorizeUser = async (req, res) => {
     },
   });
 
-  const companyLogoUrl = 'https://res.cloudinary.com/dvc7i8g1a/image/upload/v1720787425/Intimates_o.jpg';
+  const companyLogoUrl =
+    "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1720787425/Intimates_o.jpg";
 
   const mailOptions = {
     from: privateEmail,
@@ -469,7 +473,6 @@ const authorizeUser = async (req, res) => {
   });
 };
 
-
 const getAdsInfo = async (req, res) => {
   const acceptLanguage = req.headers["accept-language"] || "en-US";
   const referrer = req.headers.referer || "unknown";
@@ -504,30 +507,26 @@ const getAdsInfo = async (req, res) => {
 
 const allUsers = asyncHandler(async (req, res) => {
   try {
-    const keyword = req.query.search
+    const { search } = req.query;
+    const { _id: currentUserId, gender: currentUserGender } = req.user;
+
+    // Construct search keyword for name
+    const keyword = search
       ? {
-          $or: [
-            { name: { $regex: req.query.search, $options: "i" } },
-            { email: { $regex: req.query.search, $options: "i" } },
-          ],
+          name: { $regex: search, $options: "i" },
         }
       : {};
 
-    const currentUserId = req.user._id;
-
-    // Fetch the current user's gender
-    const currentUserGender = req.user.gender;
-
-    // Define the gender filter based on the current user's gender
-    const genderFilter =
-      currentUserGender === "male"
-        ? { gender: "female" } // Fetch female users if the current user is male
-        : currentUserGender === "female"
-        ? { gender: "male" } // Fetch male users if the current user is female
-        : {}; // No gender filter if the current user's gender is invalid
+    // Define gender filter based on the current user's gender
+    const genderFilter = {};
+    if (currentUserGender === "male") {
+      genderFilter.gender = "female";
+    } else if (currentUserGender === "female") {
+      genderFilter.gender = "male";
+    }
 
     // Fetch all users matching the search query and gender filter
-    let users = await User.find({
+    const users = await User.find({
       ...keyword,
       ...genderFilter,
       _id: { $ne: currentUserId },
@@ -538,10 +537,14 @@ const allUsers = asyncHandler(async (req, res) => {
       "users"
     );
 
-    // Create a list of user IDs from the current user's chats, excluding the current user's ID
+    // Create a list of other user IDs from the current user's chats
     const currentChatUserIds = currentUserChats
-      .flatMap((chat) => chat.users.map((user) => user.toString()))
-      .filter((userId) => userId !== currentUserId.toString());
+      .map((chat) =>
+        chat.users.find(
+          (userId) => userId.toString() !== currentUserId.toString()
+        )
+      )
+      .filter(Boolean); // Ensure that only valid user IDs are included
 
     const onlineUsersArray = Array.from(onlineUsersMatch);
 
@@ -551,21 +554,15 @@ const allUsers = asyncHandler(async (req, res) => {
     );
 
     // Separate the new users into online and offline users
-    const onlineNewUsers = newUsers.filter((user) =>
-      onlineUsersArray.some(
-        (onlineUser) => onlineUser._id.toString() === user._id.toString()
-      )
-    );
-
-    const offlineNewUsers = newUsers.filter(
-      (user) =>
-        !onlineUsersArray.some(
-          (onlineUser) => onlineUser._id.toString() === user._id.toString()
-        )
-    );
-
-    // Combine the results: online new users first, then offline new users
-    const sortedNewUsers = [...onlineNewUsers, ...offlineNewUsers];
+    const sortedNewUsers = newUsers.sort((a, b) => {
+      const aIsOnline = onlineUsersArray.some(
+        (onlineUser) => onlineUser._id.toString() === a._id.toString()
+      );
+      const bIsOnline = onlineUsersArray.some(
+        (onlineUser) => onlineUser._id.toString() === b._id.toString()
+      );
+      return bIsOnline - aIsOnline; // online users first
+    });
 
     res.send(sortedNewUsers);
   } catch (error) {

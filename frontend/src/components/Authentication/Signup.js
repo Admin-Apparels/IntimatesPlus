@@ -212,9 +212,19 @@ const Signup = () => {
         pt={0}
         position={"relative"}
       >
-        <Text position={"absolute"} fontSize={"small"} width={"100%"} top={'-15%'} left={-4} transform="rotate(-25deg)" style={{ alignItems: 'start', justifyContent: "start" }}>
-            <MdNoAdultContent style={{ color: 'red', fontSize: "2rem", marginRight: '8px' }} />
-            The only Adult Escape!
+        <Text
+          position={"absolute"}
+          fontSize={"x-small"}
+          width={"100%"}
+          top={"-15%"}
+          left={-4}
+          transform="rotate(-25deg)"
+          style={{ alignItems: "start", justifyContent: "start" }}
+        >
+          <MdNoAdultContent
+            style={{ color: "red", fontSize: "2rem", marginRight: "8px" }}
+          />
+          The only Adult Escape!
         </Text>
         {step === 1 && (
           <Box
@@ -226,7 +236,7 @@ const Signup = () => {
               animation: "slideInRight 0.5s forwards",
             }}
           >
-            <GiClover style={{fontSize:"200px", color: "#F44336"}} />
+            <GiClover style={{ fontSize: "200px", color: "#F44336" }} />
             <Box
               display={"flex"}
               justifyContent={"center"}
@@ -243,7 +253,8 @@ const Signup = () => {
             </Box>{" "}
             <Text mb={4} textAlign={"center"}>
               Ready for fun and deeper connections? Find real intimacy and
-              lasting relationships with <strong style={{color: "pink"}}>Fuckmate Boo</strong>.
+              lasting relationships with{" "}
+              <strong style={{ color: "pink" }}>Fuckmate Boo</strong>.
             </Text>
             <FormControl id="first-name" isRequired>
               <FormLabel>Name</FormLabel>
@@ -288,9 +299,7 @@ const Signup = () => {
               Dummy emails are prone to losing access to your account.
             </Text>
             <FormControl isRequired>
-              <FormLabel>
-                Email Address (Optional)
-              </FormLabel>
+              <FormLabel>Email Address (Optional)</FormLabel>
               <Input
                 type="email"
                 placeholder="Enter Your Email Address"
@@ -325,7 +334,7 @@ const Signup = () => {
               animation: "slideInRight 0.5s forwards",
             }}
           >
-             <GiLoveInjection  style={{fontSize:"200px", color: "#F44336"}}/>
+            <GiLoveInjection style={{ fontSize: "200px", color: "#F44336" }} />
 
             <Text mb={4} textAlign={"center"}>
               Secure your connection: Choose a strong password to protect your
@@ -388,18 +397,16 @@ const Signup = () => {
               animation: "slideInRight 0.5s forwards",
             }}
           >
-            <PiGenderIntersexBold style={{fontSize:"200px", color: "#F44336"}}/>
+            <PiGenderIntersexBold
+              style={{ fontSize: "200px", color: "#F44336" }}
+            />
             <Text mb={4} textAlign={"center"}>
               {" "}
               Select your gender: Choose the option that best represents you.
             </Text>
             <FormControl id="gender" isRequired>
               <FormLabel>Gender</FormLabel>
-              <RadioGroup
-                onChange={setGender}
-                value={gender}
-                isRequired
-              >
+              <RadioGroup onChange={setGender} value={gender} isRequired>
                 <Stack direction="row">
                   <Radio value="male">Male</Radio>
                   <Radio value="female">Female</Radio>
@@ -428,7 +435,6 @@ const Signup = () => {
             />
 
             <Text
-            
               mb={4}
               textAlign={"center"}
               fontSize={"larger"}
@@ -488,7 +494,6 @@ const Signup = () => {
                   m={0}
                   color={"green.400"}
                   userSelect={"none"}
-                
                   style={{
                     animation: "slideInFromTop 0.5s forwards",
                   }}
@@ -523,16 +528,13 @@ const Signup = () => {
               animation: "slideInRight 0.5s forwards",
             }}
           >
-           
-            <FcPicture style={{fontSize:"200px"}}/>
+            <FcPicture style={{ fontSize: "200px" }} />
             <Text mb={4} textAlign={"center"}>
               Upload a clear and recent photo of yourself for better matching
               results.
             </Text>
             <FormControl id="pic">
-              <FormLabel>
-                Upload your Picture(*Public & Optional)
-              </FormLabel>
+              <FormLabel>Upload your Picture(*Public & Optional)</FormLabel>
               <Input
                 type="file"
                 p={1.5}

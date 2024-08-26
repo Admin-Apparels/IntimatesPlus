@@ -104,7 +104,7 @@ function SideDrawer() {
       try {
         const config = {
           headers: {
-            Authorization: `Bearer ${user.token}`, // Adjust this based on your auth implementation
+            Authorization: `Bearer ${user.token}`,
           },
         };
         const { data } = await axios.get(
@@ -239,15 +239,13 @@ function SideDrawer() {
         </div>
       </Box>
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
-      <DrawerOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
-     />
+        <DrawerOverlay
+          bg="blackAlpha.300"
+          backdropFilter="blur(10px) hue-rotate(90deg)"
+        />
         <DrawerContent>
           <DrawerHeader borderBottomWidth="1px">Search User</DrawerHeader>
-          <DrawerCloseButton textColor={
-            'white'
-          } />
+          <DrawerCloseButton textColor={"white"} />
           <DrawerBody>
             {loadingChat && <Spinner ml="auto" display="flex" />}
             <Box display="flex" pb={2}>
@@ -342,7 +340,7 @@ function SideDrawer() {
                   )}
                 </Box>
               </>
-            ): null}
+            ) : null}
           </DrawerBody>
         </DrawerContent>
       </Drawer>
