@@ -229,14 +229,14 @@ const MatchModal = () => {
                 />
 
                 <ModalFooter
-                  display={"flex"}
-                  flexDir={"column"}
-                  position="absolute" // Position the footer absolutely
-                  bottom="0" // Align it to the bottom of the modal body
-                  left="50%" // Center horizontally
-                  transform="translateX(-50%)" // Move it left by half its width to center it horizontally
+                  display="flex"
+                  flexDir="column"
+                  position="absolute" // Positions the footer absolutely
+                  bottom="0" // Aligns it to the bottom of the modal body
+                  left="50%" // Centers it horizontally
+                  transform="translateX(-50%)" // Moves it left by half its width to center it horizontally
                   justifyContent="space-between"
-                  background={"blackAlpha.400"}
+                  bg="linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 1))"
                   width="100%"
                 >
                   {onlineUsersCount.includes(currentUser._id) ? (
