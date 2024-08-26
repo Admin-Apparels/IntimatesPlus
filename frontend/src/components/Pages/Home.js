@@ -49,22 +49,7 @@ function Homepage() {
         borderRadius={3}
         p={"3"}
         minH={"300px"}
-        position={"relative"}
       >
-        <Text
-          position={"absolute"}
-          width={"100%"}
-          fontSize={"x-small"}
-          top={"-12%"}
-          left={0}
-          transform="rotate(-25deg)"
-          style={{ alignItems: "start", justifyContent: "start" }}
-        >
-          <MdNoAdultContent
-            style={{ color: "red", fontSize: "2rem", marginRight: "8px" }}
-          />
-          The only Adult Escape!
-        </Text>{" "}
         <Image
           src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1722070627/cutted2_1_myprbg.jpg"
           alt=""
@@ -130,6 +115,16 @@ function Homepage() {
               defaultIndex={1}
               background={"whitesmoke"}
             >
+              <Box
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+              >
+                <MdNoAdultContent
+                  style={{ color: "red", fontSize: "2rem", marginRight: "8px" }}
+                />
+                <Text fontSize={"x-small"}> The only Adult Escape!</Text>
+              </Box>
               <TabList p={"3"} pb={0}>
                 <Tab color={"lightblue"} mx={"2"}>
                   Login

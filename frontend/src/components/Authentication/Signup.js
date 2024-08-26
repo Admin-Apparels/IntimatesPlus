@@ -21,7 +21,6 @@ import { GiClover, GiLoveInjection } from "react-icons/gi";
 import PageIndicator from "../miscellanious/PageIndicator";
 import { PiGenderIntersexBold } from "react-icons/pi";
 import { FcPicture } from "react-icons/fc";
-import { MdNoAdultContent } from "react-icons/md";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -210,22 +209,7 @@ const Signup = () => {
         justifyContent={"center"}
         width={"100%"}
         pt={0}
-        position={"relative"}
       >
-        <Text
-          position={"absolute"}
-          fontSize={"x-small"}
-          width={"100%"}
-          top={"-15%"}
-          left={-4}
-          transform="rotate(-25deg)"
-          style={{ alignItems: "start", justifyContent: "start" }}
-        >
-          <MdNoAdultContent
-            style={{ color: "red", fontSize: "2rem", marginRight: "8px" }}
-          />
-          The only Adult Escape!
-        </Text>
         {step === 1 && (
           <Box
             display={"flex"}
@@ -235,26 +219,37 @@ const Signup = () => {
             style={{
               animation: "slideInRight 0.5s forwards",
             }}
+            width={"100%"}
           >
             <GiClover style={{ fontSize: "200px", color: "#F44336" }} />
             <Box
               display={"flex"}
+              flexWrap={"wrap"}
               justifyContent={"center"}
               alignItems={"center"}
-              fontSize="lg"
               fontWeight={"bold"}
               mb={4}
+              width={"100%"}
             >
-              <>Welcome to</>{" "}
-              <Text fontWeight={"extrabold"} textColor={"red.200"} pl={"2"}>
+              Welcome to&nbsp;
+              <Text
+                display={"flex"}
+                textAlign={"center"}
+                fontWeight={"bold"}
+                textColor={"teal.400"}
+              >
                 Fuckmate Boo
               </Text>
-              !
+              &nbsp;
+              <Text fontSize={"small"}>formerly</Text>
+              &nbsp;
+              <Text fontWeight={"bold"} textColor={"teal"}>
+                IntiMates+
+              </Text>
+              &nbsp;!
             </Box>{" "}
             <Text mb={4} textAlign={"center"}>
-              Ready for fun and deeper connections? Find real intimacy and
-              lasting relationships with{" "}
-              <strong style={{ color: "pink" }}>Fuckmate Boo</strong>.
+              Ready for fun and deeper connections?
             </Text>
             <FormControl id="first-name" isRequired>
               <FormLabel>Name</FormLabel>
