@@ -47,7 +47,7 @@ const MyChat = () => {
             const chatsWithSenderNames = response.data.map((chat) => {
               // Assuming users are already resolved
               const resolvedUsers = chat.users;
-        
+
               // Determine the sender's name based on the logged-in user
               const senderName =
                 resolvedUsers.length === 2
@@ -55,13 +55,13 @@ const MyChat = () => {
                     ? resolvedUsers[1].name
                     : resolvedUsers[0].name
                   : resolvedUsers[0].name;
-        
+
               return { ...chat, senderName };
             });
-        
+
             setChats(chatsWithSenderNames);
           }
-        })        
+        })
         .catch((error) => {
           if (error.response && error.response.status === 401) {
             toast({
@@ -102,7 +102,7 @@ const MyChat = () => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setLoggedUser(userInfo);
   }, []);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       if (loggedUser) {
@@ -117,7 +117,6 @@ const MyChat = () => {
   }, [fetchChats, loggedUser]);
 
   const renderChatItems = () => {
-
     return chats.map((chat) => {
       const isFlagged = chat.flagged.includes(user._id);
 
@@ -141,35 +140,42 @@ const MyChat = () => {
           py={2}
           borderRadius="lg"
           position="relative"
-          p={"4"}
+          p={"2"}
           cursor={"pointer"}
-        > 
-        <Box display={"flex"}>
-          <Avatar
-           size="sm"
-          cursor="pointer"
-          name={getSenderName(user, chat.users)}
-          src={getSenderPic(user, chat.users)}
-         />
-         <Box display="flex" flexDir={"column"} justifyContent={"center"} alignItems={"start"} pl={"4"}>
-            <Text display="flex">{chat.senderName} {chat.chatName === "Admin" && <MdVerified />}</Text>
-         {chat.latestMessage && chat.latestMessage.sender && (
-            <Text fontSize="xs">
-              <b>
-                {chat.latestMessage.sender?.name === user.name
-                  ? "You"
-                  : chat.latestMessage.sender?.name}
-                {":"}{" "}
-              </b>
-              {chat.latestMessage.content.length > 50
-                ? chat.latestMessage.content.substring(0, 30) + "..."
-                : chat.latestMessage.content}
-            </Text>
-          )}
+        >
+          <Box display={"flex"}>
+            <Avatar
+              size="sm"
+              cursor="pointer"
+              name={getSenderName(user, chat.users)}
+              src={getSenderPic(user, chat.users)}
+            />
+            <Box
+              display="flex"
+              flexDir={"column"}
+              justifyContent={"center"}
+              alignItems={"start"}
+              pl={"4"}
+            >
+              <Text display="flex">
+                {chat.senderName} {chat.chatName === "Admin" && <MdVerified />}
+              </Text>
+              {chat.latestMessage && chat.latestMessage.sender && (
+                <Text fontSize="xs">
+                  <b>
+                    {chat.latestMessage.sender?.name === user.name
+                      ? "You"
+                      : chat.latestMessage.sender?.name}
+                    {":"}{" "}
+                  </b>
+                  {chat.latestMessage.content.length > 50
+                    ? chat.latestMessage.content.substring(0, 30) + "..."
+                    : chat.latestMessage.content}
+                </Text>
+              )}
+            </Box>
           </Box>
-         </Box>
-        
-          
+
           {isFlagged && (
             <FaFlag
               style={{
@@ -196,7 +202,7 @@ const MyChat = () => {
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
-      height={"90vh"}
+      height={"88vh"}
     >
       {modal && <Notifier isOpen={modal} onClose={() => setModal(false)} />}
       <Box
@@ -207,7 +213,7 @@ const MyChat = () => {
         alignItems="center"
       >
         <Text
-          fontFamily='Arial, sans-serif'
+          fontFamily="Arial, sans-serif"
           fontWeight={"medium"}
           textColor={"white"}
           userSelect={"none"}
@@ -233,34 +239,33 @@ const MyChat = () => {
         p={3}
         bg="blackAlpha.400"
         w="100%"
-        height={{base: "100%", md: "97%"}}
+        height={{ base: "100%", md: "97%" }}
         borderRadius="lg"
         overflowY="hidden"
         position={"relative"}
       >
-   
-          <Box
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            background={"blackAlpha.400"}
-            textColor={"white"}
-            borderRadius="lg"
-            position={"sticky"}
-            top={-2}
-            width={"100%"}
-            mb={2}
-            onClick={()=> {setTrend(true);}}
-            cursor={"pointer"}
-            p={'6'}
-            bottom={5}
-            userSelect={"none"}
-          >
-            <FaFireAlt style={{color: "red"}}/>
-            <Text pl={"2"}>
-              What's trending
-            </Text>
-          </Box>
+        <Box
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          background={"blackAlpha.400"}
+          textColor={"white"}
+          borderRadius="lg"
+          position={"sticky"}
+          top={-2}
+          width={"100%"}
+          mb={2}
+          onClick={() => {
+            setTrend(true);
+          }}
+          cursor={"pointer"}
+          p={"6"}
+          bottom={5}
+          userSelect={"none"}
+        >
+          <FaFireAlt style={{ color: "red" }} />
+          <Text pl={"2"}>What's trending</Text>
+        </Box>
         {chats && chats.length > 0 ? (
           <Stack overflowY="scroll">{renderChatItems()}</Stack>
         ) : (

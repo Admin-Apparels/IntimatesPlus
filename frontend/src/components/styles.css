@@ -1,59 +1,56 @@
 .messages {
-    display: flex;
-    flex-direction: column;
-    overflow-y: scroll;
-    scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
-.Content{
-    
-            justify-content: flex-start;
-            padding-inline: 2rem;
-    
+.Content {
+  justify-content: flex-start;
+  padding-inline: 2rem;
 }
 
 .page-indicator {
-    display: flex;
-    align-items: center;
-    
+  display: flex;
+  align-items: center;
 }
 
 .dot:hover {
-    cursor: pointer;
-    color: #007bff;
+  cursor: pointer;
+  color: #007bff;
 }
 
 .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: #ccc;
-    /* Inactive dot color */
-    margin: 0 5px;
-    transition: background-color 0.3s;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ccc;
+  /* Inactive dot color */
+  margin: 0 5px;
+  transition: background-color 0.3s;
 }
 
 .dot.active {
-    background-color: #007bff;
-    /* Active dot color */
+  background-color: #007bff;
+  /* Active dot color */
 }
 
 @keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 @keyframes slideInFromTop {
-    from {
-        transform: translateY(-100%);
-    }
+  from {
+    transform: translateY(-100%);
+  }
 
-    to {
-        transform: translateY(0);
-    }
+  to {
+    transform: translateY(0);
+  }
 }

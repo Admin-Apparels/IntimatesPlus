@@ -52,8 +52,6 @@ const LoveIcon = () => {
       flexDir={"column"}
       justifyContent={"center"}
       alignItems={"center"}
-      p={0}
-      m={0}
     >
       <Tooltip
         label="Users Online"
@@ -66,7 +64,7 @@ const LoveIcon = () => {
           justifyContent={"center"}
           m={-1}
           fontSize={"x-small"}
-          fontFamily={"cursive"}
+          fontFamily="Arial, sans-serif"
         >
           {" "}
           <FaCircle color="green" size={10} />

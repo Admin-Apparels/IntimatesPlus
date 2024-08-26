@@ -23,7 +23,7 @@ import {
   LinkOverlay,
 } from "@chakra-ui/react";
 import Poll from "../miscellanious/Poll";
-import  FooterAchieves from "../miscellanious/FooterAchieves";
+import FooterAchieves from "../miscellanious/FooterAchieves";
 import { IoLibrary } from "react-icons/io5";
 import { TiEyeOutline } from "react-icons/ti";
 
@@ -52,14 +52,22 @@ const Chatpage = () => {
     };
   }, [navigate, setUser]);
 
-  useEffect(()=> {
-    if(trend){
+  useEffect(() => {
+    if (trend) {
       onOpen();
     }
   }, [trend, onOpen]);
 
   return (
-    <Box width="100%" display={"flex"} flexDir={"column"} overflow={"scroll"} background={"whitesmoke"}>
+    <Box
+      width="100%"
+      height={"100vh"}
+      display={"flex"}
+      flexDir={"column"}
+      overflow={"scroll"}
+      p={"2"}
+      background={"whitesmoke"}
+    >
       <ErrorBoundary fallback={<p>Something went wrong</p>}>
         {user && <SideDrawer />}{" "}
         {user &&
@@ -67,10 +75,18 @@ const Chatpage = () => {
             parseInt(new Date().getTime()) > parseInt(user.subscription)) ||
             parseInt(new Date().getTime()) >
               parseInt(user.adsSubscription)) && <Ads />}
-        <Modal size="lg" onClose={() => {onClose(); setTrend(false)}} isOpen={isOpen} onOpen={onOpen}>
-        <ModalOverlay
-          bg="blackAlpha.300"
-          backdropFilter="blur(10px) hue-rotate(90deg)"
+        <Modal
+          size="lg"
+          onClose={() => {
+            onClose();
+            setTrend(false);
+          }}
+          isOpen={isOpen}
+          onOpen={onOpen}
+        >
+          <ModalOverlay
+            bg="blackAlpha.300"
+            backdropFilter="blur(10px) hue-rotate(90deg)"
           />
           <ModalContent
             display={"flex"}
@@ -88,7 +104,7 @@ const Chatpage = () => {
               bgClip="text"
               userSelect={"none"}
             >
-              <ModalCloseButton textColor={"black"}/>
+              <ModalCloseButton textColor={"black"} />
               <LinkBox
                 as="article"
                 maxW="sm"
@@ -104,12 +120,15 @@ const Chatpage = () => {
                 <LinkOverlay
                   userSelect={"none"}
                   href="https://www.paypal.com/donate/?hosted_button_id=2L8HHGURQTED2"
-                  target="_blank" rel="noopener noreferrer"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   Donate
                 </LinkOverlay>
               </LinkBox>
-              <h1 style={{fontWeight: "bolder"}}>From Fleeting to Lasting Open Space</h1>
+              <h1 style={{ fontWeight: "bolder" }}>
+                From Fleeting to Lasting Open Space
+              </h1>
             </ModalHeader>
             <ModalBody
               display={"flex"}
@@ -120,21 +139,18 @@ const Chatpage = () => {
               overflowY={"auto"}
               userSelect={"none"}
             >
-              <Feed/>
+              <Feed />
             </ModalBody>
             <ModalFooter
               display={"flex"}
               flexDir={"column"}
               textAlign={"center"}
               fontSize={"small"}
-              p={'4'}
+              p={"4"}
               borderRadius={2}
             >
               <TiEyeOutline />
-
-              <Text fontSize={"smaller"}>
-                15k
-              </Text>
+              <Text fontSize={"smaller"}>15k</Text>
               For more stories and inspiration, follow us on
               <Link
                 href="https://twitter.com/IntiMates_Plus"
@@ -157,18 +173,25 @@ const Chatpage = () => {
         >
           {" "}
           {user && <MyChats />}
-          {user && (
-            <Chatbox />
-          )}
-          {!selectedChat && (
-           <Poll/>
-          )}
+          {user && <Chatbox />}
+          {!selectedChat && <Poll />}
         </Box>
-        {user && <Box width={"100%"}>
-         <Box display={"flex"} width={"100%"} justifyContent={"center"} alignItems={"center"}>
-          <IoLibrary style={{color: "red"}} /> <Text p={"3"} fontWeight={"bold"}>Achieves</Text></Box>
-         <FooterAchieves />
-          </Box>}
+        {user && (
+          <Box width={"100%"}>
+            <Box
+              display={"flex"}
+              width={"100%"}
+              justifyContent={"center"}
+              alignItems={"center"}
+            >
+              <IoLibrary style={{ color: "red" }} />{" "}
+              <Text p={"3"} fontWeight={"bold"}>
+                Achieves
+              </Text>
+            </Box>
+            <FooterAchieves />
+          </Box>
+        )}
       </ErrorBoundary>
     </Box>
   );

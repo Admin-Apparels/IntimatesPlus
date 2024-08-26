@@ -154,12 +154,9 @@ function SideDrawer() {
             </Text>
           </Button>
         </Tooltip>
-
         <MatchModal />
-
         <LoveIcon />
         {modal && <Notifier isOpen={modal} onClose={() => setModal(false)} />}
-
         <div>
           <Menu>
             <MenuButton p={1} position="relative">

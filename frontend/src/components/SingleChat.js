@@ -12,10 +12,10 @@ import {
   useToast,
   ModalOverlay,
   Button,
-  Input,
   FormControl,
   Checkbox,
   Link,
+  Textarea,
 } from "@chakra-ui/react";
 import "../components/styles.css";
 import PageIndicator from "./miscellanious/PageIndicator";
@@ -28,7 +28,7 @@ import {
   formatMessageTime,
 } from "./config/ChatLogics";
 import { CiVideoOn } from "react-icons/ci";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import ProfileModal from "../components/miscellanious/ProfileModal";
@@ -56,6 +56,15 @@ const SingleChat = () => {
   const [sending, setSending] = useState(false);
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
+  const textareaRef = useRef(null);
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`; // Limit the height to 200px
+    }
+  }, [newMessage]);
 
   const toast = useToast();
 
@@ -735,7 +744,7 @@ const SingleChat = () => {
             display="flex"
             flexDir="column"
             justifyContent="space-between"
-            p={3}
+            pb={"2"}
             bg="blackAlpha.400"
             width="100%"
             height="100%"
@@ -771,9 +780,10 @@ const SingleChat = () => {
                 display={"flex"}
                 justifyContent={"center"}
                 alignItems={"center"}
+                pl={"2"}
               >
-                {" "}
-                <Input
+                <Textarea
+                  ref={textareaRef}
                   variant="filled"
                   textColor={"white"}
                   bg="#E0E0E0"
@@ -786,12 +796,16 @@ const SingleChat = () => {
                       sendMessage();
                     }
                   }}
+                  resize="none" // This prevents manual resizing by dragging the corner
+                  rows={1} // Sets the initial number of rows
+                  autoComplete="off"
+                  overflowY="auto" // Allows the textarea to expand vertically
+                  maxLength={250}
                 />
                 <IconButton
                   colorScheme="transparent"
-                  ml={2}
                   isLoading={sending}
-                  icon={<IoSend fontSize={"2rem"} />}
+                  icon={<IoSend fontSize={"1.5rem"} />}
                   onClick={() => sendMessage()}
                 />
               </Box>

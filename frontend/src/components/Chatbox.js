@@ -17,7 +17,7 @@ const Chatbox = () => {
       width={{ base: "100%", md: "68%" }}
       borderRadius="lg"
       borderWidth="1px"
-      height={"90vh"}
+      height={"88vh"}
     >
       <SingleChat />
     </Box>
