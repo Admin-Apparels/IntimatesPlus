@@ -18,7 +18,7 @@ import {
 import { ChatState } from "../Context/ChatProvider";
 import React, { useState } from "react";
 import axios from "axios";
-import { checkChatCount, formatMessageTime, handleCreateChat } from "../config/ChatLogics";
+import { formatMessageTime, handleCreateChat } from "../config/ChatLogics";
 import { MdOutlineVerified } from "react-icons/md";
 import { VscUnverified } from "react-icons/vsc";
 import { HiStatusOnline } from "react-icons/hi";
@@ -44,35 +44,6 @@ const MatchModal = () => {
   const toast = useToast();
 
   const accessChat = async (userId) => {
-    if(!user || !chats || !userId){
-      console.log("something missing", user, chats, userId);
-      return;
-    };
-
-    const existingChat = chats.find(
-      (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
-    );
-
-    if (existingChat) {
-      setSelectedChat(existingChat);
-      onClose();
-      return;
-    }
-    const chatCount = checkChatCount(chats);
-    const currentTime = Date.now();
-
-    if (user.subscription < currentTime && chatCount >= 2) {
-      toast({
-        title: "Maximum number of chats reached",
-        description: "You have reached the maximum number of chats for free users in the last 24 hours.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom-left",
-      });
-      return;
-    }
-
     try {
       setLoadingChat(true);
       await handleCreateChat(
@@ -126,15 +97,15 @@ const MatchModal = () => {
           isClosable: true,
           position: "bottom-left",
         });
-      }else{
+      } else {
         toast({
-        title: "Error fetching next matches",
-        description: error.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom-left",
-      });
+          title: "Error fetching next matches",
+          description: error.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left",
+        });
       }
     }
   };
@@ -148,7 +119,9 @@ const MatchModal = () => {
     }
   };
   const currentUser = users[currentIndex];
-  const lastSeenTime = currentUser ? formatMessageTime(currentUser.status) : 'Unknown';
+  const lastSeenTime = currentUser
+    ? formatMessageTime(currentUser.status)
+    : "Unknown";
 
   return (
     <>
@@ -193,11 +166,11 @@ const MatchModal = () => {
         {currentUser && (
           <>
             <ModalOverlay
-             bg="none"
-             backdropFilter="auto"
-             backdropInvert="80%"
-             backdropBlur="2px"
-             />
+              bg="none"
+              backdropFilter="auto"
+              backdropInvert="80%"
+              backdropBlur="2px"
+            />
             <ModalContent position="relative">
               <ModalCloseButton zIndex="2" color={"white"} />
               <ModalHeader
@@ -277,9 +250,19 @@ const MatchModal = () => {
                       />
                       Online
                     </Text>
-                  ) : <Box display={"flex"} justifyContent={"center"} alignItems={"center"} width={"100%"}>
-                  Last seen: &nbsp;<Text fontSize={"small"} textColor="green.100">{lastSeenTime}</Text>
-                </Box>}
+                  ) : (
+                    <Box
+                      display={"flex"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                      width={"100%"}
+                    >
+                      Last seen: &nbsp;
+                      <Text fontSize={"small"} textColor="green.100">
+                        {lastSeenTime}
+                      </Text>
+                    </Box>
+                  )}
 
                   <Button
                     m={0.5}
@@ -303,35 +286,8 @@ const MatchModal = () => {
                     justifyContent={"space-between"}
                     width={"100%"}
                   >
-                     <IconButton
-      aria-label="Heart"
-      background="transparent"
-      _hover={{
-        background: "transparent",
-        transform: "scale(1.2)", // Increase size on hover
-        transition: "transform 0.2s", // Smooth transition
-      }}
-      _active={{
-        transform: "scale(1.5)", // Increase size on click
-        transition: "transform 0.2s", // Smooth transition
-      }}
-      icon={
-        <FaHeart
-          fontSize="3rem"
-          color={click ? "#FF2400" : "#FF2400"} // Change color if clicked
-        />
-      }
-      onClick={() => {
-        setUserId(currentUser._id);
-        accessChat(currentUser._id);
-        setClick(!clicked); // Toggle clicked state
-      }}
-    />
-                    {loadingChat ? (
-                      <Spinner display="flex" />
-                    ) : (
-                      <IconButton
-                      aria-label="Heart Broken"
+                    <IconButton
+                      aria-label="Heart"
                       background="transparent"
                       _hover={{
                         background: "transparent",
@@ -343,16 +299,43 @@ const MatchModal = () => {
                         transition: "transform 0.2s", // Smooth transition
                       }}
                       icon={
-                        <FaHeartBroken
+                        <FaHeart
                           fontSize="3rem"
-                          color="#7C0A02" // Dark red color
+                          color={click ? "#FF2400" : "#FF2400"} // Change color if clicked
                         />
                       }
                       onClick={() => {
-                        nextPage();
-                        setClicked(!clicked); // Toggle clicked state
+                        setUserId(currentUser._id);
+                        accessChat(currentUser._id);
+                        setClick(!clicked); // Toggle clicked state
                       }}
                     />
+                    {loadingChat ? (
+                      <Spinner display="flex" />
+                    ) : (
+                      <IconButton
+                        aria-label="Heart Broken"
+                        background="transparent"
+                        _hover={{
+                          background: "transparent",
+                          transform: "scale(1.2)", // Increase size on hover
+                          transition: "transform 0.2s", // Smooth transition
+                        }}
+                        _active={{
+                          transform: "scale(1.5)", // Increase size on click
+                          transition: "transform 0.2s", // Smooth transition
+                        }}
+                        icon={
+                          <FaHeartBroken
+                            fontSize="3rem"
+                            color="#7C0A02" // Dark red color
+                          />
+                        }
+                        onClick={() => {
+                          nextPage();
+                          setClicked(!clicked); // Toggle clicked state
+                        }}
+                      />
                     )}
                   </Box>
                 </ModalFooter>

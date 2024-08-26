@@ -8,15 +8,15 @@ let socketInstance;
 export const formatMessageTime = (timestamp) => {
   // Check if the timestamp is valid
   if (!timestamp) {
-    return 'Invalid time';
+    return "Invalid time";
   }
 
   // Convert the timestamp to a Date object
   const messageTime = new Date(timestamp);
-  
+
   // Check if the Date object is valid
   if (isNaN(messageTime.getTime())) {
-    return 'Invalid time';
+    return "Invalid time";
   }
 
   const currentTime = new Date();
@@ -27,24 +27,24 @@ export const formatMessageTime = (timestamp) => {
   const days = Math.floor(hours / 24);
 
   if (seconds < 60) {
-    return 'Just now';
+    return "Just now";
   } else if (minutes < 60) {
-    return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+    return `${minutes} minute${minutes === 1 ? "" : "s"} ago`;
   } else if (hours < 24) {
-    return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+    return `${hours} hour${hours === 1 ? "" : "s"} ago`;
   } else if (days === 1) {
-    return 'Yesterday';
+    return "Yesterday";
   } else if (days < 7) {
-    return `${days} day${days === 1 ? '' : 's'} ago`;
+    return `${days} day${days === 1 ? "" : "s"} ago`;
   } else {
     const options = {
-      hour: 'numeric',
-      minute: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
+      hour: "numeric",
+      minute: "numeric",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
     };
-    return messageTime.toLocaleDateString('en-US', options);
+    return messageTime.toLocaleDateString("en-US", options);
   }
 };
 
@@ -55,7 +55,6 @@ export const checkChatCount = (chats) => {
   );
   return recentChats.length;
 };
-
 
 export const isSameSenderMargin = (messages, m, i, userId) => {
   if (
@@ -108,7 +107,7 @@ export const getSenderId = (loggedUser, users) => {
 };
 
 export const getSenderFull = (loggedUser, user) => {
-  if(!user || !loggedUser)return;
+  if (!user || !loggedUser) return;
 
   return user[0]._id === loggedUser._id ? user[1] : user[0];
 };
@@ -190,6 +189,34 @@ export async function handleCreateChat(
   setSelectedChat,
   toast
 ) {
+  if (!user || !chats || !userId) {
+    return;
+  }
+  const chatCount = checkChatCount(chats);
+  const currentTime = Date.now();
+
+  if (user.subscription < currentTime && chatCount >= 2) {
+    toast({
+      title: "Maximum number of chats reached",
+      description:
+        "You have reached the maximum number of chats for free users in the last 24 hours.",
+      status: "error",
+      duration: 5000,
+      isClosable: true,
+      position: "bottom-left",
+    });
+    return;
+  }
+
+  const existingChat = chats.find(
+    (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
+  );
+
+  if (existingChat) {
+    setSelectedChat(existingChat);
+    return;
+  }
+
   try {
     const config = {
       headers: {
@@ -200,10 +227,12 @@ export async function handleCreateChat(
 
     const { data } = await axios.post(`/api/chat`, { userId }, config);
 
-    if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+    // Check if the chat already exists in the chats array
+    if (!chats.find((c) => c._id === data._id)) {
+      setChats([data, ...chats]); // Add the new chat only if it doesn't exist
+    }
 
-    setChats([data, ...chats]);
-    setSelectedChat(data);
+    setSelectedChat(data); // Set the newly created/selected chat as the active chat
   } catch (error) {
     console.log(error);
     toast({
@@ -239,8 +268,7 @@ export function useConnectSocket(token) {
       newSocket.emit("newConnection", user);
     });
 
-    newSocket.on("disconnect", () => {
-    });
+    newSocket.on("disconnect", () => {});
 
     setSocket(newSocket);
     socketInstance = newSocket;

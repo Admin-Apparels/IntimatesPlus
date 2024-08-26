@@ -15,6 +15,7 @@ const accessChat = async (req, res) => {
     $and: [
       { users: { $elemMatch: { $eq: loggedId } } },
       { users: { $elemMatch: { $eq: userId } } },
+      { chatName: { $ne: "Admin" } }, // Exclude chats with the name "Admin"
     ],
   })
     .populate("users", "-password")
@@ -64,7 +65,7 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
 
       // Fetch all users to include in the admin chat
       const users = await User.find({});
-      const userIds = users.map(user => user._id);
+      const userIds = users.map((user) => user._id);
 
       // Fetch or create the admin chat
       let adminChat = await Chat.findOne({ chatName: ADMIN_CHAT_NAME });
@@ -95,7 +96,7 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
           path: "users",
           match: { _id: { $in: userIds } },
           select: "-password",
-          options: { limit: 2 } // Limit to admin and one random user
+          options: { limit: 2 }, // Limit to admin and one random user
         })
         .populate("latestMessage");
 
@@ -112,7 +113,10 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
     const adminUser = await User.findOne({ email: ADMIN_EMAIL });
     let adminChat = await Chat.findOne({ chatName: ADMIN_CHAT_NAME });
 
-    if (adminChat && !adminChat.users.some(user => user._id.equals(req.user._id))) {
+    if (
+      adminChat &&
+      !adminChat.users.some((user) => user._id.equals(req.user._id))
+    ) {
       adminChat.users.push(req.user._id);
       await adminChat.save();
     }
@@ -125,7 +129,7 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
       .populate("latestMessage")
       .sort({ updatedAt: -1 })
       .exec();
-  
+
     userChats = await User.populate(userChats, {
       path: "latestMessage.sender",
       select: "name pic email isBlocked",
@@ -137,7 +141,6 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
-
 
 const flagChats = async (req, res) => {
   const chatId = req.params.chatId;

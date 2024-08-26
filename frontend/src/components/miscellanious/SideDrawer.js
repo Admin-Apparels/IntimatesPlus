@@ -61,16 +61,6 @@ function SideDrawer() {
   };
 
   const accessChat = async (userId) => {
-    const existingChat = chats.find(
-      (chat) => chat.users[0]._id === userId || chat.users[1]._id === userId
-    );
-
-    if (existingChat) {
-      setSelectedChat(existingChat);
-      onClose();
-      return;
-    }
-
     try {
       setLoadingChat(true);
       await handleCreateChat(
