@@ -17,6 +17,8 @@ import {
   FormControl,
   Box,
   Divider,
+  LinkOverlay,
+  LinkBox,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useState } from "react";
@@ -289,10 +291,10 @@ const ClientModal = ({ children }) => {
         />
       )}
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
-      <ModalOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
-      />
+        <ModalOverlay
+          bg="blackAlpha.300"
+          backdropFilter="blur(10px) hue-rotate(90deg)"
+        />
         <ModalContent width={"calc(100% - 20px)"} p={1}>
           <ModalHeader
             fontSize="40px"
@@ -312,14 +314,14 @@ const ClientModal = ({ children }) => {
 
             {user.verified ? <MdOutlineVerified /> : <VscUnverified />}
           </ModalHeader>
-          <ModalCloseButton color={"white"}/>
+          <ModalCloseButton color={"white"} />
           <ModalBody
             display="flex"
             flexDir="column"
             alignItems="center"
             justifyContent="space-between"
             position="relative"
-            p={'4'}
+            p={"4"}
           >
             <Image
               borderRadius={isFocused ? "50%" : "5%"}
@@ -335,7 +337,7 @@ const ClientModal = ({ children }) => {
 
             <Text
               fontSize={{ base: "20px", md: "22px" }}
-              fontFamily='Arial, sans-serif'
+              fontFamily="Arial, sans-serif"
               display={isFocused ? "none" : "flex"}
               textAlign={"center"}
             >
@@ -365,7 +367,11 @@ const ClientModal = ({ children }) => {
                 </Button>
               </Box>
             )}
-            {code && <Text p={"4"} fontSize={"small"}>Code sent to ~{email}~</Text>}
+            {code && (
+              <Text p={"4"} fontSize={"small"}>
+                Code sent to ~{email}~
+              </Text>
+            )}
             {code && (
               <Box display={"flex"} width={"100%"} p={"4"}>
                 <Input
@@ -411,11 +417,19 @@ const ClientModal = ({ children }) => {
             >
               {user?.value}
             </Text>
-            {!user?.verified && <Text p='6' fontSize={"small"} width={"100%"} textAlign={"center"}>
-            <CiCircleInfo />
-            Once verified, you will receive more replies and gain increased trust from others. You'll also be able to access the
-            latest posts and will be preferred over unverified accounts.
-              </Text>}
+            {!user?.verified && (
+              <Text
+                p="6"
+                fontSize={"small"}
+                width={"100%"}
+                textAlign={"center"}
+              >
+                <CiCircleInfo />
+                Once verified, you will receive more replies and gain increased
+                trust from others. You'll also be able to access the latest
+                posts and will be preferred over unverified accounts.
+              </Text>
+            )}
           </ModalBody>
           <ModalFooter
             display={isFocused ? "none" : "block"}
@@ -446,10 +460,31 @@ const ClientModal = ({ children }) => {
             </FormControl>
             <Box
               display={"flex"}
-              justifyContent={"space-evenly"}
-              p={2}
-              margin={0}
+              flexDir={"column"}
+              width={"100%"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
             >
+              <LinkBox
+                as="article"
+                maxW="sm"
+                p="2"
+                mb={"4"}
+                borderWidth="1px"
+                rounded="md"
+                textColor={"white"}
+                background={"#FFA500"}
+                width={"100%"}
+              >
+                <LinkOverlay
+                  userSelect={"none"}
+                  href="https://www.paypal.com/donate/?hosted_button_id=2L8HHGURQTED2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Donate
+                </LinkOverlay>
+              </LinkBox>
               <Button
                 backgroundColor={"red.400"}
                 onClick={() => {
@@ -464,6 +499,7 @@ const ClientModal = ({ children }) => {
                   }
                 }}
                 isLoading={deleteLoading}
+                width={"100%"}
               >
                 Delete Account
               </Button>

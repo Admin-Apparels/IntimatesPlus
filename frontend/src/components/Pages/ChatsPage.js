@@ -19,13 +19,10 @@ import {
   ModalFooter,
   ModalBody,
   useDisclosure,
-  LinkBox,
-  LinkOverlay,
 } from "@chakra-ui/react";
 import Poll from "../miscellanious/Poll";
 import FooterAchieves from "../miscellanious/FooterAchieves";
 import { IoLibrary } from "react-icons/io5";
-import { TiEyeOutline } from "react-icons/ti";
 
 const Chatpage = () => {
   const navigate = useNavigate();
@@ -94,41 +91,19 @@ const Chatpage = () => {
             height={"100%"}
           >
             <ModalHeader
-              fontSize="100%"
-              fontFamily="Work sans"
-              display="flex"
-              flexDir={"column"}
+              fontFamily="Arial, sans-serif"
+              fontSize={"md"}
               textAlign={"center"}
-              position={"sticky"}
               bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
               bgClip="text"
               userSelect={"none"}
             >
-              <ModalCloseButton textColor={"black"} />
-              <LinkBox
-                as="article"
-                maxW="sm"
-                p="2"
-                borderWidth="1px"
-                rounded="md"
-                position="absolute"
-                top="-50%"
-                left="0"
-                textColor={"white"}
-                background={"#FFA500"}
-              >
-                <LinkOverlay
-                  userSelect={"none"}
-                  href="https://www.paypal.com/donate/?hosted_button_id=2L8HHGURQTED2"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Donate
-                </LinkOverlay>
-              </LinkBox>
-              <h1 style={{ fontWeight: "bolder" }}>
-                From Fleeting to Lasting Open Space
-              </h1>
+              <ModalCloseButton
+                textColor={"black"}
+                background={"transparent"}
+                mr={-3}
+              />
+              🔥 Explore the Hottest Kinks: Your Personalized Trendy Feed 💋
             </ModalHeader>
             <ModalBody
               display={"flex"}
@@ -138,6 +113,7 @@ const Chatpage = () => {
               width={"100%"}
               overflowY={"auto"}
               userSelect={"none"}
+              p={"2"}
             >
               <Feed />
             </ModalBody>
@@ -146,11 +122,7 @@ const Chatpage = () => {
               flexDir={"column"}
               textAlign={"center"}
               fontSize={"small"}
-              p={"4"}
-              borderRadius={2}
             >
-              <TiEyeOutline />
-              <Text fontSize={"smaller"}>15k</Text>
               For more stories and inspiration, follow us on
               <Link
                 href="https://twitter.com/IntiMates_Plus"

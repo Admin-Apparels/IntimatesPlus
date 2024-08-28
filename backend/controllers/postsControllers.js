@@ -1,6 +1,6 @@
 const Post = require("../models/postModal");
 const User = require("../models/userModel");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 const privateEmailPass = process.env.privateEmailPass;
 const privateEmail = "intimates_plus@fuckmate.boo";
 
@@ -9,7 +9,7 @@ const postComment = async (req, res) => {
   try {
     const post = await Post.findById(req.params.postId);
     if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
+      return res.status(404).json({ message: "Post not found" });
     }
 
     post.comments.push({ content, author });
@@ -17,32 +17,37 @@ const postComment = async (req, res) => {
 
     // Populate the author and comments' author fields
     await post.populate([
-      { path: 'author', select: 'name pic' },
-      { path: 'comments.author', select: 'name pic' }
+      { path: "author", select: "name pic" },
+      { path: "comments.author", select: "name pic" },
     ]);
 
     res.status(200).json(post);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
 const createPost = async (req, res) => {
-  const { content, author } = req.body;
+  const { content, author, media, mediaType } = req.body;
   const email = req.user.email;
   try {
     let post = new Post({
       content,
       author,
-      comments: []
+      media,
+      mediaType,
+      comments: [],
     });
     post = await post.save();
 
     if (email === privateEmail) {
       // Fetch users excluding the private email and only if they are verified
-      const users = await User.find({ email: { $ne: privateEmail }, verified: true });
-      const userEmails = users.map(user => user.email);
+      const users = await User.find({
+        email: { $ne: privateEmail },
+        verified: true,
+      });
+      const userEmails = users.map((user) => user.email);
 
       let transporter = nodemailer.createTransport({
         host: "mail.privateemail.com",
@@ -53,11 +58,15 @@ const createPost = async (req, res) => {
           pass: privateEmailPass, // your email password
         },
       });
-  
+
       // URL to your company logo or static image
-      const companyLogoUrl = 'https://res.cloudinary.com/dvc7i8g1a/image/upload/v1720787425/Intimates_o.jpg'; // Replace with your actual logo URL
+      const companyLogoUrl =
+        "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1720787425/Intimates_o.jpg"; // Replace with your actual logo URL
       const maxLength = 100; // Maximum length of content to display
-      const trimmedContent = content.length > maxLength ? content.substring(0, maxLength) + '...' : content;
+      const trimmedContent =
+        content.length > maxLength
+          ? content.substring(0, maxLength) + "..."
+          : content;
 
       const mailOptions = {
         from: `Fuckmate Boo <${privateEmail}>`,
@@ -82,7 +91,7 @@ const createPost = async (req, res) => {
           </div>
         `,
       };
-  
+
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
@@ -93,26 +102,56 @@ const createPost = async (req, res) => {
     }
 
     // Populate the author field
-    post = await post.populate('author', 'name pic');
+    post = await post.populate("author", "name pic");
 
     res.status(201).json(post);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
 const getPosts = async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate('author', 'name pic')  // Populate author with fields name and pic
-      .populate('comments.author', 'name pic')  // Populate comments' author with fields name and pic
-      .sort({ createdAt: -1 });
+      .populate("author", "name pic") // Populate author with fields name and pic
+      .populate("comments.author", "name pic") // Populate comments' author with fields name and pic
+      .sort({ updatedAt: -1 });
     res.status(200).json(posts);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-  module.exports = { postComment, createPost, getPosts }
+const deletePost = async (req, res) => {
+  try {
+    // Find and delete the post by its ID
+    const post = await Post.findById(req.params.postId);
+
+    // Check if the post exists
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (post.author.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Unauthorized action" });
+    }
+
+    // Delete the post
+    await Post.findByIdAndDelete(req.params.postId);
+
+    // Optionally: Return the updated list of posts sorted by `updatedAt`
+    const posts = await Post.find()
+      .populate("author", "name pic")
+      .sort({ updatedAt: -1 });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+module.exports = { postComment, createPost, getPosts, deletePost };

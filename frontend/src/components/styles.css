@@ -54,3 +54,23 @@
     transform: translateY(0);
   }
 }
+.custom-file-input {
+  display: none;
+}
+.custom-file-upload {
+  border-radius: 8px;
+  padding: 10px 20px;
+  background-color: #fff;
+  color: #1da1f2;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+.custom-file-upload:hover {
+  background-color: #f0f8ff;
+}
+.custom-file-upload:active {
+  background-color: #e1e8ed;
+}
