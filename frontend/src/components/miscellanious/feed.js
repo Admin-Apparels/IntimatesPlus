@@ -252,7 +252,7 @@ const Feed = () => {
           />
           {media ? (
             <>
-              <p>Uploaded</p>
+              <strong>Uploaded</strong>
               <FcApproval />
             </>
           ) : (

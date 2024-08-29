@@ -12,6 +12,8 @@ import { MdVerified } from "react-icons/md";
 import { PiChatsCircleThin } from "react-icons/pi";
 import { Avatar } from "@chakra-ui/react";
 import { getSenderName, getSenderPic } from "./config/ChatLogics";
+import Lottie from "react-lottie";
+import animation from "../animations/Chattting.json";
 
 const MyChat = () => {
   const [loggedUser, setLoggedUser] = useState();
@@ -29,6 +31,15 @@ const MyChat = () => {
 
   const toast = useToast();
   const navigate = useNavigate();
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
 
   const fetchChats = useCallback(async () => {
     try {
@@ -140,7 +151,7 @@ const MyChat = () => {
           py={2}
           borderRadius="lg"
           position="relative"
-          p={"2"}
+          p={"3"}
           cursor={"pointer"}
         >
           <Box display={"flex"}>
@@ -237,7 +248,7 @@ const MyChat = () => {
         display="flex"
         flexDir="column"
         p={3}
-        bg="blackAlpha.400"
+        bg="whitesmoke"
         w="100%"
         height={{ base: "100%", md: "97%" }}
         borderRadius="lg"
@@ -245,11 +256,27 @@ const MyChat = () => {
         position={"relative"}
       >
         <Box
+          position="absolute"
+          top="20"
+          left="0"
+          right="0"
+          bottom="0"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Lottie
+            options={defaultOptions}
+            height={"100%"} // Adjust this according to your layout needs
+            width={"100%"} // Adjust this according to your layout needs
+            speed={0.5}
+          />
+        </Box>
+        <Box
           display={"flex"}
           justifyContent={"center"}
           alignItems={"center"}
-          background={"blackAlpha.400"}
-          textColor={"white"}
+          background={"#E8E8E8"}
           borderRadius="lg"
           position={"sticky"}
           top={-2}

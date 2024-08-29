@@ -8,7 +8,6 @@ import {
   useDisclosure,
   ModalHeader,
   IconButton,
-  Spinner,
   useToast,
   ModalOverlay,
   Button,
@@ -35,6 +34,8 @@ import ProfileModal from "../components/miscellanious/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import { ChatState } from "./Context/ChatProvider";
 import animation from "../animations/typing.json";
+import sendingMessage from "../animations/Sending.json";
+import Inbox from "../animations/Inbox.json";
 import { useNavigate } from "react-router-dom";
 import Notifier from "./miscellanious/Notifier";
 import { HiStatusOffline, HiStatusOnline } from "react-icons/hi";
@@ -72,6 +73,23 @@ const SingleChat = () => {
     loop: true,
     autoplay: true,
     animationData: animation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
+  const InboxdefaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: Inbox,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+  const sendingDefaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: sendingMessage,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
@@ -283,13 +301,11 @@ const SingleChat = () => {
           "link",
           "sc",
           "send",
-          "when",
           "skype",
           "sk",
           "discord",
           "dc",
           "date",
-          "your",
           "account",
           "call",
           "chat",
@@ -744,27 +760,25 @@ const SingleChat = () => {
             display="flex"
             flexDir="column"
             justifyContent="space-between"
-            pb={"2"}
-            bg="blackAlpha.400"
+            bg="whitesmoke"
             width="100%"
             height="100%"
             borderRadius="lg"
             overflowY="auto"
+            paddingRight={"1"}
+            paddingLeft={"1"}
           >
             {loading ? (
-              <Spinner
-                size="xl"
-                w={20}
-                h={20}
-                alignSelf="center"
-                margin="auto"
-                color="green"
+              <Lottie
+                options={InboxdefaultOptions}
+                height={"100%"}
+                width={"100%"}
+                speed={0.5}
               />
             ) : (
               <ScrollableChat messages={messages} />
             )}
-
-            <FormControl id="first-name" isRequired mt={3}>
+            <FormControl id="typing">
               {istyping ? (
                 <div>
                   <Lottie
@@ -780,12 +794,13 @@ const SingleChat = () => {
                 display={"flex"}
                 justifyContent={"center"}
                 alignItems={"center"}
-                pl={"2"}
+                paddingRight={"2"}
+                paddingLeft={"2"}
+                paddingBottom={"2"}
               >
                 <Textarea
                   ref={textareaRef}
                   variant="filled"
-                  textColor={"white"}
                   bg="#E0E0E0"
                   placeholder="Enter a message.."
                   value={newMessage}
@@ -802,12 +817,16 @@ const SingleChat = () => {
                   overflowY="auto" // Allows the textarea to expand vertically
                   maxLength={250}
                 />
-                <IconButton
-                  colorScheme="transparent"
-                  isLoading={sending}
-                  icon={<IoSend fontSize={"1.5rem"} />}
-                  onClick={() => sendMessage()}
-                />
+                {sending ? (
+                  <Lottie options={sendingDefaultOptions} width={50} />
+                ) : (
+                  <IconButton
+                    colorScheme="transparent"
+                    isLoading={sending}
+                    icon={<IoSend fontSize={"1.5rem"} color="#0077b6" />}
+                    onClick={() => sendMessage()}
+                  />
+                )}
               </Box>
             </FormControl>
           </Box>
@@ -824,7 +843,6 @@ const SingleChat = () => {
             textColor={"white"}
             fontWeight="extrabold"
             fontSize="3xl"
-            pb={3}
             fontFamily="Arial, sans-serif"
             userSelect="none"
           >
