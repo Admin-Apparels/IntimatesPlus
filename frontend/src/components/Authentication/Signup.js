@@ -236,15 +236,15 @@ const Signup = () => {
                 display={"flex"}
                 textAlign={"center"}
                 fontWeight={"bold"}
-                textColor={"teal.400"}
+                textColor={"teal"}
               >
-                Fuckmate Boo
+                IntimatesPlus
               </Text>
               &nbsp;
               <Text fontSize={"small"}>formerly</Text>
               &nbsp;
-              <Text fontWeight={"bold"} textColor={"teal"}>
-                IntiMates+
+              <Text fontWeight={"bold"} textColor={"teal.400"}>
+                Fuckmate Boo
               </Text>
               &nbsp;!
             </Box>{" "}

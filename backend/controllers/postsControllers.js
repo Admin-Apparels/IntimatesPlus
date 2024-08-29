@@ -69,7 +69,7 @@ const createPost = async (req, res) => {
           : content;
 
       const mailOptions = {
-        from: `Fuckmate Boo <${privateEmail}>`,
+        from: `IntimatesPlus <${privateEmail}>`,
         bcc: userEmails,
         subject: "Trending Post",
         html: `
@@ -80,13 +80,13 @@ const createPost = async (req, res) => {
             <p>Be part of the trending topics out there and show your soulmate where you stand.</p>
             <p>THE POST: <strong style="color: #7e8fab;">${trimmedContent}</strong></p>
             <li style="margin-bottom: 6px;"><a href="https://fuckmate.boo/chats" target="_blank" style="color: #007bff; text-decoration: none;">Engage Now</a></li>
-            <p>Fuckmate Boo is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. By reducing isolation, depression, and anxiety, IntiMates+ aims to improve users' mental health and overall well-being. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.</p>
+            <p>IntimatesPlus is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships.</p>
             <p>Stay connected and follow us on social media:</p>
             <ul style="list-style: none; padding: 0;">
               <li style="margin-bottom: 10px;"><a href="https://twitter.com/IntiMates_Plus" target="_blank" style="color: #007bff; text-decoration: none;">Twitter</a></li>
               <li style="margin-bottom: 10px;"><a href="https://web.facebook.com/profile.php?id=61554735039262" target="_blank" style="color: #007bff; text-decoration: none;">Facebook</a></li>
             </ul>
-            <p>Fuckmate Boo, The Ultimate Adult Escape!</p>
+            <p>IntimatesPlus, The Ultimate Adult Escape!</p>
             <p>Thank you for being a part of our community.</p> 
           </div>
         `,

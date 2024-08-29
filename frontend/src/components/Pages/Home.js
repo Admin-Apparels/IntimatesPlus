@@ -173,7 +173,7 @@ function Homepage() {
                 fontSize={"small"}
                 p={"4"}
               >
-                <strong style={{ color: "#F44336" }}>Fuckmate Boo</strong> is a
+                <strong style={{ color: "#F44336" }}>IntimatesPlus</strong> is a
                 hookup-free, adult content-free platform designed to channel
                 sexual arousal from fleeting pleasures and self-comforts into
                 intimacy-driven, long-term relationships. Find someone who

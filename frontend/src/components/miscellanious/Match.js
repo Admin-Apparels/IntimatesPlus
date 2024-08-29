@@ -23,6 +23,8 @@ import { MdOutlineVerified } from "react-icons/md";
 import { VscUnverified } from "react-icons/vsc";
 import { HiStatusOnline } from "react-icons/hi";
 import { FaHeart, FaHeartBroken } from "react-icons/fa";
+import Lottie from "react-lottie";
+import animation from "../../animations/love.json";
 
 const MatchModal = () => {
   const [loadingChat, setLoadingChat] = useState(false);
@@ -42,6 +44,15 @@ const MatchModal = () => {
     onlineUsersCount,
   } = ChatState();
   const toast = useToast();
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
 
   const accessChat = async (userId) => {
     try {
@@ -122,16 +133,16 @@ const MatchModal = () => {
   const lastSeenTime = currentUser
     ? formatMessageTime(currentUser.status)
     : "Unknown";
-
   return (
     <>
       {loading ? (
-        <Spinner
-          thickness="4px"
-          speed="0.6s"
-          emptyColor="gray.200"
-          color="green.100"
-          size="md"
+        <Lottie
+          options={defaultOptions}
+          width={70}
+          style={{
+            margin: 0,
+            padding: 0,
+          }}
         />
       ) : (
         <IconButton
@@ -141,9 +152,10 @@ const MatchModal = () => {
           _hover={{ backgroundColor: "transparent" }}
           backgroundColor={"transparent"}
           icon={
-            <Image
-              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1702454939/icons8-love-circled_q6q3t5.gif"
-              height={12}
+            <Lottie
+              options={defaultOptions}
+              height={50} // Adjust height as needed
+              width={50} // Adjust width as needed
             />
           }
           onClick={() => {

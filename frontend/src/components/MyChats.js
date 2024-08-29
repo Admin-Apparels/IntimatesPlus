@@ -145,13 +145,13 @@ const MyChat = () => {
               setNotification(otherNotifications);
             }
           }}
-          background={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
+          background={selectedChat === chat ? "#38B2AC" : "#D3D3D3"}
           color={selectedChat === chat ? "white" : "black"}
           px={3}
           py={2}
           borderRadius="lg"
           position="relative"
-          p={"3"}
+          p={"4"}
           cursor={"pointer"}
         >
           <Box display={"flex"}>
@@ -269,7 +269,7 @@ const MyChat = () => {
             options={defaultOptions}
             height={"100%"} // Adjust this according to your layout needs
             width={"100%"} // Adjust this according to your layout needs
-            speed={0.5}
+            speed={1.5}
           />
         </Box>
         <Box
@@ -281,7 +281,7 @@ const MyChat = () => {
           position={"sticky"}
           top={-2}
           width={"100%"}
-          mb={2}
+          mb={"2"}
           onClick={() => {
             setTrend(true);
           }}

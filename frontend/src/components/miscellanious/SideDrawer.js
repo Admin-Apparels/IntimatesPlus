@@ -123,7 +123,7 @@ function SideDrawer() {
         display={"flex"}
         justifyContent="space-between"
         alignItems="center"
-        bg="white"
+        bg="whitesmoke"
         w="100%"
         p="5px 10px 10px 10px"
       >
@@ -131,7 +131,6 @@ function SideDrawer() {
           src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701779357/icons8-sex-64_a1hki1.png"
           height={{ base: 6, md: 10 }}
         />
-
         <Tooltip
           label="Search Users to chat"
           placement="bottom-end"
@@ -176,7 +175,7 @@ function SideDrawer() {
                 </Badge>
               )}
             </MenuButton>
-            <MenuList pl={{ base: 0, md: 2 }}>
+            <MenuList pl={{ base: 0, md: 2 }} fontSize={"small"} p={"1"}>
               {!notification.length && "No New Messages"}
               {notification.map((notif, index) => (
                 <MenuItem
@@ -201,13 +200,7 @@ function SideDrawer() {
             </MenuList>
           </Menu>
           <Menu>
-            <MenuButton
-              as={Button}
-              bg="white"
-              _hover={{ backgroundColor: "green.100" }}
-              rightIcon={<ChevronDownIcon />}
-              p={0}
-            >
+            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={0}>
               <Avatar
                 size="sm"
                 cursor="pointer"

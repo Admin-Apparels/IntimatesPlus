@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const ColoredTypewriter = styled.div`
   .Typewriter__wrapper {
-    fontSize: 20px;
+    fontsize: 20px;
     color: #fff; /* Change this to your desired color */
   }
   .Typewriter__cursor {
@@ -17,10 +17,7 @@ function Type() {
     <ColoredTypewriter>
       <Typewriter
         options={{
-          strings: [
-            "Fuckmate Boo💑",
-            "From Fleeting to Lasting🌟",
-          ],
+          strings: ["IntimatesPlus💑", "From Fleeting to Lasting🌟"],
           autoStart: true,
           loop: true,
           deleteSpeed: 50,

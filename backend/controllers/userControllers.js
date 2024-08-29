@@ -439,7 +439,7 @@ const authorizeUser = async (req, res) => {
     "https://res.cloudinary.com/dvc7i8g1a/image/upload/v1720787425/Intimates_o.jpg";
 
   const mailOptions = {
-    from: privateEmail,
+    from: `IntimatesPlus <${privateEmail}>`,
     to: email,
     subject: "Verify Your Email",
     html: `
@@ -450,13 +450,13 @@ const authorizeUser = async (req, res) => {
         <p>You have requested to verify your email associated with our service.</p>
         <p>Your recovery code is: <strong style="color: #7e8fab;">${verificationCode}</strong></p>
         <p>If you did not request this change, please contact support immediately.</p>
-        <p><strong style={{color: "#F44336"}}>Fuckmate Boo</strong> is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships. By reducing isolation, depression, and anxiety, IntiMates+ aims to improve users' mental health and overall well-being. Find someone who shares your passions and desires, turning fleeting moments into lasting connections.</p>
+        <p><strong style={{color: "#F44336"}}>IntimatesPlus</strong> is a hookup-free, porn-free platform designed to channel sexual arousal from fleeting pleasures and self-comforts into intimacy-driven, long-term relationships.</p>
         <p>Stay connected and follow us on social media:</p>
         <ul style="list-style: none; padding: 0;">
           <li style="margin-bottom: 10px;"><a href="https://twitter.com/IntiMates_Plus" target="_blank" style="color: #007bff; text-decoration: none;">X</a></li>
           <li style="margin-bottom: 10px;"><a href="https://web.facebook.com/profile.php?id=61554735039262" target="_blank" style="color: #007bff; text-decoration: none;">Facebook</a></li>
         </ul>
-        <p>Fuckmate Boo, the only Adult Escape!</p>
+        <p>IntimatesPlus, the only Adult Escape!</p>
         <p>Thank you for being a part of our community.</p> 
       </div>
     `,
