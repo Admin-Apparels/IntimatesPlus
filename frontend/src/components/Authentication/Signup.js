@@ -113,37 +113,10 @@ const Signup = () => {
     }
   };
 
-  const postDetails = (pics) => {
+  const postDetails = async (pics) => {
     setPicLoading(true);
+
     if (pics === undefined) {
-      toast({
-        title: "Please Select an Image!",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      return;
-    }
-
-    if (pics.type === "image/jpeg" || pics.type === "image/png") {
-      let data = new FormData();
-      data.append("file", pics);
-      data.append("upload_preset", "RocketChat");
-      fetch("https://api.cloudinary.com/v1_1/dvc7i8g1a/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setPic(data.url.toString());
-
-          setPicLoading(false);
-        })
-        .catch((err) => {
-          setPicLoading(false);
-        });
-    } else {
       toast({
         title: "Please Select an Image!",
         status: "warning",
@@ -153,6 +126,53 @@ const Signup = () => {
       });
       setPicLoading(false);
       return;
+    }
+
+    if (pics.type !== "image/jpeg" && pics.type !== "image/png") {
+      toast({
+        title: "Invalid file type!",
+        description: "Please upload a JPEG or PNG image.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setPicLoading(false);
+      return;
+    }
+
+    try {
+      // Request to your backend to get the signed URL and parameters
+      const response = await fetch(`/generate-upload-url?resource_type=image`);
+      const { uploadUrl, signature, timestamp } = await response.json();
+
+      let data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "RocketChat"); // Ensure this matches your Cloudinary preset
+      data.append("api_key", "766123662688499"); // API key for client-side (ensure this is secure)
+      data.append("timestamp", timestamp);
+      data.append("signature", signature);
+
+      // Perform the upload to Cloudinary
+      const uploadResponse = await fetch(uploadUrl, {
+        method: "POST",
+        body: data,
+      });
+
+      const result = await uploadResponse.json();
+      setPic(result.url.toString());
+    } catch (error) {
+      console.error("Error uploading media:", error);
+      toast({
+        title: "Upload failed!",
+        description: "There was an error uploading your file.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    } finally {
+      setPicLoading(false);
     }
   };
 

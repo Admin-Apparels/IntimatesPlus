@@ -31,7 +31,6 @@ const MatchModal = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [users, setUsers] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [loading, setLoading] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [click, setClick] = useState(false);
 
@@ -84,7 +83,6 @@ const MatchModal = () => {
   };
 
   const fetchFemaleUsers = async () => {
-    setLoading(true);
     try {
       const config = {
         headers: {
@@ -95,10 +93,7 @@ const MatchModal = () => {
       const { data } = await axios.get("/api/user/female/users", config);
 
       setUsers(data);
-
-      setLoading(false);
     } catch (error) {
-      setLoading(false);
       if (error.response && error.response.status === 429) {
         toast({
           title: "Too many request:",
@@ -135,42 +130,28 @@ const MatchModal = () => {
     : "Unknown";
   return (
     <>
-      {loading ? (
-        <Lottie
-          options={defaultOptions}
-          width={70}
-          style={{
-            margin: 0,
-            padding: 0,
-          }}
-        />
-      ) : (
-        <IconButton
-          borderRadius={20}
-          padding={0}
-          margin={0}
-          _hover={{ backgroundColor: "transparent" }}
-          backgroundColor={"transparent"}
-          icon={
-            <Lottie
-              options={defaultOptions}
-              height={50} // Adjust height as needed
-              width={50} // Adjust width as needed
-            />
-          }
-          onClick={() => {
-            setLoading(true);
-            onOpen();
-            fetchFemaleUsers();
-          }}
-        />
-      )}
-
+      <IconButton
+        _hover={{ backgroundColor: "transparent" }}
+        _focus={{ boxShadow: "none" }} // Prevent focus styles from affecting size
+        backgroundColor={"transparent"}
+        height="50px" // Ensure the button height remains consistent
+        width="50px" // Ensure the button width remains consistent
+        icon={
+          <Lottie
+            options={defaultOptions}
+            height={50} // Adjust height as needed
+            width={50} // Adjust width as needed
+          />
+        }
+        onClick={() => {
+          onOpen();
+          fetchFemaleUsers();
+        }}
+      />
       <Modal
         size="lg"
         onClose={() => {
           onClose();
-          setLoading(false);
         }}
         isOpen={isOpen}
         isCentered

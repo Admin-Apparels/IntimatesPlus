@@ -173,7 +173,7 @@ const Feed = () => {
     }
   };
 
-  const handleMediaUpload = (file) => {
+  const handleMediaUpload = async (file) => {
     setPicLoading(true);
 
     if (!file) {
@@ -188,30 +188,13 @@ const Feed = () => {
       return;
     }
 
-    if (
-      file.type === "image/jpeg" ||
-      file.type === "image/png" ||
-      file.type === "video/mp4"
-    ) {
-      let data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", "RocketChat");
+    const resourceType = file.type.startsWith("image")
+      ? "image"
+      : file.type.startsWith("video")
+      ? "video"
+      : null;
 
-      fetch("https://api.cloudinary.com/v1_1/dvc7i8g1a/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setMedia(data.url.toString());
-          setMediaType(file.type.startsWith("image") ? "image" : "video");
-          setPicLoading(false);
-        })
-        .catch((err) => {
-          console.error("Error uploading media:", err);
-          setPicLoading(false);
-        });
-    } else {
+    if (!resourceType) {
       toast({
         title: "Invalid file type!",
         description: "Please upload a JPEG, PNG, or MP4 file.",
@@ -220,6 +203,44 @@ const Feed = () => {
         isClosable: true,
         position: "bottom",
       });
+      setPicLoading(false);
+      return;
+    }
+
+    try {
+      // Request to your backend to get the signed URL and parameters
+      const response = await fetch(
+        `/generate-upload-url?resource_type=${resourceType}`
+      );
+      const { uploadUrl, signature, timestamp } = await response.json();
+
+      let data = new FormData();
+      data.append("file", file);
+      data.append("upload_preset", "RocketChat"); // Ensure this matches your Cloudinary preset
+      data.append("api_key", "766123662688499"); // API key for client-side
+      data.append("timestamp", timestamp);
+      data.append("signature", signature);
+
+      // Perform the upload to Cloudinary
+      const uploadResponse = await fetch(uploadUrl, {
+        method: "POST",
+        body: data,
+      });
+
+      const result = await uploadResponse.json();
+      setMedia(result.url.toString());
+      setMediaType(resourceType);
+    } catch (error) {
+      console.error("Error uploading media:", error);
+      toast({
+        title: "Upload failed!",
+        description: "There was an error uploading your file.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    } finally {
       setPicLoading(false);
     }
   };

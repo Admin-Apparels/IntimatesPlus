@@ -267,8 +267,8 @@ const MyChat = () => {
         >
           <Lottie
             options={defaultOptions}
-            height={"100%"} // Adjust this according to your layout needs
-            width={"100%"} // Adjust this according to your layout needs
+            height={"80%"} // Adjust this according to your layout needs
+            width={"80%"} // Adjust this according to your layout needs
             speed={1.5}
           />
         </Box>
