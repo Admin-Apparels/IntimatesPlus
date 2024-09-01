@@ -92,7 +92,7 @@ const Chatpage = () => {
           >
             <ModalHeader
               fontFamily="Arial, sans-serif"
-              fontSize={"md"}
+              fontSize={"xl"}
               textAlign={"center"}
               bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
               bgClip="text"
@@ -102,8 +102,9 @@ const Chatpage = () => {
                 textColor={"black"}
                 background={"transparent"}
                 mr={-3}
+                border={"none"}
               />
-              🔥 Explore the Hottest Kinks: Your Personalized Trendy Feed 💋
+              My Restricted Kinky Trendy Feed
             </ModalHeader>
             <ModalBody
               display={"flex"}

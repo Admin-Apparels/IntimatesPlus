@@ -17,7 +17,7 @@ import {
   ModalFooter,
   Divider,
   Spinner,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { ChatState } from "../Context/ChatProvider";
@@ -137,6 +137,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             type={show ? "text" : "password"}
             placeholder="Enter password"
+            maxLength={24}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -191,6 +192,7 @@ const Login = () => {
               textAlign="center"
               onChange={(e) => setForgotEmail(e.target.value)}
               value={forgotEmail}
+              maxLength={24}
             />
             <Divider p={2} />
             <Button
@@ -204,8 +206,10 @@ const Login = () => {
               {disable ? "Sent, try again after 30sec." : "Search for my email"}
             </Button>
           </ModalBody>
-          <ModalFooter  p={1}>
-            {forgotEmail && <Text p={"3"}>A code will be sent to the above email</Text>}
+          <ModalFooter p={1}>
+            {forgotEmail && (
+              <Text p={"3"}>A code will be sent to the above email</Text>
+            )}
             {searching && <Spinner />}
           </ModalFooter>
         </ModalContent>

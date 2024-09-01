@@ -21,7 +21,7 @@ import {
   LinkBox,
 } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineVerified } from "react-icons/md";
@@ -92,37 +92,47 @@ const ClientModal = ({ children }) => {
       });
     }
   };
-  const submitHandler = async (pic) => {
-    setPicLoading(true);
+  const submitHandler = useCallback(
+    async (pic) => {
+      setPicLoading(true);
 
-    const publicId = await extractPublicId(user.pic);
+      try {
+        // Extract the public ID from the user's current picture
+        const publicId = await extractPublicId(user.pic);
 
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      const { data } = await axios.put(
-        `/api/user/update?publicId=${publicId}`,
-        { pic },
-        config
-      );
+        const config = {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
 
-      setUser((prev) => ({ ...prev, pic: data.pic }));
-      setPic("");
-      setPicLoading(false);
-    } catch (error) {
-      toast({
-        title: "Error Occurred",
-        description: error.message,
-        status: "error",
-        duration: 5000,
-        position: "bottom",
-        isClosable: true,
-      });
-    }
-  };
+        // Send the update request to the server
+        const { data } = await axios.put(
+          `/api/user/update?publicId=${publicId}`,
+          { pic },
+          config
+        );
+
+        // Update the user's profile picture in the state
+        setUser((prev) => ({ ...prev, pic: data.pic }));
+        setPic("");
+      } catch (error) {
+        // Show an error toast if the request fails
+        toast({
+          title: "Error Occurred",
+          description: error.message,
+          status: "error",
+          duration: 5000,
+          position: "bottom",
+          isClosable: true,
+        });
+      } finally {
+        // Set the loading state to false after the request completes
+        setPicLoading(false);
+      }
+    },
+    [user.pic, user.token, setUser, toast] // Dependencies for useCallback
+  );
 
   const postDetails = async (pics) => {
     setPicLoading(true);
@@ -215,7 +225,7 @@ const ClientModal = ({ children }) => {
     };
 
     handlePicUpload();
-  }, [pic]); // This useEffect runs whenever `pic` is set
+  }, [pic, submitHandler]); // This useEffect runs whenever `pic` is set
 
   const deleteAccount = async () => {
     setDeleteLoading(true);

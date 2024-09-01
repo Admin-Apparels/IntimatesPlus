@@ -234,7 +234,7 @@ const Feed = () => {
 
       // Perform the upload to Cloudinary
       const uploadResponse = await fetch(
-        `https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/${resourceType}/upload`,
+        `https://api.cloudinary.com/v1_1/dvc7i8g1a/${resourceType}/upload`,
         {
           method: "POST",
           body: data,

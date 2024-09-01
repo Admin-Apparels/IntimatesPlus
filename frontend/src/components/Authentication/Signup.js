@@ -293,6 +293,7 @@ const Signup = () => {
               <Input
                 placeholder="Enter Your Name"
                 onChange={(e) => setName(e.target.value)}
+                maxLength={24}
               />
             </FormControl>
           </Box>
@@ -336,6 +337,7 @@ const Signup = () => {
                 type="email"
                 placeholder="Enter Your Email Address"
                 onChange={(e) => setEmail(e.target.value)}
+                maxLength={24}
               />
               {email ? (
                 <FormLabel
@@ -379,6 +381,7 @@ const Signup = () => {
                   type={show ? "text" : "password"}
                   placeholder="Enter Password"
                   onChange={(e) => setPassword(e.target.value)}
+                  maxLength={24}
                 />
                 <InputRightElement width="4.5rem">
                   <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -394,6 +397,7 @@ const Signup = () => {
                   type={show ? "text" : "password"}
                   placeholder="Confirm password"
                   onChange={(e) => setConfirmpassword(e.target.value)}
+                  maxLength={24}
                 />
                 <InputRightElement width="4.5rem">
                   <Button h="1.75rem" size="sm" onClick={handleClick}>
