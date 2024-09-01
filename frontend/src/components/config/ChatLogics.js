@@ -181,6 +181,30 @@ export async function handleApprove(type, user, setUser) {
     throw new Error("Error occurred", error);
   }
 }
+
+export async function extractPublicId(url) {
+  if (!url) return;
+
+  // Split the URL by '/' and find the index of 'upload' or 'authenticated'
+  const parts = url.split("/");
+  const relevantIndex =
+    parts.indexOf("authenticated") !== -1
+      ? parts.indexOf("authenticated") + 2
+      : parts.indexOf("upload") + 2;
+
+  if (relevantIndex === -1 || relevantIndex >= parts.length) {
+    return; // If 'authenticated' or 'upload' isn't found, or index is out of range, return
+  }
+
+  // The public ID starts after the signature segment
+  const publicIdParts = parts.slice(relevantIndex + 1).join("/"); // 'thblktgxhx6rczscxzpr.jpg'
+
+  // Remove the file extension
+  const publicId = publicIdParts.replace(/\.[^/.]+$/, "");
+
+  return publicId;
+}
+
 export async function handleCreateChat(
   userId,
   user,

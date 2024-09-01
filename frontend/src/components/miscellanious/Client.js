@@ -21,12 +21,13 @@ import {
   LinkBox,
 } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineVerified } from "react-icons/md";
 import { VscUnverified } from "react-icons/vsc";
 import { CiCircleInfo } from "react-icons/ci";
+import { extractPublicId } from "../config/ChatLogics";
 
 const ClientModal = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -91,20 +92,11 @@ const ClientModal = ({ children }) => {
       });
     }
   };
-  const submitHandler = async () => {
+  const submitHandler = async (pic) => {
     setPicLoading(true);
-    if (pic === undefined) {
-      toast({
-        title: "Please Select an Image!",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setPicLoading(false);
-      return;
-    }
-    const userId = user._id;
+
+    const publicId = await extractPublicId(user.pic);
+
     try {
       const config = {
         headers: {
@@ -112,7 +104,7 @@ const ClientModal = ({ children }) => {
         },
       };
       const { data } = await axios.put(
-        `/api/user/update/${userId}`,
+        `/api/user/update?publicId=${publicId}`,
         { pic },
         config
       );
@@ -134,8 +126,9 @@ const ClientModal = ({ children }) => {
 
   const postDetails = async (pics) => {
     setPicLoading(true);
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
-    if (pics === undefined) {
+    if (!pics) {
       toast({
         title: "Please Select an Image!",
         status: "warning",
@@ -147,7 +140,7 @@ const ClientModal = ({ children }) => {
       return;
     }
 
-    if (pics.type !== "image/jpeg" && pics.type !== "image/png") {
+    if (!["image/jpeg", "image/png"].includes(pics.type)) {
       toast({
         title: "Invalid file type!",
         description: "Please upload a JPEG or PNG image.",
@@ -160,33 +153,50 @@ const ClientModal = ({ children }) => {
       return;
     }
 
-    try {
-      // Request to your backend to get the signed URL and parameters
-      const response = await fetch(`/generate-upload-url?resource_type=image`);
-      const { uploadUrl, signature, timestamp } = await response.json();
-
-      console.log(uploadUrl, signature, timestamp);
-
-      let data = new FormData();
-      data.append("file", pics);
-      data.append("upload_preset", "RocketChat"); // Ensure this matches your Cloudinary preset
-      data.append("api_key", "766123662688499"); // API key for client-side
-      data.append("timestamp", timestamp);
-      data.append("signature", signature);
-
-      // Perform the upload to Cloudinary
-      const uploadResponse = await fetch(uploadUrl, {
-        method: "POST",
-        body: data,
+    if (pics.size > MAX_FILE_SIZE) {
+      toast({
+        title: "File too large!",
+        description: "Please upload a file smaller than 5MB.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
       });
+      setPicLoading(false);
+      return;
+    }
+
+    try {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "RocketChat");
+
+      const uploadResponse = await fetch(
+        "https://api.cloudinary.com/v1_1/dvc7i8g1a/image/upload",
+        {
+          method: "POST",
+          body: data,
+        }
+      );
+
+      if (!uploadResponse.ok) {
+        throw new Error("Upload failed");
+      }
 
       const result = await uploadResponse.json();
-      setPic(result.url.toString());
+      setPic(result.secure_url); // Triggers the useEffect for submitHandler
+      toast({
+        title: "Upload successful!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
     } catch (error) {
       console.error("Error uploading media:", error);
       toast({
         title: "Upload failed!",
-        description: "There was an error uploading your file.",
+        description: error.message,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -196,6 +206,16 @@ const ClientModal = ({ children }) => {
       setPicLoading(false);
     }
   };
+
+  useEffect(() => {
+    const handlePicUpload = async () => {
+      if (pic) {
+        await submitHandler(pic);
+      }
+    };
+
+    handlePicUpload();
+  }, [pic]); // This useEffect runs whenever `pic` is set
 
   const deleteAccount = async () => {
     setDeleteLoading(true);

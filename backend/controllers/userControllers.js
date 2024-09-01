@@ -329,8 +329,9 @@ const getMail = async (req, res) => {
     res.status(500).json({ error: "Trouble establishing uniqueness" });
   }
 };
+
 const updateUser = async (req, res) => {
-  const { userId } = req.params;
+  const userId = req.user._id;
   const { email, pic } = req.body;
 
   try {
@@ -364,7 +365,6 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   const { userId } = req.params;
-  console.log(userId);
   try {
     const deletedUser = await User.findOneAndUpdate(
       { _id: userId },
@@ -389,10 +389,17 @@ const deleteUser = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-const deleteImage = async (req, res) => {
-  const public_id = req.params.publicId;
+
+const deleteImage = async (req, res, next) => {
+  const publicId = req.query.publicId;
+
+  if (!publicId || publicId === "v1692259839") {
+    // Skip deletion if publicId is not provided or is a placeholder
+    return next();
+  }
+
   const timestamp = new Date().getTime();
-  const stringToSign = `public_id=${public_id}&timestamp=${timestamp}${process.env.CLOUDINARY_API_SECRET}`;
+  const stringToSign = `public_id=${publicId}&timestamp=${timestamp}${process.env.CLOUDINARY_API_SECRET}`;
   const signature = crypto
     .createHash("sha1")
     .update(stringToSign)
@@ -400,18 +407,25 @@ const deleteImage = async (req, res) => {
 
   try {
     const formData = new FormData();
-    formData.append("public_id", public_id);
+    formData.append("public_id", publicId);
     formData.append("signature", signature);
     formData.append("api_key", process.env.CLOUDINARY_API_KEY);
     formData.append("timestamp", timestamp);
 
-    await axios.delete(
+    const response = await axios.post(
       `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/destroy`,
-      { data: formData }
+      formData
     );
 
-    res.status(200).json({ message: "Image deleted successfully" });
+    if (response.data.result === "ok") {
+      console.log("Image deleted successfully");
+    } else {
+      console.warn("Image deletion response:", response.data);
+    }
+
+    next(); // Proceed to the next middleware (updateUser)
   } catch (error) {
+    console.error("Error deleting image:", error);
     res
       .status(500)
       .json({ error: "An error occurred while deleting the image" });

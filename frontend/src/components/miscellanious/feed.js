@@ -176,6 +176,10 @@ const Feed = () => {
   const handleMediaUpload = async (file) => {
     setPicLoading(true);
 
+    // Define maximum file size (5MB in bytes)
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 5MB
+
+    // Check if a file is selected
     if (!file) {
       toast({
         title: "Please select an image or video!",
@@ -188,6 +192,7 @@ const Feed = () => {
       return;
     }
 
+    // Determine the resource type based on file type
     const resourceType = file.type.startsWith("image")
       ? "image"
       : file.type.startsWith("video")
@@ -207,28 +212,37 @@ const Feed = () => {
       return;
     }
 
-    try {
-      // Request to your backend to get the signed URL and parameters
-      const response = await fetch(
-        `/generate-upload-url?resource_type=${resourceType}`
-      );
-      const { uploadUrl, signature, timestamp } = await response.json();
+    // Check file size
+    if (file.size > MAX_FILE_SIZE) {
+      toast({
+        title: "File too large!",
+        description: "Please upload a file smaller than 5MB.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setPicLoading(false);
+      return;
+    }
 
+    try {
+      // Prepare the FormData object for the upload
       let data = new FormData();
       data.append("file", file);
-      data.append("upload_preset", "RocketChat"); // Ensure this matches your Cloudinary preset
-      data.append("api_key", "766123662688499"); // API key for client-side
-      data.append("timestamp", timestamp);
-      data.append("signature", signature);
+      data.append("upload_preset", "RocketChat"); // Ensure this matches your Cloudinary public preset
 
       // Perform the upload to Cloudinary
-      const uploadResponse = await fetch(uploadUrl, {
-        method: "POST",
-        body: data,
-      });
-
+      const uploadResponse = await fetch(
+        `https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/${resourceType}/upload`,
+        {
+          method: "POST",
+          body: data,
+        }
+      );
+      // Handle the response
       const result = await uploadResponse.json();
-      setMedia(result.url.toString());
+      setMedia(result.secure_url); // Use `result.secure_url` for the URL of the uploaded media
       setMediaType(resourceType);
     } catch (error) {
       console.error("Error uploading media:", error);
