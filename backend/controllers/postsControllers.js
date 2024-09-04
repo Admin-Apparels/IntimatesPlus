@@ -74,7 +74,7 @@ const createPost = async (req, res) => {
         subject: "Trending Post",
         html: `
           <div style="background-color: #f2f2f2; padding: 20px; font-family: Arial, sans-serif;">
-            <h2 style="color: #333;">Engage with Others and Let Your Soulmate Find You</h2>
+            <h2 style="color: #333;">Engage with Others</h2>
             <img src="${companyLogoUrl}" loading="eager" alt="Company Logo" style="width: 100%; margin-bottom: 20px;">
             <p>Hello,</p>
             <p>Be part of the trending topics out there and show your soulmate where you stand.</p>

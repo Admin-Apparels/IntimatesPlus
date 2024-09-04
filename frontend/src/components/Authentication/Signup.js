@@ -37,14 +37,36 @@ const Signup = () => {
   const [looking, setLooking] = useState("");
   const [value, setValue] = useState("");
   const [gender, setGender] = useState("");
-
   const [loading, setLoading] = useState("");
-
   const [step, setStep] = useState(1);
-
   const nextStep = () => {
     setStep(step + 1);
   };
+
+  const [image, setImage] = useState(null);
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(URL.createObjectURL(file)); // For preview
+      postDetails(file); // Call postDetails with the selected file
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      setImage(URL.createObjectURL(file)); // For preview
+      postDetails(file); // Call postDetails with the dropped file
+    }
+  };
+
   const CheckEmail = async () => {
     setLoading(true);
     try {
@@ -164,7 +186,7 @@ const Signup = () => {
       // Prepare the FormData object for the upload
       let data = new FormData();
       data.append("file", pics);
-      data.append("upload_preset", "public_preset"); // Replace with your Cloudinary public preset
+      data.append("upload_preset", "RocketChat"); // Replace with your Cloudinary public preset
 
       // Perform the upload to Cloudinary
       const uploadResponse = await fetch(
@@ -178,11 +200,11 @@ const Signup = () => {
       // Handle the response
       const result = await uploadResponse.json();
       setPic(result.secure_url); // Use `result.secure_url` for the URL of the uploaded image
+      toast({ title: "Uploaded", status: "success" });
     } catch (error) {
       console.error("Error uploading media:", error);
       toast({
         title: "Upload failed!",
-        description: "There was an error uploading your file.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -207,22 +229,22 @@ const Signup = () => {
   };
 
   const options = [
-    "👫 Fun Buddy",
-    "❤️ Friends-with-Benefits",
-    "😄 Activity Partner",
+    "😂 Fun Buddy",
+    "🔥 FWB",
+    "💋 Kink Partner",
     "💖 Genuine Connection",
   ];
 
   const getOptionDescription = (option) => {
     switch (option) {
-      case "👫 Fun Buddy":
-        return "Enjoy exciting times and build a fun connection.";
-      case "❤️ Friends-with-Benefits":
-        return "Start with playful interactions and see where it goes.";
-      case "😄 Activity Partner":
-        return "Join in on adventures and shared interests.";
+      case "😂 Fun Buddy":
+        return "Start with playful chats. Great connections begin with cheeky fun and laughter.";
+      case "🔥 FWB":
+        return "Ignite the sparks. Sometimes, the best connections begin with a little heat.";
+      case "💋 Kink Partner":
+        return "Share your desires. Explore interests and discover new ones together.";
       case "💖 Genuine Connection":
-        return "Create a deep and meaningful relationship after fun times.";
+        return "Experience the traditional dating vibe, the old-fashioned way.";
       default:
         return "";
     }
@@ -499,8 +521,7 @@ const Signup = () => {
                     {option}
                   </Button>
                   <Text
-                    bgGradient={gradients[index]}
-                    bgClip={"text"}
+                    fontSize={"small"}
                     style={{
                       filter:
                         looking && looking !== option ? "blur(4px)" : "none",
@@ -556,27 +577,61 @@ const Signup = () => {
 
         {step === 6 && (
           <Box
-            display={"flex"}
-            flexDir={"column"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            style={{
-              animation: "slideInRight 0.5s forwards",
-            }}
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            p={6}
+            borderRadius="md"
+            boxShadow="md"
+            backgroundColor="white"
+            border="2px dashed"
+            borderColor="gray.300"
+            _hover={{ borderColor: "teal.500" }}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
           >
-            <FcPicture style={{ fontSize: "200px" }} />
-            <Text mb={4} textAlign={"center"}>
+            <FcPicture style={{ fontSize: "80px", marginBottom: "16px" }} />
+            <Text mb={4} textAlign="center" fontSize="lg" color="gray.700">
               Upload a clear and recent photo of yourself for better matching
               results.
             </Text>
-            <FormControl id="pic">
-              <FormLabel>Upload your Picture(*Public & Optional)</FormLabel>
+            <FormControl id="pic" isRequired>
+              <FormLabel fontSize="md" color="gray.600">
+                Upload a pic
+              </FormLabel>
               <Input
                 type="file"
-                p={1.5}
                 accept="image/*"
-                onChange={(e) => postDetails(e.target.files[0])}
+                display="none"
+                id="fileInput"
+                onChange={handleFileChange} // Update the onChange event
+                placeholder="Image"
               />
+              <Button
+                as="label"
+                htmlFor="fileInput"
+                variant="outline"
+                colorScheme="teal"
+                borderRadius="md"
+              >
+                Choose Image
+              </Button>
+              {image && (
+                <Box mt={4} textAlign="center">
+                  <Image
+                    src={image}
+                    alt="Selected"
+                    borderRadius="md"
+                    boxSize="150px"
+                    objectFit="cover"
+                    mb={2}
+                  />
+                </Box>
+              )}
+              <Text mt={2} fontSize="x-small" color="gray.500">
+                Drag and drop or click to select an Image
+              </Text>
             </FormControl>
           </Box>
         )}

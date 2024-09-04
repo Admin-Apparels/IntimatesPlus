@@ -361,7 +361,7 @@ const ClientModal = ({ children }) => {
             p={"4"}
           >
             <Image
-              borderRadius={isFocused ? "50%" : "5%"}
+              borderRadius={isFocused ? "none" : "full"}
               boxSize={isFocused ? "20rem" : "10rem"}
               height={"50vh"}
               width={"auto"}
@@ -495,52 +495,43 @@ const ClientModal = ({ children }) => {
                 onChange={(e) => postDetails(e.target.files[0])}
               />
             </FormControl>
-            <Box
-              display={"flex"}
-              flexDir={"column"}
+            <LinkBox
+              as="article"
+              p="2"
+              mb={"4"}
+              borderWidth="1px"
+              rounded="md"
+              textColor={"white"}
+              background={"#FFA500"}
               width={"100%"}
-              justifyContent={"space-between"}
-              alignItems={"center"}
             >
-              <LinkBox
-                as="article"
-                maxW="sm"
-                p="2"
-                mb={"4"}
-                borderWidth="1px"
-                rounded="md"
-                textColor={"white"}
-                background={"#FFA500"}
-                width={"100%"}
+              <LinkOverlay
+                userSelect={"none"}
+                href="https://www.paypal.com/donate/?hosted_button_id=2L8HHGURQTED2"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <LinkOverlay
-                  userSelect={"none"}
-                  href="https://www.paypal.com/donate/?hosted_button_id=2L8HHGURQTED2"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Donate
-                </LinkOverlay>
-              </LinkBox>
-              <Button
-                backgroundColor={"red.400"}
-                onClick={() => {
-                  if (
-                    window.confirm(
-                      `We appreciate your patience! Many users are currently registering, and we're working to find someone closer to your location. Please wait a moment for the best match. Thank you for using our service!
+                Donate
+              </LinkOverlay>
+            </LinkBox>
+            <Button
+              backgroundColor={"red.400"}
+              onClick={() => {
+                if (
+                  window.confirm(
+                    `We appreciate your patience! Many users are currently registering, and we're working to find someone closer to your location. Please wait a moment for the best match. Thank you for using our service!
                       
                       Are you sure you want to delete your account?`
-                    )
-                  ) {
-                    deleteAccount();
-                  }
-                }}
-                isLoading={deleteLoading}
-                width={"100%"}
-              >
-                Delete Account
-              </Button>
-            </Box>
+                  )
+                ) {
+                  deleteAccount();
+                }
+              }}
+              isLoading={deleteLoading}
+              width={"100%"}
+            >
+              Delete Account
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

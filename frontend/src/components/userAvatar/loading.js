@@ -55,7 +55,7 @@ const Loading = () => {
         color="gray.700"
         width={"100%"}
       >
-        Loading to <span style={{ color: "#F44336" }}>IntimatesPlus💑</span>,
+        Loading to <span style={{ color: "#F44336" }}>IntimatesPlus</span>,
         please wait...
       </Text>
       <Progress

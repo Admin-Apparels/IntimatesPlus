@@ -393,7 +393,7 @@ const deleteUser = async (req, res) => {
 const deleteImage = async (req, res, next) => {
   const publicId = req.query.publicId;
 
-  if (!publicId || publicId === "v1692259839") {
+  if (!publicId || publicId === "xqm81bw94x7h6velrwha") {
     // Skip deletion if publicId is not provided or is a placeholder
     return next();
   }
