@@ -104,7 +104,7 @@ const Chatpage = () => {
                 mr={-3}
                 border={"none"}
               />
-              My Restricted Kinky Trendy Feed
+              IntimatesPlus Confesional
             </ModalHeader>
             <ModalBody
               display={"flex"}

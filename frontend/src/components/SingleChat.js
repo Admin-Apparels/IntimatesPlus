@@ -317,7 +317,6 @@ const SingleChat = () => {
           "whatsup",
           "on",
           "share",
-          "no:",
         ];
 
         const daysOfWeek = [
@@ -775,6 +774,7 @@ const SingleChat = () => {
                 justifyContent={"center"}
                 alignItems={"center"}
                 width={"100%"}
+                height={"100%"}
               >
                 <Lottie
                   options={InboxdefaultOptions}

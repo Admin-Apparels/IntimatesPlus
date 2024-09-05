@@ -131,8 +131,8 @@ const MatchModal = () => {
   return (
     <>
       <IconButton
-        _hover={{ backgroundColor: "transparent" }}
-        _focus={{ boxShadow: "none" }} // Prevent focus styles from affecting size
+        _hover={{ background: "transparent" }}
+        _focus={{ background: "transparent" }} // Prevent focus styles from affecting size
         backgroundColor={"transparent"}
         height="50px" // Ensure the button height remains consistent
         width="50px" // Ensure the button width remains consistent

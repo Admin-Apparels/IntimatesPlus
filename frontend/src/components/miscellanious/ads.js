@@ -16,6 +16,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
+import { AiTwotoneInfoCircle } from "react-icons/ai";
 import {
   useConnectSocket,
   handleApprove,
@@ -24,7 +25,7 @@ import {
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 
-const Ads = () => {
+function Ads() {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [disable, setDisable] = useState(false);
   const { ads, setAds, user, setUser } = ChatState();
@@ -147,11 +148,11 @@ const Ads = () => {
 
   return (
     <>
-    <Modal size="lg" isOpen={isOpen} isCentered closeOnOverlayClick={false}>
-      <ModalOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
-      />
+      <Modal size="lg" isOpen={isOpen} isCentered closeOnOverlayClick={false}>
+        <ModalOverlay
+          bg="blackAlpha.300"
+          backdropFilter="blur(10px) hue-rotate(90deg)"
+        />
         <ModalContent width={"calc(100% - 20px)"} p={1}>
           <ModalHeader
             fontSize="40px"
@@ -179,7 +180,10 @@ const Ads = () => {
           >
             {disable ? (
               !clicked ? (
-                <>
+                <Box width={"100%"}>
+                  <Text>
+                    Paying to <strong>Admin Apparels</strong>
+                  </Text>
                   <PayPalScriptProvider
                     options={{
                       clientId:
@@ -231,7 +235,7 @@ const Ads = () => {
                     display={"flex"}
                     justifyContent={"center"}
                     alignItems={"center"}
-                    width={"12.5rem"}
+                    width={"100%"}
                     borderRadius={2}
                     backgroundColor={"green.400"}
                     color={"white"}
@@ -250,7 +254,7 @@ const Ads = () => {
                     />{" "}
                     Pay via Mpesa
                   </Button>{" "}
-                </>
+                </Box>
               ) : (
                 <>
                   <Text
@@ -268,13 +272,13 @@ const Ads = () => {
                     fontSize={"sm"}
                     color={"green.400"}
                     fontWeight={"bold"}
-                    placeholder="i.e 0710334455"
+                    placeholder="Enter phone number"
                     type="text"
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     value={phoneNumber}
-                    textAlign={"center"}
                     minLength={10}
                     maxLength={10}
+                    mb={"2"}
                   />
                   <Button
                     width={"100%"}
@@ -298,14 +302,21 @@ const Ads = () => {
                 </>
               )
             ) : (
-              <Text textAlign={"center"} userSelect={"none"}>
-                👋 Hey there! <br />
-                We're a small team working hard to bring you the best
-                experience. Your support means the world to us! 🌍✨ Consider
-                upgrading to our no-ads package—it not only enhances your
-                experience but also supports our growth. 🚀 <br /> Thanks for
-                being a part of our community! 🙌
-              </Text>
+              <>
+                <Text textAlign={"center"} userSelect={"none"}>
+                  👋 Hey there! <br />
+                  We're a small team working hard to bring you the best
+                  experience. Your support means the world to us! 🌍✨ Consider
+                  upgrading to our no-ads package—it not only enhances your
+                  experience but also supports our growth. 🚀 <br /> Thanks for
+                  being a part of our community! 🙌
+                </Text>
+                <Text display={"flex"} p={"6"}>
+                  {" "}
+                  <AiTwotoneInfoCircle /> A new tab will open and ads may be
+                  offensive
+                </Text>
+              </>
             )}
           </ModalBody>
           <ModalFooter display={"flex"} justifyContent={"space-evenly"}>
@@ -364,5 +375,5 @@ const Ads = () => {
       </Modal>
     </>
   );
-};
+}
 export default Ads;

@@ -11,16 +11,16 @@ import {
   Button,
   Text,
 } from "@chakra-ui/react";
+import { PiProhibitInset } from "react-icons/pi";
 
 const Notifier = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
-
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay
-      bg="blackAlpha.300"
-      backdropFilter="blur(10px) hue-rotate(90deg)"
+        bg="blackAlpha.300"
+        backdropFilter="blur(10px) hue-rotate(90deg)"
       />
       <ModalContent>
         <ModalHeader
@@ -32,15 +32,25 @@ const Notifier = ({ isOpen, onClose }) => {
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text textAlign="center" mb={4}>
+          <PiProhibitInset color="red" fontSize={"2rem"} />
+          <Text
+            alignItems="center"
+            fontSize={"larger"}
+            fontWeight={"bold"}
+            mb={2}
+          >
+            Attempt to share contact information or set a date was detected.
+          </Text>
+          <Text textAlign="center" mb={2}>
             Since you are not subscribed, your chats will remain open with the
-            other user but you will not be able to open them.
+            other user, but you will not be able to view or respond to them.
           </Text>
           <Text textAlign="center" mb={4}>
             To subscribe and enjoy a seamless experience, click the button
             below.
           </Text>
         </ModalBody>
+
         <ModalFooter
           display={"flex"}
           flexDir={"column"}
