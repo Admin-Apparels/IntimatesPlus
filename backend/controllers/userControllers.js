@@ -435,6 +435,19 @@ const deleteImage = async (req, res, next) => {
 const authorizeUser = async (req, res) => {
   const { email } = req.query;
 
+  const existingUser = await User.findOne({ email });
+
+  if (!existingUser) {
+    // Email does not exist, return error
+    return res.status(404).json({ message: "Email not found" });
+  }
+
+  // Step 2: Check if the user is already verified
+  if (existingUser.verified) {
+    // User is already verified, no need to send verification email
+    return res.status(400).json({ message: "User is already verified" });
+  }
+
   const verificationCode = Math.floor(
     100000 + Math.random() * 900000
   ).toString();

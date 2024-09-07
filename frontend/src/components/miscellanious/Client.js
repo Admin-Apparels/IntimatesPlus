@@ -61,11 +61,7 @@ const ClientModal = ({ children }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.put(
-        `/api/user/update/${userId}`,
-        { email },
-        config
-      );
+      const { data } = await axios.put(`/api/user/update`, { email }, config);
       setCode("");
       setUser((prev) => ({
         ...prev,
@@ -82,6 +78,7 @@ const ClientModal = ({ children }) => {
       });
     } catch (error) {
       setConfirm(false);
+      console.log(error);
       toast({
         title: "Error Occurred",
         description: error.message,
@@ -293,12 +290,8 @@ const ClientModal = ({ children }) => {
       }, 30000);
     } catch (error) {
       toast({
-        title: "Check Your Email!",
-        description: error.response.data.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
+        title: error.response.data.message,
+        status: "warning",
       });
       setDisabled(true);
       setTimeout(() => {
@@ -349,7 +342,11 @@ const ClientModal = ({ children }) => {
               {user.name}
             </Text>
 
-            {user.verified ? <MdOutlineVerified /> : <VscUnverified />}
+            {user.verified ? (
+              <MdOutlineVerified color="green" />
+            ) : (
+              <VscUnverified color="red" />
+            )}
           </ModalHeader>
           <ModalCloseButton color={"white"} />
           <ModalBody

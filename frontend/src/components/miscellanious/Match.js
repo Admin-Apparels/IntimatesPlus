@@ -189,12 +189,10 @@ const MatchModal = () => {
 
                 {currentUser.verified ? (
                   <MdOutlineVerified
-                    style={{ paddingLeft: "6", color: "#878ae8" }}
+                    style={{ paddingLeft: "6", color: "green" }}
                   />
                 ) : (
-                  <VscUnverified
-                    style={{ paddingLeft: "6", color: "#878ae8" }}
-                  />
+                  <VscUnverified style={{ paddingLeft: "6", color: "red" }} />
                 )}
               </ModalHeader>
               <ModalCloseButton />
@@ -241,7 +239,7 @@ const MatchModal = () => {
                       <HiStatusOnline
                         style={{ color: "red", fontSize: "1.5rem" }}
                       />
-                      Online
+                      Active
                     </Text>
                   ) : (
                     <Box

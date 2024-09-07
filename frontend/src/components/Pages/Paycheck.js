@@ -162,33 +162,19 @@ export default function Paycheck() {
             display="flex"
             flexDirection={"column"}
             justifyContent="center"
+            bg={"white"}
+            textColor={"black"}
           >
-            <Box
-              display={"flex"}
-              justifyContent={"center"}
-              alignItems={"center"}
-              p={0}
-              m={0}
-            >
-              <Text
-                fontSize={"sm"}
-                fontWeight={500}
-                bg={useColorModeValue("green.100", "green.900")}
-                p={2}
-                px={3}
-                color={"green.500"}
-                rounded={"full"}
-              >
-                *23% off
-              </Text>
-            </Box>
-
             <Text
-              textAlign={"center"}
-              justifyContent={"center"}
-              fontSize={"2xl"}
+              fontSize={"sm"}
+              fontWeight={500}
+              bg={useColorModeValue("green.100", "green.900")}
+              p={2}
+              px={3}
+              color={"green.500"}
+              rounded={"full"}
             >
-              Enter Your Mpesa Phone Number
+              *23% off
             </Text>
           </ModalHeader>
           <ModalCloseButton />
@@ -202,8 +188,7 @@ export default function Paycheck() {
               fontSize={"small"}
               color={"green.400"}
               fontWeight={"bold"}
-              placeholder="i.e 0710334455"
-              textAlign={"center"}
+              placeholder="Enter phone number"
               type="text"
               onChange={(e) => setPhoneNumber(e.target.value)}
               value={phoneNumber}
@@ -301,6 +286,10 @@ export default function Paycheck() {
               <ListItem>
                 <ListIcon as={CheckIcon} color="green.400" />
                 Chat without flags
+              </ListItem>
+              <ListItem>
+                <ListIcon as={CheckIcon} color="green.400" />
+                Get our book at a 50% discount
               </ListItem>
             </List>
 
@@ -435,7 +424,7 @@ export default function Paycheck() {
               </ListItem>
               <ListItem>
                 <ListIcon as={CheckIcon} color="green.400" />
-                Access to new features
+                Get our book completely free
               </ListItem>
             </List>
 

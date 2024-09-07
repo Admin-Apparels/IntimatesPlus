@@ -759,58 +759,59 @@ const SingleChat = () => {
           <Box
             display="flex"
             flexDir="column"
-            justifyContent="space-between"
+            justifyContent="space-between" // This ensures space is distributed between the chat and input
             bg="whitesmoke"
+            alignItems="center"
             width="100%"
             height="100%"
             borderRadius="lg"
-            overflowY="auto"
-            paddingRight={"1"}
-            paddingLeft={"1"}
+            overflowY="hidden" // Hide any overflow except for scrollable chat
+            paddingRight="1"
+            paddingLeft="1"
           >
             {loading ? (
-              <Box
-                display={"flex"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                width={"100%"}
-                height={"100%"}
-              >
-                <Lottie
-                  options={InboxdefaultOptions}
-                  height={"100%"}
-                  width={"100%"}
-                  speed={0.5}
-                />
-              </Box>
+              <Lottie
+                options={InboxdefaultOptions}
+                height="95%"
+                width="95%"
+                speed={0.5}
+              />
             ) : (
-              <ScrollableChat messages={messages} />
+              <Box
+                flex="1" // This makes the chat take up the remaining space
+                width="100%"
+                overflowY="auto" // Ensure chat is scrollable
+              >
+                <ScrollableChat messages={messages} />
+              </Box>
             )}
-            <FormControl id="typing">
-              {istyping ? (
-                <div style={{ background: "transparent" }}>
+
+            {/* Typing indicator and input box at the bottom */}
+            <FormControl id="typing" width="100%">
+              {istyping && (
+                <Box bg="transparent" mb={3}>
                   <Lottie
                     options={defaultOptions}
                     width={70}
                     style={{ marginBottom: 15, marginLeft: 0 }}
                   />
-                </div>
-              ) : (
-                <></>
+                </Box>
               )}
+
               <Box
-                display={"flex"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                paddingRight={"2"}
-                paddingLeft={"2"}
-                paddingBottom={"2"}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                paddingRight="2"
+                paddingLeft="2"
+                paddingBottom="2"
+                width="100%"
               >
                 <Textarea
                   ref={textareaRef}
                   variant="filled"
                   bg="#E0E0E0"
-                  placeholder="Enter a message.."
+                  placeholder="Enter a message..."
                   value={newMessage}
                   onChange={typingHandler}
                   onKeyDown={(event) => {
@@ -819,11 +820,12 @@ const SingleChat = () => {
                       sendMessage();
                     }
                   }}
-                  resize="none" // This prevents manual resizing by dragging the corner
-                  rows={1} // Sets the initial number of rows
+                  resize="none" // Prevent manual resizing
+                  rows={1} // Initial rows for textarea
                   autoComplete="off"
-                  overflowY="auto" // Allows the textarea to expand vertically
+                  overflowY="auto" // Enable vertical scroll for textarea if needed
                   maxLength={250}
+                  width="100%" // Ensure textarea takes full width
                 />
                 {sending ? (
                   <Lottie options={sendingDefaultOptions} width={50} />
@@ -831,8 +833,8 @@ const SingleChat = () => {
                   <IconButton
                     colorScheme="transparent"
                     isLoading={sending}
-                    icon={<IoSend fontSize={"1.5rem"} color="#0077b6" />}
-                    onClick={() => sendMessage()}
+                    icon={<IoSend fontSize="1.5rem" color="#0077b6" />}
+                    onClick={sendMessage}
                   />
                 )}
               </Box>

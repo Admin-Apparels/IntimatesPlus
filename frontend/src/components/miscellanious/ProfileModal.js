@@ -118,9 +118,9 @@ const ProfileModal = ({ userInfo }) => {
         isCentered
       >
         <ModalOverlay
-         bg="blackAlpha.300"
-         backdropFilter="blur(10px) hue-rotate(90deg)"
-         />
+          bg="blackAlpha.300"
+          backdropFilter="blur(10px) hue-rotate(90deg)"
+        />
         <ModalContent width={"calc(90%)"}>
           <ModalHeader
             fontSize="30px"
@@ -142,9 +142,13 @@ const ProfileModal = ({ userInfo }) => {
 
             {userInfo.email === ADMIN_EMAIL && <MdVerified />}
 
-            {userInfo.verified ? <MdOutlineVerified /> : <VscUnverified />}
+            {userInfo.verified ? (
+              <MdOutlineVerified color="" green />
+            ) : (
+              <VscUnverified color="red" />
+            )}
           </ModalHeader>
-          <ModalCloseButton color={"white"}/>
+          <ModalCloseButton color={"white"} />
           <ModalBody
             display="flex"
             flexDir="column"
