@@ -802,7 +802,6 @@ const SingleChat = () => {
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
-                paddingRight="2"
                 paddingLeft="2"
                 paddingBottom="2"
                 width="100%"
@@ -822,7 +821,7 @@ const SingleChat = () => {
                   }}
                   resize="none" // Prevent manual resizing
                   rows={1} // Initial rows for textarea
-                  autoComplete="off"
+                  autoComplete="on"
                   overflowY="auto" // Enable vertical scroll for textarea if needed
                   maxLength={250}
                   width="100%" // Ensure textarea takes full width
@@ -830,11 +829,13 @@ const SingleChat = () => {
                 {sending ? (
                   <Lottie options={sendingDefaultOptions} width={50} />
                 ) : (
-                  <IconButton
-                    colorScheme="transparent"
-                    isLoading={sending}
-                    icon={<IoSend fontSize="1.5rem" color="#0077b6" />}
-                    onClick={sendMessage}
+                  <IoSend
+                    onClick={() => sendMessage()}
+                    style={{
+                      color: "#0077b6",
+                      fontSize: "2.5rem",
+                      padding: "4",
+                    }}
                   />
                 )}
               </Box>
