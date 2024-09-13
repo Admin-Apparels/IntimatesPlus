@@ -18,7 +18,7 @@ const ScrollableChat = ({ messages }) => {
     selectedChat.users[0].deleted || selectedChat.users[1].deleted;
 
   return (
-    <Box width="100%" background="whitesmoke" overflowY="auto">
+    <Box width="100%" bg="transparent" overflowY="auto">
       {" "}
       {/* Ensure the parent Box takes full width */}
       <ScrollableFeed>

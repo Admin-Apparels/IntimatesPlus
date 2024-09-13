@@ -21,6 +21,8 @@ import { GiClover, GiLoveInjection } from "react-icons/gi";
 import PageIndicator from "../miscellanious/PageIndicator";
 import { PiGenderIntersexBold } from "react-icons/pi";
 import { FcPicture } from "react-icons/fc";
+import animation from "../../animations/Burning.json";
+import Lottie from "react-lottie";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -258,6 +260,15 @@ const Signup = () => {
     "linear(to-r, pink.300, purple.400, blue.200)",
   ];
 
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
   return (
     <VStack spacing="3px">
       <Box
@@ -484,14 +495,12 @@ const Signup = () => {
             minH={"300px"}
             alignItems={"center"}
           >
-            <Image
-              src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1722070626/cuttted2_htcot9.jpg"
-              userSelect={"none"}
-              boxSize={"200px"}
-              border={"5px solid red"}
-              borderRadius={"full"}
+            <Lottie
+              options={defaultOptions}
+              height="10%"
+              width="10%"
+              speed={0.5}
             />
-
             <Text
               mb={4}
               textAlign={"center"}
@@ -534,8 +543,8 @@ const Signup = () => {
               ))}
             </Box>
 
-            <FormControl id="description" Box isRequired>
-              <FormLabel>Add a short description</FormLabel>
+            <FormControl id="description" isRequired>
+              <FormLabel fontWeight={"bold"}>Add a short description</FormLabel>
               <Textarea
                 value={value}
                 onChange={(e) => setValue(e.target.value)}

@@ -41,6 +41,7 @@ import Notifier from "./miscellanious/Notifier";
 import { HiStatusOffline, HiStatusOnline } from "react-icons/hi";
 import { TbPhoneCalling } from "react-icons/tb";
 import { IoSend } from "react-icons/io5";
+import background from "../chatBackground.jpg";
 
 var selectedChatCompare;
 
@@ -760,7 +761,7 @@ const SingleChat = () => {
             display="flex"
             flexDir="column"
             justifyContent="space-between" // This ensures space is distributed between the chat and input
-            bg="whitesmoke"
+            bgImage={background}
             alignItems="center"
             width="100%"
             height="100%"
@@ -809,7 +810,7 @@ const SingleChat = () => {
                 <Textarea
                   ref={textareaRef}
                   variant="filled"
-                  bg="#E0E0E0"
+                  bg="whitesmoke"
                   placeholder="Enter a message..."
                   value={newMessage}
                   onChange={typingHandler}
