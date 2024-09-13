@@ -44,6 +44,7 @@ const ClientModal = ({ children }) => {
   const [disabled, setDisabled] = useState(false);
   const [inputCode, setInputCode] = useState("");
   const [email, setEmail] = useState(user?.email);
+  const [media, setMedia] = useState(null);
 
   const toggleFocus = () => {
     setIsFocused((prevState) => !prevState);
@@ -63,11 +64,20 @@ const ClientModal = ({ children }) => {
       };
       const { data } = await axios.put(`/api/user/update`, { email }, config);
       setCode("");
-      setUser((prev) => ({
-        ...prev,
-        verified: data.verified,
-        email: data.email,
-      }));
+
+      setUser((prev) => {
+        const updatedUser = {
+          ...prev,
+          verified: data.verified,
+          email: data.email,
+        };
+
+        // Also store the updated user in localStorage
+        localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+
+        return updatedUser;
+      });
+
       setConfirm(false);
       toast({
         title: "Verified!",
@@ -78,7 +88,6 @@ const ClientModal = ({ children }) => {
       });
     } catch (error) {
       setConfirm(false);
-      console.log(error);
       toast({
         title: "Error Occurred",
         description: error.message,
@@ -111,8 +120,14 @@ const ClientModal = ({ children }) => {
         );
 
         // Update the user's profile picture in the state
-        setUser((prev) => ({ ...prev, pic: data.pic }));
-        setPic("");
+        setUser((prev) => {
+          const updatedUser = { ...prev, pic: data.pic };
+
+          // Also store the updated user in localStorage
+          localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+
+          return updatedUser;
+        });
       } catch (error) {
         // Show an error toast if the request fails
         toast({
@@ -126,9 +141,11 @@ const ClientModal = ({ children }) => {
       } finally {
         // Set the loading state to false after the request completes
         setPicLoading(false);
+        setPic("");
+        setMedia(null);
       }
     },
-    [user.pic, user.token, setUser, toast] // Dependencies for useCallback
+    [user.pic, user.token, setUser, toast, setPic, setMedia, setPicLoading] // Dependencies for useCallback
   );
 
   const postDetails = async (pics) => {
@@ -191,7 +208,8 @@ const ClientModal = ({ children }) => {
       }
 
       const result = await uploadResponse.json();
-      setPic(result.secure_url); // Triggers the useEffect for submitHandler
+      await setPic(result.secure_url); // Triggers the useEffect for submitHandler
+      await setMedia(null);
       toast({
         title: "Upload successful!",
         status: "success",
@@ -479,7 +497,7 @@ const ClientModal = ({ children }) => {
             >
               <Button
                 width={"50%"}
-                onClick={() => submitHandler()}
+                onClick={() => postDetails(media)}
                 isLoading={picLoading}
               >
                 Change Pic{" "}
@@ -489,7 +507,7 @@ const ClientModal = ({ children }) => {
                 p={1.5}
                 ml={1}
                 accept="image/*"
-                onChange={(e) => postDetails(e.target.files[0])}
+                onChange={(e) => setMedia(e.target.files[0])}
               />
             </FormControl>
             <LinkBox

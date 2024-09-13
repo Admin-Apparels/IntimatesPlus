@@ -767,14 +767,12 @@ const SingleChat = () => {
             height="100%"
             borderRadius="lg"
             overflowY="hidden" // Hide any overflow except for scrollable chat
-            paddingRight="1"
-            paddingLeft="1"
           >
             {loading ? (
               <Lottie
                 options={InboxdefaultOptions}
-                height="95%"
-                width="95%"
+                height="100%"
+                width="100%"
                 speed={0.5}
               />
             ) : (

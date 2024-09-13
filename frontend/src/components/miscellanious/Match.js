@@ -176,8 +176,6 @@ const MatchModal = () => {
                 background={"blackAlpha.400"}
                 textColor={"whiteSmoke"}
                 userSelect={"none"}
-                p={0}
-                m={0}
                 position="absolute" // Position the header absolutely
                 top="0" // Align it to the top of the modal content
                 left="50%" // Center horizontally

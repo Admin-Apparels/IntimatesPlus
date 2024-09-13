@@ -46,11 +46,49 @@ const Signup = () => {
   };
 
   const [image, setImage] = useState(null);
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file)); // For preview
-      postDetails(file); // Call postDetails with the selected file
+      // Define maximum file size (5MB in bytes)
+      const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+      // Validate file type (including .jpg)
+      const validTypes = ["image/jpeg", "image/png"];
+      if (!validTypes.includes(file.type)) {
+        toast({
+          title: "Invalid file type!",
+          description: "Please upload a JPEG, JPG, or PNG image.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+        setImage(null); // Clear preview
+        setPicLoading(false);
+        return;
+      }
+
+      // Check file size
+      if (file.size > MAX_FILE_SIZE) {
+        toast({
+          title: "File too large!",
+          description: "Please select a file smaller than 5MB.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+        setImage(null); // Clear preview
+        setPicLoading(false);
+        return;
+      }
+
+      // If validation passes, set the image preview
+      setImage(URL.createObjectURL(file));
+
+      // Proceed with file upload
+      postDetails(file);
     }
   };
 
@@ -139,51 +177,6 @@ const Signup = () => {
 
   const postDetails = async (pics) => {
     setPicLoading(true);
-
-    // Define maximum file size (5MB in bytes)
-    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-
-    // Check if a file is selected
-    if (!pics) {
-      toast({
-        title: "Please Select an Image!",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setPicLoading(false);
-      return;
-    }
-
-    // Validate file type
-    if (pics.type !== "image/jpeg" && pics.type !== "image/png") {
-      toast({
-        title: "Invalid file type!",
-        description: "Please upload a JPEG or PNG image.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setPicLoading(false);
-      return;
-    }
-
-    // Check file size
-    if (pics.size > MAX_FILE_SIZE) {
-      toast({
-        title: "File too large!",
-        description: "Please upload a file smaller than 5MB.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setPicLoading(false);
-      return;
-    }
-
     try {
       // Prepare the FormData object for the upload
       let data = new FormData();

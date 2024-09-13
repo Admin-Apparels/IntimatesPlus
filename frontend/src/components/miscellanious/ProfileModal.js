@@ -49,7 +49,15 @@ const ProfileModal = ({ userInfo }) => {
       };
 
       const { data } = await axios.put(`/api/user/block/${userId}`, {}, config);
-      setUser((prev) => ({ ...prev, isBlocked: data.isBlocked }));
+
+      setUser((prev) => {
+        const updatedUser = { ...prev, isBlocked: data.isBlocked };
+
+        // Also store the updated user in localStorage
+        localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+
+        return updatedUser;
+      });
       onClose();
     } catch (error) {
       toast({
@@ -75,7 +83,16 @@ const ProfileModal = ({ userInfo }) => {
         {},
         config
       );
-      setUser((prev) => ({ ...prev, isBlocked: data.isBlocked }));
+
+      setUser((prev) => {
+        const updatedUser = { ...prev, isBlocked: data.isBlocked };
+
+        // Also store the updated user in localStorage
+        localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+
+        return updatedUser;
+      });
+
       onClose();
     } catch (error) {
       toast({

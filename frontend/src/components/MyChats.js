@@ -76,9 +76,9 @@ const MyChat = () => {
         .catch((error) => {
           if (error.response && error.response.status === 401) {
             toast({
-              title: "Your session has expired",
+              title: "Please log back in",
               duration: 8000,
-              status: "loading",
+              status: "warning",
               position: "bottom",
             });
 
