@@ -244,7 +244,6 @@ const Feed = () => {
     } catch (error) {
       toast({
         title: "Post failed",
-        description: "An error occurred. Please try again.",
         status: "error",
         position: "top",
       });
@@ -272,7 +271,6 @@ const Feed = () => {
       setMediaType("");
       toast({
         title: "Upload failed!",
-        description: "There was an error uploading your file.",
         status: "error",
         duration: 5000,
         isClosable: true,
