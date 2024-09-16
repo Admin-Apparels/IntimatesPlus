@@ -9,9 +9,14 @@ import {
   IconButton,
   Textarea,
   useToast,
+  FormControl,
+  Input,
+  Image,
 } from "@chakra-ui/react";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { FcApproval, FcComments } from "react-icons/fc";
+import { FcComments } from "react-icons/fc";
+import { GoVideo } from "react-icons/go";
+import { CiImageOn } from "react-icons/ci";
 import ChatLoading from "../ChatLoading";
 import { formatMessageTime } from "../config/ChatLogics";
 import { MdAdd, MdDeleteForever } from "react-icons/md";
@@ -31,6 +36,8 @@ const Feed = () => {
   const [mediaType, setMediaType] = useState("");
   const [picLoading, setPicLoading] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  const [image, setImage] = useState(null); //raw file, image/video
+  const [file, setFile] = useState(null);
 
   const fetchPosts = useCallback(
     async (page) => {
@@ -63,46 +70,6 @@ const Feed = () => {
     }
   }, [user, page, fetchPosts]);
 
-  const handlePostSubmit = async () => {
-    if (media && !content) {
-      toast({
-        title: "Please add some text!",
-        status: "info",
-        duration: 3000, // Toast will disappear after 3 seconds
-        isClosable: true, // Allow the user to close the toast manually
-      });
-      return;
-    }
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      const { data } = await axios.post(
-        "/api/posts",
-        { content, author, media, mediaType },
-        config
-      );
-      setPosts([data, ...posts]);
-      setContent("");
-      setMedia("");
-      toast({
-        title: "Posted",
-        status: "info",
-        position: "top",
-      });
-    } catch (error) {
-      toast({
-        title: "Not posted",
-        description: "Try again after some time",
-        status: "info",
-        position: "top",
-      });
-    }
-  };
-
   const handleCommentSubmit = async (postId, commentContent) => {
     try {
       const config = {
@@ -130,8 +97,7 @@ const Feed = () => {
       setSelectedPost(null);
     } catch (error) {
       toast({
-        title: "Not posted",
-        description: "Try again after some time",
+        title: "Oops!, not posted",
         status: "error",
         position: "top",
       });
@@ -173,11 +139,10 @@ const Feed = () => {
     }
   };
 
-  const handleMediaUpload = async (file) => {
-    setPicLoading(true);
-
-    // Define maximum file size (5MB in bytes)
-    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 5MB
+  const handleMediaUpload = async (e) => {
+    // Define maximum file size (50MB in bytes)
+    const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+    const file = e.target.files[0];
 
     // Check if a file is selected
     if (!file) {
@@ -188,7 +153,6 @@ const Feed = () => {
         isClosable: true,
         position: "bottom",
       });
-      setPicLoading(false);
       return;
     }
 
@@ -208,7 +172,7 @@ const Feed = () => {
         isClosable: true,
         position: "bottom",
       });
-      setPicLoading(false);
+
       return;
     }
 
@@ -216,7 +180,7 @@ const Feed = () => {
     if (file.size > MAX_FILE_SIZE) {
       toast({
         title: "File too large!",
-        description: "Please upload a file smaller than 5MB.",
+        description: "Please upload a file smaller than 50MB.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -226,26 +190,86 @@ const Feed = () => {
       return;
     }
 
+    //media passed availble checks, ready for upload!
+    setImage(URL.createObjectURL(file));
+    setFile(file);
+    setMediaType(resourceType);
+  };
+
+  const handlePostSubmit = async () => {
+    setPicLoading(true);
+
+    // Check if content or media is available
+    if (!content && !file) {
+      toast({
+        title: "Please add some text or media!",
+        status: "info",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     try {
-      // Prepare the FormData object for the upload
+      let uploadedMediaUrl = media;
+
+      // If file exists, upload the media first
+      if (file && mediaType) {
+        uploadedMediaUrl = await UploadContent(); // Wait for upload and get URL
+      }
+
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      // Post submission with content and media
+      const { data } = await axios.post(
+        "/api/posts",
+        { content, author, media: uploadedMediaUrl, mediaType },
+        config
+      );
+
+      setPosts([data, ...posts]);
+      setContent(""); // Clear content field
+      setMedia(""); // Clear media URL
+      setImage(null); // Clear image preview
+      toast({
+        title: "Posted successfully!",
+        status: "success",
+        position: "top",
+      });
+    } catch (error) {
+      toast({
+        title: "Post failed",
+        description: "An error occurred. Please try again.",
+        status: "error",
+        position: "top",
+      });
+    } finally {
+      setPicLoading(false);
+    }
+  };
+
+  const UploadContent = async () => {
+    try {
       let data = new FormData();
       data.append("file", file);
-      data.append("upload_preset", "RocketChat"); // Ensure this matches your Cloudinary public preset
+      data.append("upload_preset", "RocketChat");
 
-      // Perform the upload to Cloudinary
       const uploadResponse = await fetch(
-        `https://api.cloudinary.com/v1_1/dvc7i8g1a/${resourceType}/upload`,
-        {
-          method: "POST",
-          body: data,
-        }
+        `https://api.cloudinary.com/v1_1/dvc7i8g1a/${mediaType}/upload`,
+        { method: "POST", body: data }
       );
-      // Handle the response
+
       const result = await uploadResponse.json();
-      setMedia(result.secure_url); // Use `result.secure_url` for the URL of the uploaded media
-      setMediaType(resourceType);
+      setFile(null); // Clear the file input after upload
+      return result.secure_url; // Return the uploaded media URL
     } catch (error) {
-      console.error("Error uploading media:", error);
+      setMedia("");
+      setMediaType("");
       toast({
         title: "Upload failed!",
         description: "There was an error uploading your file.",
@@ -254,8 +278,7 @@ const Feed = () => {
         isClosable: true,
         position: "bottom",
       });
-    } finally {
-      setPicLoading(false);
+      throw error; // Ensure the error is caught in handlePostSubmit
     }
   };
 
@@ -285,33 +308,98 @@ const Feed = () => {
             placeholder="What's happening?"
             maxLength={500}
           />
-          {media ? (
-            <>
-              <strong>Uploaded</strong>
-              <FcApproval />
-            </>
-          ) : (
-            <>
-              <label htmlFor="file-upload" class="custom-file-upload">
-                📁 Choose a file
-              </label>
-              <input
-                id="file-upload"
-                type="file"
-                accept="image/jpeg,image/png,video/mp4"
-                onChange={(e) => handleMediaUpload(e.target.files[0])}
-                class="custom-file-input"
-              />
-            </>
-          )}
-          {picLoading && <p>Uploading...</p>}
+
+          <FormControl id="pic" isRequired>
+            <Input
+              type="file"
+              accept="image/jpeg,image/png,video/mp4"
+              display="none"
+              id="fileInput"
+              onChange={(e) => handleMediaUpload(e)} // Update the onChange event
+              placeholder="Image/video"
+            />
+            {!mediaType && (
+              <Button
+                as="label"
+                htmlFor="fileInput"
+                variant="outline"
+                colorScheme="teal"
+                borderRadius="md"
+                border={"none"}
+                _hover={{ background: "transparent", cursor: "pointer" }}
+              >
+                <CiImageOn fontSize={"20px"} /> <GoVideo fontSize={"20px"} />
+              </Button>
+            )}
+            {image && mediaType === "image" && (
+              <Box
+                mt={4}
+                textAlign="center"
+                position="relative"
+                display="inline-block"
+              >
+                <Image
+                  src={image}
+                  alt="Selected"
+                  borderRadius="md"
+                  boxSize="150px"
+                  objectFit="cover"
+                  mb={2}
+                />
+                <Button
+                  size="xs"
+                  colorScheme="red"
+                  position="absolute"
+                  top="-10px"
+                  right="-10px"
+                  borderRadius="full"
+                  onClick={() => {
+                    setImage(null);
+                    setMediaType("");
+                  }} // Clear image on click
+                >
+                  ✕
+                </Button>
+              </Box>
+            )}
+            {image && mediaType === "video" && (
+              <Box
+                mt={4}
+                textAlign="center"
+                position="relative"
+                display="inline-block"
+              >
+                <video width="150" controls>
+                  <source src={image} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <Button
+                  size="xs"
+                  colorScheme="red"
+                  position="absolute"
+                  top="-10px"
+                  right="-10px"
+                  borderRadius="full"
+                  onClick={() => {
+                    setImage(null);
+                    setMediaType("");
+                  }} // Clear video on click
+                >
+                  ✕
+                </Button>
+              </Box>
+            )}
+          </FormControl>
           <Text mb={4} fontSize={"small"}>
             {content.length}/500
           </Text>
           <Button
             colorScheme="green"
             width={"100%"}
-            onClick={handlePostSubmit}
+            onClick={() => {
+              handlePostSubmit();
+              setIsClicked(false);
+            }}
             mb={4}
             isDisabled={!content && !media}
             isLoading={picLoading}
@@ -325,9 +413,10 @@ const Feed = () => {
         right={"15%"}
         bottom={"20%"}
         zIndex={10}
+        color={"white"}
         borderRadius={"full"}
-        _hover={{ background: "transparent", color: "red" }}
-        background={"white"}
+        _hover={{ color: "black" }}
+        background={"blue.400"}
         onClick={() => setIsClicked(!isClicked)}
         icon={
           isClicked ? (

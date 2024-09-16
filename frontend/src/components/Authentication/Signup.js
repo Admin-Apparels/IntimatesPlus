@@ -102,8 +102,7 @@ const Signup = () => {
     e.stopPropagation();
     const file = e.dataTransfer.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file)); // For preview
-      postDetails(file); // Call postDetails with the dropped file
+      handleFileChange({ target: { files: [file] } });
     }
   };
 
@@ -620,7 +619,12 @@ const Signup = () => {
                 Choose Image
               </Button>
               {image && (
-                <Box mt={4} textAlign="center">
+                <Box
+                  mt={4}
+                  textAlign="center"
+                  position="relative"
+                  display="inline-block"
+                >
                   <Image
                     src={image}
                     alt="Selected"
@@ -629,6 +633,17 @@ const Signup = () => {
                     objectFit="cover"
                     mb={2}
                   />
+                  <Button
+                    size="xs"
+                    colorScheme="red"
+                    position="absolute"
+                    top="-10px"
+                    right="-10px"
+                    borderRadius="full"
+                    onClick={() => setImage(null)} // Clear image on click
+                  >
+                    ✕
+                  </Button>
                 </Box>
               )}
               <Text mt={2} fontSize="x-small" color="gray.500">
