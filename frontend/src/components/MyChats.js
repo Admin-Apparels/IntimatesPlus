@@ -9,11 +9,12 @@ import { useNavigate } from "react-router-dom";
 import Notifier from "./miscellanious/Notifier";
 import { FaFireAlt, FaFlag } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
-import { PiChatsCircleThin } from "react-icons/pi";
 import { Avatar } from "@chakra-ui/react";
-import { getSenderName, getSenderPic } from "./config/ChatLogics";
-import Lottie from "react-lottie";
-import animation from "../animations/Chattting.json";
+import {
+  formatMessageLongTime,
+  getSenderName,
+  getSenderPic,
+} from "./config/ChatLogics";
 
 const MyChat = () => {
   const [loggedUser, setLoggedUser] = useState();
@@ -31,15 +32,6 @@ const MyChat = () => {
 
   const toast = useToast();
   const navigate = useNavigate();
-
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: animation,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
 
   const fetchChats = useCallback(async () => {
     try {
@@ -145,13 +137,12 @@ const MyChat = () => {
               setNotification(otherNotifications);
             }
           }}
-          background={selectedChat === chat ? "#38B2AC" : "#D3D3D3"}
+          background={selectedChat === chat ? "#38B2AC" : "whitesmoke"}
           color={selectedChat === chat ? "white" : "black"}
           px={3}
           py={2}
           borderRadius="lg"
           position="relative"
-          p={"4"}
           cursor={"pointer"}
         >
           <Box display={"flex"}>
@@ -187,6 +178,17 @@ const MyChat = () => {
             </Box>
           </Box>
 
+          {/* Time at the top-right corner */}
+          <Text
+            position="absolute"
+            top={2}
+            right={2}
+            fontSize="xs"
+            color={selectedChat === chat ? "white" : "black"}
+          >
+            {formatMessageLongTime(chat.latestMessage?.createdAt)}
+          </Text>
+
           {isFlagged && (
             <FaFlag
               style={{
@@ -207,94 +209,44 @@ const MyChat = () => {
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
       flexDir="column"
       alignItems="center"
-      p={2}
-      bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
-      bgClip="border-box"
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
-      borderWidth="1px"
       height={"85vh"}
     >
       {modal && <Notifier isOpen={modal} onClose={() => setModal(false)} />}
       <Box
         display="flex"
-        p={2}
-        width="100%"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Text
-          fontFamily="Arial, sans-serif"
-          fontWeight={"medium"}
-          textColor={"white"}
-          userSelect={"none"}
-        >
-          My Chats:{" "}
-        </Text>
-
-        <Text
-          display={"flex"}
-          justifyContent={"space-between"}
-          userSelect={"none"}
-          fontSize={"small"}
-          textColor={"white"}
-          p={2}
-        >
-          {chats !== undefined ? chats.length : 0}
-          <PiChatsCircleThin style={{ fontSize: "1.5rem" }} />
-        </Text>
-      </Box>
-      <Box
-        display="flex"
         flexDir="column"
-        p={3}
         bg="whitesmoke"
         w="100%"
         height={{ base: "100%", md: "97%" }}
         borderRadius="lg"
         overflowY="hidden"
-        position={"relative"}
       >
-        <Box
-          position="absolute"
-          top="20"
-          left="0"
-          right="0"
-          bottom="0"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Lottie
-            options={defaultOptions}
-            height={"80%"} // Adjust this according to your layout needs
-            width={"80%"} // Adjust this according to your layout needs
-            speed={1.5}
-          />
-        </Box>
-        <Box
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          background={"#E8E8E8"}
-          borderRadius="lg"
-          position={"sticky"}
-          top={-2}
-          width={"100%"}
-          mb={"2"}
-          onClick={() => {
-            setTrend(true);
-          }}
-          cursor={"pointer"}
-          p={"6"}
-          bottom={5}
-          userSelect={"none"}
-        >
-          <FaFireAlt style={{ color: "red" }} />
-          <Text pl={"2"}>What's trending</Text>
-        </Box>
         {chats && chats.length > 0 ? (
-          <Stack overflowY="scroll">{renderChatItems()}</Stack>
+          <Stack overflowY="scroll">
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              background={"#E8E8E8"}
+              borderRadius="lg"
+              top={-2}
+              width={"100%"}
+              mb={"2"}
+              onClick={() => {
+                setTrend(true);
+              }}
+              cursor={"pointer"}
+              p={"6"}
+              bottom={5}
+              userSelect={"none"}
+            >
+              <FaFireAlt style={{ color: "red" }} />
+              <Text pl={"2"}>What's trending</Text>
+            </Box>
+            {renderChatItems()}
+          </Stack>
         ) : (
           <ChatLoading />
         )}

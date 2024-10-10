@@ -1,12 +1,5 @@
-import { Avatar } from "@chakra-ui/avatar";
-import { Tooltip } from "@chakra-ui/tooltip";
 import ScrollableFeed from "react-scrollable-feed";
-import {
-  isLastMessage,
-  isSameSender,
-  isSameSenderMargin,
-  isSameUser,
-} from "./config/ChatLogics";
+import { isSameSenderMargin, isSameUser } from "./config/ChatLogics";
 import { Text, Box } from "@chakra-ui/react";
 import { ChatState } from "./Context/ChatProvider";
 import Message from "./Message";
@@ -36,28 +29,10 @@ const ScrollableChat = ({ messages }) => {
                   justifyContent:
                     m.sender._id === user._id ? "flex-end" : "flex-start", // Align messages based on sender
                   alignItems: "center",
+                  padding: ".1rem",
                 }}
                 key={m._id}
               >
-                {m &&
-                  (isSameSender(messages, m, i, user?._id) ||
-                    isLastMessage(messages, i, user?._id)) && (
-                    <Tooltip
-                      label={m.sender.name}
-                      placement="bottom-start"
-                      hasArrow
-                    >
-                      <Avatar
-                        mt="7px"
-                        mr={1}
-                        size="sm"
-                        cursor="pointer"
-                        name={m.sender.name}
-                        src={m.sender.pic}
-                      />
-                    </Tooltip>
-                  )}
-
                 <span
                   style={{
                     backgroundColor: `${

@@ -9,7 +9,6 @@ import {
   ModalCloseButton,
   Button,
   useDisclosure,
-  IconButton,
   Text,
   Image,
   useToast,
@@ -117,9 +116,8 @@ const ProfileModal = ({ userInfo }) => {
 
   return (
     <>
-      <IconButton
+      <ViewIcon
         display={{ base: "flex" }}
-        icon={<ViewIcon />}
         onClick={() => {
           onOpen();
         }}

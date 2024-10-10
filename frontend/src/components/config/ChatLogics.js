@@ -48,6 +48,47 @@ export const formatMessageTime = (timestamp) => {
   }
 };
 
+export const formatMessageLongTime = (timestamp) => {
+  // Check if the timestamp is valid
+  if (!timestamp) {
+    return "Invalid time";
+  }
+
+  // Convert the timestamp to a Date object
+  const messageTime = new Date(timestamp);
+
+  // Check if the Date object is valid
+  if (isNaN(messageTime.getTime())) {
+    return "Invalid time";
+  }
+
+  const currentTime = new Date();
+  const timeDifference = currentTime - messageTime;
+  const seconds = Math.floor(timeDifference / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (seconds < 60) {
+    return "Just now";
+  } else if (minutes < 60) {
+    return `${minutes} minute${minutes === 1 ? "" : "s"} ago`;
+  } else if (hours < 24) {
+    return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+  } else if (days === 1) {
+    return "Yesterday";
+  } else if (days < 7) {
+    return `${days} day${days === 1 ? "" : "s"} ago`;
+  } else {
+    // Format the date as MM/DD/YY
+    return messageTime.toLocaleDateString("en-US", {
+      month: "numeric",
+      day: "numeric",
+      year: "2-digit",
+    });
+  }
+};
+
 export const checkChatCount = (chats) => {
   const last24Hours = Date.now() - 24 * 60 * 60 * 1000;
   const recentChats = chats?.filter(

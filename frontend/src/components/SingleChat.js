@@ -7,7 +7,6 @@ import {
   ModalFooter,
   useDisclosure,
   ModalHeader,
-  IconButton,
   useToast,
   ModalOverlay,
   Button,
@@ -15,6 +14,7 @@ import {
   Checkbox,
   Link,
   Textarea,
+  Avatar,
 } from "@chakra-ui/react";
 import "../components/styles.css";
 import PageIndicator from "./miscellanious/PageIndicator";
@@ -24,7 +24,7 @@ import {
   getUserById,
   getSenderId,
   useConnectSocket,
-  formatMessageTime,
+  formatMessageLongTime,
 } from "./config/ChatLogics";
 import { CiVideoOn } from "react-icons/ci";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -41,7 +41,7 @@ import Notifier from "./miscellanious/Notifier";
 import { HiStatusOffline, HiStatusOnline } from "react-icons/hi";
 import { TbPhoneCalling } from "react-icons/tb";
 import { IoSend } from "react-icons/io5";
-import background from "../chatBackground.jpg";
+import background from "../triangles.svg";
 
 var selectedChatCompare;
 
@@ -578,7 +578,7 @@ const SingleChat = () => {
     ? new Date(senderFullInfo.status)
     : null;
   const lastSeenTime = senderStatusTime
-    ? formatMessageTime(senderStatusTime)
+    ? formatMessageLongTime(senderStatusTime)
     : "Unknown";
 
   return (
@@ -701,29 +701,38 @@ const SingleChat = () => {
             justifyContent={"space-between"}
             alignItems="center"
           >
-            <IconButton
-              display="flex"
-              icon={<ArrowBackIcon />}
-              onClick={() => setSelectedChat("")}
-            />
-
             <Box
+              display={"flex"}
+              alignItems={"center"}
               textAlign={"center"}
-              textColor={"white"}
               userSelect={"none"}
               fontFamily="Arial, sans-serif"
             >
-              {" "}
-              {senderFullInfo?.name}
+              <ArrowBackIcon
+                fontSize={"medium"}
+                onClick={() => setSelectedChat("")}
+                mr={"1"}
+              />
+              <Avatar
+                size="sm"
+                cursor="pointer"
+                name={senderFullInfo?.name}
+                src={senderFullInfo?.pic}
+                mr={"1"}
+              />{" "}
+              <Text fontSize={"md"} fontWeight={"bold"} mb={-3}>
+                {senderFullInfo?.name}
+              </Text>
               <Text
                 display={"flex"}
                 textAlign={"center"}
-                textColor={"white"}
                 fontSize={"x-small"}
+                pl={1}
+                mb={-3}
               >
                 {onlineUsersCount?.includes(senderFullInfo?._id)
                   ? "Online"
-                  : `last seen: ${lastSeenTime}`}
+                  : `Seen: ${lastSeenTime}`}
               </Text>
             </Box>
             <Box
@@ -737,17 +746,12 @@ const SingleChat = () => {
                 <HiStatusOffline />
               )}{" "}
               {!isCallStarted ? (
-                <IconButton
-                  borderRadius={20}
-                  padding={0}
-                  margin={0}
-                  _hover={{ backgroundColor: "transparent" }}
-                  backgroundColor={"transparent"}
+                <CiVideoOn
                   isDisabled={!isOnline}
-                  icon={<CiVideoOn style={{ fontSize: "2rem" }} />}
                   onClick={() => {
                     startCall();
                   }}
+                  style={{ fontSize: "2rem" }}
                 />
               ) : (
                 <TbPhoneCalling />
@@ -850,7 +854,6 @@ const SingleChat = () => {
           h="100%"
         >
           <Text
-            textColor={"white"}
             fontWeight="extrabold"
             fontSize="3xl"
             fontFamily="Arial, sans-serif"
