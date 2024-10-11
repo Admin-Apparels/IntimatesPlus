@@ -37,7 +37,7 @@ const ProfileModal = ({ userInfo }) => {
   const toggleFocus = () => {
     setIsFocused((prevState) => !prevState);
   };
-  const ADMIN_EMAIL = "admin@fuckmate.boo";
+  const ADMIN_EMAIL = "intimates_plus@fuckmate.boo";
 
   const handleBlock = async (userId, user) => {
     try {

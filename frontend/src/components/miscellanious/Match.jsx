@@ -6,7 +6,6 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button,
   useDisclosure,
   IconButton,
   Text,
@@ -148,14 +147,7 @@ const MatchModal = () => {
           fetchFemaleUsers();
         }}
       />
-      <Modal
-        size="lg"
-        onClose={() => {
-          onClose();
-        }}
-        isOpen={isOpen}
-        isCentered
-      >
+      <Modal size="sm" onClose={onClose} isOpen={isOpen} isCentered>
         {currentUser && (
           <>
             <ModalOverlay
@@ -164,10 +156,18 @@ const MatchModal = () => {
               backdropInvert="80%"
               backdropBlur="2px"
             />
-            <ModalContent position="relative">
+            <ModalContent
+              position="relative"
+              width={["100%", "80%", "40%"]}
+              maxWidth="100vw"
+              bg="none"
+              backdropFilter="auto"
+              backdropInvert="80%"
+              backdropBlur="2px"
+            >
               <ModalCloseButton zIndex="2" color={"white"} />
               <ModalHeader
-                fontSize="40px"
+                fontSize={["24px", "30px", "40px"]}
                 fontFamily="Work sans"
                 display="flex"
                 justifyContent="center"
@@ -176,15 +176,13 @@ const MatchModal = () => {
                 background={"blackAlpha.400"}
                 textColor={"whiteSmoke"}
                 userSelect={"none"}
-                position="absolute" // Position the header absolutely
-                top="0" // Align it to the top of the modal content
-                left="50%" // Center horizontally
-                transform="translateX(-50%)" // Move it left by half its width to center it horizontally
+                position="absolute"
+                top="0"
+                left="50%"
+                transform="translateX(-50%)"
                 zIndex="1"
-                // Ensure the header is above the image
               >
                 {currentUser.name}
-
                 {currentUser.verified ? (
                   <MdOutlineVerified
                     style={{ paddingLeft: "6", color: "green" }}
@@ -193,37 +191,35 @@ const MatchModal = () => {
                   <VscUnverified style={{ paddingLeft: "6", color: "red" }} />
                 )}
               </ModalHeader>
-              <ModalCloseButton />
+
               <ModalBody
-                position="relative" // Ensure the body is relatively positioned
+                position="relative"
                 display="flex"
                 flexDir="column"
                 alignItems="center"
                 justifyContent="space-between"
-                p={1}
+                width={"100%"}
+                p={4}
               >
                 <Image
                   src={currentUser.pic}
                   alt={""}
-                  height={"100%"}
-                  width={"100%"}
+                  width={"100%"} // Takes full width of the modal
+                  height={"auto"} // Keeps the aspect ratio
+                  objectFit={"cover"} // Adjust the image to contain inside the modal
                   loading="eager"
                   cursor="pointer"
-                  transition="box-size 0.3s ease-in-out"
-                  boxShadow="dark-lg"
-                  rounded="md"
-                  bg="white"
-                  borderRadius={20}
                   userSelect="none"
                 />
 
                 <ModalFooter
                   display="flex"
                   flexDir="column"
-                  position="absolute" // Positions the footer absolutely
-                  bottom="0" // Aligns it to the bottom of the modal body
-                  left="50%" // Centers it horizontally
-                  transform="translateX(-50%)" // Moves it left by half its width to center it horizontally
+                  position="absolute"
+                  bottom="0"
+                  left="50%"
+                  transform="translateX(-50%)"
+                  fontSize={"small"}
                   justifyContent="space-between"
                   bg="linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 1))"
                   width="100%"
@@ -247,19 +243,19 @@ const MatchModal = () => {
                       width={"100%"}
                     >
                       Last seen: &nbsp;
-                      <Text fontSize={"small"} textColor="green.100">
+                      <Text fontSize={"x-small"} textColor="green.100">
                         {lastSeenTime}
                       </Text>
                     </Box>
                   )}
 
-                  <Button
-                    m={0.5}
+                  <Text
+                    m={0.2}
                     bgGradient="linear(to-r, gray.300, yellow.400, pink.200)"
-                    borderRadius={20}
+                    bgClip={"text"}
                   >
                     {currentUser.looking}
-                  </Button>
+                  </Text>
                   <Text
                     width={"100%"}
                     fontFamily="Work sans"
@@ -275,55 +271,46 @@ const MatchModal = () => {
                     justifyContent={"space-between"}
                     width={"100%"}
                   >
-                    <IconButton
-                      aria-label="Heart"
+                    <FaHeart
+                      fontSize="2rem"
                       background="transparent"
                       _hover={{
                         background: "transparent",
-                        transform: "scale(1.2)", // Increase size on hover
-                        transition: "transform 0.2s", // Smooth transition
+                        transform: "scale(1.2)",
+                        transition: "transform 0.2s",
                       }}
                       _active={{
-                        transform: "scale(1.5)", // Increase size on click
-                        transition: "transform 0.2s", // Smooth transition
+                        transform: "scale(1.5)",
+                        transition: "transform 0.2s",
                       }}
-                      icon={
-                        <FaHeart
-                          fontSize="3rem"
-                          color={click ? "#FF2400" : "#FF2400"} // Change color if clicked
-                        />
-                      }
                       onClick={() => {
                         setUserId(currentUser._id);
                         accessChat(currentUser._id);
-                        setClick(!clicked); // Toggle clicked state
+                        setClick(!clicked);
                       }}
+                      color={click ? "#FF2400" : "#FF2400"}
                     />
+
                     {loadingChat ? (
                       <Spinner display="flex" />
                     ) : (
-                      <IconButton
-                        aria-label="Heart Broken"
+                      <FaHeartBroken
+                        fontSize="2rem"
                         background="transparent"
                         _hover={{
                           background: "transparent",
-                          transform: "scale(1.2)", // Increase size on hover
-                          transition: "transform 0.2s", // Smooth transition
+                          transform: "scale(1.2)",
+                          transition: "transform 0.2s",
                         }}
                         _active={{
-                          transform: "scale(1.5)", // Increase size on click
-                          transition: "transform 0.2s", // Smooth transition
+                          transform: "scale(1.5)",
+                          transition: "transform 0.2s",
                         }}
-                        icon={
-                          <FaHeartBroken
-                            fontSize="3rem"
-                            color="#7C0A02" // Dark red color
-                          />
-                        }
                         onClick={() => {
                           nextPage();
-                          setClicked(!clicked); // Toggle clicked state
+                          setClicked(!clicked);
                         }}
+                        color="#7C0A02"
                       />
                     )}
                   </Box>
