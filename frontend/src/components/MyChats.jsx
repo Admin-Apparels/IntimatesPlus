@@ -14,6 +14,7 @@ import {
   getSenderName,
   getSenderPic,
 } from "./config/ChatLogics";
+import { OrderForm } from "./miscellanious/Order";
 
 const MyChat = () => {
   const [loggedUser, setLoggedUser] = useState();
@@ -224,6 +225,7 @@ const MyChat = () => {
       >
         {chats && chats.length > 0 ? (
           <Stack overflowY="scroll">
+            <OrderForm />
             <Box
               display={"flex"}
               justifyContent={"center"}

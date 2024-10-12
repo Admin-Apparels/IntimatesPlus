@@ -354,23 +354,36 @@ export function useConnectSocket(token) {
 }
 
 // Function to get all orders (for admin)
-export const getAllOrders = async () => {
+export const getAllOrders = async (user) => {
   try {
-    const response = await axios.get(`/api/orders`);
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const response = await axios.get(`/api/orders`, config);
     return response.data; // Return the orders data
   } catch (error) {
-    console.error("Error fetching all orders:", error);
     throw error; // Throw error to handle it in the calling function
   }
 };
 
 // Function to get user-specific orders
-export const getUserOrders = async (userId) => {
+export const getUserOrders = async (user) => {
   try {
-    const response = await axios.get(`/api/orders/${userId}`);
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const userId = user._id;
+
+    const response = await axios.get(`/api/orders/${userId}`, config);
+
     return response.data; // Return the orders data for the user
   } catch (error) {
-    console.error(`Error fetching orders for user ${userId}:`, error);
     throw error; // Throw error to handle it in the calling function
   }
 };

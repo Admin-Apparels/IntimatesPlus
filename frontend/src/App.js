@@ -2,6 +2,7 @@ import "./App.css";
 import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import Loading from "./components/userAvatar/loading";
+import OrdersPage from "./components/Pages/Orders";
 
 // Lazily load the components
 const Home = React.lazy(() => import("./components/Pages/Home"));
@@ -24,6 +25,7 @@ function App() {
           <Route path="/accountrecovery" Component={ForgotPassword} />
           <Route path="/videocalls/:receiver" Component={VideoCall} />
           <Route path="/video-call" Component={VideoCall} />
+          <Route path="/orders" Component={OrdersPage} />
           <Route path="*" Component={NotFound} />
         </Routes>
       </Suspense>

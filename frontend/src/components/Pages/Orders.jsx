@@ -4,9 +4,26 @@ import { DataTable } from "../Table/DataTable";
 import { Image, Link } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { getAllOrders, getUserOrders } from "../config/ChatLogics";
+import { ChatState } from "../Context/ChatProvider";
+import classNames from "classnames";
+import logo from "../../assets/icons/logo-full.svg";
+import appointments from "../../assets/icons/appointments.svg";
+import cancelled from "../../assets/icons/cancelled.svg";
+import pending from "../../assets/icons/pending.svg";
 
-const OrdersPage = async ({ isAdmin, userId }) => {
-  const [dates, setDates] = useState([]);
+const OrdersPage = () => {
+  const ADMIN_EMAIL = "intimates_plus@fuckmate.boo";
+
+  const { user } = ChatState();
+
+  const isAdmin = user?.email === ADMIN_EMAIL;
+
+  const [dates, setDates] = useState({
+    scheduledCount: 0,
+    pendingCount: 0,
+    cancelledCount: 0,
+    documents: [],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -16,13 +33,13 @@ const OrdersPage = async ({ isAdmin, userId }) => {
       setError(null);
       try {
         const ordersData = isAdmin
-          ? await getAllOrders()
-          : await getUserOrders(userId);
+          ? await getAllOrders(user) // Fetching all orders if the user is an admin
+          : await getUserOrders(user); // Fetching specific user's orders if not an admin
 
-        // Assuming ordersData returns an array of orders
+        // Calculate the number of orders based on status
         const scheduledCount = ordersData.filter(
           (order) => order.status === "scheduled"
-        ).length; // Adjust as needed
+        ).length;
         const pendingCount = ordersData.filter(
           (order) => order.status === "pending"
         ).length;
@@ -30,7 +47,7 @@ const OrdersPage = async ({ isAdmin, userId }) => {
           (order) => order.status === "cancelled"
         ).length;
 
-        // Set the state with counts and documents
+        // Set the fetched data into the state
         setDates({
           scheduledCount,
           pendingCount,
@@ -44,18 +61,31 @@ const OrdersPage = async ({ isAdmin, userId }) => {
       }
     };
 
+    // Call the fetch function
     fetchOrders();
-  }, [isAdmin, userId]); // Depend on isAdmin and userId
+  }, [isAdmin, user]); // Dependency array: refetch data when `isAdmin` or `user` changes
 
+  // Handle loading state
   if (loading) return <p>Loading...</p>;
+
+  // Handle error state
   if (error) return <p>Error: {error}</p>;
 
+  // JSX returned when data is available
   return (
-    <div className="mx-auto flex max-w-7xl flex-col space-y-14">
+    <div
+      className={classNames(
+        "min-h-screen",
+        "bg-dark-300",
+        "font-sans",
+        "antialiased",
+        "w-full"
+      )}
+    >
       <header className="admin-header">
         <Link href="/" className="cursor-pointer">
           <Image
-            src=""
+            src={logo}
             height={32}
             width={162}
             alt="logo"
@@ -70,7 +100,7 @@ const OrdersPage = async ({ isAdmin, userId }) => {
 
       <main className="admin-main">
         <section className="w-full space-y-4">
-          <h1 className="header">Welcome 👋</h1>
+          <h1 className="header text-dark-600">Welcome 👋</h1>
           <p className="text-dark-700">Start the day with managing new dates</p>
         </section>
 
@@ -79,19 +109,19 @@ const OrdersPage = async ({ isAdmin, userId }) => {
             type="appointments"
             count={dates.scheduledCount}
             label="Scheduled appointments"
-            icon={"/assets/icons/appointments.svg"}
+            icon={appointments}
           />
           <StatCard
             type="pending"
             count={dates.pendingCount}
             label="Pending appointments"
-            icon={"/assets/icons/pending.svg"}
+            icon={pending}
           />
           <StatCard
             type="cancelled"
             count={dates.cancelledCount}
             label="Cancelled appointments"
-            icon={"/assets/icons/cancelled.svg"}
+            icon={cancelled}
           />
         </section>
 

@@ -1,27 +1,59 @@
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Order = require("../models/orderModel");
+const paypal = require("@paypal/checkout-server-sdk");
 
-const createPaymentIntent = async (req, res) => {
+const environment = new paypal.core.LiveEnvironment(
+  process.env.PAYPAL_CLIENT_ID,
+  process.env.PAYPAL_CLIENT_SECRET
+);
+const client = new paypal.core.PayPalHttpClient(environment);
+
+const createPaymentOrder = async (req, res) => {
   const { amount, currency } = req.body;
+
+  const request = new paypal.orders.OrdersCreateRequest();
+  request.prefer("return=representation");
+  request.requestBody({
+    intent: "AUTHORIZE", // Use AUTHORIZE to capture later
+    purchase_units: [
+      {
+        amount: {
+          currency_code: currency,
+          value: amount, // Amount in regular units (not cents)
+        },
+      },
+    ],
+  });
+
   try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount * 100, // Amount in cents
-      currency,
-      payment_method_types: ["card"],
-      capture_method: "manual", // Manual to hold funds
-    });
-    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+    const order = await client.execute(request);
+    res.status(200).json({ orderID: order.result.id });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// Capture the payment when the date is confirmed
 const capturePayment = async (req, res) => {
-  const { paymentIntentId } = req.body;
+  const { orderID } = req.body;
+
+  const request = new paypal.orders.OrdersCaptureRequest(orderID);
+  request.requestBody({});
+
   try {
-    const paymentIntent = await stripe.paymentIntents.capture(paymentIntentId);
-    res.status(200).json(paymentIntent);
+    const capture = await client.execute(request);
+    res.status(200).json(capture.result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const voidPayment = async (req, res) => {
+  const { orderID } = req.body;
+
+  const request = new paypal.orders.OrdersVoidRequest(orderID);
+
+  try {
+    const voided = await client.execute(request);
+    res.status(200).json(voided.result);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -53,9 +85,10 @@ const getUserOrders = async (req, res) => {
   }
 };
 
-export default {
+module.exports = {
   capturePayment,
-  createPaymentIntent,
+  createPaymentOrder,
+  voidPayment,
   getUserOrders,
   getAllOrders,
 };

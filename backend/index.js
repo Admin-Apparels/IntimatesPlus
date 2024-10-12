@@ -7,6 +7,7 @@ const messageRoutes = require("./routes/messageRouter");
 const payRoutes = require("./routes/payRouter");
 const voteRouter = require("./routes/voteRouter");
 const postsRoutes = require("./routes/postRouter");
+const ordersRoutes = require("./routes/ordersRouter");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const path = require("path");
 const bodyParser = require("body-parser");
@@ -34,6 +35,7 @@ app.use("/api/message", messageRoutes);
 app.use("/api/paycheck", payRoutes);
 app.use("/api/posts", postsRoutes);
 app.use("/api/poll", voteRouter);
+app.use("/api/orders", ordersRoutes);
 
 const __dirname1 = path.resolve();
 

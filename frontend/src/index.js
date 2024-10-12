@@ -6,19 +6,18 @@ import { ChakraProvider } from "@chakra-ui/react";
 import ChatProvider from "./components/Context/ChatProvider";
 import { BrowserRouter } from "react-router-dom";
 import { createRoot } from "react-dom/client";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import { ThemeProvider } from "next-themes";
 
 const domNode = document.getElementById("root");
 const root = createRoot(domNode);
-const stripePromise = loadStripe("your-publishable-key-here");
+
 root.render(
   <ChakraProvider>
     <BrowserRouter>
       <ChatProvider>
-        <Elements stripe={stripePromise}>
+        <ThemeProvider attribute="class" defaultTheme="dark">
           <App />
-        </Elements>
+        </ThemeProvider>
       </ChatProvider>
     </BrowserRouter>
   </ChakraProvider>
