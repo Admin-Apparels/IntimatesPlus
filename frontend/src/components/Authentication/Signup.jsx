@@ -1,17 +1,20 @@
-import { Button } from "@chakra-ui/button";
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
-import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
-import { VStack } from "@chakra-ui/layout";
 import {
   Radio,
+  VStack,
   RadioGroup,
   Textarea,
   Stack,
   Text,
   Box,
   Image,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Button,
+  FormControl,
+  FormLabel,
+  useToast,
 } from "@chakra-ui/react";
-import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useState } from "react";
 import "../styles.css";

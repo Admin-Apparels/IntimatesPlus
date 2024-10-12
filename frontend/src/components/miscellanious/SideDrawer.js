@@ -1,15 +1,3 @@
-import { Button } from "@chakra-ui/button";
-import { useDisclosure } from "@chakra-ui/hooks";
-import { Input } from "@chakra-ui/input";
-import { Box, Text } from "@chakra-ui/layout";
-import { Badge, Image, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
-import {
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/menu";
 import {
   Drawer,
   DrawerBody,
@@ -17,15 +5,28 @@ import {
   DrawerHeader,
   DrawerOverlay,
   DrawerCloseButton,
-} from "@chakra-ui/modal";
-import { Tooltip } from "@chakra-ui/tooltip";
-import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import { Avatar } from "@chakra-ui/avatar";
+  useToast,
+  Spinner,
+  Avatar,
+  Tooltip,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Badge,
+  Image,
+  SkeletonCircle,
+  SkeletonText,
+  Box,
+  Text,
+  Input,
+  useDisclosure,
+  Button,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { useToast } from "@chakra-ui/toast";
-import { Spinner } from "@chakra-ui/spinner";
 import ClientModal from "../miscellanious/Client";
 
 import { getSenderName, handleCreateChat } from "../config/ChatLogics";
@@ -34,6 +35,9 @@ import { ChatState } from "../Context/ChatProvider";
 import MatchModal from "./Match";
 import LoveIcon from "./loveIcon";
 import Notifier from "./Notifier";
+import { OrderForm } from "./Order";
+import { CiBellOn } from "react-icons/ci";
+import OrdersPage from "../Pages/Orders";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -159,7 +163,7 @@ function SideDrawer() {
         <div>
           <Menu>
             <MenuButton p={1} position="relative">
-              <BellIcon fontSize="2xl" p={0} m={0} />
+              <CiBellOn fontSize="2xl" />
               {notification.length > 0 && (
                 <Badge
                   variant="subtle"
@@ -200,7 +204,11 @@ function SideDrawer() {
             </MenuList>
           </Menu>
           <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={0}>
+            <MenuButton
+              as={Button}
+              background={"whitesmoke"}
+              _hover={{ background: "whitesmoke" }}
+            >
               <Avatar
                 size="sm"
                 cursor="pointer"
@@ -209,11 +217,17 @@ function SideDrawer() {
               />
             </MenuButton>
             <MenuList>
-              <ClientModal user={user}>
+              <ClientModal>
                 <MenuItem>My Profile</MenuItem>{" "}
               </ClientModal>
               <MenuDivider />
-              <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+              <OrdersPage>
+                <MenuItem>Orders</MenuItem>
+              </OrdersPage>
+              <MenuDivider />
+              <MenuItem mt={"20"} onClick={logoutHandler}>
+                Logout
+              </MenuItem>
             </MenuList>
           </Menu>
         </div>

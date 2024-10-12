@@ -1,5 +1,5 @@
-import { Box, Stack, Text } from "@chakra-ui/layout";
-import { useToast } from "@chakra-ui/toast";
+import { Box, Stack, Text, useToast, Avatar } from "@chakra-ui/react";
+
 import axiosInstance from "./miscellanious/axios";
 
 import { useCallback, useEffect, useState } from "react";
@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import Notifier from "./miscellanious/Notifier";
 import { FaFireAlt, FaFlag } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
-import { Avatar } from "@chakra-ui/react";
 import {
   formatMessageLongTime,
   getSenderName,

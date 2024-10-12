@@ -2,8 +2,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { ChatState } from "../Context/ChatProvider";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 let socketInstance;
+
+export const cn = (...inputs) => {
+  return twMerge(clsx(inputs));
+};
 
 export const formatMessageTime = (timestamp) => {
   // Check if the timestamp is valid
@@ -346,3 +352,25 @@ export function useConnectSocket(token) {
 
   return socket;
 }
+
+// Function to get all orders (for admin)
+export const getAllOrders = async () => {
+  try {
+    const response = await axios.get(`/api/orders`);
+    return response.data; // Return the orders data
+  } catch (error) {
+    console.error("Error fetching all orders:", error);
+    throw error; // Throw error to handle it in the calling function
+  }
+};
+
+// Function to get user-specific orders
+export const getUserOrders = async (userId) => {
+  try {
+    const response = await axios.get(`/api/orders/${userId}`);
+    return response.data; // Return the orders data for the user
+  } catch (error) {
+    console.error(`Error fetching orders for user ${userId}:`, error);
+    throw error; // Throw error to handle it in the calling function
+  }
+};

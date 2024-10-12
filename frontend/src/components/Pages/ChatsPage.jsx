@@ -1,4 +1,3 @@
-import { Box } from "@chakra-ui/layout";
 import React, { useEffect } from "react";
 import Chatbox from "../Chatbox";
 import MyChats from "../MyChats";
@@ -8,7 +7,6 @@ import { ChatState } from "../Context/ChatProvider";
 import { useNavigate } from "react-router-dom";
 import Ads from "../miscellanious/ads";
 import Feed from "../miscellanious/feed";
-import { ModalCloseButton } from "@chakra-ui/react";
 import {
   Text,
   Link,
@@ -19,6 +17,8 @@ import {
   ModalFooter,
   ModalBody,
   useDisclosure,
+  Box,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import Poll from "../miscellanious/Poll";
 import FooterAchieves from "../miscellanious/FooterAchieves";
