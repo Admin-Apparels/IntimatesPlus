@@ -1,4 +1,11 @@
-import { Box, Stack, Text, useToast, Avatar } from "@chakra-ui/react";
+import {
+  Box,
+  Stack,
+  Text,
+  useToast,
+  Avatar,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 
 import axiosInstance from "./miscellanious/axios";
 
@@ -204,55 +211,65 @@ const MyChat = () => {
     });
   };
 
+  const navbarHeight = useBreakpointValue({ base: "60px", md: "80px" });
+
   return (
     <Box
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
-      flexDir="column"
+      flexDirection="column"
       alignItems="center"
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
-      height={"85vh"}
+      minH={"100%"} // This ensures it fills most of the screen height
+      bg="whitesmoke"
+      p={2} // Adding some padding for spacing
+      height={`calc(100vh - ${navbarHeight})`} // Subtracting navbar height from 100vh
     >
+      {/* Notifier modal for updates */}
       {modal && <Notifier isOpen={modal} onClose={() => setModal(false)} />}
+
+      {/* Chat list container */}
       <Box
         display="flex"
-        flexDir="column"
+        flexDirection="column"
         bg="whitesmoke"
         w="100%"
-        height={{ base: "100%", md: "97%" }}
+        height="100%" // Ensures the container takes the full height
         borderRadius="lg"
-        overflowY="hidden"
+        overflowY="hidden" // Prevents overflow when chats are many
       >
         {chats && chats.length > 0 ? (
-          <Stack overflowY="scroll">
-            <OrderForm />
+          <Stack overflowY="scroll" spacing={2} p={2}>
+            {/* Trending Button */}
             <Box
-              display={"flex"}
-              justifyContent={"center"}
-              alignItems={"center"}
-              background={"#E8E8E8"}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              background="#E8E8E8"
               borderRadius="lg"
-              top={-2}
-              width={"100%"}
-              mb={"2"}
-              onClick={() => {
-                setTrend(true);
-              }}
-              cursor={"pointer"}
-              p={"6"}
-              bottom={5}
-              userSelect={"none"}
+              width="100%"
+              mb={2}
+              p={4} // Increased padding for a larger clickable area
+              cursor="pointer"
+              userSelect="none"
+              onClick={() => setTrend(true)}
+              _hover={{ background: "#D0D0D0" }} // Hover effect for better UX
             >
               <FaFireAlt style={{ color: "red" }} />
-              <Text pl={"2"}>What's trending</Text>
+              <Text pl={2} fontWeight="bold">
+                What's trending
+              </Text>
             </Box>
-            {renderChatItems()}
+            {/* Chats list */}
+            {renderChatItems()}{" "}
+            {/* Replace with your actual chat items rendering function */}
           </Stack>
         ) : (
-          <ChatLoading />
+          <ChatLoading /> // Show loading spinner or placeholder when no chats
         )}
       </Box>
     </Box>
   );
 };
+
 export default MyChat;

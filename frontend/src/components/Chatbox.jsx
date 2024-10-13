@@ -1,10 +1,11 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useBreakpointValue } from "@chakra-ui/react";
 import "./styles.css";
 import SingleChat from "./SingleChat";
 import { ChatState } from "./Context/ChatProvider";
 
 const Chatbox = () => {
   const { selectedChat } = ChatState();
+  const navbarHeight = useBreakpointValue({ base: "60px", md: "80px" });
 
   return (
     <Box
@@ -13,7 +14,7 @@ const Chatbox = () => {
       flexDir="column"
       width={{ base: "100%", md: "68%" }}
       borderRadius="lg"
-      height={"85vh"}
+      height={`calc(100vh - ${navbarHeight})`} // Subtracting navbar height from 100vh
     >
       <SingleChat />
     </Box>

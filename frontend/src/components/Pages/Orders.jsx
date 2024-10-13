@@ -6,10 +6,12 @@ import { useEffect, useState } from "react";
 import { getAllOrders, getUserOrders } from "../config/ChatLogics";
 import { ChatState } from "../Context/ChatProvider";
 import classNames from "classnames";
-import logo from "../../assets/icons/logo-full.svg";
+import logo from "../../assets/images/IntimatesPlus_logo.png";
 import appointments from "../../assets/icons/appointments.svg";
 import cancelled from "../../assets/icons/cancelled.svg";
 import pending from "../../assets/icons/pending.svg";
+import { useNavigate } from "react-router-dom";
+import Spinner from "../../assets/icons/loader.svg";
 
 const OrdersPage = () => {
   const ADMIN_EMAIL = "intimates_plus@fuckmate.boo";
@@ -26,6 +28,7 @@ const OrdersPage = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -66,10 +69,56 @@ const OrdersPage = () => {
   }, [isAdmin, user]); // Dependency array: refetch data when `isAdmin` or `user` changes
 
   // Handle loading state
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div
+        className={classNames(
+          "min-h-screen", // ensures the error page takes up full vertical height
+          "bg-dark-300", // dark background
+          "flex", // flexbox to center content
+          "items-center", // center vertically
+          "justify-center", // center horizontally
+          "font-sans", // applying sans-serif font
+          "antialiased", // smoother text rendering
+          "w-full" // full width
+        )}
+      >
+        <Image
+          src={Spinner}
+          alt="Loading..."
+          className="w-12 h-12 animate-spin"
+        />
+        {/* You can adjust width/height (w-12 h-12) and add animate-spin for rotation */}
+      </div>
+    );
 
   // Handle error state
-  if (error) return <p>Error: {error}</p>;
+  if (error)
+    return (
+      <div
+        className={classNames(
+          "min-h-screen", // ensures the error page takes up full vertical height
+          "bg-dark-300", // dark background
+          "flex", // flexbox to center content
+          "items-center", // center vertically
+          "justify-center", // center horizontally
+          "font-sans", // applying sans-serif font
+          "antialiased", // smoother text rendering
+          "w-full" // full width
+        )}
+      >
+        <div className="text-center">
+          <p className="text-white text-xl font-semibold">Error:</p>
+          <p className="text-red-500 text-lg mt-2">{error}</p>{" "}
+          <p
+            className="text-green-500 text-lg mt-4 cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            Go back
+          </p>
+        </div>
+      </div>
+    );
 
   // JSX returned when data is available
   return (
@@ -84,17 +133,11 @@ const OrdersPage = () => {
     >
       <header className="admin-header">
         <Link href="/" className="cursor-pointer">
-          <Image
-            src={logo}
-            height={32}
-            width={162}
-            alt="logo"
-            className="h-8 w-fit"
-          />
+          <Image src={logo} alt="logo" className="h-8 w-fit" />
         </Link>
 
         <p className="text-16-semibold">
-          {isAdmin ? "Admin Dashboard " : "Dates"}
+          {isAdmin ? "Admin Dashboard " : "Ordates"}
         </p>
       </header>
 

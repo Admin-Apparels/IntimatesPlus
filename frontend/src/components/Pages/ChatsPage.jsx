@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import Ads from "../miscellanious/ads";
 import Feed from "../miscellanious/feed";
 import {
-  Text,
   Link,
   Modal,
   ModalOverlay,
@@ -21,8 +20,6 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import Poll from "../miscellanious/Poll";
-import FooterAchieves from "../miscellanious/FooterAchieves";
-import { IoLibrary } from "react-icons/io5";
 
 const Chatpage = () => {
   const navigate = useNavigate();
@@ -58,20 +55,22 @@ const Chatpage = () => {
   return (
     <Box
       width="100%"
-      height={"100vh"}
-      display={"flex"}
-      flexDir={"column"}
-      overflow={"scroll"}
-      p={"2"}
-      background={"whitesmoke"}
+      height="100vh" // Take full viewport height
+      display="flex"
+      flexDirection="column"
+      background="whitesmoke"
     >
       <ErrorBoundary fallback={<p>Something went wrong</p>}>
-        {user && <SideDrawer />}{" "}
+        {user && <SideDrawer />}
+
+        {/* Show Ads conditionally */}
         {user &&
           ((user.accountType === "Gold" &&
             parseInt(new Date().getTime()) > parseInt(user.subscription)) ||
             parseInt(new Date().getTime()) >
               parseInt(user.adsSubscription)) && <Ads />}
+
+        {/* Modal */}
         <Modal
           size="lg"
           onClose={() => {
@@ -86,50 +85,50 @@ const Chatpage = () => {
             backdropFilter="blur(10px) hue-rotate(90deg)"
           />
           <ModalContent
-            display={"flex"}
-            flexDirection={"column"}
-            height={"100%"}
+            display="flex"
+            flexDirection="column"
+            height="100%" // Fullscreen modal
           >
             <ModalHeader
               fontFamily="Arial, sans-serif"
-              fontSize={"xl"}
-              textAlign={"center"}
+              fontSize="xl"
+              textAlign="center"
               bgGradient="linear(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
               bgClip="text"
-              userSelect={"none"}
+              userSelect="none"
             >
               <ModalCloseButton
-                textColor={"black"}
-                background={"transparent"}
+                textColor="black"
+                background="transparent"
                 mr={-3}
-                border={"none"}
+                border="none"
               />
-              IntimatesPlus Confesional
+              IntimatesPlus Confessional
             </ModalHeader>
             <ModalBody
-              display={"flex"}
-              flexWrap={"wrap"}
-              justifyContent={"center"}
-              alignItems={"center"}
-              width={"100%"}
-              overflowY={"auto"}
-              userSelect={"none"}
-              p={"2"}
+              display="flex"
+              flexWrap="wrap"
+              justifyContent="center"
+              alignItems="center"
+              width="100%"
+              overflowY="auto"
+              userSelect="none"
+              p="2"
             >
               <Feed />
             </ModalBody>
             <ModalFooter
-              display={"flex"}
-              flexDir={"column"}
-              textAlign={"center"}
-              fontSize={"small"}
+              display="flex"
+              flexDirection="column"
+              textAlign="center"
+              fontSize="small"
             >
-              For more stories and inspiration, follow us on
+              For more stories and inspiration, follow us on{" "}
               <Link
                 href="https://twitter.com/IntiMates_Plus"
-                textColor={"blue.200"}
-                fontSize={"larger"}
-                fontWeight={"bold"}
+                textColor="blue.200"
+                fontSize="larger"
+                fontWeight="bold"
                 isExternal
               >
                 X
@@ -137,34 +136,20 @@ const Chatpage = () => {
             </ModalFooter>
           </ModalContent>
         </Modal>
+
+        {/* Main chat area */}
         <Box
+          flex="1" // Ensure the main content takes up the remaining space
           display="flex"
           justifyContent="space-evenly"
           width="100%"
-          height={"100%"}
+          height="100%"
           p="0.2rem"
         >
-          {" "}
           {user && <MyChats />}
           {user && <Chatbox />}
           {!selectedChat && <Poll />}
         </Box>
-        {user && (
-          <Box width={"100%"}>
-            <Box
-              display={"flex"}
-              width={"100%"}
-              justifyContent={"center"}
-              alignItems={"center"}
-            >
-              <IoLibrary style={{ color: "red" }} />{" "}
-              <Text p={"3"} fontWeight={"bold"}>
-                Achieves
-              </Text>
-            </Box>
-            <FooterAchieves />
-          </Box>
-        )}
       </ErrorBoundary>
     </Box>
   );

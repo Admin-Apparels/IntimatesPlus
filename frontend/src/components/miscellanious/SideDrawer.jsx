@@ -11,7 +11,6 @@ import {
   Tooltip,
   Menu,
   MenuButton,
-  MenuDivider,
   MenuItem,
   MenuList,
   Badge,
@@ -38,6 +37,7 @@ import Notifier from "./Notifier";
 import { CiBellOn, CiGift } from "react-icons/ci";
 import { FaSignOutAlt } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
+import logo from "../../assets/images/IntimatesPlus_logo.png";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -130,11 +130,9 @@ function SideDrawer() {
         bg="whitesmoke"
         w="100%"
         p="5px 10px 10px 10px"
+        height="60px"
       >
-        <Image
-          src="https://res.cloudinary.com/dvc7i8g1a/image/upload/v1701779357/icons8-sex-64_a1hki1.png"
-          height={{ base: 6, md: 10 }}
-        />
+        <Image src={logo} height={{ base: 6, md: 10 }} />
         <Tooltip
           label="Search Users to chat"
           placement="bottom-end"
