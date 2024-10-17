@@ -151,24 +151,24 @@ const OrdersPage = () => {
           <StatCard
             type="appointments"
             count={dates.scheduledCount}
-            label="Scheduled appointments"
+            label="Scheduled dates"
             icon={appointments}
           />
           <StatCard
             type="pending"
             count={dates.pendingCount}
-            label="Pending appointments"
+            label="Pending dates"
             icon={pending}
           />
           <StatCard
             type="cancelled"
             count={dates.cancelledCount}
-            label="Cancelled appointments"
+            label="Cancelled dates"
             icon={cancelled}
           />
         </section>
 
-        <DataTable columns={columns} data={dates.documents} />
+        <DataTable columns={columns} data={dates.documents} user={user} />
       </main>
     </div>
   );

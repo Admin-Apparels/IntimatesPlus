@@ -16,11 +16,12 @@ import {
 } from "./table";
 import { Button } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
+import arrow from "../../assets/icons/arrow.svg";
 
-export function DataTable({ columns, data }) {
+export function DataTable({ columns, data, user }) {
   const table = useReactTable({
     data,
-    columns,
+    columns: columns(user),
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
@@ -61,7 +62,10 @@ export function DataTable({ columns, data }) {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center text-white"
+              >
                 No results.
               </TableCell>
             </TableRow>
@@ -76,7 +80,7 @@ export function DataTable({ columns, data }) {
           disabled={!table.getCanPreviousPage()}
           className="shad-gray-btn"
         >
-          <Image src="" width={24} height={24} alt="arrow" />
+          <Image src={arrow} width={14} height={14} alt="arrow" />
         </Button>
         <Button
           variant="outline"
@@ -86,9 +90,9 @@ export function DataTable({ columns, data }) {
           className="shad-gray-btn"
         >
           <Image
-            src=""
-            width={24}
-            height={24}
+            src={arrow}
+            width={14}
+            height={14}
             alt="arrow"
             className="rotate-180"
           />

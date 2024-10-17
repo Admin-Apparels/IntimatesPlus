@@ -1,7 +1,7 @@
 import { Image } from "@chakra-ui/react";
 import clsx from "clsx";
 
-export const StatCard = ({ count = 0, label, icon, type }) => {
+export const StatCard = ({ count, label, icon, type }) => {
   return (
     <div
       className={clsx("stat-card", {
@@ -11,17 +11,11 @@ export const StatCard = ({ count = 0, label, icon, type }) => {
       })}
     >
       <div className="flex items-center gap-4">
-        <Image
-          src={icon}
-          height={32}
-          width={32}
-          alt={label} // Changed alt from "appointments" to dynamic label
-          className="size-8 w-fit"
-        />
+        <Image src={icon} alt={label} className="size-8 w-fit" />
         <h2 className="text-32-bold text-white">{count}</h2>
       </div>
 
-      <p className="text-14-regular">{label}</p>
+      <p className="text-14-regular text-white">{label}</p>
     </div>
   );
 };
