@@ -1,27 +1,20 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-
 import { SelectItem } from "@/components/ui/select";
-import { Doctors } from "@/constants";
-// import {
-//   createAppointment,
-//   updateAppointment,
-// } from "@/lib/actions/appointment.actions";
 import { getAppointmentSchema } from "@/lib/validation";
 import "react-datepicker/dist/react-datepicker.css";
-
 import CustomFormField, { FormFieldType } from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
 import { Form } from "../ui/form";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const AppointmentForm = ({
-  userId,
-  patientId,
+  ordererId,
+  orderedDateId,
   type,
   appointment,
   setOpen,
@@ -34,7 +27,6 @@ export const AppointmentForm = ({
   const form = useForm({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
-      primaryPhysician: appointment ? appointment?.primaryPhysician : "",
       schedule: appointment
         ? new Date(appointment?.schedule)
         : new Date(Date.now()),
@@ -46,7 +38,6 @@ export const AppointmentForm = ({
 
   const onSubmit = async (values) => {
     setIsLoading(true);
-
     let status;
     switch (type) {
       case "schedule":
@@ -60,31 +51,29 @@ export const AppointmentForm = ({
     }
 
     try {
-      if (type === "create" && patientId) {
-        const appointment = {
-          userId,
-          patient: patientId,
-          primaryPhysician: values.primaryPhysician,
+      if (type === "create" && orderedDateId) {
+        const appointmentData = {
+          ordererId,
+          orderedDateId,
           schedule: new Date(values.schedule),
           reason: values.reason,
           status,
           note: values.note,
         };
 
-        const newAppointment = await createAppointment(appointment);
+        const { data } = await axios.post("/api/order/create", appointmentData); // API call to your Node backend
 
-        if (newAppointment) {
+        if (data) {
           form.reset();
           router.push(
-            `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
+            `/patients/${userId}/new-appointment/success?appointmentId=${data._id}`
           );
         }
       } else {
-        const appointmentToUpdate = {
-          userId,
-          appointmentId: appointment?.$id,
+        const dateToUpdate = {
+          ordererId,
+          dateId: appointment?._id,
           appointment: {
-            primaryPhysician: values.primaryPhysician,
             schedule: new Date(values.schedule),
             status,
             cancellationReason: values.cancellationReason,
@@ -92,7 +81,10 @@ export const AppointmentForm = ({
           type,
         };
 
-        const updatedAppointment = await updateAppointment(appointmentToUpdate);
+        const updatedAppointment = await axios.put(
+          "/api/order/update",
+          dateToUpdate
+        ); // API call to your Node backend
 
         if (updatedAppointment) {
           setOpen && setOpen(false);
@@ -122,49 +114,23 @@ export const AppointmentForm = ({
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
         {type === "create" && (
           <section className="mb-12 space-y-4">
-            <h1 className="header">New Appointment</h1>
-            <p className="text-dark-700">
-              Request a new appointment in 10 seconds.
-            </p>
+            <h1 className="header">New Date</h1>
+            <p className="text-dark-700">Request a new date in 10 seconds.</p>
           </section>
         )}
 
         {type !== "cancel" && (
           <>
             <CustomFormField
-              fieldType={FormFieldType.SELECT}
-              control={form.control}
-              name="primaryPhysician"
-              label="Doctor"
-              placeholder="Select a doctor"
-            >
-              {Doctors.map((doctor, i) => (
-                <SelectItem key={doctor.name + i} value={doctor.name}>
-                  <div className="flex cursor-pointer items-center gap-2">
-                    <Image
-                      src={doctor.image}
-                      width={32}
-                      height={32}
-                      alt="doctor"
-                      className="rounded-full border border-dark-500"
-                    />
-                    <p>{doctor.name}</p>
-                  </div>
-                </SelectItem>
-              ))}
-            </CustomFormField>
-
-            <CustomFormField
               fieldType={FormFieldType.DATE_PICKER}
               control={form.control}
               name="schedule"
               label="Expected appointment date"
               showTimeSelect
-              dateFormat="MM/dd/yyyy  -  h:mm aa"
+              dateFormat="MM/dd/yyyy - h:mm aa"
             />
-
             <div
-              className={`flex flex-col gap-6  ${
+              className={`flex flex-col gap-6 ${
                 type === "create" && "xl:flex-row"
               }`}
             >

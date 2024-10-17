@@ -144,7 +144,7 @@ const OrdersPage = () => {
       <main className="admin-main">
         <section className="w-full space-y-4">
           <h1 className="header text-dark-600">Welcome 👋</h1>
-          <p className="text-dark-700">Start the day with managing new dates</p>
+          <p className="text-dark-700">Start with managing new dates</p>
         </section>
 
         <section className="admin-stat">

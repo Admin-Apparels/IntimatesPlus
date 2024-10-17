@@ -178,7 +178,7 @@ function SideDrawer() {
               )}
             </MenuButton>
             <MenuList pl={{ base: 0, md: 2 }} fontSize={"small"} p={"1"}>
-              {!notification.length && "No New Messages"}
+              {!notification.length && "No new messages..."}
               {notification.map((notif, index) => (
                 <MenuItem
                   key={index}
@@ -196,7 +196,7 @@ function SideDrawer() {
                     }
                   }}
                 >
-                  {`New Message from ${getSenderName(user, notif.chat.users)}`}
+                  {`New message from ${getSenderName(user, notif.chat.users)}`}
                 </MenuItem>
               ))}
             </MenuList>
