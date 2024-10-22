@@ -3,12 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { SelectItem } from "@/components/ui/select";
-import { getAppointmentSchema } from "@/lib/validation";
+import { getAppointmentSchema } from "../../components/config/ChatLogics";
 import "react-datepicker/dist/react-datepicker.css";
-import CustomFormField, { FormFieldType } from "../CustomFormField";
-import SubmitButton from "../SubmitButton";
-import { Form } from "../ui/form";
+import CustomFormField, { FormFieldType } from "./CustomFormField";
+import SubmitButton from "./SubmitButton";
+import { Form } from "./ui/form";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -66,7 +65,7 @@ export const AppointmentForm = ({
         if (data) {
           form.reset();
           router.push(
-            `/patients/${userId}/new-appointment/success?appointmentId=${data._id}`
+            `/patients/${ordererId}/new-appointment/success?appointmentId=${data._id}`
           );
         }
       } else {

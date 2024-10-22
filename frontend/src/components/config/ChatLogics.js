@@ -4,12 +4,51 @@ import { io } from "socket.io-client";
 import { ChatState } from "../Context/ChatProvider";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { z } from "zod";
 
 let socketInstance;
 
 export const cn = (...inputs) => {
   return twMerge(clsx(inputs));
 };
+
+export const CreateAppointmentSchema = z.object({
+  schedule: z.coerce.date(),
+  reason: z
+    .string()
+    .min(2, "Reason must be at least 2 characters")
+    .max(500, "Reason must be at most 500 characters"),
+  note: z.string().optional(),
+  cancellationReason: z.string().optional(),
+});
+
+export const ScheduleAppointmentSchema = z.object({
+  schedule: z.coerce.date(),
+  reason: z.string().optional(),
+  note: z.string().optional(),
+  cancellationReason: z.string().optional(),
+});
+
+export const CancelAppointmentSchema = z.object({
+  schedule: z.coerce.date(),
+  reason: z.string().optional(),
+  note: z.string().optional(),
+  cancellationReason: z
+    .string()
+    .min(2, "Reason must be at least 2 characters")
+    .max(500, "Reason must be at most 500 characters"),
+});
+
+export function getAppointmentSchema(type) {
+  switch (type) {
+    case "create":
+      return CreateAppointmentSchema;
+    case "cancel":
+      return CancelAppointmentSchema;
+    default:
+      return ScheduleAppointmentSchema;
+  }
+}
 
 export const formatMessageTime = (timestamp) => {
   // Check if the timestamp is valid

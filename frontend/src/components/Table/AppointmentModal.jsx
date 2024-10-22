@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "./dialog";
 
-// import { AppointmentForm } from "./forms/AppointmentForm";
+import { AppointmentForm } from "./AppointmentForm";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "@mui/material";
 
@@ -37,13 +37,13 @@ export const AppointmentModal = ({ patientId, userId, appointment, type }) => {
           </DialogDescription>
         </DialogHeader>
 
-        {/* <AppointmentForm
+        <AppointmentForm
           userId={userId}
           patientId={patientId}
           type={type}
           appointment={appointment}
           setOpen={setOpen}
-        /> */}
+        />
       </DialogContent>
     </Dialog>
   );
