@@ -2,15 +2,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { ChatState } from "../Context/ChatProvider";
+import { z } from "zod";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { z } from "zod";
 
 let socketInstance;
 
-export const cn = (...inputs) => {
+export function cn(...inputs) {
   return twMerge(clsx(inputs));
-};
+}
 
 export const CreateAppointmentSchema = z.object({
   schedule: z.coerce.date(),

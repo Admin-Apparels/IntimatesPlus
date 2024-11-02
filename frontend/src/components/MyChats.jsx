@@ -5,6 +5,7 @@ import {
   useToast,
   Avatar,
   useBreakpointValue,
+  Image,
 } from "@chakra-ui/react";
 
 import axiosInstance from "./miscellanious/axios";
@@ -22,6 +23,7 @@ import {
   getSenderPic,
 } from "./config/ChatLogics";
 import { OrderForm } from "./miscellanious/Order";
+import ZoomedDateList from "./miscellanious/ScrollOrdates";
 
 const MyChat = () => {
   const [loggedUser, setLoggedUser] = useState();
@@ -212,6 +214,12 @@ const MyChat = () => {
   };
 
   const navbarHeight = useBreakpointValue({ base: "60px", md: "80px" });
+  const dates = [
+    "http://res.cloudinary.com/dvc7i8g1a/image/upload/v1706014611/hrelhdnn52dkcl77cotk.jpg",
+    "http://res.cloudinary.com/dvc7i8g1a/image/upload/v1706014611/hrelhdnn52dkcl77cotk.jpg",
+    "http://res.cloudinary.com/dvc7i8g1a/image/upload/v1706014611/hrelhdnn52dkcl77cotk.jpg",
+    "http://res.cloudinary.com/dvc7i8g1a/image/upload/v1706014611/hrelhdnn52dkcl77cotk.jpg",
+  ];
 
   return (
     <Box
@@ -238,6 +246,8 @@ const MyChat = () => {
         borderRadius="lg"
         overflowY="hidden" // Prevents overflow when chats are many
       >
+        <ZoomedDateList />
+
         {chats && chats.length > 0 ? (
           <Stack overflowY="scroll" spacing={2} p={2}>
             {/* Trending Button */}
