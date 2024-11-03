@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef } from "react";
+import { OrderForm } from "./Order";
 
 const ZoomedDateList = () => {
   const containerRef = useRef(null);
@@ -23,16 +24,15 @@ const ZoomedDateList = () => {
         style={{ WebkitOverflowScrolling: "touch" }} // Enables smooth scrolling on iOS
       >
         {dates.map((date, index) => (
-          <div
-            key={index}
-            className="flex-shrink-0 w-[120px] h-[120px] bg-whitesmoke p-4 flex items-center justify-center transition-transform"
-          >
-            <img
-              src={date}
-              alt={`Date ${index}`}
-              className="w-full h-full object-cover rounded-lg shadow-md"
-            />
-          </div>
+          <OrderForm key={index}>
+            <div className="flex-shrink-0 w-[120px] h-[120px] bg-whitesmoke p-4 flex items-center justify-center transition-transform">
+              <img
+                src={date}
+                alt={`Date ${index}`}
+                className="w-full h-full object-cover rounded-lg shadow-md"
+              />
+            </div>
+          </OrderForm>
         ))}
       </div>
     </div>
