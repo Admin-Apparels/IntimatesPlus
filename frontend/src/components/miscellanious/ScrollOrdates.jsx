@@ -25,11 +25,11 @@ const ZoomedDateList = () => {
       >
         {dates.map((date, index) => (
           <OrderForm key={index}>
-            <div className="flex-shrink-0 w-[120px] h-[120px] bg-whitesmoke p-4 flex items-center justify-center transition-transform">
+            <div className="flex-shrink-0 w-[120px] h-[120px] bg-whitesmoke p-4 flex items-center justify-center transition-transform pointer-cursor">
               <img
                 src={date}
                 alt={`Date ${index}`}
-                className="w-full h-full object-cover rounded-lg shadow-md"
+                className="w-full h-full object-cover rounded-lg shadow-md pointer-cursor"
               />
             </div>
           </OrderForm>

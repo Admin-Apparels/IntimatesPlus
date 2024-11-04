@@ -5,7 +5,6 @@ import {
   useToast,
   Avatar,
   useBreakpointValue,
-  Image,
 } from "@chakra-ui/react";
 
 import axiosInstance from "./miscellanious/axios";
@@ -22,7 +21,6 @@ import {
   getSenderName,
   getSenderPic,
 } from "./config/ChatLogics";
-import { OrderForm } from "./miscellanious/Order";
 import ZoomedDateList from "./miscellanious/ScrollOrdates";
 
 const MyChat = () => {
@@ -90,8 +88,7 @@ const MyChat = () => {
           }
           if (error.response && error.response.status === 429) {
             toast({
-              title: "Too many request:",
-              description: "please try again after sometime.",
+              title: "Too many request!",
               status: "error",
               duration: 5000,
               isClosable: true,
@@ -119,9 +116,6 @@ const MyChat = () => {
     const fetchData = async () => {
       if (loggedUser) {
         await fetchChats();
-        setTimeout(async () => {
-          await fetchChats();
-        }, 2000);
       }
     };
 
@@ -214,12 +208,6 @@ const MyChat = () => {
   };
 
   const navbarHeight = useBreakpointValue({ base: "60px", md: "80px" });
-  const dates = [
-    "http://res.cloudinary.com/dvc7i8g1a/image/upload/v1706014611/hrelhdnn52dkcl77cotk.jpg",
-    "http://res.cloudinary.com/dvc7i8g1a/image/upload/v1706014611/hrelhdnn52dkcl77cotk.jpg",
-    "http://res.cloudinary.com/dvc7i8g1a/image/upload/v1706014611/hrelhdnn52dkcl77cotk.jpg",
-    "http://res.cloudinary.com/dvc7i8g1a/image/upload/v1706014611/hrelhdnn52dkcl77cotk.jpg",
-  ];
 
   return (
     <Box
